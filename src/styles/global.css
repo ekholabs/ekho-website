@@ -301,6 +301,20 @@
     color: var(--text);
   }
 
+  /* the WHY between the opening statement and the chapters */
+  .intro {
+    padding-block: 2rem 4rem;
+  }
+
+  .closing {
+    margin: 0;
+    padding-block: 5rem 6rem;
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+  }
+
   /* chapter navigation: stays at the top while the page scrolls */
   .chapter-nav {
     position: sticky;
