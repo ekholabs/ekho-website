@@ -1,5 +1,7 @@
 :root {
-  /* EKHO Design System v0.4: black, white and greys, one signal (yellow) */
+  /* EKHO Design System v0.4: black, white and greys, one signal (yellow).
+     The site is dark only: there is no light theme. */
+  color-scheme: dark;
   --bg: #151515;
   --surface: #1e1e1e;
   --border: #404040;
@@ -7,35 +9,17 @@
   --muted: #929292;
   --signal: #fff056;
   --signal-ink: #151515;
-  /* links: yellow text on dark ground */
+  /* links: yellow text, a faint yellow line underneath */
   --link: var(--signal);
   --link-line: color-mix(in srgb, var(--signal) 40%, transparent);
   --link-thickness: 1px;
   --link-offset: 3px;
-  /* dot matrix motif above the headline, only on dark ground */
+  /* dot matrix motif above the headline */
   --dots: var(--border);
-  --dots-band: 6rem;
   --radius: 10px;
   --maxw: 44rem;
   --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme='dark']) {
-    --bg: #ffffff;
-    --surface: #f4f4f4;
-    --border: #e4e4e4;
-    --text: #151515;
-    --muted: #6e6e6e;
-    /* links: ink text over a yellow marker stroke; yellow text on white is unreadable */
-    --link: var(--text);
-    --link-line: var(--signal);
-    --link-thickness: 0.42em;
-    --link-offset: -0.22em;
-    --dots: transparent;
-    --dots-band: 0;
-  }
 }
 
 *,
@@ -154,8 +138,8 @@ h1 {
 .hero::before {
   content: '';
   display: block;
-  height: var(--dots-band);
-  margin-bottom: min(var(--dots-band), 2.5rem);
+  height: 6rem;
+  margin-bottom: 2.5rem;
   border-radius: var(--radius);
   background-image: radial-gradient(var(--dots) 1.2px, transparent 1.7px);
   background-size: 12px 12px;

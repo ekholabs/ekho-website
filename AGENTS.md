@@ -127,11 +127,11 @@ import Base from '../layouts/Base.astro';
 --radius  corner rounding        --maxw    content column width
 ```
 
-Light mode is a second definition of the same tokens under `@media (prefers-color-scheme: light)`. **A colour added to one block must be added to the other**, or the site breaks for half its visitors — check both themes before opening a PR (macOS: System Settings → Appearance).
+**The site is dark only.** There is one `:root` block and no light theme — it is not a missing feature, it is the decision. Do not add a `prefers-color-scheme: light` block or a theme switch.
 
 Rules that hold regardless of what you are styling:
 
-- The look follows the EKHO Design System (v0.4, derived from the pitch deck): black, white and greys, exactly one signal colour (yellow `--signal`), Helvetica Neue. Yellow is opt-in, never a default surface, and never text on a light background — in the light theme links are ink text over a yellow marker stroke.
+- The look follows the EKHO Design System (v0.4, derived from the pitch deck): black, white and greys, exactly one signal colour (yellow `--signal`), Helvetica Neue. Yellow is opt-in and never a default surface; as text it only ever sits on the dark ground.
 - No CSS framework, no utility classes, no CSS-in-JS. One stylesheet, plain CSS, semantic class names.
 - Never hardcode a colour in a page or layout file. Use a token, or add one.
 - The site must work at 320px wide with no horizontal scroll. The `.wrap` class already handles the content column and its 16px gutters — use it rather than inventing margins.
@@ -177,7 +177,7 @@ There is no test suite; a brochure site does not earn one. What stands in for it
 
 All five run on every pull request via `.github/workflows/ci.yml`. Run them locally before you push — they take seconds and CI runs the identical commands, so a local pass means a CI pass.
 
-**What no check can catch:** whether the page _reads_ well, whether it looks right on a phone, whether both colour themes work, and whether a claim is true. Look at the page in a browser. Nothing here substitutes for that.
+**What no check can catch:** whether the page _reads_ well, whether it looks right on a phone, and whether a claim is true. Look at the page in a browser. Nothing here substitutes for that.
 
 ## 9 · Deployment
 
@@ -218,7 +218,7 @@ Those four IPv4 addresses are GitHub's, shared by every Pages site, and they cha
 - [ ] `npm run format:check`, `npm run check` and `npm run build` pass
 - [ ] `node tools/check-links.mjs` passes against a fresh build
 - [ ] you loaded the page in a browser and read it
-- [ ] it holds up at 320px wide and in both colour themes
+- [ ] it holds up at 320px wide
 - [ ] every new page has a real `title` and `description`
 - [ ] no claim outruns what the `ekho` repo ships (N4)
 - [ ] `public/CNAME` still says `ekholabs.eu` (N1)
@@ -231,7 +231,6 @@ Those four IPv4 addresses are GitHub's, shared by every Pages site, and they cha
 - **`{` in prose.** Astro reads it as the start of a JavaScript expression and the build fails with a parse error that points at a line with nothing wrong on it. Write `&#123;`.
 - **Deleting `public/CNAME` while tidying.** It is one line and looks like leftovers. It is the domain (N1).
 - **Adding a page and expecting it in the nav.** Routing is automatic; the header is not. Edit the `.nav` block in `src/layouts/Base.astro`.
-- **A colour that only exists in the dark block.** It silently falls back to whatever was there in light mode, usually to something unreadable. Both `:root` blocks or neither (§6).
 - **`npm install` instead of `npm ci` in CI.** `npm ci` is deliberate: it installs exactly what `package-lock.json` pins, so the deployed build matches the one you tested.
 - **Trusting a green CI for copy.** CI proves the site compiles and its links resolve. It has no opinion about whether a sentence is true or a heading is good.
 
