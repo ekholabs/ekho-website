@@ -9,8 +9,7 @@ const chapters = [
   { id: 'context', n: '01', label: 'Context' },
   { id: 'why', n: '02', label: 'Why' },
   { id: 'how', n: '03', label: 'How' },
-  { id: 'yours', n: '04', label: 'Yours' },
-  { id: 'not-yet', n: '05', label: 'Not yet' },
+  { id: 'architecture', n: '04', label: 'Architecture' },
 ];
 ---
 
@@ -42,8 +41,8 @@ const chapters = [
           <a class="pill pill--solid" href="#how">
             See how it works <span aria-hidden="true">↓</span>
           </a>
-          <a class="pill" href="#not-yet">
-            What exists today
+          <a class="pill" href="#architecture">
+            See the architecture
           </a>
         </div>
       </div>
@@ -101,7 +100,6 @@ const chapters = [
             <span class="reader">{r}</span>
           ))}
         </span>
-        <span class="chip hatched">Your profile · in development</span>
       </a>
     </div>
   </section>
@@ -207,66 +205,50 @@ const chapters = [
         </ol>
       </section>
 
-      <section class="chapter measure" id="yours" data-chapter>
+      <section class="chapter measure" id="architecture" data-chapter>
         <p class="chapter-label">
-          <span>04</span> Yours
+          <span>04</span> Architecture
         </p>
-        <h2>It stays yours</h2>
+        <h2>The EKHO architecture</h2>
+        <p class="chapter-lede">
+          Claude Code and Obsidian get you a smart notebook. EKHO adds the grammar and the workflows
+          that make it repeatable, and compatible with every other EKHO vault.
+        </p>
         <ul class="layers">
           <li>
-            <h3>Your agent</h3>
+            <h3>Ontology</h3>
             <p>
-              Claude Code, Codex, OpenCode or whatever comes next. The model is replaceable; your
-              context is not tied to it.
+              The shared grammar of knowledge: what a note is (insight, hypothesis, decision), how
+              notes relate, and which rules they follow. It is declared, not prompted, so every
+              vault behaves the same.
             </p>
           </li>
           <li>
-            <h3>Your knowledge</h3>
+            <h3>Harness</h3>
             <p>
-              A folder of plain Markdown files. You read them, your AI reads the same ones, and you
-              can take them anywhere.
+              Skills, workflows and a linter that take in sources, answer questions and keep
+              everything consistent. It turns something one person prompted once into behaviour
+              anyone can repeat.
             </p>
           </li>
-          <li class="hatched">
-            <h3>
-              Your profile <span class="tag">in development</span>
-            </h3>
-            <p>Your own terms and types on top of the core, without ever redefining it.</p>
-          </li>
           <li>
-            <h3>EKHO Core</h3>
+            <h3>LLM</h3>
             <p>
-              An open, typed format and a linter that keeps any agent in line, so your files stay
-              consistent whichever model is running.
+              The engine that reads, writes and links. EKHO works with any model, so you can swap
+              the model and your knowledge stays yours.
+            </p>
+          </li>
+          <li class="layer-owned">
+            <h3>Knowledge → Specs → Code</h3>
+            <p>
+              What you own: the knowledge vault where the thinking lives, specs that turn validated
+              knowledge into requirements, and the software built from them, fed back as evidence.
             </p>
           </li>
         </ul>
         <noscript>
-          <ArchitectureGraphic animated={false} idPrefix="ns" />
+          <ArchitectureGraphic animated={false} />
         </noscript>
-      </section>
-
-      <section class="chapter measure" id="not-yet" data-chapter>
-        <p class="chapter-label">
-          <span>05</span> Not yet
-        </p>
-        <h2>What does not exist yet</h2>
-        <ul class="not-yet-list">
-          <li class="hatched">
-            No web interface. You work in your editor and your terminal, and read in Obsidian.
-          </li>
-          <li class="hatched">
-            No automatic import. Mail, chat and calendar are not connected; you bring things in.
-          </li>
-          <li class="hatched">No built-in sharing between people yet.</li>
-          <li>EKHO takes over the bookkeeping, not your judgement.</li>
-        </ul>
-
-        <h2>Install</h2>
-        <pre class="hatched"><code>curl -fsSL https://get.ekholabs.eu/i/&lt;key&gt; | sh</code></pre>
-        <p class="note">
-          EKHO is in early access, by invitation. This installer is not available yet.
-        </p>
       </section>
     </div>
   </div>

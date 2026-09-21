@@ -1,121 +1,116 @@
 ---
-// Who owns what, as stacked layers. Colour carries the meaning, as in the
-// pitch deck: black is EKHO, yellow is yours, grey is replaceable; hatching
-// means it does not exist yet. With data-arch the layers can build up from
-// the bottom (the page toggles is-shown); without it the graphic is finished.
+// The EKHO architecture, after slide 23 of the pitch deck (Planet A,
+// 2026-09-12), set for the dark site: the core layers in paper, the model
+// in grey, what the member owns in signal yellow, the conversation and the
+// return channel dotted. With data-arch the layers can build up top to
+// bottom (the page toggles is-shown); without it the graphic is finished.
 
 interface Props {
   animated?: boolean;
-  idPrefix?: string;
 }
-const { animated = true, idPrefix = 'ar' } = Astro.props;
-const tileId = `${idPrefix}-tile`;
-const hatchId = `${idPrefix}-hatch`;
+const { animated = true } = Astro.props;
 
-const person = '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>';
-const terminal =
-  '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M12 15h5"/>';
+const W = 640;
+const X = 20;
+const IW = W - 2 * X;
+const layers = [
+  {
+    kind: 'conversation',
+    title: 'Conversation',
+    code: 'ekho-stream',
+    note: 'Interface to every layer',
+    y: 20,
+  },
+  { kind: 'core', title: 'Ontology', code: 'ekho-core', note: 'Types, links, rules', y: 104 },
+  {
+    kind: 'core',
+    title: 'Harness',
+    code: 'ekho-cockpit',
+    note: 'Workflows that apply the grammar',
+    y: 188,
+  },
+  { kind: 'llm', title: 'LLM', code: '', note: 'Swappable reasoning engine', y: 288 },
+];
+const H = 70;
+const boxW = (IW - 2 * 24) / 3;
+const owned = [
+  { title: 'Knowledge', code: 'ekho-knowledge-vault' },
+  { title: 'Specs', code: 'ekho-spec-vault' },
+  { title: 'Code', code: 'ekho-applications' },
+];
+const oy = 388;
+const oh = 96;
+const legend = [
+  { kind: 'core', label: 'EKHO core', x: 0 },
+  { kind: 'llm', label: 'Swappable LLM', x: 118 },
+  { kind: 'owned', label: 'Owned by the member', x: 262 },
+  { kind: 'return', label: 'Return channel', x: 450 },
+];
 ---
 
 <figure
   class="arch-graphic"
   data-arch={animated ? '' : undefined}
   role="img"
-  aria-label="Three layers. At the bottom EKHO Core: shared vocabulary, typed links, an open format and a harness that keeps your agent in line. Above it your profile, your own terms on top of the core, in development. On top your knowledge, the files that are yours. You and your replaceable AI agent both read the same files."
+  aria-label="The EKHO architecture. A conversation is the interface to every layer. Below it the EKHO core: the ontology (types, links, rules) and the harness (workflows that apply the grammar). Then a swappable LLM as the reasoning engine. At the bottom what the member owns: knowledge, specs and code, each feeding the next, with code returning to knowledge."
 >
-  <svg viewBox="0 0 640 620" aria-hidden="true">
-    <defs>
-      <linearGradient id={tileId} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" style="stop-color: var(--tile-top)"></stop>
-        <stop offset="1" style="stop-color: var(--tile-bottom)"></stop>
-      </linearGradient>
-      <pattern
-        id={hatchId}
-        width="12"
-        height="12"
-        patternUnits="userSpaceOnUse"
-        patternTransform="rotate(45)"
-      >
-        <rect width="12" height="12" style="fill: var(--surface)"></rect>
-        <rect width="6" height="12" style="fill: var(--stripe)"></rect>
-      </pattern>
-    </defs>
-
-    <!-- the two readers: grey, replaceable -->
-    <g class="ar-layer" style="--d: 3">
-      <path class="ar-line" d="M 186 118 C 186 160, 200 170, 200 200"></path>
-      <path class="ar-line" d="M 454 118 C 454 160, 440 170, 440 200"></path>
-      <text class="ar-mid" x="320" y="164" text-anchor="middle">
-        same files
-      </text>
-      <g transform="translate(150 40)">
-        <rect class="ar-tile" width="72" height="72" rx="16" fill={`url(#${tileId})`}></rect>
-        <svg class="ar-icon" x="24" y="24" width="24" height="24" viewBox="0 0 24 24">
-          <g set:html={person} />
-        </svg>
-        <text class="ar-label" x="36" y="-12" text-anchor="middle">
-          You
+  <svg viewBox="0 0 640 600" aria-hidden="true">
+    {layers.map((l, i) => (
+      <g class="ar-layer" style={`--d: ${i}`}>
+        <rect class={`ar-box ar-${l.kind}`} x={X} y={l.y} width={IW} height={H} rx="14" />
+        <text class={`ar-title ar-t-${l.kind}`} x={X + 22} y={l.y + 43}>
+          {l.title}
+          {l.code && <tspan class={`ar-code ar-c-${l.kind}`}> | {l.code}</tspan>}
+        </text>
+        <text class={`ar-note ar-t-${l.kind}`} x={X + IW - 22} y={l.y + 42} text-anchor="end">
+          {l.note}
         </text>
       </g>
-      <g transform="translate(418 40)">
-        <rect class="ar-tile" width="72" height="72" rx="16" fill={`url(#${tileId})`}></rect>
-        <svg class="ar-icon" x="24" y="24" width="24" height="24" viewBox="0 0 24 24">
-          <g set:html={terminal} />
-        </svg>
-        <text class="ar-label" x="36" y="-12" text-anchor="middle">
-          Your AI agent
-        </text>
-      </g>
-      <text class="ar-note" x="508" y="82">
-        replaceable
-      </text>
+    ))}
+
+    {owned.map((o, i) => {
+      const x = X + i * (boxW + 24);
+      return (
+        <g class="ar-layer" style={`--d: ${4 + i}`}>
+          <rect class="ar-box ar-owned" x={x} y={oy} width={boxW} height={oh} rx="14" />
+          <text class="ar-title ar-t-owned" x={x + 16} y={oy + 38}>
+            {o.title}
+          </text>
+          <text class="ar-code ar-c-owned" x={x + 16} y={oy + 70}>
+            {o.code}
+          </text>
+          {i < 2 && (
+            <path
+              class="ar-arrow"
+              d={`M ${x + boxW + 3} ${oy + 44} L ${x + boxW + 19} ${oy + 44} M ${x + boxW + 14} ${oy + 39} L ${x + boxW + 20} ${oy + 44} L ${x + boxW + 14} ${oy + 49}`}
+            />
+          )}
+        </g>
+      );
+    })}
+
+    <!-- return channel: from code back to knowledge -->
+    <g class="ar-layer" style="--d: 7">
+      <path
+        class="ar-return"
+        d={`M ${X + 2 * (boxW + 24) + boxW / 2} ${oy + oh + 4} L ${X + 2 * (boxW + 24) + boxW / 2} ${oy + oh + 22} L ${X + boxW / 2} ${oy + oh + 22} L ${X + boxW / 2} ${oy + oh + 8}`}
+      ></path>
+      <path
+        class="ar-arrow"
+        d={`M ${X + boxW / 2 - 5} ${oy + oh + 12} L ${X + boxW / 2} ${oy + oh + 5} L ${X + boxW / 2 + 5} ${oy + oh + 12}`}
+      ></path>
     </g>
 
-    <!-- your knowledge: yellow, yours -->
-    <g class="ar-layer" style="--d: 2">
-      <rect class="ar-knowledge" x="60" y="200" width="520" height="110" rx="22"></rect>
-      <text class="ar-title ar-on-signal" x="88" y="246">
-        Your knowledge
-      </text>
-      <text class="ar-sub ar-on-signal" x="88" y="276">
-        Markdown files in your folder, typed and linked
-      </text>
-    </g>
-
-    <!-- your profile: hatched, does not exist yet -->
-    <g class="ar-layer" style="--d: 1">
-      <rect x="60" y="326" width="520" height="96" rx="22" fill={`url(#${hatchId})`}></rect>
-      <rect class="ar-profile" x="60" y="326" width="520" height="96" rx="22"></rect>
-      <text class="ar-title" x="88" y="366">
-        Your profile
-      </text>
-      <text class="ar-sub" x="88" y="396">
-        Your terms and types on top of the core
-      </text>
-      <rect class="ar-tag" x="438" y="346" width="122" height="30" rx="15"></rect>
-      <text class="ar-tag-text" x="499" y="366" text-anchor="middle">
-        in development
-      </text>
-    </g>
-
-    <!-- EKHO core: black -->
-    <g class="ar-layer" style="--d: 0">
-      <rect class="ar-core" x="60" y="438" width="520" height="150" rx="22"></rect>
-      <text class="ar-title" x="88" y="482">
-        EKHO Core
-      </text>
-      <text class="ar-sub" x="88" y="512">
-        Shared vocabulary · typed links · open format
-      </text>
-      <text class="ar-sub" x="88" y="540">
-        Harness: rules for your agent, and a linter
-      </text>
-      <text class="ar-sub" x="88" y="564">
-        that enforces them
-      </text>
+    <!-- legend -->
+    <g class="ar-layer ar-legend" style="--d: 8">
+      {legend.map((k) => (
+        <g transform={`translate(${X + k.x} 560)`}>
+          <rect class={`ar-swatch ar-s-${k.kind}`} x="0" y="-13" width="16" height="16" rx="4" />
+          <text class="ar-legend-text" x="24" y="0">
+            {k.label}
+          </text>
+        </g>
+      ))}
     </g>
   </svg>
-  <figcaption class="ar-caption">
-    Black is EKHO. <span class="signal-text">Yellow is yours.</span> Grey is replaceable.
-  </figcaption>
 </figure>

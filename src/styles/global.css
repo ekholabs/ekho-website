@@ -875,8 +875,9 @@
     display: inline;
   }
 
-  /* architecture graphic: who owns what. Black is EKHO, yellow is yours,
-     grey is replaceable, hatched does not exist yet */
+  /* architecture graphic, after slide 23 of the pitch deck: the EKHO core in
+     paper, the model in grey, what the member owns in yellow, dotted for the
+     conversation and the return channel */
   .arch-graphic {
     display: flex;
     flex-direction: column;
@@ -892,85 +893,107 @@
     min-height: 0;
   }
 
-  .ar-tile {
-    stroke: var(--tile-line);
+  .ar-box {
+    stroke-width: 1.5;
   }
 
-  .ar-icon {
-    fill: none;
-    stroke: var(--text);
-    stroke-width: 1.75;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .ar-label,
-  .ar-mid,
-  .ar-note {
-    fill: var(--muted);
-    font-family: var(--font-sans);
-    font-size: 15px;
-  }
-
-  .ar-note {
-    font-size: 13px;
-    font-style: italic;
-  }
-
-  .ar-line {
+  .ar-conversation {
     fill: none;
     stroke: var(--muted);
-    stroke-width: 1.25;
-  }
-
-  .ar-knowledge {
-    fill: var(--signal);
-  }
-
-  .ar-profile {
-    fill: none;
-    stroke: var(--tile-line);
-    stroke-width: 1.5;
-    stroke-dasharray: 6 5;
+    stroke-dasharray: 2 6;
+    stroke-linecap: round;
   }
 
   .ar-core {
-    fill: var(--core);
-    stroke: var(--border);
+    fill: var(--text);
+  }
+
+  .ar-llm {
+    fill: var(--stripe);
+  }
+
+  .ar-owned {
+    fill: var(--signal);
   }
 
   .ar-title {
-    fill: var(--text);
     font-family: var(--font-sans);
     font-size: 22px;
     font-weight: 500;
   }
 
-  .ar-sub {
-    fill: var(--muted);
+  .ar-note,
+  .ar-code {
     font-family: var(--font-sans);
     font-size: 15px;
+    font-weight: 400;
   }
 
-  .ar-on-signal {
+  .ar-t-conversation {
+    fill: var(--text);
+  }
+
+  .ar-t-core {
     fill: var(--signal-ink);
   }
 
-  .ar-tag {
-    fill: var(--bg);
-    stroke: var(--border);
+  .ar-t-llm {
+    fill: var(--muted);
   }
 
-  .ar-tag-text {
-    fill: var(--text);
+  .ar-t-owned {
+    fill: var(--signal-ink);
+  }
+
+  .ar-c-conversation,
+  .ar-c-core {
+    fill: var(--muted);
+  }
+
+  .ar-c-owned {
+    fill: var(--signal-ink);
+    opacity: 0.75;
+  }
+
+  .ar-arrow {
+    fill: none;
+    stroke: var(--text);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ar-return {
+    fill: none;
+    stroke: var(--text);
+    stroke-width: 2;
+    stroke-dasharray: 1 6;
+    stroke-linecap: round;
+  }
+
+  .ar-legend-text {
+    fill: var(--muted);
     font-family: var(--font-sans);
     font-size: 13px;
   }
 
-  .ar-caption {
-    margin-top: 0.5rem;
-    color: var(--muted);
-    font-size: 0.9375rem;
+  .ar-s-core {
+    fill: var(--text);
+  }
+
+  .ar-s-llm {
+    fill: var(--stripe);
+  }
+
+  .ar-s-owned {
+    fill: var(--signal);
+  }
+
+  .ar-s-return {
+    fill: none;
+    stroke: var(--text);
+    stroke-dasharray: 1 3;
+    stroke-linecap: round;
   }
 
   /* beside the chapters: the architecture takes the context graphic's place
@@ -1017,18 +1040,12 @@
     transition:
       opacity 500ms ease,
       transform 500ms ease;
-    transition-delay: calc(var(--d) * 220ms + 200ms);
+    transition-delay: calc(var(--d) * 140ms + 150ms);
   }
 
   .reveal-on [data-arch].is-shown .ar-layer {
     opacity: 1;
     transform: none;
-  }
-
-  @media (max-width: 63.99rem) {
-    .ar-caption {
-      display: none;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1099,6 +1116,15 @@
     font-size: 1.125rem;
   }
 
+  .layers .layer-owned {
+    background-color: var(--signal);
+    color: var(--signal-ink);
+  }
+
+  .layers .layer-owned p {
+    color: var(--signal-ink);
+  }
+
   .tag {
     padding: 0.15rem 0.6rem;
     border-radius: 999px;
@@ -1111,21 +1137,6 @@
   /* hatched: means exactly one thing on this site: "does not exist yet" */
   .hatched {
     background: repeating-linear-gradient(135deg, var(--stripe) 0 7px, var(--surface) 7px 14px);
-  }
-
-  .not-yet-list {
-    display: grid;
-    gap: 0.75rem;
-    margin: 0 0 2.5rem;
-    padding: 0;
-    list-style: none;
-  }
-
-  .not-yet-list li {
-    padding: 1rem 1.25rem;
-    border-radius: var(--radius);
-    background-color: var(--surface);
-    box-shadow: var(--lift);
   }
 
   /* chapter navigation, inside the sticky header on the homepage. On narrow
