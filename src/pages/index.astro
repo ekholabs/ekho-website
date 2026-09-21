@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ContextGraphic from '../components/ContextGraphic.astro';
-import ArchitectureGraphic from '../components/ArchitectureGraphic.astro';
+import Architecture from '../components/Architecture.astro';
 
 const readers = ['You', 'Claude Code', 'Codex', 'OpenCode'];
 
@@ -107,7 +107,6 @@ const chapters = [
   <div class="wrap wrap-wide landing story">
     <div class="story-figure" data-story-figure>
       <ContextGraphic />
-      <ArchitectureGraphic />
     </div>
     <div class="story-text">
       <section class="chapter measure" id="context" data-chapter>
@@ -204,54 +203,22 @@ const chapters = [
           </li>
         </ol>
       </section>
-
-      <section class="chapter measure" id="architecture" data-chapter>
-        <p class="chapter-label">
-          <span>04</span> Architecture
-        </p>
-        <h2>The EKHO architecture</h2>
-        <p class="chapter-lede">
-          Claude Code and Obsidian get you a smart notebook. EKHO adds the grammar and the workflows
-          that make it repeatable, and compatible with every other EKHO vault.
-        </p>
-        <ul class="layers">
-          <li>
-            <h3>Ontology</h3>
-            <p>
-              The shared grammar of knowledge: what a note is (insight, hypothesis, decision), how
-              notes relate, and which rules they follow. It is declared, not prompted, so every
-              vault behaves the same.
-            </p>
-          </li>
-          <li>
-            <h3>Harness</h3>
-            <p>
-              Skills, workflows and a linter that take in sources, answer questions and keep
-              everything consistent. It turns something one person prompted once into behaviour
-              anyone can repeat.
-            </p>
-          </li>
-          <li>
-            <h3>LLM</h3>
-            <p>
-              The engine that reads, writes and links. EKHO works with any model, so you can swap
-              the model and your knowledge stays yours.
-            </p>
-          </li>
-          <li class="layer-owned">
-            <h3>Knowledge → Specs → Code</h3>
-            <p>
-              What you own: the knowledge vault where the thinking lives, specs that turn validated
-              knowledge into requirements, and the software built from them, fed back as evidence.
-            </p>
-          </li>
-        </ul>
-        <noscript>
-          <ArchitectureGraphic animated={false} />
-        </noscript>
-      </section>
     </div>
   </div>
+
+  <section class="wrap wrap-wide chapter chapter--wide" id="architecture" data-chapter>
+    <div class="measure">
+      <p class="chapter-label">
+        <span>04</span> Architecture
+      </p>
+      <h2>The EKHO architecture</h2>
+      <p class="chapter-lede">
+        Claude Code and Obsidian get you a smart notebook. EKHO adds the grammar and the workflows
+        that make it repeatable, and compatible with every other EKHO vault.
+      </p>
+    </div>
+    <Architecture />
+  </section>
 
   <div class="wrap wrap-wide landing">
     <p class="closing measure">
@@ -280,7 +247,6 @@ const chapters = [
   const sequences = [...document.querySelectorAll<HTMLElement>('[data-seq]')];
   const chapterNav = document.querySelector<HTMLElement>('[data-chapter-nav]');
   const graphic = document.querySelector<HTMLElement>('[data-graphic]');
-  const storyFigure = document.querySelector<HTMLElement>('[data-story-figure]');
   const arch = document.querySelector<HTMLElement>('[data-arch]');
   let lastChapter: string | undefined;
 
@@ -326,10 +292,10 @@ const chapters = [
     if (graphic) {
       const stage = currentChapter ? chapters.findIndex((c) => c.id === currentChapter) + 1 : 1;
       for (let n = 2; n <= 5; n++) graphic.classList.toggle(`is-${n}`, stage >= n);
-      // from chapter 04 on, the architecture takes the graphic's place
-      storyFigure?.classList.toggle('is-arch', stage >= 4);
-      arch?.classList.toggle('is-shown', stage >= 4);
     }
+
+    // architecture: its rows come in once the chapter is in view
+    if (arch && arch.getBoundingClientRect().top < vh * 0.8) arch.classList.add('is-in');
 
     // statement sequences: the step nearest the reading line is full, the rest dim
     const line = vh * 0.45;

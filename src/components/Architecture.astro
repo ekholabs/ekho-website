@@ -1,0 +1,111 @@
+---
+// The EKHO architecture as an interactive graphic, after slides 23 and 24 of
+// the pitch deck (Planet A, 2026-09-12). At rest it reads like slide 23:
+// every layer with its name, repository and one line. Opening a layer shows
+// its description from slide 24. Built on <details name="arch">, so it works
+// without JavaScript and by keyboard, and only one layer is open at a time.
+
+const core = [
+  {
+    title: 'Ontology',
+    code: 'ekho-core',
+    note: 'Types, links, rules',
+    lead: 'The shared grammar of knowledge:',
+    text: 'what a note is (insight, hypothesis, decision), how notes relate, and which rules they follow. It is declared, not prompted, so every vault behaves the same and each domain can extend it without touching the core.',
+  },
+  {
+    title: 'Harness',
+    code: 'ekho-cockpit',
+    note: 'Workflows that apply the grammar',
+    lead: 'The layer that puts the ontology to work:',
+    text: 'skills, workflows and a linter that take in sources, answer questions and keep everything consistent. It turns something one person prompted once into behaviour anyone can repeat.',
+  },
+];
+
+const owned = [
+  {
+    title: 'Knowledge',
+    code: 'ekho-knowledge-vault',
+    lead: 'The knowledge vault:',
+    text: 'sources, insights, hypotheses and decisions as plain Markdown. It becomes more valuable with every session, and it is where the thinking lives.',
+  },
+  {
+    title: 'Specs',
+    code: 'ekho-spec-vault',
+    lead: 'The bridge from validated knowledge to buildable requirements:',
+    text: 'user stories, architecture decisions, acceptance criteria. Anything that gets built can be traced back to why.',
+  },
+  {
+    title: 'Code',
+    code: 'ekho-applications',
+    lead: 'The running software,',
+    text: 'built from specs and fed back into the knowledge vault as evidence. Every shipped feature closes the loop and sharpens the next round.',
+  },
+];
+---
+
+<div class="arch" data-arch>
+  <div class="arch-row arch-conversation">
+    <div class="arch-head">
+      <span class="arch-title">
+        Conversation <span class="arch-code">| ekho-stream</span>
+      </span>
+      <span class="arch-note">Interface to every layer</span>
+    </div>
+  </div>
+
+  {core.map((l) => (
+    <details class="arch-row arch-core" name="arch">
+      <summary class="arch-head">
+        <span class="arch-title">
+          {l.title} <span class="arch-code">| {l.code}</span>
+        </span>
+        <span class="arch-note">{l.note}</span>
+      </summary>
+      <p class="arch-desc">
+        <strong>{l.lead}</strong> {l.text}
+      </p>
+    </details>
+  ))}
+
+  <details class="arch-row arch-llm" name="arch">
+    <summary class="arch-head">
+      <span class="arch-title">LLM</span>
+      <span class="arch-note">Swappable reasoning engine</span>
+    </summary>
+    <p class="arch-desc">
+      The engine that reads, writes and links. EKHO works with any model (frontier, open or locally
+      hosted), so you can swap the model and your knowledge stays yours.
+    </p>
+  </details>
+
+  <div class="arch-owned">
+    {owned.map((o) => (
+      <details class="arch-row arch-member" name="arch">
+        <summary class="arch-head arch-head--stacked">
+          <span class="arch-title">{o.title}</span>
+          <span class="arch-code">{o.code}</span>
+        </summary>
+        <p class="arch-desc">
+          <strong>{o.lead}</strong> {o.text}
+        </p>
+      </details>
+    ))}
+  </div>
+  <div class="arch-return" aria-hidden="true"></div>
+
+  <ul class="arch-legend">
+    <li>
+      <span class="arch-swatch arch-swatch--core"></span>EKHO core
+    </li>
+    <li>
+      <span class="arch-swatch arch-swatch--llm"></span>Swappable LLM
+    </li>
+    <li>
+      <span class="arch-swatch arch-swatch--member"></span>Owned by the member
+    </li>
+    <li>
+      <span class="arch-swatch arch-swatch--return"></span>Return channel
+    </li>
+  </ul>
+</div>
