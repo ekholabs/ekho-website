@@ -241,6 +241,32 @@
     font-size: 0.9375rem;
   }
 
+  /* bare layout: the page fills the screen below the header itself */
+  .main-bare {
+    padding: 0;
+  }
+
+  /* teaser: one statement, as large as the screen allows */
+  .wrap-wide {
+    max-width: 80rem;
+  }
+
+  .teaser {
+    display: flex;
+    align-items: center;
+    min-height: calc(100svh - 4rem);
+    padding-block: 3rem;
+  }
+
+  .teaser h1 {
+    margin: 0;
+    font-size: clamp(2.75rem, 9vw, 7.5rem);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
   .site-footer {
     border-bottom: 0;
     padding-block: 1.5rem;

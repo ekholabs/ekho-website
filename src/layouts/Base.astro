@@ -4,9 +4,11 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  /** 'bare': no footer and no content column, the page lays itself out */
+  layout?: 'page' | 'bare';
 }
 
-const { title, description = 'EKHO Labs' } = Astro.props;
+const { title, description = 'EKHO Labs', layout = 'page' } = Astro.props;
 const year = new Date().getFullYear();
 
 // Until launch the site stays out of search engines (AGENTS.md §9).
@@ -30,7 +32,7 @@ const indexable = false;
   </head>
   <body>
     <header class="site-header">
-      <div class="wrap">
+      <div class:list={['wrap', { 'wrap-wide': layout === 'bare' }]}>
         <a class="brand" href="/">
           EKHO
         </a>
@@ -41,17 +43,25 @@ const indexable = false;
       </div>
     </header>
 
-    <main>
-      <div class="wrap">
+    {layout === 'bare' ? (
+      <main class="main-bare">
         <slot />
-      </div>
-    </main>
+      </main>
+    ) : (
+      <>
+        <main>
+          <div class="wrap">
+            <slot />
+          </div>
+        </main>
 
-    <footer class="site-footer">
-      <div class="wrap">
-        <span>&copy; {year} EKHO Labs</span>
-        <span>ekholabs.eu</span>
-      </div>
-    </footer>
+        <footer class="site-footer">
+          <div class="wrap">
+            <span>&copy; {year} EKHO Labs</span>
+            <span>ekholabs.eu</span>
+          </div>
+        </footer>
+      </>
+    )}
   </body>
 </html>
