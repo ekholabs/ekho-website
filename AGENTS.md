@@ -153,10 +153,12 @@ Scopes: `content` · `layout` · `styles` · `seo` · `deploy` · `ci` · `deps`
 
 Subject in the imperative, no trailing period, **72 bytes** or fewer — bytes, not characters, so an em dash costs three and a subject that reads as 71 characters can be 73. A body is only needed when the _why_ is not obvious from the subject.
 
-| #   | Rule                                                                     | Enforced by                                 |
-| --- | ------------------------------------------------------------------------ | ------------------------------------------- |
-| N9  | No direct commit to `main`. Every change goes through a PR with green CI | review · branch protection, once configured |
-| N10 | A PR that changes what a visitor sees says so in its body, in one line   | review                                      |
+| #   | Rule                                                                                                        | Enforced by                                                                        |
+| --- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| N9  | No direct commit to `main`. Every change goes through a PR **and a green CI**, with no exception for anyone | ruleset _main - every change through a PR, CI is the authority_ (no bypass actors) |
+| N10 | A PR that changes what a visitor sees says so in its body, in one line                                      | review                                                                             |
+
+N9 is enforced, not advisory: a push straight to `main` is rejected by the ruleset, as is a force-push, a branch deletion and a merge whose `check` run is not green. The ruleset requires the branch to be up to date before merging and allows **merge commits only** — no squash, no rebase, so the history of what was deployed stays readable. It requires zero approvals, because GitHub does not let you approve your own PR and a team this size would deadlock; CI is the gate, and a second pair of eyes is a convention here rather than a rule.
 
 Because `main` deploys itself the moment it merges, "I will fix it right after merging" is not a plan — the broken version is live for as long as the fix takes.
 
@@ -194,7 +196,7 @@ gh run watch                   # follow the one in flight
 gh run view --log-failed       # why the last one failed
 ```
 
-**Rolling back** is `git revert <sha>` on a branch, then a PR — the revert deploys itself like anything else. Never force-push `main` to undo a deploy: the deployment history stops matching the commit history and the next person cannot tell what is actually live.
+**Rolling back** is `git revert <sha>` on a branch, then a PR — the revert deploys itself like anything else. Force-pushing `main` to undo a deploy is rejected by the ruleset, and rightly: the deployment history would stop matching the commit history and the next person could not tell what is actually live.
 
 **The custom domain.** `public/CNAME` is copied into `dist/` by the build and is what binds the site to `ekholabs.eu` (N1). The domain is on **Hetzner DNS**, and the apex records must stay as:
 
@@ -206,7 +208,9 @@ A     @    185.199.111.153     AAAA  @    2606:50c0:8003::153
 CNAME www  ekholabs.github.io.
 ```
 
-Those four IPv4 addresses are GitHub's, shared by every Pages site, and they change rarely but they do change — if the site goes dark with DNS errors, check them against [GitHub's current list](https://docs.github.com/pages/configuring-a-custom-domain-for-your-github-pages-site) before debugging anything in this repo. _Enforce HTTPS_ must stay on in Settings → Pages.
+Those four IPv4 addresses are GitHub's, shared by every Pages site, and they change rarely but they do change — if the site goes dark with DNS errors, check them against [GitHub's current list](https://docs.github.com/pages/configuring-a-custom-domain-for-your-github-pages-site) before debugging anything in this repo. _Enforce HTTPS_ is on and must stay on.
+
+**If the domain ever has to be set up again**, the order is not optional. DNS records first; then the domain on Pages (`gh api -X PUT repos/ekholabs/ekho-website/pages -f cname=ekholabs.eu`); then GitHub requests a Let's Encrypt certificate, which takes minutes; then, and only then, HTTPS enforcement (`-F https_enforced=true`). Passing `https_enforced` in the same call that sets the domain fails with `The certificate does not exist yet` — GitHub sets it to `false` by itself and it is turned on afterwards. Enforcing HTTPS before the certificate exists takes the site down rather than merely leaving it unencrypted.
 
 ## 10 · Definition of done
 
