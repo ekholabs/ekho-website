@@ -2,40 +2,29 @@
 
 Source for [ekholabs.eu](https://ekholabs.eu) — the EKHO Labs website.
 
-Built with [Astro](https://astro.build), output is fully static, and deployed to
+Built with [Astro](https://astro.build), compiled to static files, deployed to
 GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.
 
-## Develop
+## Quick start
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321
-npm run build    # static output in dist/
-npm run preview  # serve the built output
+npm run dev      # http://localhost:4321, reloads as you save
 ```
 
-## Content
+Edit copy in `src/pages/`, the header and footer in `src/layouts/Base.astro`,
+and colours in `src/styles/global.css`.
 
-The site is currently a scaffold with placeholder copy:
+Before opening a pull request:
 
-- `src/pages/index.astro` — homepage
-- `src/pages/404.astro` — not-found page
-- `src/layouts/Base.astro` — shell, `<head>`, header and footer
-- `src/styles/global.css` — design tokens and styles
-
-## Deployment
-
-`public/CNAME` pins the custom domain to `ekholabs.eu`; it is copied verbatim
-into `dist/`. The apex domain needs these DNS records at the registrar:
-
+```bash
+npm run format && npm run check && npm run build && node tools/check-links.mjs
 ```
-A     @   185.199.108.153
-A     @   185.199.109.153
-A     @   185.199.110.153
-A     @   185.199.111.153
-AAAA  @   2606:50c0:8000::153
-AAAA  @   2606:50c0:8001::153
-AAAA  @   2606:50c0:8002::153
-AAAA  @   2606:50c0:8003::153
-CNAME www ekholabs.github.io
-```
+
+## Read this first
+
+**[`AGENTS.md`](AGENTS.md)** is the single source for how this repo is worked
+on — what may and may not change, how to add a page, how styling is organised,
+commit and branch conventions, what CI enforces, and how deployment and the
+custom domain work. It covers humans and AI agents alike; `CLAUDE.md` is a stub
+that imports it.
