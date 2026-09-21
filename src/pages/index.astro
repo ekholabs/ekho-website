@@ -15,36 +15,76 @@ const chapters = [
   description="EKHO turns what you know into connected context that compounds, so you get more out of AI every time you use it, and it stays yours."
   layout="wide"
 >
-  <div class="teaser-track">
-    <div class="wrap wrap-wide teaser">
-      <h1>
-        <span class="teaser-line is-current" data-teaser-step>
+  <div class="scene" data-scene style="--phrases: 2">
+    <div class="wrap wrap-wide scene-frame">
+      <h1 class="scene-text scene-text--lead">
+        <span class="phrase" data-phrase>
           AI is only as good as your context.
         </span>
-        <span class="teaser-line" data-teaser-step>
+        <span class="phrase" data-phrase>
           Own it!
         </span>
       </h1>
     </div>
   </div>
 
-  <div class="wrap wrap-wide landing">
-    <div class="intro measure" data-seq>
-      <p class="statement" data-step>
-        The model is the same for everyone. What makes it work for you is your context: what you
-        know, what you have decided, and why.
+  <div class="scene" data-scene style="--phrases: 3">
+    <div class="wrap wrap-wide scene-frame">
+      <p class="scene-text">
+        <span class="phrase" data-phrase>
+          The model is the same for everyone.
+        </span>
+        <span class="phrase" data-phrase>
+          What makes it work for you is your context:
+        </span>
+        <span class="phrase" data-phrase>
+          what you know, what you have decided, and why.
+        </span>
       </p>
-      <p class="statement" data-step>
-        Most of it lives in your head, and every chat forgets it. So you explain it again, or you
-        settle for a generic answer.
+    </div>
+  </div>
+
+  <div class="scene" data-scene style="--phrases: 3">
+    <div class="wrap wrap-wide scene-frame">
+      <p class="scene-text">
+        <span class="phrase" data-phrase>
+          Most of it lives in your head,
+        </span>
+        <span class="phrase" data-phrase>
+          and every chat forgets it.
+        </span>
+        <span class="phrase" data-phrase>
+          So you explain it again, or you settle for a generic answer.
+        </span>
       </p>
-      <p class="statement" data-step>
-        EKHO lets you capture it once and make it compound. Every time you use AI, you get more out
-        of it than the time before.
+    </div>
+  </div>
+
+  <div class="scene" data-scene style="--phrases: 3">
+    <div class="wrap wrap-wide scene-frame">
+      <p class="scene-text">
+        <span class="phrase" data-phrase>
+          EKHO lets you capture it once
+        </span>
+        <span class="phrase" data-phrase>
+          and make it compound.
+        </span>
+        <span class="phrase" data-phrase>
+          Every time you use AI, you get more out of it than the time before.
+        </span>
       </p>
-      <p class="statement" data-step>
-        And because your context is what makes AI valuable to you,{' '}
-        <mark>it has to stay yours.</mark>
+    </div>
+  </div>
+
+  <div class="scene" data-scene style="--phrases: 2">
+    <div class="wrap wrap-wide scene-frame">
+      <p class="scene-text">
+        <span class="phrase" data-phrase>
+          And because your context is what makes AI valuable to you,
+        </span>
+        <span class="phrase" data-phrase>
+          <mark>it has to stay yours.</mark>
+        </span>
       </p>
     </div>
   </div>
@@ -185,14 +225,13 @@ const chapters = [
 
 <script>
   // Deck-style reveal and chapter navigation. Progressive enhancement only:
-  // without JavaScript, or with reduced motion, everything is fully visible
-  // and the teaser does not take extra scroll room.
+  // without JavaScript, or with reduced motion, every phrase is fully visible
+  // and the scenes take no extra scroll room.
   const root = document.documentElement;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduceMotion) root.classList.add('reveal-on');
 
-  const track = document.querySelector<HTMLElement>('.teaser-track');
-  const teaserSteps = [...document.querySelectorAll<HTMLElement>('[data-teaser-step]')];
+  const scenes = [...document.querySelectorAll<HTMLElement>('[data-scene]')];
   const chapters = [...document.querySelectorAll<HTMLElement>('[data-chapter]')];
   const links = new Map(
     [...document.querySelectorAll<HTMLAnchorElement>('[data-chapter-link]')].map((a) => [
@@ -205,12 +244,17 @@ const chapters = [
   function update() {
     const vh = window.innerHeight;
 
-    // teaser: the highlight moves to "Own it!" after a third of its scroll room
-    if (track && !reduceMotion) {
-      const scrollable = track.offsetHeight - vh;
-      const progress = scrollable > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollable)) : 0;
-      const current = progress < 0.35 ? 0 : 1;
-      teaserSteps.forEach((s, i) => s.classList.toggle('is-current', i === current));
+    // scenes: one statement per screen; while the statement stays in place,
+    // the highlight moves from phrase to phrase as the scene scrolls past
+    if (!reduceMotion) {
+      for (const scene of scenes) {
+        const phrases = [...scene.querySelectorAll<HTMLElement>('[data-phrase]')];
+        const scrollable = scene.offsetHeight - vh;
+        const r = scene.getBoundingClientRect();
+        const progress = scrollable > 0 ? Math.min(1, Math.max(0, -r.top / scrollable)) : 0;
+        const current = Math.min(phrases.length - 1, Math.floor(progress * phrases.length));
+        phrases.forEach((p, i) => p.classList.toggle('is-current', i === current));
+      }
     }
 
     // chapter nav: the chapter whose top has passed a third of the viewport

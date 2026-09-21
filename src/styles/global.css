@@ -251,20 +251,31 @@
     max-width: var(--maxw);
   }
 
-  /* teaser: one statement, as large as the screen allows */
   .wrap-wide {
     max-width: 80rem;
   }
 
-  .teaser {
+  /* scene: one statement per screen. Without the reveal it is simply a large
+     statement with room around it. */
+  .scene-frame {
     display: flex;
     align-items: center;
-    min-height: calc(100svh - 4rem);
+    min-height: 70svh;
     padding-block: 3rem;
   }
 
-  .teaser h1 {
+  .scene-text {
     margin: 0;
+    max-width: 60rem;
+    font-size: clamp(2rem, 5.5vw, 4.25rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    text-wrap: pretty;
+  }
+
+  .scene-text--lead {
+    max-width: none;
     font-size: clamp(2.75rem, 9vw, 7.5rem);
     font-weight: 700;
     line-height: 0.98;
@@ -272,47 +283,46 @@
     text-wrap: balance;
   }
 
-  .teaser-line {
+  .scene-text--lead .phrase {
     display: block;
   }
 
-  .teaser-line + .teaser-line {
+  .scene-text--lead .phrase + .phrase {
     margin-top: 0.15em;
   }
 
-  /* with the reveal on, the page gets scroll room and the statement stays put
-     while the highlight moves from line to line */
-  .reveal-on .teaser-track {
-    height: 200svh;
+  /* with the reveal on, each scene gets scroll room per phrase; the statement
+     stays put and the highlight moves from phrase to phrase */
+  .reveal-on .scene {
+    height: calc(100svh + var(--phrases) * 45svh);
   }
 
-  .reveal-on .teaser-track .teaser {
+  .reveal-on .scene-frame {
     position: sticky;
     top: 0;
     min-height: 100svh;
   }
 
-  .reveal-on .teaser-line {
+  .reveal-on .phrase {
     color: var(--muted);
-    transition: color 450ms ease;
+    transition: color 400ms ease;
   }
 
-  .reveal-on .teaser-line.is-current {
+  .reveal-on .phrase.is-current {
     color: var(--text);
   }
 
-  /* the WHY between the opening statement and the chapters */
-  .intro {
-    max-width: 56rem;
-    padding-block: 2rem 4rem;
+  .reveal-on .phrase mark {
+    background: transparent;
+    color: inherit;
+    transition:
+      background-color 400ms ease,
+      color 400ms ease;
   }
 
-  .intro .statement {
-    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.025em;
-    margin-bottom: 2rem;
+  .reveal-on .phrase.is-current mark {
+    background: var(--signal);
+    color: var(--signal-ink);
   }
 
   .closing {
