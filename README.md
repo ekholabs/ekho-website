@@ -13,7 +13,8 @@ npm run dev      # http://localhost:4321, reloads as you save
 ```
 
 Edit copy in `src/pages/`, the header and footer in `src/layouts/Base.astro`,
-and colours in `src/styles/global.css`.
+and colours in `src/styles/global.css`. Styling is Tailwind CSS v4 — see §6 of
+`AGENTS.md` for the token utilities.
 
 Before opening a pull request:
 
