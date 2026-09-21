@@ -267,6 +267,35 @@
     text-wrap: balance;
   }
 
+  .teaser-line {
+    display: block;
+  }
+
+  .teaser-line + .teaser-line {
+    margin-top: 0.15em;
+  }
+
+  /* with the reveal on, the page gets scroll room and the statement stays put
+     while the highlight moves from line to line */
+  .reveal-on .teaser-track {
+    height: 200svh;
+  }
+
+  .reveal-on .teaser-track .teaser {
+    position: sticky;
+    top: 0;
+    min-height: 100svh;
+  }
+
+  .reveal-on .teaser-line {
+    color: var(--muted);
+    transition: color 450ms ease;
+  }
+
+  .reveal-on .teaser-line.is-current {
+    color: var(--text);
+  }
+
   .site-footer {
     border-bottom: 0;
     padding-block: 1.5rem;

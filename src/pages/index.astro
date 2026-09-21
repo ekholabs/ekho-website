@@ -7,7 +7,51 @@ import Base from '../layouts/Base.astro';
   description="AI is only as good as your context. Own it."
   layout="bare"
 >
-  <div class="wrap wrap-wide teaser">
-    <h1>AI is only as good as your context. Own it!</h1>
+  <div class="teaser-track">
+    <div class="wrap wrap-wide teaser">
+      <h1>
+        <span class="teaser-line is-current" data-teaser-step>
+          AI is only as good as your context.
+        </span>
+        <span class="teaser-line" data-teaser-step>
+          Own it!
+        </span>
+      </h1>
+    </div>
   </div>
 </Base>
+
+<script>
+  // Deck-style reveal: the statement stays in place while you scroll, and
+  // the highlight moves from the first line to "Own it!". Without JavaScript,
+  // or with reduced motion, both lines are simply shown in full.
+  const root = document.documentElement;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduceMotion) {
+    root.classList.add('reveal-on');
+    const track = document.querySelector<HTMLElement>('.teaser-track');
+    const steps = [...document.querySelectorAll<HTMLElement>('[data-teaser-step]')];
+
+    const update = () => {
+      if (!track) return;
+      const scrollable = track.offsetHeight - window.innerHeight;
+      const progress = scrollable > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollable)) : 0;
+      const current = progress < 0.35 ? 0 : 1;
+      steps.forEach((s, i) => s.classList.toggle('is-current', i === current));
+    };
+
+    let queued = false;
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        update();
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  }
+</script>
