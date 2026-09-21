@@ -37,10 +37,12 @@ const indexable = false;
         <a class="brand" href="/">
           EKHO
         </a>
-        <nav class="nav">
-          <a href="/">Home</a>
-          <a href="https://github.com/ekholabs">GitHub</a>
-        </nav>
+        <slot name="header-nav">
+          <nav class="nav">
+            <a href="/">Home</a>
+            <a href="https://github.com/ekholabs">GitHub</a>
+          </nav>
+        </slot>
       </div>
     </header>
 

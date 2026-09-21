@@ -15,6 +15,19 @@ const chapters = [
   description="EKHO turns what you know into connected context that compounds, so you get more out of AI every time you use it, and it stays yours."
   layout="wide"
 >
+  <nav class="chapter-nav" aria-label="Chapters" slot="header-nav" data-chapter-nav>
+    <ol>
+      {chapters.map((c) => (
+        <li>
+          <a href={`#${c.id}`} data-chapter-link={c.id}>
+            <span class="chapter-nav-n">{c.n}</span>
+            {c.label}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+
   <div class="scene" data-scene style="--phrases: 2">
     <div class="wrap wrap-wide scene-frame">
       <h1 class="scene-text scene-text--lead">
@@ -79,22 +92,6 @@ const chapters = [
       </p>
     </div>
   </div>
-
-  <nav class="chapter-nav" aria-label="Chapters">
-    <div class="wrap wrap-wide">
-      <ol>
-        {chapters.map((c) => (
-          <li>
-            <a href={`#${c.id}`} data-chapter-link={c.id}>
-              <span class="chapter-nav-n">{c.n}</span>
-              {c.label}
-            </a>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </nav>
-
   <div class="wrap wrap-wide landing">
     <section class="chapter measure" id="context" data-chapter>
       <p class="chapter-label">
@@ -192,17 +189,19 @@ const chapters = [
         <span>05</span> Not yet
       </p>
       <h2>What does not exist yet</h2>
-      <ul>
-        <li>No web interface. You work in your editor and your terminal, and read in Obsidian.</li>
-        <li>
+      <ul class="not-yet-list">
+        <li class="hatched">
+          No web interface. You work in your editor and your terminal, and read in Obsidian.
+        </li>
+        <li class="hatched">
           No automatic import. Mail, chat and calendar are not connected; you bring things in.
         </li>
-        <li>No built-in sharing between people yet.</li>
+        <li class="hatched">No built-in sharing between people yet.</li>
         <li>EKHO takes over the bookkeeping, not your judgement.</li>
       </ul>
 
       <h2>Install</h2>
-      <pre><code>curl -fsSL https://get.ekholabs.eu/i/&lt;key&gt; | sh</code></pre>
+      <pre class="hatched"><code>curl -fsSL https://get.ekholabs.eu/i/&lt;key&gt; | sh</code></pre>
       <p class="note">
         EKHO is in early access, by invitation. This installer is not available yet.
       </p>
@@ -231,6 +230,8 @@ const chapters = [
     ]),
   );
   const sequences = [...document.querySelectorAll<HTMLElement>('[data-seq]')];
+  const chapterNav = document.querySelector<HTMLElement>('[data-chapter-nav]');
+  let lastChapter: string | undefined;
 
   function update() {
     const vh = window.innerHeight;
@@ -255,6 +256,20 @@ const chapters = [
       if (id === currentChapter) a.setAttribute('aria-current', 'true');
       else a.removeAttribute('aria-current');
     });
+    // on narrow screens the chapter list scrolls sideways: keep the active one in view
+    if (chapterNav && currentChapter !== lastChapter) {
+      lastChapter = currentChapter;
+      const active = currentChapter ? links.get(currentChapter) : undefined;
+      if (active) {
+        const navBox = chapterNav.getBoundingClientRect();
+        const box = active.getBoundingClientRect();
+        if (box.left < navBox.left || box.right > navBox.right) {
+          chapterNav.scrollLeft += box.left - navBox.left - 8;
+        }
+      } else {
+        chapterNav.scrollLeft = 0;
+      }
+    }
 
     // statement sequences: the step nearest the reading line is full, the rest dim
     const line = vh * 0.45;

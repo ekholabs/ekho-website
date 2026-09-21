@@ -15,6 +15,8 @@
   --muted: #929292;
   --signal: #fff056;
   --signal-ink: #151515;
+  /* hatching: the one sign for "does not exist yet", as on the roadmap dashboard */
+  --stripe: #262626;
   /* links: yellow text, a faint yellow line underneath */
   --link: var(--signal);
   --link-line: color-mix(in srgb, var(--signal) 40%, transparent);
@@ -142,9 +144,16 @@
     border-inline: 0;
   }
 
+  /* the header stays at the top on every page, over a blurred backdrop */
   .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
     border-top: 0;
     padding-block: 1rem;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
   .site-header .wrap {
@@ -155,6 +164,7 @@
   }
 
   .brand {
+    flex: none;
     font-weight: 500;
     letter-spacing: 0.02em;
     color: var(--text);
@@ -312,6 +322,14 @@
     opacity: 1;
   }
 
+  /* in the large statements a highlight may wrap; each line keeps its padding */
+  .scene-text mark,
+  .closing mark {
+    white-space: normal;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
   .reveal-on .phrase mark {
     background: transparent;
     color: inherit;
@@ -326,33 +344,56 @@
   }
 
   .closing {
+    display: flex;
+    align-items: center;
+    min-height: 100svh;
     margin: 0;
-    padding-block: 5rem 6rem;
+    padding-block: 5rem;
     font-size: clamp(1.75rem, 5vw, 2.75rem);
     line-height: 1.2;
     letter-spacing: -0.02em;
     font-weight: 500;
   }
 
-  /* chapter navigation: stays at the top while the page scrolls */
+  /* hatched: means exactly one thing on this site: "does not exist yet" */
+  .hatched {
+    background: repeating-linear-gradient(135deg, var(--stripe) 0 7px, var(--surface) 7px 14px);
+  }
+
+  .not-yet-list {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0 0 2.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .not-yet-list li {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  /* chapter navigation, inside the sticky header on the homepage. On narrow
+     screens the list scrolls sideways; the active chapter is kept in view. */
   .chapter-nav {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    border-bottom: 1px solid var(--border);
-    background: color-mix(in srgb, var(--bg) 85%, transparent);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .chapter-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .chapter-nav ol {
     display: flex;
     gap: 1.25rem;
-    margin: 0;
-    padding: 0.75rem 0;
+    width: max-content;
+    margin: 0 0 0 auto;
+    padding: 0;
     list-style: none;
-    overflow-x: auto;
-    scrollbar-width: none;
     font-size: 0.875rem;
   }
 
@@ -380,9 +421,13 @@
   }
 
   /* a chapter: small label, then the heading; clears the sticky nav when jumped to */
+  /* every chapter fills the screen, like a slide; longer ones simply grow */
   .chapter {
-    padding-top: 4rem;
-    scroll-margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100svh;
+    padding-block: 6rem 4rem;
   }
 
   .chapter-label {
