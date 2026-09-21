@@ -123,7 +123,7 @@ import Base from '../layouts/Base.astro';
 ```css
 --bg      page background        --text    body text
 --surface cards and code blocks  --muted   secondary text
---border  hairlines              --accent  links and highlights
+--border  hairlines              --signal  the one accent (yellow)
 --radius  corner rounding        --maxw    content column width
 ```
 
@@ -131,6 +131,7 @@ Light mode is a second definition of the same tokens under `@media (prefers-colo
 
 Rules that hold regardless of what you are styling:
 
+- The look follows the EKHO Design System (v0.4, derived from the pitch deck): black, white and greys, exactly one signal colour (yellow `--signal`), Helvetica Neue. Yellow is opt-in, never a default surface, and never text on a light background — in the light theme links are ink text over a yellow marker stroke.
 - No CSS framework, no utility classes, no CSS-in-JS. One stylesheet, plain CSS, semantic class names.
 - Never hardcode a colour in a page or layout file. Use a token, or add one.
 - The site must work at 320px wide with no horizontal scroll. The `.wrap` class already handles the content column and its 16px gutters — use it rather than inventing margins.
