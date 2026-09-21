@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import ContextGraphic from '../components/ContextGraphic.astro';
 
+const readers = ['You', 'Claude Code', 'Codex', 'OpenCode'];
+
 const chapters = [
   { id: 'context', n: '01', label: 'Context' },
   { id: 'why', n: '02', label: 'Why' },
@@ -29,70 +31,80 @@ const chapters = [
     </ol>
   </nav>
 
-  <div class="scene" data-scene style="--phrases: 2">
-    <div class="wrap wrap-wide scene-frame">
-      <h1 class="scene-text scene-text--lead">
-        <span class="phrase" data-phrase>
-          AI is only as good as your context.
-        </span>
-        <span class="phrase" data-phrase>
-          Own it!
-        </span>
-      </h1>
-    </div>
-  </div>
-
-  <div class="scene" data-scene style="--phrases: 2">
-    <div class="wrap wrap-wide scene-frame">
-      <p class="scene-text">
-        <span class="phrase" data-phrase>
-          The model is the same for everyone.
-        </span>
-        <span class="phrase" data-phrase>
-          What makes it work for you is your context: what you know, what you have decided, and why.
-        </span>
+  <section class="wrap wrap-wide overview" aria-labelledby="overview-title">
+    <div class="overview-head">
+      <div class="overview-intro">
+        <h1 class="overview-title" id="overview-title">
+          AI is only as good as your context. <span class="signal-text">Own it!</span>
+        </h1>
+        <div class="cta-row">
+          <a class="pill pill--solid" href="#how">
+            See how it works <span aria-hidden="true">↓</span>
+          </a>
+          <a class="pill" href="#not-yet">
+            What exists today
+          </a>
+        </div>
+      </div>
+      <p class="overview-lede">
+        EKHO turns what you know into one connected context your AI can work with. Every time you
+        use it, you get more out of it, and it stays yours.
       </p>
     </div>
-  </div>
 
-  <div class="scene" data-scene style="--phrases: 2">
-    <div class="wrap wrap-wide scene-frame">
-      <p class="scene-text">
-        <span class="phrase" data-phrase>
-          Most of it lives in your head, and every chat forgets it.
+    <div class="bento">
+      <a class="tile tile--graphic" href="#context">
+        <ContextGraphic animated={false} idPrefix="ov" caption={false} />
+        <span class="tile-arrow" aria-hidden="true">
+          ↘
         </span>
-        <span class="phrase" data-phrase>
-          So you explain it again, or you settle for a generic answer.
+        <span class="tile-foot">
+          <span class="tile-title">Your context</span>
+          <span class="tile-text">Everything you bring in, linked into one source.</span>
         </span>
-      </p>
-    </div>
-  </div>
+      </a>
 
-  <div class="scene" data-scene style="--phrases: 2">
-    <div class="wrap wrap-wide scene-frame">
-      <p class="scene-text">
-        <span class="phrase" data-phrase>
-          EKHO lets you capture it once and make it compound.
+      <a class="tile tile--dots" href="#context">
+        <span class="tile-pill">01 · Context</span>
+        <span class="tile-statement">
+          Everything an AI would need to know to answer the way you would.
         </span>
-        <span class="phrase" data-phrase>
-          Every time you use AI, you get more out of it than the time before.
-        </span>
-      </p>
-    </div>
-  </div>
+      </a>
 
-  <div class="scene" data-scene style="--phrases: 2">
-    <div class="wrap wrap-wide scene-frame">
-      <p class="scene-text">
-        <span class="phrase" data-phrase>
-          And because your context is what makes AI valuable,
+      <a class="tile tile--signal" href="#why">
+        <span class="tile-pill">Why it matters</span>
+        <span class="tile-statement">
+          The model is the same for everyone. Your context isn’t. It has to stay yours.
         </span>
-        <span class="phrase" data-phrase>
-          <mark>it has to stay yours.</mark>
+      </a>
+
+      <a class="tile tile--how" href="#how">
+        <span class="tile-pill">03 · How it works</span>
+        <ol class="how-steps">
+          <li>
+            <span>01</span> Throw it in.
+          </li>
+          <li>
+            <span>02</span> Let it be digested.
+          </li>
+          <li>
+            <span>03</span> Ask.
+          </li>
+        </ol>
+        <span class="tile-text">
+          An agent condenses what you bring in and links it to everything you already have. Sorted
+          before you ask, not searched for when you do.
         </span>
-      </p>
+        <span class="readers" aria-label="Read by you and your agents">
+          {readers.map((r) => (
+            <span class="reader">{r}</span>
+          ))}
+        </span>
+        <span class="chip hatched">Your profile · in development</span>
+      </a>
     </div>
-  </div>
+  </section>
+
   <div class="wrap wrap-wide landing story">
     <div class="story-figure">
       <ContextGraphic />

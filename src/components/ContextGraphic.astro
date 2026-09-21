@@ -1,7 +1,18 @@
 ---
 // The graphic that builds up alongside the chapters. Stage classes on the
 // figure (is-2 … is-4) switch its parts on; without JavaScript every part is
-// shown, so the graphic reads as finished.
+// shown, so the graphic reads as finished. With animated={false} it is always
+// shown finished (the overview tile). idPrefix keeps the SVG ids unique when
+// the graphic appears more than once on a page.
+
+interface Props {
+  animated?: boolean;
+  idPrefix?: string;
+  caption?: boolean;
+}
+const { animated = true, idPrefix = 'cg', caption = true } = Astro.props;
+const tileId = `${idPrefix}-tile`;
+const hatchId = `${idPrefix}-hatch`;
 
 const icons: Record<string, string> = {
   meeting:
@@ -56,18 +67,18 @@ const edges = [
 
 <figure
   class="context-graphic"
-  data-graphic
+  data-graphic={animated ? '' : undefined}
   role="img"
   aria-label="What you bring in (meetings, articles, voice notes, mails, decisions) links into one connected context that is yours; you and your AI agents read from the same source."
 >
   <svg viewBox="0 0 640 660" aria-hidden="true">
     <defs>
-      <linearGradient id="cg-tile" x1="0" y1="0" x2="0" y2="1">
+      <linearGradient id={tileId} x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" style="stop-color: var(--tile-top)"></stop>
         <stop offset="1" style="stop-color: var(--tile-bottom)"></stop>
       </linearGradient>
       <pattern
-        id="cg-hatch"
+        id={hatchId}
         width="10"
         height="10"
         patternUnits="userSpaceOnUse"
@@ -103,7 +114,7 @@ const edges = [
           <text class="cg-label" x={tile / 2} y="-14" text-anchor="middle">
             {s.label}
           </text>
-          <rect class="cg-tile" width={tile} height={tile} rx="16" />
+          <rect class="cg-tile" width={tile} height={tile} rx="16" fill={`url(#${tileId})`} />
           <svg class="cg-icon" x="24" y="24" width="24" height="24" viewBox="0 0 24 24">
             <g set:html={icons[s.icon]} />
           </svg>
@@ -113,13 +124,19 @@ const edges = [
 
     <!-- centre: your context -->
     <g class="cg-center" transform={`translate(${cx - cSize / 2} ${cTop})`}>
-      <rect class="cg-center-box" width={cSize} height={cSize} rx="26"></rect>
+      <rect
+        class="cg-center-box"
+        width={cSize}
+        height={cSize}
+        rx="26"
+        fill={`url(#${tileId})`}
+      ></rect>
       <rect
         class="cg-center-hatch"
         width={cSize}
         height={cSize}
         rx="26"
-        fill="url(#cg-hatch)"
+        fill={`url(#${hatchId})`}
       ></rect>
     </g>
     <g class="cg-graph">
@@ -145,7 +162,7 @@ const edges = [
     <g class="cg-readers">
       {readers.map((r) => (
         <g transform={`translate(${r.x - tile / 2} ${bottom})`}>
-          <rect class="cg-tile" width={tile} height={tile} rx="16" />
+          <rect class="cg-tile" width={tile} height={tile} rx="16" fill={`url(#${tileId})`} />
           <svg class="cg-icon" x="24" y="24" width="24" height="24" viewBox="0 0 24 24">
             <g set:html={icons[r.icon]} />
           </svg>
@@ -156,9 +173,11 @@ const edges = [
       ))}
     </g>
   </svg>
-  <figcaption class="cg-caption">
-    <span class="cg-caption-2">You bring things in. EKHO links them into one context.</span>
-    <span class="cg-caption-3">You and your agents read the same files.</span>
-    <span class="cg-caption-4">The context is yours. The model is replaceable.</span>
-  </figcaption>
+  {caption && (
+    <figcaption class="cg-caption">
+      <span class="cg-caption-2">You bring things in. EKHO links them into one context.</span>
+      <span class="cg-caption-3">You and your agents read the same files.</span>
+      <span class="cg-caption-4">The context is yours. The model is replaceable.</span>
+    </figcaption>
+  )}
 </figure>

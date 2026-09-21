@@ -33,7 +33,12 @@ const indexable = false;
   </head>
   <body>
     <header class="site-header">
-      <div class:list={['wrap', { 'wrap-wide': wide }]}>
+      <div
+        class:list={[
+          'wrap',
+          { 'wrap-wide': wide, 'header-centred': Astro.slots.has('header-nav') },
+        ]}
+      >
         <a class="brand" href="/">
           EKHO
         </a>
@@ -43,6 +48,11 @@ const indexable = false;
             <a href="https://github.com/ekholabs">GitHub</a>
           </nav>
         </slot>
+        {Astro.slots.has('header-nav') && (
+          <a class="header-aside" href="https://github.com/ekholabs">
+            GitHub <span aria-hidden="true">↗</span>
+          </a>
+        )}
       </div>
     </header>
 
