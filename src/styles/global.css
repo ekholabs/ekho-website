@@ -241,6 +241,94 @@
     font-size: 0.9375rem;
   }
 
+  /* chapter navigation: stays at the top while the page scrolls */
+  .chapter-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  .chapter-nav ol {
+    display: flex;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0.75rem 0;
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+    font-size: 0.875rem;
+  }
+
+  .chapter-nav a {
+    display: inline-flex;
+    gap: 0.4rem;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .chapter-nav a:hover {
+    color: var(--text);
+  }
+
+  .chapter-nav a[aria-current] {
+    color: var(--text);
+    border-bottom-color: var(--signal);
+  }
+
+  .chapter-nav-n {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* a chapter: small label, then the heading; clears the sticky nav when jumped to */
+  .chapter {
+    padding-top: 4rem;
+    scroll-margin-top: 2rem;
+  }
+
+  .chapter-label {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .chapter-label span {
+    color: var(--signal);
+    margin-right: 0.35rem;
+  }
+
+  .chapter h2 {
+    margin-top: 0;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .statement {
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.5rem;
+  }
+
+  /* deck-style reveal: the step at the reading line is full, the others dim */
+  .reveal-on [data-step] {
+    transition: opacity 400ms ease;
+    opacity: 0.3;
+  }
+
+  .reveal-on [data-step].is-current {
+    opacity: 1;
+  }
+
   .site-footer {
     border-bottom: 0;
     padding-block: 1.5rem;
