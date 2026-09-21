@@ -303,7 +303,16 @@
 
   /* the WHY between the opening statement and the chapters */
   .intro {
+    max-width: 56rem;
     padding-block: 2rem 4rem;
+  }
+
+  .intro .statement {
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    margin-bottom: 2rem;
   }
 
   .closing {
