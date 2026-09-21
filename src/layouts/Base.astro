@@ -8,6 +8,10 @@ interface Props {
 
 const { title, description = 'EKHO Labs' } = Astro.props;
 const year = new Date().getFullYear();
+
+// Until launch the site stays out of search engines (AGENTS.md §9).
+// At launch: set this to true and restore the Sitemap line in public/robots.txt.
+const indexable = false;
 ---
 
 <!doctype html>
@@ -17,6 +21,7 @@ const year = new Date().getFullYear();
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {!indexable && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

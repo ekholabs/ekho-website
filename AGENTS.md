@@ -216,6 +216,8 @@ gh run watch                   # follow the one in flight
 gh run view --log-failed       # why the last one failed
 ```
 
+**Before launch the site stays out of search engines.** Every page carries `<meta name="robots" content="noindex, nofollow">`, switched by `const indexable = false` in `src/layouts/Base.astro`, and `public/robots.txt` has its `Sitemap:` line commented out. Crawling itself stays allowed, because a crawler blocked by `robots.txt` never sees the `noindex` tag. At launch: set `indexable = true` and restore the `Sitemap:` line, in one PR.
+
 **Rolling back** is `git revert <sha>` on a branch, then a PR — the revert deploys itself like anything else. Force-pushing `main` to undo a deploy is rejected by the ruleset, and rightly: the deployment history would stop matching the commit history and the next person could not tell what is actually live.
 
 **The custom domain.** `public/CNAME` is copied into `dist/` by the build and is what binds the site to `ekholabs.eu` (N1). The domain is on **Hetzner DNS**, and the apex records must stay as:

@@ -1,4 +1,6 @@
+# Until launch every page carries a noindex meta tag (see AGENTS.md §9).
+# Crawling stays allowed so search engines can see that tag.
+# At launch: restore the line below.
+# Sitemap: https://ekholabs.eu/sitemap-index.xml
 User-agent: *
 Allow: /
-
-Sitemap: https://ekholabs.eu/sitemap-index.xml
