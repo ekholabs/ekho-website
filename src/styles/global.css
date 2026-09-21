@@ -891,6 +891,104 @@
     display: inline;
   }
 
+  /* the context gap: the same email without and with context */
+  .gap {
+    display: grid;
+    gap: 1rem;
+    margin: 2.5rem 0 0;
+  }
+
+  .gap-label {
+    justify-self: start;
+    margin: 0;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    background: var(--stripe);
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .gap-prompt {
+    margin: 0;
+    font-size: 1.0625rem;
+  }
+
+  .gap-prompt span {
+    margin-right: 0.5rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .gap-pair {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .gap-mail {
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--lift);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .gap-mail p {
+    margin: 0 0 0.6rem;
+  }
+
+  .gap-mail p:last-child {
+    margin-bottom: 0;
+  }
+
+  .gap .gap-head {
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .gap-mail--generic {
+    color: var(--muted);
+  }
+
+  .gap-mail mark {
+    white-space: normal;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .gap-mail sup {
+    margin-left: 0.15em;
+    font-size: 0.65em;
+    font-weight: 600;
+  }
+
+  .gap-sources {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  .gap-sources .gap-head {
+    margin: 0 0 0.4rem;
+  }
+
+  .gap-sources ol {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .gap-type {
+    margin-right: 0.35rem;
+    color: var(--text);
+  }
+
   /* architecture chapter: full width, after the story */
   .chapter--wide {
     align-items: stretch;
