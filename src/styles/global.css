@@ -21,6 +21,8 @@
   --tile-top: #262626;
   --tile-bottom: #161616;
   --tile-line: #4a4a4a;
+  /* EKHO core in the architecture graphic: the deck's black block */
+  --core: #0b0b0b;
   /* links: yellow text, a faint yellow line underneath */
   --link: var(--signal);
   --link-line: color-mix(in srgb, var(--signal) 40%, transparent);
@@ -856,6 +858,169 @@
   .reveal-on [data-graphic].is-3:not(.is-4) .cg-caption-3,
   .reveal-on [data-graphic].is-4 .cg-caption-4 {
     display: inline;
+  }
+
+  /* architecture graphic: who owns what. Black is EKHO, yellow is yours,
+     grey is replaceable, hatched does not exist yet */
+  .arch-graphic {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    padding-block: 1rem;
+  }
+
+  .arch-graphic svg {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .ar-tile {
+    stroke: var(--tile-line);
+  }
+
+  .ar-icon {
+    fill: none;
+    stroke: var(--text);
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ar-label,
+  .ar-mid,
+  .ar-note {
+    fill: var(--muted);
+    font-family: var(--font-sans);
+    font-size: 15px;
+  }
+
+  .ar-note {
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  .ar-line {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.25;
+  }
+
+  .ar-knowledge {
+    fill: var(--signal);
+  }
+
+  .ar-profile {
+    fill: none;
+    stroke: var(--tile-line);
+    stroke-width: 1.5;
+    stroke-dasharray: 6 5;
+  }
+
+  .ar-core {
+    fill: var(--core);
+    stroke: var(--border);
+  }
+
+  .ar-title {
+    fill: var(--text);
+    font-family: var(--font-sans);
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  .ar-sub {
+    fill: var(--muted);
+    font-family: var(--font-sans);
+    font-size: 15px;
+  }
+
+  .ar-on-signal {
+    fill: var(--signal-ink);
+  }
+
+  .ar-tag {
+    fill: var(--bg);
+    stroke: var(--border);
+  }
+
+  .ar-tag-text {
+    fill: var(--text);
+    font-family: var(--font-sans);
+    font-size: 13px;
+  }
+
+  .ar-caption {
+    margin-top: 0.5rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  /* beside the chapters: the architecture takes the context graphic's place
+     from chapter 04 on, and its layers build up from the bottom */
+  .story-figure {
+    display: grid;
+  }
+
+  .story-figure > * {
+    grid-area: 1 / 1;
+    min-height: 0;
+  }
+
+  .story-figure .arch-graphic {
+    display: none;
+  }
+
+  .js .story-figure .arch-graphic {
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .js .story-figure .context-graphic,
+  .js .story-figure .arch-graphic {
+    transition:
+      opacity 500ms ease,
+      visibility 500ms;
+  }
+
+  .js .story-figure.is-arch .context-graphic {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .js .story-figure.is-arch .arch-graphic {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .reveal-on [data-arch] .ar-layer {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 500ms ease,
+      transform 500ms ease;
+    transition-delay: calc(var(--d) * 220ms + 200ms);
+  }
+
+  .reveal-on [data-arch].is-shown .ar-layer {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 63.99rem) {
+    .ar-caption {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .js .story-figure .context-graphic,
+    .js .story-figure .arch-graphic {
+      transition: none;
+    }
   }
 
   /* hatched: means exactly one thing on this site: "does not exist yet" */

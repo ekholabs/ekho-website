@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ContextGraphic from '../components/ContextGraphic.astro';
+import ArchitectureGraphic from '../components/ArchitectureGraphic.astro';
 
 const readers = ['You', 'Claude Code', 'Codex', 'OpenCode'];
 
@@ -106,8 +107,9 @@ const chapters = [
   </section>
 
   <div class="wrap wrap-wide landing story">
-    <div class="story-figure">
+    <div class="story-figure" data-story-figure>
       <ContextGraphic />
+      <ArchitectureGraphic />
     </div>
     <div class="story-text">
       <section class="chapter measure" id="context" data-chapter>
@@ -199,6 +201,9 @@ const chapters = [
           an open, typed format, and a linter keeps the agent in line whichever model is running.
           The model is replaceable. Your context stays with you.
         </p>
+        <noscript>
+          <ArchitectureGraphic animated={false} idPrefix="ns" />
+        </noscript>
       </section>
 
       <section class="chapter measure" id="not-yet" data-chapter>
@@ -238,6 +243,7 @@ const chapters = [
   // without JavaScript, or with reduced motion, every phrase is fully visible
   // and the scenes take no extra scroll room.
   const root = document.documentElement;
+  root.classList.add('js');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduceMotion) root.classList.add('reveal-on');
 
@@ -252,6 +258,8 @@ const chapters = [
   const sequences = [...document.querySelectorAll<HTMLElement>('[data-seq]')];
   const chapterNav = document.querySelector<HTMLElement>('[data-chapter-nav]');
   const graphic = document.querySelector<HTMLElement>('[data-graphic]');
+  const storyFigure = document.querySelector<HTMLElement>('[data-story-figure]');
+  const arch = document.querySelector<HTMLElement>('[data-arch]');
   let lastChapter: string | undefined;
 
   function update() {
@@ -296,6 +304,9 @@ const chapters = [
     if (graphic) {
       const stage = currentChapter ? chapters.findIndex((c) => c.id === currentChapter) + 1 : 1;
       for (let n = 2; n <= 5; n++) graphic.classList.toggle(`is-${n}`, stage >= n);
+      // from chapter 04 on, the architecture takes the graphic's place
+      storyFigure?.classList.toggle('is-arch', stage >= 4);
+      arch?.classList.toggle('is-shown', stage >= 4);
     }
 
     // statement sequences: the step nearest the reading line is full, the rest dim
