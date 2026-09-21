@@ -21,6 +21,11 @@
   --tile-top: #262626;
   --tile-bottom: #161616;
   --tile-line: #4a4a4a;
+  /* cards lift off the ground with a soft two-step shadow instead of a border,
+     as on the roadmap dashboard */
+  --lift: 0 14px 48px -12px rgb(0 0 0 / 0.62), 0 2px 12px -4px rgb(0 0 0 / 0.4);
+  --lift-hover: 0 22px 60px -12px rgb(0 0 0 / 0.72), 0 4px 18px -4px rgb(0 0 0 / 0.48);
+  --surface-hover: #232323;
   /* EKHO core in the architecture graphic: the deck's black block */
   --core: #0b0b0b;
   /* links: yellow text, a faint yellow line underneath */
@@ -225,8 +230,8 @@
 
   .card {
     background: var(--surface);
-    border: 1px solid var(--border);
     border-radius: var(--radius);
+    box-shadow: var(--lift);
     padding: 1.125rem 1.25rem;
   }
 
@@ -520,17 +525,30 @@
     gap: 1rem;
     min-width: 0;
     padding: 1.5rem;
-    border: 1px solid var(--border);
     border-radius: 22px;
     background: var(--surface);
+    box-shadow: var(--lift);
     color: var(--text);
     text-decoration: none;
     overflow: hidden;
-    transition: border-color 200ms ease;
+    transition:
+      box-shadow 250ms ease,
+      background-color 250ms ease,
+      transform 250ms ease;
   }
 
   .tile:hover {
-    border-color: var(--muted);
+    background-color: var(--surface-hover);
+    box-shadow: var(--lift-hover);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile,
+    .tile:hover {
+      transition: none;
+      transform: none;
+    }
   }
 
   .tile:focus-visible,
@@ -624,7 +642,6 @@
   }
 
   .tile--signal {
-    border-color: var(--signal);
     background: var(--signal);
     color: var(--signal-ink);
   }
@@ -634,7 +651,7 @@
   }
 
   .tile--signal:hover {
-    border-color: var(--text);
+    background-color: var(--signal);
   }
 
   .how-steps {
@@ -668,7 +685,6 @@
 
   .reader {
     padding: 0.4rem 0.75rem;
-    border: 1px solid var(--tile-line);
     border-radius: 10px;
     background: var(--bg);
     font-size: 0.8125rem;
@@ -676,7 +692,6 @@
 
   .chip {
     padding: 0.7rem 1rem;
-    border: 1px solid var(--border);
     border-radius: 12px;
     font-size: 0.875rem;
   }
@@ -1038,8 +1053,9 @@
 
   .not-yet-list li {
     padding: 1rem 1.25rem;
-    border: 1px solid var(--border);
     border-radius: var(--radius);
+    background-color: var(--surface);
+    box-shadow: var(--lift);
   }
 
   /* chapter navigation, inside the sticky header on the homepage. On narrow
