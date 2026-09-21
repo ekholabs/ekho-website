@@ -292,7 +292,7 @@
   }
 
   /* with the reveal on, each scene gets scroll room per phrase; the statement
-     stays put and the highlight moves from phrase to phrase */
+     stays put and the highlight moves from beat to beat: the active one full, the rest at 50% */
   .reveal-on .scene {
     height: calc(100svh + var(--phrases) * 45svh);
   }
@@ -304,12 +304,12 @@
   }
 
   .reveal-on .phrase {
-    color: var(--muted);
-    transition: color 400ms ease;
+    opacity: 0.5;
+    transition: opacity 400ms ease;
   }
 
   .reveal-on .phrase.is-current {
-    color: var(--text);
+    opacity: 1;
   }
 
   .reveal-on .phrase mark {
