@@ -241,6 +241,66 @@
     font-size: 0.9375rem;
   }
 
+  /* wide layout: no content column, the page lays out its sections on the wide grid */
+  .main-wide {
+    padding: 0;
+  }
+
+  /* on the wide grid, running text keeps a readable measure */
+  .measure {
+    max-width: var(--maxw);
+  }
+
+  /* teaser: one statement, as large as the screen allows */
+  .wrap-wide {
+    max-width: 80rem;
+  }
+
+  .teaser {
+    display: flex;
+    align-items: center;
+    min-height: calc(100svh - 4rem);
+    padding-block: 3rem;
+  }
+
+  .teaser h1 {
+    margin: 0;
+    font-size: clamp(2.75rem, 9vw, 7.5rem);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  .teaser-line {
+    display: block;
+  }
+
+  .teaser-line + .teaser-line {
+    margin-top: 0.15em;
+  }
+
+  /* with the reveal on, the page gets scroll room and the statement stays put
+     while the highlight moves from line to line */
+  .reveal-on .teaser-track {
+    height: 200svh;
+  }
+
+  .reveal-on .teaser-track .teaser {
+    position: sticky;
+    top: 0;
+    min-height: 100svh;
+  }
+
+  .reveal-on .teaser-line {
+    color: var(--muted);
+    transition: color 450ms ease;
+  }
+
+  .reveal-on .teaser-line.is-current {
+    color: var(--text);
+  }
+
   /* chapter navigation: stays at the top while the page scrolls */
   .chapter-nav {
     position: sticky;
@@ -327,6 +387,20 @@
 
   .reveal-on [data-step].is-current {
     opacity: 1;
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .footer-nav a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .footer-nav a:hover {
+    color: var(--text);
   }
 
   .site-footer {

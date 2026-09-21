@@ -4,10 +4,13 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  /** 'wide': no content column, the page lays out its own sections on the wide grid */
+  layout?: 'page' | 'wide';
 }
 
-const { title, description = 'EKHO Labs' } = Astro.props;
+const { title, description = 'EKHO Labs', layout = 'page' } = Astro.props;
 const year = new Date().getFullYear();
+const wide = layout === 'wide';
 
 // Until launch the site stays out of search engines (AGENTS.md §9).
 // At launch: set this to true and restore the Sitemap line in public/robots.txt.
@@ -30,7 +33,7 @@ const indexable = false;
   </head>
   <body>
     <header class="site-header">
-      <div class="wrap">
+      <div class:list={['wrap', { 'wrap-wide': wide }]}>
         <a class="brand" href="/">
           EKHO
         </a>
@@ -41,18 +44,25 @@ const indexable = false;
       </div>
     </header>
 
-    <slot name="subnav" />
-
-    <main>
-      <div class="wrap">
+    {wide ? (
+      <main class="main-wide">
         <slot />
-      </div>
-    </main>
+      </main>
+    ) : (
+      <main>
+        <div class="wrap">
+          <slot />
+        </div>
+      </main>
+    )}
 
     <footer class="site-footer">
-      <div class="wrap">
+      <div class:list={['wrap', { 'wrap-wide': wide }]}>
         <span>&copy; {year} EKHO Labs</span>
-        <span>ekholabs.eu</span>
+        <nav class="footer-nav" aria-label="Legal">
+          <a href="/imprint">Legal notice</a>
+          <a href="/privacy">Privacy</a>
+        </nav>
       </div>
     </footer>
   </body>
