@@ -31,78 +31,80 @@ const chapters = [
     </ol>
   </nav>
 
-  <section class="wrap wrap-wide overview" aria-labelledby="overview-title">
-    <div class="overview-head">
-      <div class="overview-intro">
-        <h1 class="overview-title" id="overview-title">
-          AI is only as good as your context. <span class="signal-text">Own it!</span>
-        </h1>
-        <div class="cta-row">
-          <a class="pill pill--solid" href="#how">
-            See how it works <span aria-hidden="true">↓</span>
-          </a>
-          <a class="pill" href="#architecture">
-            See the architecture
-          </a>
+  <div class="intro-track" data-intro>
+    <section class="wrap wrap-wide overview" aria-labelledby="overview-title">
+      <div class="overview-head">
+        <div class="overview-intro">
+          <h1 class="overview-title" id="overview-title" data-intro-title>
+            AI is only as good as your context. <span class="signal-text">Own it!</span>
+          </h1>
+          <div class="cta-row" data-intro-fade>
+            <a class="pill pill--solid" href="#how">
+              See how it works <span aria-hidden="true">↓</span>
+            </a>
+            <a class="pill" href="#architecture">
+              See the architecture
+            </a>
+          </div>
         </div>
+        <p class="overview-lede" data-intro-fade>
+          EKHO turns what you know into one connected context your AI can work with. Every time you
+          use it, you get more out of it, and it stays yours.
+        </p>
       </div>
-      <p class="overview-lede">
-        EKHO turns what you know into one connected context your AI can work with. Every time you
-        use it, you get more out of it, and it stays yours.
-      </p>
-    </div>
 
-    <div class="bento">
-      <a class="tile tile--graphic" href="#context">
-        <ContextGraphic animated={false} idPrefix="ov" caption={false} />
-        <span class="tile-arrow" aria-hidden="true">
-          ↘
-        </span>
-        <span class="tile-foot">
-          <span class="tile-title">Your context</span>
-          <span class="tile-text">Everything you bring in, linked into one source.</span>
-        </span>
-      </a>
+      <div class="bento" data-intro-fade>
+        <a class="tile tile--graphic" href="#context">
+          <ContextGraphic animated={false} idPrefix="ov" caption={false} />
+          <span class="tile-arrow" aria-hidden="true">
+            ↘
+          </span>
+          <span class="tile-foot">
+            <span class="tile-title">Your context</span>
+            <span class="tile-text">Everything you bring in, linked into one source.</span>
+          </span>
+        </a>
 
-      <a class="tile tile--dots" href="#context">
-        <span class="tile-pill">01 · Context</span>
-        <span class="tile-statement">
-          Everything an AI would need to know to answer the way you would.
-        </span>
-      </a>
+        <a class="tile tile--dots" href="#context">
+          <span class="tile-pill">01 · Context</span>
+          <span class="tile-statement">
+            Everything an AI would need to know to answer the way you would.
+          </span>
+        </a>
 
-      <a class="tile tile--signal" href="#why">
-        <span class="tile-pill">Why it matters</span>
-        <span class="tile-statement">
-          The model is the same for everyone. Your context isn’t. It has to stay yours.
-        </span>
-      </a>
+        <a class="tile tile--signal" href="#why">
+          <span class="tile-pill">Why it matters</span>
+          <span class="tile-statement">
+            The model is the same for everyone. Your context isn’t. It has to stay yours.
+          </span>
+        </a>
 
-      <a class="tile tile--how" href="#how">
-        <span class="tile-pill">03 · How it works</span>
-        <ol class="how-steps">
-          <li>
-            <span>01</span> Throw it in.
-          </li>
-          <li>
-            <span>02</span> Let it be digested.
-          </li>
-          <li>
-            <span>03</span> Ask.
-          </li>
-        </ol>
-        <span class="tile-text">
-          An agent condenses what you bring in and links it to everything you already have. Sorted
-          before you ask, not searched for when you do.
-        </span>
-        <span class="readers" aria-label="Read by you and your agents">
-          {readers.map((r) => (
-            <span class="reader">{r}</span>
-          ))}
-        </span>
-      </a>
-    </div>
-  </section>
+        <a class="tile tile--how" href="#how">
+          <span class="tile-pill">03 · How it works</span>
+          <ol class="how-steps">
+            <li>
+              <span>01</span> Throw it in.
+            </li>
+            <li>
+              <span>02</span> Let it be digested.
+            </li>
+            <li>
+              <span>03</span> Ask.
+            </li>
+          </ol>
+          <span class="tile-text">
+            An agent condenses what you bring in and links it to everything you already have. Sorted
+            before you ask, not searched for when you do.
+          </span>
+          <span class="readers" aria-label="Read by you and your agents">
+            {readers.map((r) => (
+              <span class="reader">{r}</span>
+            ))}
+          </span>
+        </a>
+      </div>
+    </section>
+  </div>
 
   <div class="wrap wrap-wide landing story">
     <div class="story-figure" data-story-figure>
@@ -237,6 +239,9 @@ const chapters = [
   if (!reduceMotion) root.classList.add('reveal-on');
 
   const scenes = [...document.querySelectorAll<HTMLElement>('[data-scene]')];
+  const intro = document.querySelector<HTMLElement>('[data-intro]');
+  const introTitle = document.querySelector<HTMLElement>('[data-intro-title]');
+  const introFades = [...document.querySelectorAll<HTMLElement>('[data-intro-fade]')];
   const chapters = [...document.querySelectorAll<HTMLElement>('[data-chapter]')];
   const links = new Map(
     [...document.querySelectorAll<HTMLAnchorElement>('[data-chapter-link]')].map((a) => [
@@ -263,6 +268,28 @@ const chapters = [
         const progress = scrollable > 0 ? Math.min(1, Math.max(0, -r.top / scrollable)) : 0;
         const current = Math.min(phrases.length - 1, Math.floor(progress * phrases.length));
         phrases.forEach((p, i) => p.classList.toggle('is-current', i === current));
+      }
+    }
+
+    // intro: the statement starts full-width and vertically centred, and
+    // shrinks into its place in the grid while the rest fades in
+    if (intro && introTitle && !reduceMotion) {
+      const scrollable = intro.offsetHeight - vh;
+      const raw =
+        scrollable > 0
+          ? Math.min(1, Math.max(0, -intro.getBoundingClientRect().top / scrollable))
+          : 1;
+      const p = raw < 0.5 ? 2 * raw * raw : 1 - Math.pow(-2 * raw + 2, 2) / 2;
+      const box = (introTitle.parentElement ?? introTitle).getBoundingClientRect();
+      const avail = Math.min(window.innerWidth - 32, 1248);
+      const s0 = Math.min(Math.max(avail / introTitle.offsetWidth, 1), 2.4);
+      const s = s0 + (1 - s0) * p;
+      const dy = (vh / 2 - (introTitle.offsetHeight * s0) / 2 - box.top) * (1 - p);
+      introTitle.style.transform = p >= 1 ? '' : `translateY(${dy}px) scale(${s})`;
+      const fade = Math.min(1, Math.max(0, (p - 0.55) / 0.45));
+      for (const el of introFades) {
+        el.style.opacity = String(fade);
+        el.style.pointerEvents = fade < 0.5 ? 'none' : '';
       }
     }
 

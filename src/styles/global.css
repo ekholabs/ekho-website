@@ -417,6 +417,18 @@
     padding-block: 2.5rem 3rem;
   }
 
+  /* with the reveal on, the page opens on the large statement alone; while the
+     intro track scrolls, it shrinks into its place in the grid and the rest
+     of the overview fades in (the transform is set by the page script) */
+  .reveal-on .intro-track {
+    height: 210svh;
+  }
+
+  .reveal-on .intro-track .overview {
+    position: sticky;
+    top: 3.6rem;
+  }
+
   .overview-head {
     display: grid;
     gap: 1.5rem;
@@ -433,7 +445,8 @@
   .overview-title {
     margin: 0 0 1.5rem;
     font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 500;
+    font-weight: 700;
+    transform-origin: 0 0;
     line-height: 1.04;
     letter-spacing: -0.035em;
     text-wrap: balance;
@@ -525,7 +538,7 @@
     gap: 1rem;
     min-width: 0;
     padding: 1.5rem;
-    border-radius: 22px;
+    border-radius: var(--radius);
     background: var(--surface);
     box-shadow: var(--lift);
     color: var(--text);
@@ -685,14 +698,14 @@
 
   .reader {
     padding: 0.4rem 0.75rem;
-    border-radius: 10px;
+    border-radius: 6px;
     background: var(--bg);
     font-size: 0.8125rem;
   }
 
   .chip {
     padding: 0.7rem 1rem;
-    border-radius: 12px;
+    border-radius: 6px;
     font-size: 0.875rem;
   }
 
@@ -890,7 +903,7 @@
   }
 
   .arch-row {
-    border-radius: 16px;
+    border-radius: var(--radius);
     transition:
       transform 200ms ease,
       box-shadow 200ms ease;
@@ -939,7 +952,7 @@
   summary.arch-head:focus-visible {
     outline: 2px solid var(--signal);
     outline-offset: 3px;
-    border-radius: 16px;
+    border-radius: var(--radius);
   }
 
   details.arch-row:hover,

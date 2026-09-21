@@ -114,7 +114,7 @@ const edges = [
           <text class="cg-label" x={tile / 2} y="-14" text-anchor="middle">
             {s.label}
           </text>
-          <rect class="cg-tile" width={tile} height={tile} rx="16" fill={`url(#${tileId})`} />
+          <rect class="cg-tile" width={tile} height={tile} rx="10" fill={`url(#${tileId})`} />
           <svg class="cg-icon" x="24" y="24" width="24" height="24" viewBox="0 0 24 24">
             <g set:html={icons[s.icon]} />
           </svg>
@@ -128,14 +128,14 @@ const edges = [
         class="cg-center-box"
         width={cSize}
         height={cSize}
-        rx="26"
+        rx="14"
         fill={`url(#${tileId})`}
       ></rect>
       <rect
         class="cg-center-hatch"
         width={cSize}
         height={cSize}
-        rx="26"
+        rx="14"
         fill={`url(#${hatchId})`}
       ></rect>
     </g>
@@ -162,7 +162,7 @@ const edges = [
     <g class="cg-readers">
       {readers.map((r) => (
         <g transform={`translate(${r.x - tile / 2} ${bottom})`}>
-          <rect class="cg-tile" width={tile} height={tile} rx="16" fill={`url(#${tileId})`} />
+          <rect class="cg-tile" width={tile} height={tile} rx="10" fill={`url(#${tileId})`} />
           <svg class="cg-icon" x="24" y="24" width="24" height="24" viewBox="0 0 24 24">
             <g set:html={icons[r.icon]} />
           </svg>
