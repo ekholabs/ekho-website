@@ -1,0 +1,155 @@
+---
+// Alternative context graphic: a dot matrix (the DS motif) framed like a
+// technical poster. Dots grow and brighten towards the centre. It builds up
+// with the chapters through the same stage classes as the hub graphic
+// (is-2, is-3): 01 scattered dots, 02 links into the centre, 03 the network
+// grows between the dots and the centre turns yellow. Without JavaScript it
+// shows finished.
+
+const N = 11; // dots per side
+const G = 40; // grid spacing
+const cx = 320;
+const cy = 372;
+const half = (N - 1) / 2;
+
+const dots: { x: number; y: number; r: number; o: number }[] = [];
+for (let i = -half; i <= half; i++)
+  for (let j = -half; j <= half; j++) {
+    if (i === 0 && j === 0) continue;
+    const d = Math.hypot(i, j);
+    if (d > half + 0.4) continue;
+    dots.push({
+      x: cx + i * G,
+      y: cy + j * G,
+      r: Math.max(1.2, 4.2 - d * 0.55),
+      o: Math.max(0.18, 1 - d * 0.16),
+    });
+  }
+
+const at = (i: number, j: number) => [cx + i * G, cy + j * G];
+// stage 2: spokes from single pieces into the centre
+const spokes = [
+  [-2, 0],
+  [-1, -2],
+  [1, -2],
+  [2, -1],
+  [2, 1],
+  [1, 2],
+  [-1, 2],
+  [-2, 1],
+];
+// stage 3: the network grows between the pieces
+const links = [
+  [
+    [-1, -2],
+    [-2, -4],
+  ],
+  [
+    [2, -1],
+    [4, -2],
+  ],
+  [
+    [2, 1],
+    [4, 3],
+  ],
+  [
+    [-1, 2],
+    [-3, 4],
+  ],
+  [
+    [-2, 0],
+    [-4, -1],
+  ],
+  [
+    [1, 2],
+    [2, 4],
+  ],
+  [
+    [-1, -2],
+    [1, -2],
+  ],
+  [
+    [2, -1],
+    [2, 1],
+  ],
+  [
+    [1, 2],
+    [-1, 2],
+  ],
+  [
+    [-2, 1],
+    [-2, 0],
+  ],
+  [
+    [1, -2],
+    [3, -4],
+  ],
+  [
+    [-2, 1],
+    [-4, 2],
+  ],
+];
+const lit2 = spokes;
+const lit3 = links.flatMap(([a, b]) => [a, b]);
+---
+
+<figure
+  class="dot-graphic"
+  data-graphic
+  role="img"
+  aria-label="A field of dots, each a piece of what you know. At first they are scattered. Then single pieces link into one centre, then they link with each other and the network grows. The centre is yours."
+>
+  <svg viewBox="0 0 640 640" aria-hidden="true">
+    <rect class="dg-frame" x="0.5" y="0.5" width="639" height="639"></rect>
+    <line class="dg-frame" x1="0" y1="96" x2="640" y2="96"></line>
+    <line class="dg-frame" x1="250" y1="0" x2="250" y2="96"></line>
+    <text class="dg-title" x="28" y="55">
+      YOUR CONTEXT
+    </text>
+    <foreignObject x="270" y="16" width="350" height="72">
+      <p class="dg-copy">
+        <span class="dg-copy-1">
+          What you know is scattered: in your head, in chats that close.
+        </span>
+        <span class="dg-copy-2">EKHO links what you bring in to one context.</span>
+        <span class="dg-copy-3">
+          Every new piece connects to what is there. It compounds, and it stays yours.
+        </span>
+      </p>
+    </foreignObject>
+
+    <g class="dg-spokes">
+      {spokes.map(([i, j]) => {
+        const [x, y] = at(i, j);
+        return <line pathLength="1" x1={cx} y1={cy} x2={x} y2={y} />;
+      })}
+    </g>
+    <g class="dg-links">
+      {links.map(([a, b]) => {
+        const [x1, y1] = at(a[0], a[1]);
+        const [x2, y2] = at(b[0], b[1]);
+        return <line pathLength="1" x1={x1} y1={y1} x2={x2} y2={y2} />;
+      })}
+    </g>
+
+    <g class="dg-dots">
+      {dots.map((d) => (
+        <circle cx={d.x} cy={d.y} r={d.r} style={`opacity: ${d.o}`} />
+      ))}
+    </g>
+    <g class="dg-lit dg-lit-2">
+      {lit2.map(([i, j]) => {
+        const [x, y] = at(i, j);
+        return <circle cx={x} cy={y} r="5" />;
+      })}
+    </g>
+    <g class="dg-lit dg-lit-3">
+      {lit3.map(([i, j]) => {
+        const [x, y] = at(i, j);
+        return <circle cx={x} cy={y} r="4" />;
+      })}
+    </g>
+
+    <circle class="dg-center" cx={cx} cy={cy} r="10"></circle>
+  </svg>
+</figure>

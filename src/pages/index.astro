@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ContextGraphic from '../components/ContextGraphic.astro';
+import DotGraphic from '../components/DotGraphic.astro';
 import Architecture from '../components/Architecture.astro';
 
 const readers = ['You', 'Codex', 'OpenCode', 'Any agent'];
@@ -109,6 +110,7 @@ const chapters = [
   <div class="wrap wrap-wide landing story">
     <div class="story-figure" data-story-figure>
       <ContextGraphic />
+      <DotGraphic />
     </div>
     <div class="story-text">
       <section class="chapter measure" id="context" data-chapter>
@@ -251,7 +253,7 @@ const chapters = [
   );
   const sequences = [...document.querySelectorAll<HTMLElement>('[data-seq]')];
   const chapterNav = document.querySelector<HTMLElement>('[data-chapter-nav]');
-  const graphic = document.querySelector<HTMLElement>('[data-graphic]');
+  const graphics = [...document.querySelectorAll<HTMLElement>('[data-graphic]')];
   const arch = document.querySelector<HTMLElement>('[data-arch]');
   let lastChapter: string | undefined;
 
@@ -316,9 +318,10 @@ const chapters = [
     }
 
     // the graphic builds up chapter by chapter: stage n adds is-2 … is-n
-    if (graphic) {
+    {
       const stage = currentChapter ? chapters.findIndex((c) => c.id === currentChapter) + 1 : 1;
-      for (let n = 2; n <= 5; n++) graphic.classList.toggle(`is-${n}`, stage >= n);
+      for (const g of graphics)
+        for (let n = 2; n <= 5; n++) g.classList.toggle(`is-${n}`, stage >= n);
     }
 
     // architecture: its rows come in once the chapter is in view

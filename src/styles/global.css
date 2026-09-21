@@ -891,6 +891,141 @@
     display: inline;
   }
 
+  /* alternative context graphic: dot matrix in a technical poster frame.
+     Shown instead of the hub when the root carries g-dots (preview switch). */
+  .dot-graphic {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    padding-block: 1rem;
+  }
+
+  .g-dots .story-figure .context-graphic {
+    display: none;
+  }
+
+  .g-dots .story-figure .dot-graphic {
+    display: flex;
+  }
+
+  .dot-graphic svg {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .dg-frame {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 1;
+  }
+
+  .dg-title {
+    fill: var(--text);
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+  }
+
+  .dg-copy {
+    margin: 0;
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .dg-copy span {
+    display: none;
+  }
+
+  .dg-copy-3 {
+    display: inline !important;
+  }
+
+  .dg-dots circle {
+    fill: var(--text);
+  }
+
+  .dg-spokes line,
+  .dg-links line {
+    stroke: var(--text);
+    stroke-width: 1;
+    opacity: 0.85;
+  }
+
+  .dg-links line {
+    opacity: 0.55;
+  }
+
+  .dg-lit circle {
+    fill: var(--text);
+  }
+
+  .dg-center {
+    fill: var(--signal);
+    stroke: var(--signal);
+    stroke-width: 1.5;
+  }
+
+  /* with the reveal on, the dot graphic builds up with the chapters */
+  .reveal-on [data-graphic] .dg-spokes line,
+  .reveal-on [data-graphic] .dg-links line {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 900ms ease;
+  }
+
+  .reveal-on [data-graphic].is-2 .dg-spokes line,
+  .reveal-on [data-graphic].is-3 .dg-links line {
+    stroke-dashoffset: 0;
+  }
+
+  .reveal-on [data-graphic] .dg-lit {
+    opacity: 0;
+    transition: opacity 600ms ease 300ms;
+  }
+
+  .reveal-on [data-graphic].is-2 .dg-lit-2,
+  .reveal-on [data-graphic].is-3 .dg-lit-3 {
+    opacity: 1;
+  }
+
+  .reveal-on [data-graphic] .dg-center {
+    fill: transparent;
+    stroke: var(--text);
+    transition:
+      fill 500ms ease,
+      stroke 500ms ease;
+  }
+
+  .reveal-on [data-graphic].is-2 .dg-center {
+    fill: var(--text);
+  }
+
+  .reveal-on [data-graphic].is-3 .dg-center {
+    fill: var(--signal);
+    stroke: var(--signal);
+  }
+
+  .reveal-on [data-graphic] .dg-copy-3 {
+    display: none !important;
+  }
+
+  .reveal-on [data-graphic]:not(.is-2) .dg-copy-1,
+  .reveal-on [data-graphic].is-2:not(.is-3) .dg-copy-2 {
+    display: inline;
+  }
+
+  .reveal-on [data-graphic].is-3 .dg-copy-3 {
+    display: inline !important;
+  }
+
   /* architecture chapter: full width, after the story */
   .chapter--wide {
     align-items: stretch;
