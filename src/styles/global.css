@@ -17,6 +17,10 @@
   --signal-ink: #151515;
   /* hatching: the one sign for "does not exist yet", as on the roadmap dashboard */
   --stripe: #262626;
+  /* tiles in the graphics: a faint top-lit gradient and a hairline, as in the benchmark */
+  --tile-top: #262626;
+  --tile-bottom: #161616;
+  --tile-line: #4a4a4a;
   /* links: yellow text, a faint yellow line underneath */
   --link: var(--signal);
   --link-line: color-mix(in srgb, var(--signal) 40%, transparent);
@@ -353,6 +357,187 @@
     line-height: 1.2;
     letter-spacing: -0.02em;
     font-weight: 500;
+  }
+
+  /* story: chapters on the left, the graphic that builds up beside them */
+  .story {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .story-figure {
+    position: sticky;
+    top: 3.6rem;
+    z-index: 5;
+    height: 38svh;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  @media (min-width: 64rem) {
+    .story {
+      grid-template-columns: minmax(0, 34rem) minmax(0, 1fr);
+      column-gap: 4rem;
+    }
+
+    .story-text {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .story-figure {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: start;
+      top: 4rem;
+      height: calc(100svh - 4rem);
+      border-bottom: 0;
+    }
+  }
+
+  .context-graphic {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    padding-block: 1rem;
+  }
+
+  .context-graphic svg {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .cg-tile {
+    fill: url(#cg-tile);
+    stroke: var(--tile-line);
+    stroke-width: 1;
+  }
+
+  .cg-icon {
+    fill: none;
+    stroke: var(--text);
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .cg-label {
+    fill: var(--muted);
+    font-family: var(--font-sans);
+    font-size: 15px;
+  }
+
+  .cg-lines path {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.25;
+  }
+
+  .cg-center-box {
+    fill: url(#cg-tile);
+    stroke: var(--signal);
+    stroke-width: 2;
+  }
+
+  .cg-center-hatch {
+    opacity: 0;
+  }
+
+  .cg-edge {
+    stroke: var(--text);
+    stroke-width: 1.5;
+  }
+
+  .cg-node {
+    fill: var(--text);
+  }
+
+  .cg-center-label {
+    fill: var(--text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .cg-caption {
+    min-height: 1.6em;
+    margin-top: 0.5rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .cg-caption span {
+    display: none;
+  }
+
+  .cg-caption-4 {
+    display: inline;
+  }
+
+  @media (max-width: 63.99rem) {
+    .cg-caption {
+      display: none;
+    }
+  }
+
+  /* with the reveal on, the graphic builds up with the chapters */
+  .reveal-on .cg-lines path,
+  .reveal-on .cg-edge {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 900ms ease;
+  }
+
+  .reveal-on .cg-edge {
+    transition-delay: 350ms;
+  }
+
+  .reveal-on .context-graphic.is-2 .cg-in path,
+  .reveal-on .context-graphic.is-2 .cg-edge,
+  .reveal-on .context-graphic.is-3 .cg-out path {
+    stroke-dashoffset: 0;
+  }
+
+  .reveal-on .cg-center-hatch {
+    opacity: 1;
+    transition: opacity 600ms ease;
+  }
+
+  .reveal-on .context-graphic.is-2 .cg-center-hatch {
+    opacity: 0;
+  }
+
+  .reveal-on .cg-readers {
+    opacity: 0;
+    transition: opacity 600ms ease 300ms;
+  }
+
+  .reveal-on .context-graphic.is-3 .cg-readers {
+    opacity: 1;
+  }
+
+  .reveal-on .cg-center-box {
+    stroke: var(--tile-line);
+    stroke-width: 1.5;
+    transition: stroke 500ms ease;
+  }
+
+  .reveal-on .context-graphic.is-4 .cg-center-box {
+    stroke: var(--signal);
+    stroke-width: 2;
+  }
+
+  .reveal-on .cg-caption-4 {
+    display: none;
+  }
+
+  .reveal-on .context-graphic.is-2:not(.is-3) .cg-caption-2,
+  .reveal-on .context-graphic.is-3:not(.is-4) .cg-caption-3,
+  .reveal-on .context-graphic.is-4 .cg-caption-4 {
+    display: inline;
   }
 
   /* hatched: means exactly one thing on this site: "does not exist yet" */

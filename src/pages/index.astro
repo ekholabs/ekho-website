@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import ContextGraphic from '../components/ContextGraphic.astro';
 
 const chapters = [
   { id: 'context', n: '01', label: 'Context' },
@@ -92,121 +93,128 @@ const chapters = [
       </p>
     </div>
   </div>
+  <div class="wrap wrap-wide landing story">
+    <div class="story-figure">
+      <ContextGraphic />
+    </div>
+    <div class="story-text">
+      <section class="chapter measure" id="context" data-chapter>
+        <p class="chapter-label">
+          <span>01</span> Context
+        </p>
+        <h2>What context is</h2>
+        <div data-seq>
+          <p class="statement" data-step>
+            Context is everything an AI would need to know to answer the way you would, if you had
+            the time to explain. Your situation, your goals, what you have already decided and why,
+            what you have read and what you concluded from it.
+          </p>
+          <p class="statement" data-step>
+            The model brings intelligence. It is the same for everyone. You bring context. It exists
+            only with you.
+          </p>
+          <p class="statement" data-step>
+            The context window is where context gets used. EKHO is where it lives.
+          </p>
+        </div>
+      </section>
+
+      <section class="chapter measure" id="why" data-chapter>
+        <p class="chapter-label">
+          <span>02</span> Why
+        </p>
+        <h2>Why context matters</h2>
+        <ol class="cards">
+          <li class="card">
+            <h3>Everyone has the same models. Nobody has your context.</h3>
+            <p>
+              As intelligence gets cheap, context is what separates a generic answer from one that
+              actually helps you. It is the part of AI you control.
+            </p>
+          </li>
+          <li class="card">
+            <h3>Most of it is implicit, or scattered.</h3>
+            <p>
+              In your head, in chats that close, in mails, meetings and notes that know nothing of
+              each other. So every session starts near zero.
+            </p>
+          </li>
+          <li class="card">
+            <h3>Connected, context compounds.</h3>
+            <p>
+              EKHO turns what was scattered into one highly connected source: every insight knows
+              where it came from, what supports it and what contradicts it. Each new piece links to
+              everything already there.
+            </p>
+          </li>
+          <li class="card">
+            <h3>An asset needs an owner.</h3>
+            <p>
+              If your context decides how much AI does for you, it has to stay yours. Not locked in
+              a model provider's memory.
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="chapter measure" id="how" data-chapter>
+        <p class="chapter-label">
+          <span>03</span> How
+        </p>
+        <h2>How it works</h2>
+        <p>
+          <strong>AI does the bookkeeping.</strong> You bring in what comes up: a meeting, an
+          article, a voice note. An agent condenses it, links it to what you already have, and marks
+          what confirms or contradicts what. Your knowledge is sorted before you ask, not searched
+          for when you do. Keeping it up costs almost nothing, which is why it compounds instead of
+          gathering dust.
+        </p>
+        <p>Throw it in, let it be digested, ask.</p>
+      </section>
+
+      <section class="chapter measure" id="yours" data-chapter>
+        <p class="chapter-label">
+          <span>04</span> Yours
+        </p>
+        <h2>What it is</h2>
+        <p>
+          A folder of plain Markdown files that belongs to you and that you can take anywhere. The
+          <code>ekho</code> command-line tool maintains it with the coding agent of your choice,
+          such as Claude Code, Codex or OpenCode. You read the files, your AI reads the same ones.
+        </p>
+        <p>
+          <strong>A standard that is enforced, not just written down.</strong> Your context lives in
+          an open, typed format, and a linter keeps the agent in line whichever model is running.
+          The model is replaceable. Your context stays with you.
+        </p>
+      </section>
+
+      <section class="chapter measure" id="not-yet" data-chapter>
+        <p class="chapter-label">
+          <span>05</span> Not yet
+        </p>
+        <h2>What does not exist yet</h2>
+        <ul class="not-yet-list">
+          <li class="hatched">
+            No web interface. You work in your editor and your terminal, and read in Obsidian.
+          </li>
+          <li class="hatched">
+            No automatic import. Mail, chat and calendar are not connected; you bring things in.
+          </li>
+          <li class="hatched">No built-in sharing between people yet.</li>
+          <li>EKHO takes over the bookkeeping, not your judgement.</li>
+        </ul>
+
+        <h2>Install</h2>
+        <pre class="hatched"><code>curl -fsSL https://get.ekholabs.eu/i/&lt;key&gt; | sh</code></pre>
+        <p class="note">
+          EKHO is in early access, by invitation. This installer is not available yet.
+        </p>
+      </section>
+    </div>
+  </div>
+
   <div class="wrap wrap-wide landing">
-    <section class="chapter measure" id="context" data-chapter>
-      <p class="chapter-label">
-        <span>01</span> Context
-      </p>
-      <h2>What context is</h2>
-      <div data-seq>
-        <p class="statement" data-step>
-          Context is everything an AI would need to know to answer the way you would, if you had the
-          time to explain. Your situation, your goals, what you have already decided and why, what
-          you have read and what you concluded from it.
-        </p>
-        <p class="statement" data-step>
-          The model brings intelligence. It is the same for everyone. You bring context. It exists
-          only with you.
-        </p>
-        <p class="statement" data-step>
-          The context window is where context gets used. EKHO is where it lives.
-        </p>
-      </div>
-    </section>
-
-    <section class="chapter measure" id="why" data-chapter>
-      <p class="chapter-label">
-        <span>02</span> Why
-      </p>
-      <h2>Why context matters</h2>
-      <ol class="cards">
-        <li class="card">
-          <h3>Everyone has the same models. Nobody has your context.</h3>
-          <p>
-            As intelligence gets cheap, context is what separates a generic answer from one that
-            actually helps you. It is the part of AI you control.
-          </p>
-        </li>
-        <li class="card">
-          <h3>Most of it is implicit, or scattered.</h3>
-          <p>
-            In your head, in chats that close, in mails, meetings and notes that know nothing of
-            each other. So every session starts near zero.
-          </p>
-        </li>
-        <li class="card">
-          <h3>Connected, context compounds.</h3>
-          <p>
-            EKHO turns what was scattered into one highly connected source: every insight knows
-            where it came from, what supports it and what contradicts it. Each new piece links to
-            everything already there.
-          </p>
-        </li>
-        <li class="card">
-          <h3>An asset needs an owner.</h3>
-          <p>
-            If your context decides how much AI does for you, it has to stay yours. Not locked in a
-            model provider's memory.
-          </p>
-        </li>
-      </ol>
-    </section>
-
-    <section class="chapter measure" id="how" data-chapter>
-      <p class="chapter-label">
-        <span>03</span> How
-      </p>
-      <h2>How it works</h2>
-      <p>
-        <strong>AI does the bookkeeping.</strong> You bring in what comes up: a meeting, an article,
-        a voice note. An agent condenses it, links it to what you already have, and marks what
-        confirms or contradicts what. Your knowledge is sorted before you ask, not searched for when
-        you do. Keeping it up costs almost nothing, which is why it compounds instead of gathering
-        dust.
-      </p>
-      <p>Throw it in, let it be digested, ask.</p>
-    </section>
-
-    <section class="chapter measure" id="yours" data-chapter>
-      <p class="chapter-label">
-        <span>04</span> Yours
-      </p>
-      <h2>What it is</h2>
-      <p>
-        A folder of plain Markdown files that belongs to you and that you can take anywhere. The
-        <code>ekho</code> command-line tool maintains it with the coding agent of your choice, such
-        as Claude Code, Codex or OpenCode. You read the files, your AI reads the same ones.
-      </p>
-      <p>
-        <strong>A standard that is enforced, not just written down.</strong> Your context lives in
-        an open, typed format, and a linter keeps the agent in line whichever model is running. The
-        model is replaceable. Your context stays with you.
-      </p>
-    </section>
-
-    <section class="chapter measure" id="not-yet" data-chapter>
-      <p class="chapter-label">
-        <span>05</span> Not yet
-      </p>
-      <h2>What does not exist yet</h2>
-      <ul class="not-yet-list">
-        <li class="hatched">
-          No web interface. You work in your editor and your terminal, and read in Obsidian.
-        </li>
-        <li class="hatched">
-          No automatic import. Mail, chat and calendar are not connected; you bring things in.
-        </li>
-        <li class="hatched">No built-in sharing between people yet.</li>
-        <li>EKHO takes over the bookkeeping, not your judgement.</li>
-      </ul>
-
-      <h2>Install</h2>
-      <pre class="hatched"><code>curl -fsSL https://get.ekholabs.eu/i/&lt;key&gt; | sh</code></pre>
-      <p class="note">
-        EKHO is in early access, by invitation. This installer is not available yet.
-      </p>
-    </section>
-
     <p class="closing measure">
       We build EKHO so people can make their context compound, <mark>and keep it theirs.</mark>
     </p>
@@ -231,6 +239,7 @@ const chapters = [
   );
   const sequences = [...document.querySelectorAll<HTMLElement>('[data-seq]')];
   const chapterNav = document.querySelector<HTMLElement>('[data-chapter-nav]');
+  const graphic = document.querySelector<HTMLElement>('[data-graphic]');
   let lastChapter: string | undefined;
 
   function update() {
@@ -269,6 +278,12 @@ const chapters = [
       } else {
         chapterNav.scrollLeft = 0;
       }
+    }
+
+    // the graphic builds up chapter by chapter: stage n adds is-2 … is-n
+    if (graphic) {
+      const stage = currentChapter ? chapters.findIndex((c) => c.id === currentChapter) + 1 : 1;
+      for (let n = 2; n <= 5; n++) graphic.classList.toggle(`is-${n}`, stage >= n);
     }
 
     // statement sequences: the step nearest the reading line is full, the rest dim
