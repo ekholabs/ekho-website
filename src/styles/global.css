@@ -254,4 +254,18 @@
     gap: 0.5rem 1.25rem;
     justify-content: space-between;
   }
+
+  .footer-nav {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .footer-nav a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .footer-nav a:hover {
+    color: var(--text);
+  }
 }
