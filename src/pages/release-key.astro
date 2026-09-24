@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Release signing key — EKHO Labs"
+  description="The minisign public key that signs every ekho release, and how to check a release file against it."
+>
+  <h1>Release signing key</h1>
+  <p class="lede">
+    Every <code>ekho</code> release is signed with
+    <a href="https://jedisct1.github.io/minisign/">minisign</a>. The installer and
+    <code>ekho self update</code> check each file against this key before they install anything.
+  </p>
+
+  <h2>Key ID</h2>
+  <pre><code>5EE94122B85EDBB8</code></pre>
+
+  <h2>Public key</h2>
+  <pre><code>untrusted comment: minisign public key 5EE94122B85EDBB8
+RWS42164IkHpXvkNIBBuVP6N1ezM+8BN7Z275tNV12CFPQwx9ttkbS4I</code></pre>
+  <p>
+    The key built into <code>ekho</code> is this one. If what you were given names a different key
+    ID, do not install it.
+  </p>
+
+  <h2>Check a release file by hand</h2>
+  <p>
+    With a release file and its <code>.minisig</code> next to it:
+  </p>
+  <pre><code>minisign -Vm ekho-0.0.3-py3-none-any.whl \
+  -P RWS42164IkHpXvkNIBBuVP6N1ezM+8BN7Z275tNV12CFPQwx9ttkbS4I</code></pre>
+  <p>
+    A good file prints <code>Signature and comment signature verified</code> and a trusted comment
+    naming the release and the file, such as <code>ekho v0.0.3 ekho-0.0.3-py3-none-any.whl</code>. A
+    signature for another release or another file is not valid for this one, even when minisign
+    accepts it.
+  </p>
+</Base>
