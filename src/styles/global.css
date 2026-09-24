@@ -15,6 +15,19 @@
   --muted: #929292;
   --signal: #fff056;
   --signal-ink: #151515;
+  /* hatching: the one sign for "does not exist yet", as on the roadmap dashboard */
+  --stripe: #262626;
+  /* tiles in the graphics: a faint top-lit gradient and a hairline, as in the benchmark */
+  --tile-top: #262626;
+  --tile-bottom: #161616;
+  --tile-line: #4a4a4a;
+  /* cards lift off the ground with a soft two-step shadow instead of a border,
+     as on the roadmap dashboard */
+  --lift: 0 14px 48px -12px rgb(0 0 0 / 0.62), 0 2px 12px -4px rgb(0 0 0 / 0.4);
+  --lift-hover: 0 22px 60px -12px rgb(0 0 0 / 0.72), 0 4px 18px -4px rgb(0 0 0 / 0.48);
+  --surface-hover: #232323;
+  /* EKHO core in the architecture graphic: the deck's black block */
+  --core: #0b0b0b;
   /* links: yellow text, a faint yellow line underneath */
   --link: var(--signal);
   --link-line: color-mix(in srgb, var(--signal) 40%, transparent);
@@ -142,9 +155,16 @@
     border-inline: 0;
   }
 
+  /* the header stays at the top on every page, over a blurred backdrop */
   .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
     border-top: 0;
     padding-block: 1rem;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
   .site-header .wrap {
@@ -155,6 +175,7 @@
   }
 
   .brand {
+    flex: none;
     font-weight: 500;
     letter-spacing: 0.02em;
     color: var(--text);
@@ -209,8 +230,8 @@
 
   .card {
     background: var(--surface);
-    border: 1px solid var(--border);
     border-radius: var(--radius);
+    box-shadow: var(--lift);
     padding: 1.125rem 1.25rem;
   }
 
@@ -241,30 +262,1174 @@
     font-size: 0.9375rem;
   }
 
-  /* bare layout: the page fills the screen below the header itself */
-  .main-bare {
+  /* wide layout: no content column, the page lays out its sections on the wide grid */
+  .main-wide {
     padding: 0;
   }
 
-  /* teaser: one statement, as large as the screen allows */
+  /* on the wide grid, running text keeps a readable measure */
+  .measure {
+    max-width: var(--maxw);
+  }
+
   .wrap-wide {
     max-width: 80rem;
   }
 
-  .teaser {
+  /* scene: one statement per screen. Without the reveal it is simply a large
+     statement with room around it. */
+  .scene-frame {
     display: flex;
     align-items: center;
-    min-height: calc(100svh - 4rem);
+    min-height: 70svh;
     padding-block: 3rem;
   }
 
-  .teaser h1 {
+  .scene-text {
     margin: 0;
+    max-width: 60rem;
+    font-size: clamp(2rem, 5.5vw, 4.25rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    text-wrap: pretty;
+  }
+
+  .scene-text--lead {
+    max-width: none;
     font-size: clamp(2.75rem, 9vw, 7.5rem);
     font-weight: 700;
     line-height: 0.98;
     letter-spacing: -0.04em;
     text-wrap: balance;
+  }
+
+  .scene-text--lead .phrase {
+    display: block;
+  }
+
+  .scene-text--lead .phrase + .phrase {
+    margin-top: 0.15em;
+  }
+
+  /* with the reveal on, each scene gets scroll room per phrase; the statement
+     stays put and the highlight moves from beat to beat: the active one full, the rest at 50% */
+  .reveal-on .scene {
+    height: calc(100svh + var(--phrases) * 45svh);
+  }
+
+  .reveal-on .scene-frame {
+    position: sticky;
+    top: 0;
+    min-height: 100svh;
+  }
+
+  .reveal-on .phrase {
+    opacity: 0.5;
+    transition: opacity 400ms ease;
+  }
+
+  .reveal-on .phrase.is-current {
+    opacity: 1;
+  }
+
+  /* in the large statements a highlight may wrap; each line keeps its padding */
+  .scene-text mark,
+  .closing mark {
+    white-space: normal;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .reveal-on .phrase mark {
+    background: transparent;
+    color: inherit;
+    transition:
+      background-color 400ms ease,
+      color 400ms ease;
+  }
+
+  .reveal-on .phrase.is-current mark {
+    background: var(--signal);
+    color: var(--signal-ink);
+  }
+
+  .closing {
+    display: flex;
+    align-items: center;
+    min-height: 100svh;
+    margin: 0;
+    padding-block: 5rem;
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+  }
+
+  /* homepage header on wide screens: chapters left, logo centred, GitHub right */
+  .header-aside {
+    display: none;
+    color: var(--muted);
+    font-size: 0.875rem;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .header-aside:hover {
+    color: var(--text);
+  }
+
+  @media (min-width: 64rem) {
+    .site-header .header-centred {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+    }
+
+    .header-centred .brand {
+      grid-column: 2;
+      grid-row: 1;
+      letter-spacing: 0.04em;
+    }
+
+    .header-centred .chapter-nav {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .header-centred .chapter-nav ol {
+      margin-left: 0;
+    }
+
+    .header-centred .header-aside {
+      display: block;
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: end;
+    }
+  }
+
+  /* overview: the first screen, a grid that shows what EKHO is at a glance */
+  .overview {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-height: calc(100svh - 3.6rem);
+    padding-block: 2.5rem 3rem;
+  }
+
+  /* with the reveal on, the page opens on the large statement alone; while the
+     intro track scrolls, it shrinks into its place in the grid and the rest
+     of the overview fades in (the transform is set by the page script) */
+  .reveal-on .intro-track {
+    height: 210svh;
+  }
+
+  .reveal-on .intro-track .overview {
+    position: sticky;
+    top: 3.6rem;
+  }
+
+  .overview-head {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    .overview-head {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      column-gap: 4rem;
+      align-items: start;
+    }
+  }
+
+  .overview-title {
+    margin: 0 0 1.5rem;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    transform-origin: 0 0;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .signal-text {
+    color: var(--signal);
+  }
+
+  .overview-lede {
+    margin: 0.5rem 0 0;
+    max-width: 30rem;
+    color: var(--muted);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .pill:hover {
+    border-color: var(--muted);
+  }
+
+  .pill--solid {
+    border-color: var(--text);
+    background: var(--text);
+    color: var(--signal-ink);
+  }
+
+  .pill--solid:hover {
+    border-color: var(--signal);
+    background: var(--signal);
+  }
+
+  .bento {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 48rem) {
+    .bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tile--graphic {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .bento {
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr) minmax(0, 1.2fr);
+      grid-template-rows: minmax(15rem, 1fr) minmax(15rem, 1fr);
+    }
+
+    .tile--graphic {
+      grid-column: 1;
+      grid-row: 1 / 3;
+    }
+
+    .tile--how {
+      grid-column: 3;
+      grid-row: 1 / 3;
+    }
+  }
+
+  .tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--lift);
+    color: var(--text);
+    text-decoration: none;
+    overflow: hidden;
+    transition:
+      box-shadow 250ms ease,
+      background-color 250ms ease,
+      transform 250ms ease;
+  }
+
+  .tile:hover {
+    background-color: var(--surface-hover);
+    box-shadow: var(--lift-hover);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile,
+    .tile:hover {
+      transition: none;
+      transform: none;
+    }
+  }
+
+  .tile:focus-visible,
+  .pill:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+  }
+
+  .tile-pill {
+    align-self: flex-start;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+
+  .tile-statement {
+    margin-top: auto;
+    font-size: clamp(1.375rem, 2vw, 1.7rem);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+  }
+
+  .tile-title {
+    display: block;
+    font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .tile-text {
+    display: block;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .tile--graphic .context-graphic {
+    height: auto;
+    padding: 0;
+  }
+
+  .tile--graphic .context-graphic svg {
+    max-height: 26rem;
+  }
+
+  .tile-foot {
+    margin-top: auto;
+  }
+
+  @media (max-width: 47.99rem) {
+    .tile-arrow {
+      display: none;
+    }
+  }
+
+  .tile-arrow {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--bg);
+    font-size: 1.25rem;
+  }
+
+  .tile--dots {
+    background-image: radial-gradient(var(--tile-line) 1.3px, transparent 1.8px);
+    background-size: 14px 14px;
+    background-position: right 1.5rem top 1.5rem;
+    background-repeat: no-repeat;
+    background-color: var(--surface);
+  }
+
+  .tile--dots::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 0, var(--surface) 7rem);
+    pointer-events: none;
+  }
+
+  .tile--dots > * {
+    position: relative;
+  }
+
+  .tile--signal {
+    background: var(--signal);
+    color: var(--signal-ink);
+  }
+
+  .tile--signal .tile-pill {
+    color: var(--signal-ink);
+  }
+
+  .tile--signal:hover {
+    background-color: var(--signal);
+  }
+
+  .how-steps {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: clamp(1.6rem, 2.2vw, 2rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .how-steps span {
+    display: inline-block;
+    width: 2.2rem;
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    vertical-align: middle;
+  }
+
+  .readers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+  }
+
+  .reader {
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    background: var(--bg);
+    font-size: 0.8125rem;
+  }
+
+  .chip {
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+  }
+
+  /* story: chapters on the left, the graphic that builds up beside them */
+  .story {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .story-figure {
+    position: sticky;
+    top: 3.6rem;
+    z-index: 5;
+    height: 38svh;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  @media (min-width: 64rem) {
+    .story {
+      grid-template-columns: minmax(0, 34rem) minmax(0, 1fr);
+      column-gap: 4rem;
+    }
+
+    .story-text {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .story-figure {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: start;
+      top: 4rem;
+      height: calc(100svh - 4rem);
+      border-bottom: 0;
+    }
+  }
+
+  .context-graphic {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    padding-block: 1rem;
+  }
+
+  .context-graphic svg {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .cg-tile {
+    stroke: var(--tile-line);
+    stroke-width: 1;
+  }
+
+  .cg-icon {
+    fill: none;
+    stroke: var(--text);
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .cg-label {
+    fill: var(--muted);
+    font-family: var(--font-sans);
+    font-size: 15px;
+  }
+
+  .cg-lines path {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.25;
+  }
+
+  .cg-center-box {
+    stroke: var(--signal);
+    stroke-width: 2;
+  }
+
+  .cg-center-hatch {
+    opacity: 0;
+  }
+
+  .cg-edge {
+    stroke: var(--text);
+    stroke-width: 1.5;
+  }
+
+  .cg-node {
+    fill: var(--text);
+  }
+
+  .cg-center-label {
+    fill: var(--text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .cg-caption {
+    min-height: 1.6em;
+    margin-top: 0.75rem;
+    color: var(--text);
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-align: center;
+  }
+
+  .cg-caption span {
+    display: none;
+  }
+
+  .cg-caption-4 {
+    display: inline;
+  }
+
+  @media (max-width: 63.99rem) {
+    .cg-caption {
+      display: none;
+    }
+  }
+
+  /* with the reveal on, the graphic builds up with the chapters */
+  .reveal-on [data-graphic] .cg-lines path,
+  .reveal-on [data-graphic] .cg-edge {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 900ms ease;
+  }
+
+  .reveal-on [data-graphic] .cg-edge {
+    transition-delay: 350ms;
+  }
+
+  .reveal-on [data-graphic].is-2 .cg-in path,
+  .reveal-on [data-graphic].is-2 .cg-edge,
+  .reveal-on [data-graphic].is-3 .cg-out path {
+    stroke-dashoffset: 0;
+  }
+
+  .reveal-on [data-graphic] .cg-center-hatch {
+    opacity: 1;
+    transition: opacity 600ms ease;
+  }
+
+  .reveal-on [data-graphic].is-2 .cg-center-hatch {
+    opacity: 0;
+  }
+
+  .reveal-on [data-graphic] .cg-readers {
+    opacity: 0;
+    transition: opacity 600ms ease 300ms;
+  }
+
+  .reveal-on [data-graphic].is-3 .cg-readers {
+    opacity: 1;
+  }
+
+  .reveal-on [data-graphic] .cg-center-box {
+    stroke: var(--tile-line);
+    stroke-width: 1.5;
+    transition: stroke 500ms ease;
+  }
+
+  .reveal-on [data-graphic].is-4 .cg-center-box {
+    stroke: var(--signal);
+    stroke-width: 2;
+  }
+
+  .reveal-on [data-graphic] .cg-caption-4 {
+    display: none;
+  }
+
+  .reveal-on [data-graphic].is-2:not(.is-3) .cg-caption-2,
+  .reveal-on [data-graphic].is-3:not(.is-4) .cg-caption-3,
+  .reveal-on [data-graphic].is-4 .cg-caption-4 {
+    display: inline;
+  }
+
+  /* the context gap: the same email without and with context */
+  .gap {
+    display: grid;
+    gap: 1rem;
+    margin: 2.5rem 0 0;
+  }
+
+  .gap-label {
+    justify-self: start;
+    margin: 0;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    background: var(--stripe);
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .gap-prompt {
+    margin: 0;
+    font-size: 1.0625rem;
+  }
+
+  .gap-prompt span {
+    margin-right: 0.5rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .gap-pair {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .gap-mail {
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--lift);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .gap-mail p {
+    margin: 0 0 0.6rem;
+  }
+
+  .gap-mail p:last-child {
+    margin-bottom: 0;
+  }
+
+  .gap .gap-head {
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .gap-mail--generic {
+    color: var(--muted);
+  }
+
+  .gap-mail mark {
+    white-space: normal;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .gap-mail sup {
+    margin-left: 0.15em;
+    font-size: 0.65em;
+    font-weight: 600;
+  }
+
+  .gap-sources {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  .gap-sources .gap-head {
+    margin: 0 0 0.4rem;
+  }
+
+  .gap-sources ol {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .gap-type {
+    margin-right: 0.35rem;
+    color: var(--text);
+  }
+
+  /* architecture chapter: full width, after the story */
+  .chapter--wide {
+    align-items: stretch;
+  }
+
+  /* the interactive architecture, after slides 23/24 of the pitch deck:
+     the EKHO core in paper, the model in grey, what the member owns in
+     yellow, dotted for the conversation and the return channel */
+  .arch {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+  }
+
+  .arch-row {
+    border-radius: var(--radius);
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .arch-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    padding: 1.35rem 1.6rem;
+  }
+
+  .arch-head--stacked {
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  summary.arch-head {
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary.arch-head::-webkit-details-marker {
+    display: none;
+  }
+
+  summary.arch-head::after {
+    content: '+';
+    font-size: 1.25rem;
+    line-height: 1;
+    opacity: 0.6;
+  }
+
+  .arch-head--stacked::after {
+    position: absolute;
+    top: 1.35rem;
+    right: 1.4rem;
+  }
+
+  details[open] > summary.arch-head::after {
+    content: '−';
+  }
+
+  summary.arch-head:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+    border-radius: var(--radius);
+  }
+
+  details.arch-row:hover,
+  details.arch-row[open] {
+    box-shadow: var(--lift);
+    transform: translateY(-1px);
+  }
+
+  .arch-title {
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .arch-code {
+    font-weight: 400;
+    opacity: 0.55;
+  }
+
+  .arch-note {
+    margin-left: auto;
+    font-size: 0.9375rem;
+  }
+
+  .arch-desc {
+    max-width: 62ch;
+    margin: -0.5rem 0 0;
+    padding: 0 1.6rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .arch-conversation {
+    border: 2px dotted var(--muted);
+    color: var(--text);
+  }
+
+  .arch-core {
+    background: var(--text);
+    color: var(--signal-ink);
+  }
+
+  .arch-llm {
+    margin-top: 0.75rem;
+    background: var(--stripe);
+    color: var(--muted);
+  }
+
+  .arch-owned {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .arch-member {
+    position: relative;
+    background: var(--signal);
+    color: var(--signal-ink);
+  }
+
+  .arch-member .arch-desc {
+    margin-top: 0;
+  }
+
+  .arch-return {
+    display: none;
+  }
+
+  @media (min-width: 48rem) {
+    .arch-owned {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: 2rem;
+      align-items: start;
+    }
+
+    /* the arrow from one owned box to the next */
+    .arch-member + .arch-member::before {
+      content: '→';
+      position: absolute;
+      top: 1.3rem;
+      left: -1.55rem;
+      color: var(--text);
+      font-size: 1.1rem;
+    }
+
+    /* the return channel: from code back to knowledge, dotted */
+    .arch-return {
+      display: block;
+      position: relative;
+      height: 1.4rem;
+      margin: -0.25rem calc((100% - 4rem) / 6) 0;
+      border: 2px dotted var(--text);
+      border-top: 0;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .arch-return::before {
+      content: '';
+      position: absolute;
+      top: -0.35rem;
+      left: -0.42rem;
+      border: 0.4rem solid transparent;
+      border-top: 0;
+      border-bottom: 0.55rem solid var(--text);
+    }
+  }
+
+  .arch-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  .arch-legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .arch-swatch {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 4px;
+  }
+
+  .arch-swatch--core {
+    background: var(--text);
+  }
+
+  .arch-swatch--llm {
+    background: var(--stripe);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+
+  .arch-swatch--member {
+    background: var(--signal);
+  }
+
+  .arch-swatch--return {
+    border: 2px dotted var(--text);
+  }
+
+  /* the rows come in top to bottom when the chapter reaches the screen */
+  .reveal-on .arch > * {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 500ms ease,
+      transform 500ms ease;
+  }
+
+  .reveal-on .arch.is-in > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal-on .arch.is-in > :nth-child(2) {
+    transition-delay: 120ms;
+  }
+
+  .reveal-on .arch.is-in > :nth-child(3) {
+    transition-delay: 240ms;
+  }
+
+  .reveal-on .arch.is-in > :nth-child(4) {
+    transition-delay: 360ms;
+  }
+
+  .reveal-on .arch.is-in > :nth-child(n + 5) {
+    transition-delay: 480ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arch-row,
+    details.arch-row:hover,
+    details.arch-row[open] {
+      transition: none;
+      transform: none;
+    }
+  }
+
+  /* chapter content: a short lede, then numbered steps or stacked layers */
+  .chapter-lede {
+    margin: 0 0 2rem;
+    color: var(--muted);
+    font-size: 1.125rem;
+  }
+
+  .steps,
+  .layers {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps li {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: 0.5rem;
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .steps-n {
+    grid-row: 1 / 3;
+    padding-top: 0.45rem;
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .steps h3 {
+    margin: 0 0 0.35rem;
+    font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .steps p,
+  .layers p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .layers li {
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--radius);
+    background-color: var(--surface);
+    box-shadow: var(--lift);
+  }
+
+  .layers h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.25rem;
+    font-size: 1.125rem;
+  }
+
+  .layers .layer-owned {
+    background-color: var(--signal);
+    color: var(--signal-ink);
+  }
+
+  .layers .layer-owned p {
+    color: var(--signal-ink);
+  }
+
+  .tag {
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+
+  /* hatched: means exactly one thing on this site: "does not exist yet" */
+  .hatched {
+    background: repeating-linear-gradient(135deg, var(--stripe) 0 7px, var(--surface) 7px 14px);
+  }
+
+  /* chapter navigation, inside the sticky header on the homepage. On narrow
+     screens the list scrolls sideways; the active chapter is kept in view. */
+  .chapter-nav {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .chapter-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chapter-nav ol {
+    display: flex;
+    gap: 1.25rem;
+    width: max-content;
+    margin: 0 0 0 auto;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+  }
+
+  .chapter-nav a {
+    display: inline-flex;
+    gap: 0.4rem;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .chapter-nav a:hover {
+    color: var(--text);
+  }
+
+  .chapter-nav a[aria-current] {
+    color: var(--text);
+    border-bottom-color: var(--signal);
+  }
+
+  .chapter-nav-n {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* a chapter: small label, then the heading; clears the sticky nav when jumped to */
+  /* every chapter fills the screen, like a slide; longer ones simply grow */
+  .chapter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100svh;
+    padding-block: 6rem 4rem;
+  }
+
+  .chapter-label {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .chapter-label span {
+    color: var(--signal);
+    margin-right: 0.35rem;
+  }
+
+  .chapter h2 {
+    margin-top: 0;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .statement {
+    font-weight: 600;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.5rem;
+  }
+
+  /* deck-style reveal: the step at the reading line is full, the others dim */
+  .reveal-on [data-step] {
+    transition: opacity 400ms ease;
+    opacity: 0.3;
+  }
+
+  .reveal-on [data-step].is-current {
+    opacity: 1;
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .footer-nav a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .footer-nav a:hover {
+    color: var(--text);
   }
 
   .site-footer {

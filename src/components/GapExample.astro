@@ -1,0 +1,53 @@
+---
+// The context gap, shown instead of told: the same request answered twice,
+// once without context and once with it. Every concrete part of the second
+// answer is marked and numbered, and the list below says which note it came
+// from. An illustration, labelled as such: not a recorded output.
+
+const sources = [
+  { type: 'Meeting', note: 'Call with Anna, yesterday: pilot moves to Q1' },
+  { type: 'Meeting', note: 'Call with Anna, yesterday: open question on data hosting' },
+  { type: 'Principle', note: 'No start dates before the engineering review' },
+];
+---
+
+<figure
+  class="gap"
+  aria-label="Illustration: the same email, written without and with your context"
+>
+  <p class="gap-label">Illustration</p>
+  <p class="gap-prompt">
+    <span>Prompt</span> Draft the follow-up email to Anna after yesterday’s call.
+  </p>
+
+  <div class="gap-pair">
+    <div class="gap-mail gap-mail--generic">
+      <p class="gap-head">Without context</p>
+      <p>Hi Anna,</p>
+      <p>
+        thanks for the great call yesterday! It was a pleasure discussing the project. Let’s keep
+        the momentum going and schedule a next meeting soon.
+      </p>
+      <p>Best,</p>
+    </div>
+
+    <div class="gap-mail gap-mail--context">
+      <p class="gap-head">With your context</p>
+      <p>Hi Anna,</p>
+      <!-- prettier-ignore -->
+      <p>thanks for yesterday. As agreed, <mark>we move the pilot to Q1<sup>1</sup></mark> so your team can finish the migration first. <mark>Your question about where the data is hosted<sup>2</sup></mark> gets an answer by Friday. <mark>A start date follows after our engineering review<sup>3</sup></mark> next week.</p>
+      <p>Best,</p>
+    </div>
+  </div>
+
+  <figcaption class="gap-sources">
+    <p class="gap-head">Where it came from</p>
+    <ol>
+      {sources.map((s) => (
+        <li>
+          <span class="gap-type">{s.type}</span> {s.note}
+        </li>
+      ))}
+    </ol>
+  </figcaption>
+</figure>

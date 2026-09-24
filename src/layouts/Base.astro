@@ -4,12 +4,13 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
-  /** 'bare': no footer and no content column, the page lays itself out */
-  layout?: 'page' | 'bare';
+  /** 'wide': no content column, the page lays out its own sections on the wide grid */
+  layout?: 'page' | 'wide';
 }
 
 const { title, description = 'EKHO Labs', layout = 'page' } = Astro.props;
 const year = new Date().getFullYear();
+const wide = layout === 'wide';
 
 // Until launch the site stays out of search engines (AGENTS.md §9).
 // At launch: set this to true and restore the Sitemap line in public/robots.txt.
@@ -32,36 +33,49 @@ const indexable = false;
   </head>
   <body>
     <header class="site-header">
-      <div class:list={['wrap', { 'wrap-wide': layout === 'bare' }]}>
+      <div
+        class:list={[
+          'wrap',
+          { 'wrap-wide': wide, 'header-centred': Astro.slots.has('header-nav') },
+        ]}
+      >
         <a class="brand" href="/">
           EKHO
         </a>
-        <nav class="nav">
-          <a href="/">Home</a>
-          <a href="https://github.com/ekholabs">GitHub</a>
-        </nav>
+        <slot name="header-nav">
+          <nav class="nav">
+            <a href="/">Home</a>
+            <a href="https://github.com/ekholabs">GitHub</a>
+          </nav>
+        </slot>
+        {Astro.slots.has('header-nav') && (
+          <a class="header-aside" href="https://github.com/ekholabs">
+            GitHub <span aria-hidden="true">↗</span>
+          </a>
+        )}
       </div>
     </header>
 
-    {layout === 'bare' ? (
-      <main class="main-bare">
+    {wide ? (
+      <main class="main-wide">
         <slot />
       </main>
     ) : (
-      <>
-        <main>
-          <div class="wrap">
-            <slot />
-          </div>
-        </main>
-
-        <footer class="site-footer">
-          <div class="wrap">
-            <span>&copy; {year} EKHO Labs</span>
-            <span>ekholabs.eu</span>
-          </div>
-        </footer>
-      </>
+      <main>
+        <div class="wrap">
+          <slot />
+        </div>
+      </main>
     )}
+
+    <footer class="site-footer">
+      <div class:list={['wrap', { 'wrap-wide': wide }]}>
+        <span>&copy; {year} EKHO Labs</span>
+        <nav class="footer-nav" aria-label="Legal">
+          <a href="/imprint">Legal notice</a>
+          <a href="/privacy">Privacy</a>
+        </nav>
+      </div>
+    </footer>
   </body>
 </html>
