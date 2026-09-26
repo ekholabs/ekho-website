@@ -29,7 +29,7 @@ const { animated = true, caption = true } = Astro.props;
 
 const SIZE = 560;
 const C = SIZE / 2;
-const R = 244;
+const R = 222; // the formed body is smaller than the field it gathers from
 const N = 420; // points that carry through every state
 const EXTRA = 140; // points that exist only in the hero
 
@@ -68,7 +68,7 @@ function sample(seed: number, count: number, minDist: number, place: (r: () => n
 }
 
 const field = sample(19, N + EXTRA, 17, (r) => [14 + r() * (SIZE - 28), 14 + r() * (SIZE - 28)]);
-const scatter = sample(41, N, 19, (r) => [34 + r() * (SIZE - 68), 40 + r() * (SIZE - 80)]);
+const scatter = sample(41, N, 18, (r) => [10 + r() * (SIZE - 20), 14 + r() * (SIZE - 28)]);
 // The formed state is a sphere seen from outside, not a flat disc: points sit
 // evenly on the surface, and an orthographic projection crowds them towards the
 // rim exactly as a real one does. Depth then gives the near side its weight and
@@ -328,12 +328,12 @@ const ariaLabel =
       ))}
     </g>
 
-    <path class="cg-link cg-link-2" d={path(first)} />
+    <path class="cg-link cg-link-2" pathLength="1" d={path(first)} />
     <g class="cg-mesh">
-      <path class="cg-link cg-far" d={path(far)} />
-      <path class="cg-link cg-chord" d={chords.map(bow).join('')} />
-      <path class="cg-link cg-near" d={path(near)} />
-      <path class="cg-link cg-own" d={path(own)} />
+      <path class="cg-link cg-far" pathLength="1" d={path(far)} />
+      <path class="cg-link cg-chord" pathLength="1" d={chords.map(bow).join('')} />
+      <path class="cg-link cg-near" pathLength="1" d={path(near)} />
+      <path class="cg-link cg-own" pathLength="1" d={path(own)} />
       <path class="cg-link cg-hot" d="" />
     </g>
 
