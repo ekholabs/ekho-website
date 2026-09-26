@@ -116,19 +116,17 @@ const people = [
             <span>01</span> Why
           </p>
           <h2>Everything is already there. None of it is connected.</h2>
-          <div data-seq>
-            <p class="statement" data-step>
-              Your decisions, the people you work with, what you have read and what you concluded
-              from it. It exists. In your head, in chats that close, in mails and meetings and notes
-              that know nothing of each other.
-            </p>
-            <p class="statement" data-step>
-              So every session with an AI starts near zero. You explain yourself again. And again.
-            </p>
-            <p class="statement" data-step>
-              The model is the same for everyone. Your context is the only part that is yours.
-            </p>
-          </div>
+          <p class="statement">
+            Your decisions, the people you work with, what you have read and what you concluded from
+            it. It exists. In your head, in chats that close, in mails and meetings and notes that
+            know nothing of each other.
+          </p>
+          <p class="statement">
+            So every session with an AI starts near zero. You explain yourself again. And again.
+          </p>
+          <p class="statement">
+            The model is the same for everyone. Your context is the only part that is yours.
+          </p>
         </div>
       </section>
 
@@ -212,16 +210,14 @@ const people = [
             <span>03</span> How
           </p>
           <h2>Not one new point. Three times the connections.</h2>
-          <div data-seq>
-            <p class="statement" data-step>
-              Every source you bring in links to everything already there. An insight knows where it
-              came from, what supports it and what contradicts it.
-            </p>
-            <p class="statement" data-step>
-              That is why it compounds instead of gathering dust. The bookkeeping is the part people
-              give up on, and it is the part the agent does.
-            </p>
-          </div>
+          <p class="statement">
+            Every source you bring in links to everything already there. An insight knows where it
+            came from, what supports it and what contradicts it.
+          </p>
+          <p class="statement">
+            That is why it compounds instead of gathering dust. The bookkeeping is the part people
+            give up on, and it is the part the agent does.
+          </p>
         </div>
       </section>
     </div>
@@ -335,7 +331,6 @@ const people = [
       a,
     ]),
   );
-  const sequences = [...document.querySelectorAll<HTMLElement>('[data-seq]')];
   const chapterNav = document.querySelector<HTMLElement>('[data-chapter-nav]');
   const graphics = [...document.querySelectorAll<HTMLElement>('[data-graphic]')];
   const arch = document.querySelector<HTMLElement>('[data-arch]');
@@ -402,23 +397,6 @@ const people = [
 
     // architecture: its rows come in once the chapter is in view
     if (arch && arch.getBoundingClientRect().top < vh * 0.8) arch.classList.add('is-in');
-
-    // statement sequences: the step nearest the reading line is full, the rest dim
-    const line = vh * 0.45;
-    for (const seq of sequences) {
-      const steps = [...seq.querySelectorAll<HTMLElement>('[data-step]')];
-      let best: HTMLElement | undefined;
-      let bestDist = Infinity;
-      for (const s of steps) {
-        const r = s.getBoundingClientRect();
-        const dist = Math.abs(r.top + r.height / 2 - line);
-        if (dist < bestDist) {
-          bestDist = dist;
-          best = s;
-        }
-      }
-      for (const s of steps) s.classList.toggle('is-current', s === best);
-    }
   }
 
   let queued = false;

@@ -893,16 +893,6 @@
     margin: 0 0 1.5rem;
   }
 
-  /* deck-style reveal: the step at the reading line is full, the others dim */
-  .reveal-on [data-step] {
-    transition: opacity 400ms ease;
-    opacity: 0.3;
-  }
-
-  .reveal-on [data-step].is-current {
-    opacity: 1;
-  }
-
   .footer-nav {
     display: flex;
     gap: 1.25rem;
@@ -2628,5 +2618,24 @@
 
   details.arch-row[open]:hover {
     box-shadow: none;
+  }
+}
+
+@layer components {
+  /* The statements are the argument, so they are read, not skimmed. They used
+     to dim everything but the line nearest the middle of the screen, which is a
+     deck mannerism: on a page where all three are in view at once it leaves two
+     thirds of the text unreadable while the graph is already carrying the
+     movement. They all stand now, and they stand bigger. */
+  .statement {
+    font-size: clamp(1.1875rem, 1.9vw, 1.5rem);
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    max-width: 44ch;
+    margin: 0 0 1.35rem;
+  }
+
+  .statement:last-child {
+    margin-bottom: 0;
   }
 }
