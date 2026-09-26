@@ -171,7 +171,10 @@ not a memory inside somebody else's model.`
   1. `No new app. EKHO docks into the chat you already use: as commands it runs
 and skills it applies.`
   2. `And it never changes anything without showing you first.`
-- **On the graph** a **chat window**, close to the clients people actually use:
+- **On the graph** a **chat window** that rises into place from below while the
+  Finder lifts away out of the top, so the handover has a direction instead of
+  being one picture swapped for another. Close to the clients people actually
+  use:
   sidebar with recents grouped by day, user message as a bubble on the right,
   the answer as plain text with no bubble, tool use as bordered collapsible
   cards, composer as a pill with a round send button and a model line beneath.

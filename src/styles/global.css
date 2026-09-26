@@ -1973,6 +1973,10 @@
     padding-block: 0;
   }
 
+  /* A window arrives from below and leaves upwards, so the handover has a
+     direction: the one whose turn it is rises into place while the one before
+     it lifts away. Both fading in the same spot read as one picture being
+     swapped for another. */
   .overlay {
     position: absolute;
     inset: 0;
@@ -1980,11 +1984,11 @@
     place-items: center;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(8px);
+    transform: translateY(52px);
     transition:
-      opacity 450ms ease,
-      transform 450ms ease,
-      visibility 450ms;
+      opacity 560ms ease,
+      transform 720ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      visibility 720ms;
     pointer-events: none;
   }
 
@@ -1994,6 +1998,11 @@
     visibility: visible;
     transform: none;
     pointer-events: auto;
+  }
+
+  /* the one that has had its turn goes out of the top */
+  [data-story-figure][data-show='chat'] .overlay[data-for='finder'] {
+    transform: translateY(-44px);
   }
 
   /* with the script off, no window covers the graph */
