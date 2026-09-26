@@ -392,7 +392,8 @@
       grid-row: 1;
       align-self: start;
       top: 4rem;
-      height: calc(100svh - 4rem);
+      /* the rail must not sit flush against the bottom edge */
+      height: calc(100svh - 6.5rem);
       border-bottom: 0;
     }
   }
@@ -2217,11 +2218,16 @@
      it, the windows lie over it, and the architecture assembles underneath.
      ------------------------------------------------------------------ */
 
+  /* the stage must be able to fill the figure on every width, or the graph,
+     which is positioned against it, collapses to nothing */
+  .story-figure {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
   @media (min-width: 64rem) {
     .story-figure {
-      display: flex;
-      flex-direction: column;
-      gap: 1.75rem;
       padding-left: 4rem;
       border-left: 1px solid var(--line);
     }
@@ -2317,7 +2323,7 @@
   }
 
   .overlay .win--chat .win-body {
-    height: 27rem;
+    height: 32.5rem;
   }
 
   .overlay .chat-side {
@@ -2373,7 +2379,7 @@
      ------------------------------------------------------------------ */
   @media (max-width: 63.999rem) {
     .story-figure {
-      height: 52svh;
+      height: 44svh;
     }
 
     .figure-stage {
@@ -2585,6 +2591,32 @@
       align-self: center;
       border-radius: 2px;
       background: var(--signal);
+    }
+  }
+}
+
+@layer components {
+  /* The header blurs what scrolls under it. A backdrop-filter makes the header
+     the containing block for any fixed descendant, which pinned the menu panel
+     to the header's own box instead of the viewport. While the menu is open the
+     blur comes off, so the panel measures against the viewport again and the
+     header, at a higher z-index, keeps sitting on top of it. */
+  .menu-open .site-header {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@layer components {
+  /* The panel is a child of the header, so it paints inside the header's own
+     stacking context and would cover the wordmark and the button that closes
+     it. Both are lifted one level above the panel. */
+  @media (max-width: 63.999rem) {
+    .site-header .brand,
+    .burger {
+      position: relative;
+      z-index: 16;
     }
   }
 }
