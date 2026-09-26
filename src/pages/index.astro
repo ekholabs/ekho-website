@@ -20,6 +20,11 @@ const chapters = [
 ];
 
 // The two founders. Names on a public page are the one thing never to guess.
+// Named, not badged. What the page claims is that a folder of Markdown is
+// readable by any of them, which is true of the format. It does not claim a
+// partnership, an integration or a tested matrix.
+const models = ['Claude', 'GPT', 'Gemini', 'Mistral', 'Llama', 'Qwen', 'DeepSeek'];
+
 const people = [
   { name: 'Lorenz Vierecke', line: 'Puts EKHO in front of real work and writes down what breaks.' },
   {
@@ -186,17 +191,23 @@ const people = [
         <div class="flow-window">
           <ChatWindow />
         </div>
-        <ol class="steps-strip">
-          <li>
-            <span>01</span> Throw it in.
-          </li>
-          <li>
-            <span>02</span> Let it be digested.
-          </li>
-          <li>
-            <span>03</span> Ask.
-          </li>
-        </ol>
+        {/* The second thing this chapter has to land, besides the confirm: EKHO
+            is not tied to one model. Set as names rather than badges, because a
+            row of other companies' marks is a licensing question before it is a
+            design one, and because the claim here is about a file format and
+            not about a partnership. See docs/landing-v2.md. */}
+        <div class="models">
+          <p class="models-label">Any model, and you can change your mind</p>
+          <ul class="models-list">
+            {models.map((m) => (
+              <li>{m}</li>
+            ))}
+          </ul>
+          <p class="models-note">
+            Your vault is Markdown on your own disk. Anything that can read a file can read it, so
+            the model is the part you are free to swap.
+          </p>
+        </div>
       </section>
 
       <section
