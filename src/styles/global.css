@@ -23,6 +23,9 @@
   /* the dark panel: EKHO core in the architecture, and the ground behind a screen */
   --core: #1a1a18;
   --core-ink: #edebe6;
+  /* the highlighted layer: anthracite on a light ground, light on a dark one */
+  --block: #1a1a18;
+  --block-ink: #edebe6;
   --core-line: #34332f;
   --core-muted: #8d8880;
 
@@ -62,6 +65,8 @@
     --lift-hover: 0 0 56px rgb(0 0 0 / 0.42);
     --core: #121210;
     --core-ink: #edebe6;
+    --block: #edebe6;
+    --block-ink: #1a1a18;
     --core-line: #2b2a27;
     --core-muted: #86817a;
   }
@@ -473,11 +478,6 @@
   .cg-tip {
     opacity: 0;
     transition: opacity 180ms ease;
-  }
-
-  .cg-tip-tick {
-    stroke: var(--line-strong);
-    stroke-width: 1;
   }
 
   .cg-tip-type {
@@ -2548,5 +2548,85 @@
     .hero-title {
       font-size: clamp(2rem, 8.5vw, 2.75rem);
     }
+  }
+}
+
+@layer components {
+  /* In the scattered chapter the labels come in by themselves, one after
+     another from the top of the field down, so the reader is told what the
+     dots are without having to go looking. Everywhere else they stay on
+     hover and focus. */
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-tip {
+    opacity: 1;
+    transition: opacity 550ms ease;
+    transition-delay: calc(var(--n) * 260ms + 500ms);
+  }
+
+  /* a pointer on a dot overrides the sequence, without waiting for a delay */
+  .cg-pt:hover .cg-tip,
+  .cg-pt:focus-visible .cg-tip {
+    opacity: 1;
+    transition-delay: 0s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-on [data-graphic].is-1:not(.is-2) .cg-tip {
+      transition: none;
+      transition-delay: 0s;
+    }
+  }
+}
+
+@layer components {
+  /* The layer being read has to carry, not whisper: it inverts against the
+     ground rather than sitting a shade off it. Anthracite on the light mode,
+     the light tone on the dark one. */
+  .stack-row.is-on {
+    background: var(--block);
+    box-shadow: none;
+  }
+
+  .stack-row.is-on .stack-name {
+    color: var(--block-ink);
+  }
+
+  .stack-row.is-on .stack-note {
+    color: color-mix(in srgb, var(--block-ink) 62%, transparent);
+  }
+
+  /* in chapter 06 the row you opened is the one that carries */
+  .arch-row[open] {
+    background: var(--block);
+  }
+
+  .arch-row[open] .arch-title {
+    color: var(--block-ink);
+  }
+
+  .arch-row[open] .arch-note,
+  .arch-row[open] .arch-code,
+  .arch-row[open] summary.arch-head::after {
+    color: color-mix(in srgb, var(--block-ink) 62%, transparent);
+  }
+
+  .arch-row[open] .arch-desc {
+    color: color-mix(in srgb, var(--block-ink) 74%, transparent);
+  }
+
+  .arch-row[open] .arch-desc strong,
+  .arch-row[open] .arch-parts b {
+    color: var(--block-ink);
+  }
+
+  .arch-row[open] .arch-parts li {
+    border-top-color: color-mix(in srgb, var(--block-ink) 20%, transparent);
+  }
+
+  .arch-row[open] .arch-parts code {
+    color: color-mix(in srgb, var(--block-ink) 55%, transparent);
+  }
+
+  details.arch-row[open]:hover {
+    box-shadow: none;
   }
 }
