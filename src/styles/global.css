@@ -937,8 +937,8 @@
   .chapter-nav a {
     display: inline-flex;
     gap: 0.4rem;
-    padding-bottom: 2px;
-    border-bottom: 2px solid transparent;
+    padding-bottom: 3px;
+    border-bottom: 1.5px solid transparent;
     color: var(--muted);
     text-decoration: none;
     white-space: nowrap;
@@ -2070,7 +2070,6 @@
 
   .chapter-nav a[aria-current] {
     color: var(--text);
-    box-shadow: inset 0 -1.5px 0 var(--signal);
   }
 
   .chapter-nav a[aria-current] .chapter-nav-n {
@@ -2443,6 +2442,149 @@
 
     .flow-window .win--chat .win-body {
       height: 24rem;
+    }
+  }
+}
+
+@layer components {
+  /* ------------------------------------------------------------------
+     The menu on narrow screens. The chapters do not fit in a row there, so
+     the same <nav> becomes a full-screen panel behind a button. One list of
+     links, laid out two ways.
+     ------------------------------------------------------------------ */
+
+  .burger {
+    display: none;
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: -0.6rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .burger-lines::before,
+  .burger-lines::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20px;
+    height: 1.5px;
+    margin-left: -10px;
+    background: currentcolor;
+    transition:
+      transform 240ms ease,
+      opacity 240ms ease;
+  }
+
+  .burger-lines::before {
+    transform: translateY(-4px);
+  }
+
+  .burger-lines::after {
+    transform: translateY(4px);
+  }
+
+  .menu-open .burger-lines::before {
+    transform: rotate(45deg);
+  }
+
+  .menu-open .burger-lines::after {
+    transform: rotate(-45deg);
+  }
+
+  .burger:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+    border-radius: var(--radius);
+  }
+
+  /* the two extra rows only exist for the panel */
+  .chapter-nav-extra {
+    display: none;
+  }
+
+  @media (max-width: 63.999rem) {
+    .burger {
+      display: block;
+    }
+
+    .chapter-nav {
+      position: fixed;
+      inset: 0;
+      z-index: 15;
+      flex: none;
+      overflow-y: auto;
+      padding: 5.25rem 1rem 2.5rem;
+      background: var(--bg);
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity 240ms ease,
+        visibility 240ms;
+    }
+
+    .menu-open .chapter-nav {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .menu-open body {
+      overflow: hidden;
+    }
+
+    .chapter-nav ol {
+      display: block;
+      width: auto;
+      margin: 0;
+    }
+
+    .chapter-nav-extra {
+      display: block;
+    }
+
+    .chapter-nav li {
+      border-top: 1px solid var(--line);
+    }
+
+    .chapter-nav li:last-child {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .chapter-nav a {
+      display: flex;
+      align-items: baseline;
+      gap: 0.9rem;
+      padding: 1.05rem 0;
+      border-bottom: 0;
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      white-space: normal;
+    }
+
+    .chapter-nav .chapter-nav-n {
+      flex: none;
+      width: 1.5rem;
+      font-size: 0.8125rem;
+      font-weight: 400;
+      color: var(--muted-deep);
+    }
+
+    /* the chapter you are in is marked, not coloured in */
+    .chapter-nav a[aria-current]::after {
+      content: '';
+      width: 9px;
+      height: 9px;
+      margin-left: auto;
+      align-self: center;
+      border-radius: 2px;
+      background: var(--signal);
     }
   }
 }

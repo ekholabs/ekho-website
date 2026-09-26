@@ -74,9 +74,19 @@ Also changing:
 
 ## 2 · The page, chapter by chapter
 
-Nav (sticky, top right of the header): `01 Why · 02 What · 03 How · 04 Architecture`.
-The active chapter carries a yellow underline. The footer of each full-height
-chapter carries `03 HOW · 05 / 09` so the reader knows where they are.
+Nav (sticky, in the header): `01 Why · 02 What · 03 How · 04 Architecture`. The
+active chapter carries a 1.5px yellow underline.
+
+The Figma frames also carry `Context sovereignty` top right and a footer with
+`01 WHY · 02 / 07`. Both belong to a deck of slides and neither is on the page:
+a scrolling page has no slide count, so the footer would be a claim that is not
+true, and the tagline was decided against.
+
+Below 64rem the chapters do not fit in a row, so the same `<nav>` becomes a
+full-screen panel behind a burger button, the way the large AI labs' sites do
+it. One list of links laid out two ways, not two lists. The panel adds two rows
+that only exist there, the waitlist and GitHub, and marks the chapter you are in
+with a yellow square rather than colouring the row.
 
 ### 00 · Hero
 
@@ -296,6 +306,8 @@ The two columns cannot sit side by side, so below 64rem:
 - the architecture rail is hidden. A fifth of a phone screen is too much to
   spend on it, and chapter 06 carries the same five layers in full.
 - the chat window drops its sidebar, the way the real clients do at this width.
+- the header nav becomes a burger menu. `Escape` closes it, following a link
+  closes it, and crossing back over 64rem closes it.
 
 ## 5 · Still open
 

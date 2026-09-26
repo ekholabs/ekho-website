@@ -34,7 +34,13 @@ const people = [
   description="EKHO turns what you know into connected context that compounds, so you get more out of AI every time you use it, and it stays yours."
   layout="wide"
 >
-  <nav class="chapter-nav" aria-label="Chapters" slot="header-nav" data-chapter-nav>
+  <nav
+    class="chapter-nav"
+    id="chapter-nav"
+    aria-label="Chapters"
+    slot="header-nav"
+    data-chapter-nav
+  >
     <ol>
       {chapters.map((c) => (
         <li>
@@ -44,6 +50,18 @@ const people = [
           </a>
         </li>
       ))}
+      <li class="chapter-nav-extra">
+        <a href="#waitlist">
+          <span class="chapter-nav-n">05</span>
+          Join the waitlist
+        </a>
+      </li>
+      <li class="chapter-nav-extra">
+        <a href="https://github.com/ekholabs">
+          <span class="chapter-nav-n">↗</span>
+          GitHub
+        </a>
+      </li>
     </ol>
   </nav>
 

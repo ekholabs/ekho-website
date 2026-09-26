@@ -53,6 +53,18 @@ const indexable = false;
             GitHub <span aria-hidden="true">↗</span>
           </a>
         )}
+        {Astro.slots.has('header-nav') && (
+          <button
+            class="burger"
+            type="button"
+            aria-expanded="false"
+            aria-controls="chapter-nav"
+            aria-label="Open menu"
+            data-burger
+          >
+            <span class="burger-lines" aria-hidden="true"></span>
+          </button>
+        )}
       </div>
     </header>
 
@@ -77,5 +89,43 @@ const indexable = false;
         </nav>
       </div>
     </footer>
+
+    <script>
+      // Narrow screens get a menu instead of a row of chapters. The panel is
+      // the same <nav> the wide layout uses, laid out full screen by CSS, so
+      // there is one list of links and not two. Without the script the button
+      // is not rendered as interactive and the nav stays a plain list.
+      const root = document.documentElement;
+      const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
+      const panel = document.getElementById('chapter-nav');
+
+      if (burger && panel) {
+        const set = (open: boolean) => {
+          root.classList.toggle('menu-open', open);
+          burger.setAttribute('aria-expanded', String(open));
+          burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        };
+
+        burger.addEventListener('click', () => set(!root.classList.contains('menu-open')));
+
+        // following a link closes the menu, so the target is not hidden behind it
+        panel.addEventListener('click', (e) => {
+          if ((e.target as HTMLElement).closest('a')) set(false);
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && root.classList.contains('menu-open')) {
+            set(false);
+            burger.focus();
+          }
+        });
+
+        // widening past the breakpoint puts the chapters back in the header
+        const wide = window.matchMedia('(min-width: 64rem)');
+        wide.addEventListener('change', (e) => {
+          if (e.matches) set(false);
+        });
+      }
+    </script>
   </body>
 </html>
