@@ -6,6 +6,7 @@ import FinderWindow from '../components/FinderWindow.astro';
 import ChatWindow from '../components/ChatWindow.astro';
 import ViewerMockup from '../components/ViewerMockup.astro';
 import Waitlist from '../components/Waitlist.astro';
+import ModelRow from '../components/ModelRow.astro';
 
 // The scroll is the lifecycle of a vault: scattered before EKHO, connected with
 // it, compounding once it runs. The graphic on the right holds that movement,
@@ -20,11 +21,6 @@ const chapters = [
 ];
 
 // The two founders. Names on a public page are the one thing never to guess.
-// Named, not badged. What the page claims is that a folder of Markdown is
-// readable by any of them, which is true of the format. It does not claim a
-// partnership, an integration or a tested matrix.
-const models = ['Claude', 'GPT', 'Gemini', 'Mistral', 'Llama', 'Qwen', 'DeepSeek'];
-
 const people = [
   { name: 'Lorenz Vierecke', line: 'Puts EKHO in front of real work and writes down what breaks.' },
   {
@@ -198,11 +194,7 @@ const people = [
             not about a partnership. See docs/landing-v2.md. */}
         <div class="models">
           <p class="models-label">Any model, and you can change your mind</p>
-          <ul class="models-list">
-            {models.map((m) => (
-              <li>{m}</li>
-            ))}
-          </ul>
+          <ModelRow />
           <p class="models-note">
             Your vault is Markdown on your own disk. Anything that can read a file can read it, so
             the model is the part you are free to swap.

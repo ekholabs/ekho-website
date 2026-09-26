@@ -20,6 +20,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "prettier": "^3.9.8",
     "prettier-plugin-astro": "^1.0.1",
+    "simple-icons": "^16.32.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3"
   }

@@ -1,0 +1,42 @@
+---
+// The models EKHO does not care about, as marks on identical plates.
+//
+// The paths come from the simple-icons package at build time, so they are the
+// real outlines at their real proportions and not something drawn from memory.
+// The package is CC0; the marks themselves stay the property of their owners,
+// and this row is a statement of compatibility, not of endorsement.
+//
+// OpenAI is the exception: its mark is not in that set, because OpenAI asked
+// for it to be removed. So GPT is set in type on the same plate rather than
+// approximated. A drawn-from-memory logo would be both wrong and theirs.
+import * as si from 'simple-icons';
+
+type Plate = { label: string; icon?: { path: string; title: string }; text?: string };
+
+const plates: Plate[] = [
+  { label: 'Claude', icon: si.siClaude },
+  { label: 'GPT', text: 'GPT' },
+  { label: 'Gemini', icon: si.siGooglegemini },
+  { label: 'Mistral', icon: si.siMistralai },
+  { label: 'Llama, by Meta', icon: si.siMeta },
+  { label: 'Qwen', icon: si.siQwen },
+  { label: 'DeepSeek', icon: si.siDeepseek },
+  { label: 'Ollama', icon: si.siOllama },
+];
+---
+
+<ul class="plates">
+  {plates.map((p) => (
+    <li class="plate" title={p.label}>
+      {p.icon ? (
+        <svg class="plate-mark" viewBox="0 0 24 24" role="img" aria-label={p.label}>
+          <path d={p.icon.path} />
+        </svg>
+      ) : (
+        <span class="plate-text" aria-label={p.label}>
+          {p.text}
+        </span>
+      )}
+    </li>
+  ))}
+</ul>
