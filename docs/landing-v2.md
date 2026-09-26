@@ -277,9 +277,9 @@ change (N7).
 7. **Viewer** into chapter 05.
 8. **Who we are** and **Where we are**, text only.
 9. **Waitlist**, once the provider is decided.
-10. **Cleanup.** The styles for the retired bento, tiles, overview and gap blocks
-    are still in `global.css` and nothing uses them any more. Delete them in a
-    commit of their own, with no content change alongside it (N7).
+10. **Cleanup.** Done. The styles for the retired bento, tiles, overview, scene
+    and gap blocks are gone, in a commit of their own (N7). `global.css` went
+    from 2762 to 2244 lines.
 
 ## 5 · Still open
 

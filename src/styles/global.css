@@ -29,9 +29,6 @@
   /* older names, kept so the existing component styles keep resolving */
   --border: var(--line);
   --stripe: var(--surface-raised);
-  --tile-top: var(--surface);
-  --tile-bottom: var(--surface);
-  --tile-line: var(--line);
   --surface-hover: var(--surface-raised);
 
   /* centred, wide, barely there. Only on dark and white panels, never in the
@@ -233,16 +230,6 @@
     color: var(--text);
   }
 
-  .hero::before {
-    content: '';
-    display: block;
-    height: 6rem;
-    margin-bottom: 2.5rem;
-    border-radius: var(--radius);
-    background-image: radial-gradient(var(--dots) 1.2px, transparent 1.7px);
-    background-size: 12px 12px;
-  }
-
   .lede {
     font-size: 1.125rem;
     color: var(--muted);
@@ -251,49 +238,6 @@
   }
 
   .note {
-    color: var(--muted);
-    font-size: 0.9375rem;
-  }
-
-  .cards {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
-
-  .card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    box-shadow: var(--lift);
-    padding: 1.125rem 1.25rem;
-  }
-
-  ol.cards {
-    counter-reset: step;
-  }
-
-  ol.cards > .card::before {
-    counter-increment: step;
-    content: counter(step, decimal-leading-zero);
-    display: block;
-    margin-bottom: 0.75rem;
-    font-size: 2.5rem;
-    line-height: 1;
-    letter-spacing: -0.03em;
-    color: var(--muted);
-  }
-
-  .card h3 {
-    margin: 0 0 0.375rem;
-    font-size: 1rem;
-    letter-spacing: -0.01em;
-  }
-
-  .card p {
-    margin: 0;
     color: var(--muted);
     font-size: 0.9375rem;
   }
@@ -312,82 +256,11 @@
     max-width: 80rem;
   }
 
-  /* scene: one statement per screen. Without the reveal it is simply a large
-     statement with room around it. */
-  .scene-frame {
-    display: flex;
-    align-items: center;
-    min-height: 70svh;
-    padding-block: 3rem;
-  }
-
-  .scene-text {
-    margin: 0;
-    max-width: 60rem;
-    font-size: clamp(2rem, 5.5vw, 4.25rem);
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    text-wrap: pretty;
-  }
-
-  .scene-text--lead {
-    max-width: none;
-    font-size: clamp(2.75rem, 9vw, 7.5rem);
-    font-weight: 700;
-    line-height: 0.98;
-    letter-spacing: -0.04em;
-    text-wrap: balance;
-  }
-
-  .scene-text--lead .phrase {
-    display: block;
-  }
-
-  .scene-text--lead .phrase + .phrase {
-    margin-top: 0.15em;
-  }
-
-  /* with the reveal on, each scene gets scroll room per phrase; the statement
-     stays put and the highlight moves from beat to beat: the active one full, the rest at 50% */
-  .reveal-on .scene {
-    height: calc(100svh + var(--phrases) * 45svh);
-  }
-
-  .reveal-on .scene-frame {
-    position: sticky;
-    top: 0;
-    min-height: 100svh;
-  }
-
-  .reveal-on .phrase {
-    opacity: 0.5;
-    transition: opacity 400ms ease;
-  }
-
-  .reveal-on .phrase.is-current {
-    opacity: 1;
-  }
-
   /* in the large statements a highlight may wrap; each line keeps its padding */
-  .scene-text mark,
   .closing mark {
     white-space: normal;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
-  }
-
-  .reveal-on .phrase mark {
-    background: transparent;
-    color: inherit;
-    transition:
-      background-color 400ms ease,
-      color 400ms ease;
-  }
-
-  .reveal-on .phrase.is-current mark {
-    background: var(--signal);
-    color: var(--signal-ink);
   }
 
   .closing {
@@ -444,60 +317,8 @@
     }
   }
 
-  /* overview: the first screen, a grid that shows what EKHO is at a glance */
-  .overview {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    min-height: calc(100svh - 3.6rem);
-    padding-block: 2.5rem 3rem;
-  }
-
-  /* with the reveal on, the page opens on the large statement alone; while the
-     intro track scrolls, it shrinks into its place in the grid and the rest
-     of the overview fades in (the transform is set by the page script) */
-  .reveal-on .intro-track {
-    height: 210svh;
-  }
-
-  .reveal-on .intro-track .overview {
-    position: sticky;
-    top: 3.6rem;
-  }
-
-  .overview-head {
-    display: grid;
-    gap: 1.5rem;
-  }
-
-  @media (min-width: 64rem) {
-    .overview-head {
-      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-      column-gap: 4rem;
-      align-items: start;
-    }
-  }
-
-  .overview-title {
-    margin: 0 0 1.5rem;
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 700;
-    transform-origin: 0 0;
-    line-height: 1.04;
-    letter-spacing: -0.035em;
-    text-wrap: balance;
-  }
-
   .signal-text {
     color: var(--signal);
-  }
-
-  .overview-lede {
-    margin: 0.5rem 0 0;
-    max-width: 30rem;
-    color: var(--muted);
-    font-size: 1.0625rem;
-    line-height: 1.55;
   }
 
   .cta-row {
@@ -534,215 +355,10 @@
     background: var(--signal);
   }
 
-  .bento {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  @media (min-width: 48rem) {
-    .bento {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .tile--graphic {
-      grid-column: 1 / -1;
-    }
-  }
-
-  @media (min-width: 64rem) {
-    .bento {
-      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr) minmax(0, 1.2fr);
-      grid-template-rows: minmax(15rem, 1fr) minmax(15rem, 1fr);
-    }
-
-    .tile--graphic {
-      grid-column: 1;
-      grid-row: 1 / 3;
-    }
-
-    .tile--how {
-      grid-column: 3;
-      grid-row: 1 / 3;
-    }
-  }
-
-  .tile {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    min-width: 0;
-    padding: 1.5rem;
-    border-radius: var(--radius);
-    background: var(--surface);
-    box-shadow: var(--lift);
-    color: var(--text);
-    text-decoration: none;
-    overflow: hidden;
-    transition:
-      box-shadow 250ms ease,
-      background-color 250ms ease,
-      transform 250ms ease;
-  }
-
-  .tile:hover {
-    background-color: var(--surface-hover);
-    box-shadow: var(--lift-hover);
-    transform: translateY(-2px);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .tile,
-    .tile:hover {
-      transition: none;
-      transform: none;
-    }
-  }
-
   .tile:focus-visible,
   .pill:focus-visible {
     outline: 2px solid var(--signal);
     outline-offset: 3px;
-  }
-
-  .tile-pill {
-    align-self: flex-start;
-    padding: 0.3rem 0.8rem;
-    border: 1px solid currentColor;
-    border-radius: 999px;
-    color: var(--muted);
-    font-size: 0.8125rem;
-  }
-
-  .tile-statement {
-    margin-top: auto;
-    font-size: clamp(1.375rem, 2vw, 1.7rem);
-    font-weight: 500;
-    line-height: 1.18;
-    letter-spacing: -0.02em;
-  }
-
-  .tile-title {
-    display: block;
-    font-size: clamp(1.6rem, 2.4vw, 2.1rem);
-    font-weight: 500;
-    letter-spacing: -0.02em;
-  }
-
-  .tile-text {
-    display: block;
-    color: var(--muted);
-    font-size: 0.9375rem;
-    line-height: 1.55;
-  }
-
-  .tile--graphic .context-graphic {
-    height: auto;
-    padding: 0;
-  }
-
-  .tile--graphic .context-graphic svg {
-    max-height: 26rem;
-  }
-
-  .tile-foot {
-    margin-top: auto;
-  }
-
-  @media (max-width: 47.99rem) {
-    .tile-arrow {
-      display: none;
-    }
-  }
-
-  .tile-arrow {
-    position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
-    display: grid;
-    place-items: center;
-    width: 3rem;
-    height: 3rem;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    background: var(--bg);
-    font-size: 1.25rem;
-  }
-
-  .tile--dots {
-    background-image: radial-gradient(var(--tile-line) 1.3px, transparent 1.8px);
-    background-size: 14px 14px;
-    background-position: right 1.5rem top 1.5rem;
-    background-repeat: no-repeat;
-    background-color: var(--surface);
-  }
-
-  .tile--dots::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent 0, var(--surface) 7rem);
-    pointer-events: none;
-  }
-
-  .tile--dots > * {
-    position: relative;
-  }
-
-  .tile--signal {
-    background: var(--signal);
-    color: var(--signal-ink);
-  }
-
-  .tile--signal .tile-pill {
-    color: var(--signal-ink);
-  }
-
-  .tile--signal:hover {
-    background-color: var(--signal);
-  }
-
-  .how-steps {
-    display: grid;
-    gap: 0.75rem;
-    margin: 0.5rem 0 0;
-    padding: 0;
-    list-style: none;
-    font-size: clamp(1.6rem, 2.2vw, 2rem);
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 1.15;
-  }
-
-  .how-steps span {
-    display: inline-block;
-    width: 2.2rem;
-    color: var(--muted);
-    font-size: 0.875rem;
-    font-weight: 400;
-    letter-spacing: 0;
-    vertical-align: middle;
-  }
-
-  .readers {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: auto;
-  }
-
-  .reader {
-    padding: 0.4rem 0.75rem;
-    border-radius: 6px;
-    background: var(--bg);
-    font-size: 0.8125rem;
-  }
-
-  .chip {
-    padding: 0.7rem 1rem;
-    border-radius: 6px;
-    font-size: 0.875rem;
   }
 
   /* story: chapters on the left, the graphic that builds up beside them */
@@ -975,104 +591,6 @@
     .cg-halo {
       transition: none;
     }
-  }
-
-  /* the context gap: the same email without and with context */
-  .gap {
-    display: grid;
-    gap: 1rem;
-    margin: 2.5rem 0 0;
-  }
-
-  .gap-label {
-    justify-self: start;
-    margin: 0;
-    padding: 0.2rem 0.65rem;
-    border-radius: 999px;
-    background: var(--stripe);
-    color: var(--muted);
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .gap-prompt {
-    margin: 0;
-    font-size: 1.0625rem;
-  }
-
-  .gap-prompt span {
-    margin-right: 0.5rem;
-    color: var(--muted);
-    font-size: 0.8125rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .gap-pair {
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  .gap-mail {
-    padding: 1.1rem 1.25rem;
-    border-radius: var(--radius);
-    background: var(--surface);
-    box-shadow: var(--lift);
-    font-size: 0.9375rem;
-    line-height: 1.6;
-  }
-
-  .gap-mail p {
-    margin: 0 0 0.6rem;
-  }
-
-  .gap-mail p:last-child {
-    margin-bottom: 0;
-  }
-
-  .gap .gap-head {
-    color: var(--muted);
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .gap-mail--generic {
-    color: var(--muted);
-  }
-
-  .gap-mail mark {
-    white-space: normal;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-  }
-
-  .gap-mail sup {
-    margin-left: 0.15em;
-    font-size: 0.65em;
-    font-weight: 600;
-  }
-
-  .gap-sources {
-    color: var(--muted);
-    font-size: 0.875rem;
-  }
-
-  .gap-sources .gap-head {
-    margin: 0 0 0.4rem;
-  }
-
-  .gap-sources ol {
-    display: grid;
-    gap: 0.25rem;
-    margin: 0;
-    padding-left: 1.25rem;
-  }
-
-  .gap-type {
-    margin-right: 0.35rem;
-    color: var(--text);
   }
 
   /* architecture chapter: full width, after the story */
@@ -1346,29 +864,6 @@
     list-style: none;
   }
 
-  .steps li {
-    display: grid;
-    grid-template-columns: 2.5rem minmax(0, 1fr);
-    column-gap: 0.5rem;
-    padding-block: 1.25rem;
-    border-top: 1px solid var(--border);
-  }
-
-  .steps-n {
-    grid-row: 1 / 3;
-    padding-top: 0.45rem;
-    color: var(--muted);
-    font-size: 0.875rem;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .steps h3 {
-    margin: 0 0 0.35rem;
-    font-size: clamp(1.5rem, 2.4vw, 1.9rem);
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-  }
-
   .steps p,
   .layers p {
     margin: 0;
@@ -1407,11 +902,6 @@
     color: var(--text);
     font-size: 0.75rem;
     font-weight: 400;
-  }
-
-  /* hatched: means exactly one thing on this site: "does not exist yet" */
-  .hatched {
-    background: repeating-linear-gradient(135deg, var(--stripe) 0 7px, var(--surface) 7px 14px);
   }
 
   /* chapter navigation, inside the sticky header on the homepage. On narrow
@@ -2655,14 +2145,6 @@
 }
 
 @layer components {
-  /* One architecture rail for the whole story. It shares its grid cell with the
-     text column and is pinned to the bottom of the viewport, so it stays in one
-     place while the chapters move past and never appears twice. The chapters
-     reserve its height as padding. */
-  .story-rail-space {
-    display: none;
-  }
-
   @media (min-width: 64rem) {
     .stack--rail {
       grid-column: 1;
