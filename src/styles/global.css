@@ -1982,6 +1982,10 @@
       padding-left: 4rem;
       border-left: 1px solid transparent;
       transition: border-color 400ms ease;
+      /* the opaque band and its stacking belong to the narrow layout only: here
+         the field has to pass behind the statement, not cover it */
+      background: none;
+      z-index: 0;
     }
 
     /* nothing to divide in the hero: the line arrives with the first chapter */
@@ -2874,6 +2878,55 @@
     .cg-own {
       transition: opacity 500ms ease;
       stroke-dashoffset: 0;
+    }
+  }
+}
+
+@layer components {
+  /* The opening. The hero gets its own stretch of scroll: the statement is held
+     in place while the track runs past, and the page script shrinks it from as
+     large as the frame allows into its place in the column, with the point
+     field pulling back from the whole screen into its stage at the same time.
+     Both are transforms, so neither reflows anything on the way.
+
+     Below the breakpoint, and with reduced motion, there is no track and the
+     hero is simply the first chapter. */
+  @media (min-width: 64rem) {
+    .reveal-on .chapter--hero {
+      min-height: 190svh;
+      justify-content: flex-start;
+      padding-block: 0;
+    }
+
+    .reveal-on .chapter--hero .chapter-body {
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100svh;
+    }
+
+    /* the statement has to sit over the field, which covers the screen while
+       the opening runs */
+    .story-text {
+      position: relative;
+      z-index: 2;
+    }
+
+    .chapter--hero .hero-title {
+      transform-origin: center center;
+      will-change: transform;
+    }
+
+    .figure-stage {
+      will-change: transform;
+    }
+
+    /* nothing is grabbable or hoverable until the field has left the text */
+    .chapter--hero.is-opening ~ * .cg-pt,
+    [data-intro].is-opening + * .cg-pt {
+      pointer-events: none;
     }
   }
 }
