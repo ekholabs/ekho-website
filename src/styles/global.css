@@ -2960,11 +2960,9 @@
 
      scroll-margin clears the sticky header, or every chapter would come to rest
      with its label underneath it. */
+  /* No CSS snapping: the page script moves between fixed views itself, and
+     mandatory snapping would fight its animation for the scroll position. */
   @media (min-width: 64rem) {
-    html {
-      scroll-snap-type: y mandatory;
-    }
-
     .story-text .chapter,
     .chapter--wide {
       scroll-snap-align: start;

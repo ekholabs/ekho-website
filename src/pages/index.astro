@@ -92,7 +92,14 @@ const people = [
     </div>
 
     <div class="story-text">
-      <section class="chapter chapter--hero" id="hero" data-chapter data-stage="0" data-intro>
+      <section
+        class="chapter chapter--hero"
+        id="hero"
+        data-chapter
+        data-stage="0"
+        data-intro
+        data-view
+      >
         <div class="chapter-body">
           <h1 class="hero-title" data-intro-title>
             AI is only as good as your context. <span class="signal-text">Own it.</span>
@@ -111,12 +118,13 @@ const people = [
           </p>
         </div>
         {/* the second resting place of the opening: everything settled */}
-        <div class="intro-anchor" aria-hidden="true"></div>
+        <div class="intro-anchor" aria-hidden="true" data-view></div>
       </section>
 
       <section
         class="chapter"
         id="why"
+        data-view
         data-chapter
         data-nav="why"
         data-stage="1"
@@ -145,6 +153,7 @@ const people = [
       <section
         class="chapter"
         id="what"
+        data-view
         data-chapter
         data-nav="what"
         data-stage="2"
@@ -189,6 +198,7 @@ const people = [
       <section
         class="chapter"
         id="how"
+        data-view
         data-chapter
         data-nav="how"
         data-stage="2"
@@ -235,6 +245,7 @@ const people = [
       <section
         class="chapter"
         id="compound"
+        data-view
         data-chapter
         data-nav="how"
         data-stage="3"
@@ -263,6 +274,7 @@ const people = [
   <section
     class="wrap wrap-wide chapter chapter--wide"
     id="viewer"
+    data-view
     data-chapter
     data-nav="how"
     data-stage="3"
@@ -282,6 +294,7 @@ const people = [
   <section
     class="wrap wrap-wide chapter chapter--wide"
     id="architecture"
+    data-view
     data-chapter
     data-nav="architecture"
     data-stage="3"
@@ -303,6 +316,7 @@ const people = [
   <section
     class="wrap wrap-wide chapter chapter--wide"
     id="who"
+    data-view
     data-chapter
     data-nav="architecture"
     data-stage="3"
@@ -334,6 +348,7 @@ const people = [
   <section
     class="wrap wrap-wide chapter chapter--wide"
     id="waitlist"
+    data-view
     data-chapter
     data-nav="architecture"
     data-stage="3"
@@ -348,7 +363,7 @@ const people = [
     </div>
   </section>
 
-  <div class="wrap wrap-wide landing">
+  <div class="wrap wrap-wide landing" data-view>
     <p class="closing measure">
       We build EKHO so people can make their context compound, <mark>and keep it theirs.</mark>
     </p>
@@ -519,6 +534,153 @@ const people = [
     // architecture: its rows come in once the chapter is in view
     if (arch && arch.getBoundingClientRect().top < vh * 0.8) arch.classList.add('is-in');
   }
+
+  // ---- one gesture, one view --------------------------------------------
+  //
+  // The page does not scroll freely on a wide screen: a wheel turn, a swipe or
+  // an arrow key asks for the next fixed view and the page animates there,
+  // ignoring everything else until it arrives. CSS scroll snapping cannot do
+  // this. Snapping still lets the reader drag through the middle of a chapter
+  // and only settles afterwards; here there is no middle to be in.
+  //
+  // It stays out of the way where it would do harm: narrow screens keep their
+  // native scrolling, and with reduced motion the page jumps instead of gliding.
+  const views = [...document.querySelectorAll<HTMLElement>('[data-view]')];
+  const wideViews = window.matchMedia('(min-width: 64rem)');
+  const stepping = () => wideViews.matches && views.length > 1;
+
+  let index = 0;
+  let animating = false;
+  let lockUntil = 0;
+  let release = 0;
+
+  const topOf = (el: HTMLElement) => Math.round(el.getBoundingClientRect().top + window.scrollY);
+
+  // whichever view the page is actually resting on, so a jump from the nav or a
+  // hash does not leave the counter behind
+  function syncIndex() {
+    const y = window.scrollY;
+    let best = 0;
+    let bd = Infinity;
+    views.forEach((v, i) => {
+      const d = Math.abs(topOf(v) - y);
+      if (d < bd) {
+        bd = d;
+        best = i;
+      }
+    });
+    index = best;
+  }
+
+  function goTo(i: number) {
+    const next = Math.max(0, Math.min(views.length - 1, i));
+    const target = topOf(views[next]);
+    index = next;
+    if (reduceMotion) {
+      window.scrollTo(0, target);
+      return;
+    }
+    const start = window.scrollY;
+    if (Math.abs(target - start) < 2) return;
+    // the further it travels the longer it takes, within reason
+    const span = Math.abs(target - start);
+    const duration = Math.min(1100, Math.max(520, 420 + span * 0.35));
+    const t0 = performance.now();
+    animating = true;
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - t0) / duration);
+      const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      window.scrollTo(0, Math.round(start + (target - start) * e));
+      if (p < 1) requestAnimationFrame(tick);
+      else {
+        animating = false;
+        // a trackpad keeps sending events after the fingers lift; this stops
+        // the tail of one flick from being read as the next one
+        lockUntil = performance.now() + 220;
+      }
+    };
+    requestAnimationFrame(tick);
+    // A hidden tab stops serving animation frames, so a move begun just before
+    // the reader switched away would never finish and every gesture after it
+    // would be ignored. A timer is not throttled the same way and lets go.
+    window.clearTimeout(release);
+    release = window.setTimeout(() => {
+      animating = false;
+    }, duration + 600);
+  }
+
+  function step(dir: number) {
+    if (animating || performance.now() < lockUntil) return;
+    // read where the page actually is before moving, rather than trusting a
+    // counter: anything that scrolls the page by other means, a hash, a focus,
+    // a resize, would otherwise cost the reader one gesture to correct
+    syncIndex();
+    goTo(index + dir);
+  }
+
+  window.addEventListener(
+    'wheel',
+    (e) => {
+      if (!stepping()) return;
+      e.preventDefault();
+      if (Math.abs(e.deltaY) < 2) return;
+      step(e.deltaY > 0 ? 1 : -1);
+    },
+    { passive: false },
+  );
+
+  let touchY = 0;
+  window.addEventListener('touchstart', (e) => {
+    touchY = e.touches[0]?.clientY ?? 0;
+  });
+  window.addEventListener(
+    'touchmove',
+    (e) => {
+      if (!stepping()) return;
+      e.preventDefault();
+      const dy = touchY - (e.touches[0]?.clientY ?? 0);
+      if (Math.abs(dy) > 24) {
+        step(dy > 0 ? 1 : -1);
+        touchY = e.touches[0]?.clientY ?? 0;
+      }
+    },
+    { passive: false },
+  );
+
+  window.addEventListener('keydown', (e) => {
+    if (!stepping()) return;
+    const tag = (e.target as HTMLElement)?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+      e.preventDefault();
+      step(1);
+    } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
+      e.preventDefault();
+      step(-1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goTo(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goTo(views.length - 1);
+    }
+  });
+
+  // the chapter links and the two hero buttons hand over to the same mechanism
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')) {
+    a.addEventListener('click', (e) => {
+      if (!stepping()) return;
+      const el = document.querySelector<HTMLElement>(a.getAttribute('href') ?? '');
+      if (!el) return;
+      const i = views.indexOf(el);
+      if (i < 0) return;
+      e.preventDefault();
+      goTo(i);
+    });
+  }
+
+  window.addEventListener('resize', syncIndex);
+  syncIndex();
 
   let queued = false;
   function onScroll() {
