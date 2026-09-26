@@ -1,82 +1,54 @@
 ---
 // A vault is a folder. The fastest way to say that is to show the folder the
-// way the reader already sees folders: Finder, column view, real PARA names.
-// Static by design, it is a picture of a filesystem and not a file browser.
-const sidebar = [
-  { group: 'Favourites', items: ['Desktop', 'Documents', 'Downloads'] },
-  { group: 'Vaults', items: ['EKHO_brain', 'myEKHO', 'family'] },
-];
+// way the reader already sees folders. After the Figma frame "What · Ordner
+// über Graph": one plain list, real macOS folder icons, floating over the
+// graph, so the same knowledge is a picture and a directory at once.
 const folders = ['00 - Now', '01 - Projects', '02 - Areas', '03 - Resources', '04 - Archive'];
 const files = ['AGENTS.md', 'index.md', 'log.md'];
-const inner = ['Decisions', 'Insights', 'Hypotheses', 'Principles', 'Contacts'];
-const notes = [
-  'adr-0027-braun-formensprache.md',
-  'i-0147-compute-privacy.md',
-  'p-0001-clarity-over-automation.md',
-];
 ---
 
-<figure
-  class="win win--finder"
-  aria-label="A vault is an ordinary folder: the EKHO_brain vault in Finder"
->
+<figure class="win win--finder" aria-label="A vault is an ordinary folder: myEKHO in Finder">
   <div class="win-bar">
     <span class="win-lights" aria-hidden="true">
       <i></i>
       <i></i>
       <i></i>
     </span>
-    <span class="win-title">EKHO_brain</span>
+    <span class="win-title">myEKHO</span>
   </div>
-  <div class="win-body">
-    <nav class="fin-side" aria-hidden="true">
-      {sidebar.map((g) => (
-        <>
-          <p class="fin-group">{g.group}</p>
-          <ul>
-            {g.items.map((i) => (
-              <li class:list={[{ 'is-sel': i === 'EKHO_brain' }]}>
-                <span class="fin-ico"></span>
-                {i}
-              </li>
-            ))}
-          </ul>
-        </>
-      ))}
-    </nav>
-    <div class="fin-cols" aria-hidden="true">
-      <ul class="fin-col">
-        {folders.map((f) => (
-          <li class:list={['is-dir', { 'is-sel': f === '02 - Areas' }]}>
-            <span class="fin-ico fin-ico--dir"></span>
-            {f}
-            <span class="fin-arrow">›</span>
-          </li>
-        ))}
-        {files.map((f) => (
-          <li>
-            <span class="fin-ico fin-ico--doc"></span>
-            {f}
-          </li>
-        ))}
-      </ul>
-      <ul class="fin-col">
-        {inner.map((f) => (
-          <li class:list={['is-dir', { 'is-sel': f === 'Decisions' }]}>
-            <span class="fin-ico fin-ico--dir"></span>
-            {f}
-            <span class="fin-arrow">›</span>
-          </li>
-        ))}
-      </ul>
-      <ul class="fin-col fin-col--last">
-        {notes.map((f) => (
-          <li>
-            <span class="fin-ico fin-ico--doc"></span>
-            {f}
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
+  <ul class="fin-list" aria-hidden="true">
+    {folders.map((f) => (
+      <li>
+        <svg class="ic-folder" viewBox="0 0 18 14" aria-hidden="true">
+          <defs>
+            <linearGradient id="folder-front" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#8ed2f8"></stop>
+              <stop offset="1" stop-color="#4ca6e8"></stop>
+            </linearGradient>
+          </defs>
+          <path
+            d="M1 2.6A1.6 1.6 0 0 1 2.6 1h3.6c.4 0 .8.15 1.1.43L8.4 2.5H15.4A1.6 1.6 0 0 1 17 4.1v6.9a1.6 1.6 0 0 1-1.6 1.6H2.6A1.6 1.6 0 0 1 1 11z"
+            fill="#3f9adf"
+          ></path>
+          <path
+            d="M1 4.9h16v6.1A1.6 1.6 0 0 1 15.4 12.6H2.6A1.6 1.6 0 0 1 1 11z"
+            fill="url(#folder-front)"
+          ></path>
+        </svg>
+        {f}
+      </li>
+    ))}
+    {files.map((f) => (
+      <li class="is-file">
+        <svg class="ic-doc" viewBox="0 0 14 17" aria-hidden="true">
+          <path
+            d="M1 1.8A.8.8 0 0 1 1.8 1H8.6L13 5.3V15.2a.8.8 0 0 1-.8.8H1.8a.8.8 0 0 1-.8-.8z"
+            fill="#e8e5df"
+          ></path>
+          <path d="M8.6 1 13 5.3H9.4a.8.8 0 0 1-.8-.8z" fill="#cfcac1"></path>
+        </svg>
+        {f}
+      </li>
+    ))}
+  </ul>
 </figure>

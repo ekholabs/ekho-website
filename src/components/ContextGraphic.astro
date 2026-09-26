@@ -1,27 +1,32 @@
 ---
-// The graphic that builds up alongside the chapters, after the Braun speaker
-// grille: one form, the same 64 points throughout, only the connections grow.
+// The companion graphic. One cloud of points, the same 64 throughout, three
+// states, after the Figma choreography (file "EKHO CI · Vorschlag", pages 11
+// and 13):
 //
-//   stage 1 (no class)  scattered   before EKHO, no form, nothing connected
-//   stage 2 (.is-2)     connected   the same points in one form, first links
-//   stage 3 (.is-3/4)   compounding no new points, three times the links
+//   stage 1 (no class)  scattered    before EKHO, no form, nothing connected
+//   stage 2 (.is-2)     connected    the same points find a form, first links
+//   stage 3 (.is-3)     compounding  no new point, three times the links
+//
+// The layout is organic, not a lattice: points are Poisson-sampled inside a
+// disc, so the form reads as a cloud that found an edge rather than a grid.
+// Dots are small and the links are hairlines; the picture carries by density,
+// never by weight.
 //
 // Without JavaScript every stage collapses to the finished graphic, so the
-// figure still reads. animated={false} pins it to the finished state for the
-// overview tile. idPrefix keeps ids unique when it appears more than once.
+// figure still reads. animated={false} pins it to the finished state.
 
 interface Props {
   animated?: boolean;
   idPrefix?: string;
   caption?: boolean;
 }
-const { animated = true, idPrefix = 'cg', caption = true } = Astro.props;
+const { animated = true, caption = true } = Astro.props;
 
 const SIZE = 560;
 const C = SIZE / 2;
-const RING = 52;
-const R_MAX = 208;
-const DOT = 6.4;
+const R = 232; // radius of the formed cloud
+const DOT = 3.3; // the resting dot, small on purpose
+const N = 64;
 
 // deterministic: the same picture on every build, and the same as in Figma
 function mulberry32(a: number) {
@@ -43,25 +48,32 @@ function shuffled<T>(arr: T[], seed: number) {
   return out;
 }
 
-// the grille: concentric rings, even spacing, one hole size
-const lattice: [number, number][] = [[C, C]];
-for (let r = RING; r <= R_MAX; r += RING) {
-  const n = Math.round((2 * Math.PI * r) / RING);
-  const off = (r / RING) % 2 ? 0 : Math.PI / n;
-  for (let i = 0; i < n; i++) {
-    const a = off + (i * 2 * Math.PI) / n;
-    lattice.push([+(C + Math.cos(a) * r).toFixed(1), +(C + Math.sin(a) * r).toFixed(1)]);
+// stage 2 and 3: Poisson-sampled inside the disc. Dart throwing with a
+// shrinking minimum distance, so the cloud fills evenly without a grid.
+function sample(seed: number, radius: number, count: number, minDist: number) {
+  const rnd = mulberry32(seed);
+  const pts: [number, number][] = [];
+  let d = minDist;
+  let guard = 0;
+  while (pts.length < count && guard++ < 40000) {
+    const a = rnd() * Math.PI * 2;
+    const r = radius * Math.sqrt(rnd());
+    const p: [number, number] = [C + Math.cos(a) * r, C + Math.sin(a) * r];
+    if (pts.every((q) => Math.hypot(q[0] - p[0], q[1] - p[1]) >= d)) pts.push(p);
+    if (guard % 3000 === 0) d *= 0.92;
   }
+  return pts.map((p) => [+p[0].toFixed(1), +p[1].toFixed(1)] as [number, number]);
 }
-const N = lattice.length;
-const dist = (i: number, j: number) =>
-  Math.hypot(lattice[i][0] - lattice[j][0], lattice[i][1] - lattice[j][1]);
 
-// stage 1: the same count, no form
+const cloud = sample(7, R, N, 46);
+const dist = (i: number, j: number) =>
+  Math.hypot(cloud[i][0] - cloud[j][0], cloud[i][1] - cloud[j][1]);
+
+// stage 1: the same count, spread loose, no form and no edge
 const rs = mulberry32(41);
 const scatter: [number, number][] = [];
 for (let i = 0; i < N; i++) {
-  scatter.push([Math.round(64 + rs() * 432), Math.round(64 + rs() * 432)]);
+  scatter.push([+(46 + rs() * (SIZE - 92)).toFixed(1), +(58 + rs() * (SIZE - 116)).toFixed(1)]);
 }
 const sOrder = shuffled(
   scatter.map((_, i) => i),
@@ -69,21 +81,21 @@ const sOrder = shuffled(
 );
 const scatterTier = (i: number) => {
   const p = sOrder.indexOf(i);
-  return p < 14 ? 'a' : p < 34 ? 'b' : 'c';
+  return p < 15 ? 'a' : p < 36 ? 'b' : 'c';
 };
 
-// stage 2: a few chords across the grid, at most two per point, most stay loose
+// stage 2: a few links across the cloud, at most two per point, most stay loose
 const candidates: [number, number][] = [];
 for (let i = 0; i < N; i++) {
   for (let j = i + 1; j < N; j++) {
     const d = dist(i, j);
-    if (d > RING * 1.15 && d < RING * 2.9) candidates.push([i, j]);
+    if (d > 44 && d < 132) candidates.push([i, j]);
   }
 }
-const deg2 = lattice.map(() => 0);
+const deg2 = cloud.map(() => 0);
 const links2: [number, number][] = [];
 for (const [i, j] of shuffled(candidates, 211)) {
-  if (links2.length >= 21) break;
+  if (links2.length >= 22) break;
   if (deg2[i] >= 2 || deg2[j] >= 2) continue;
   links2.push([i, j]);
   deg2[i]++;
@@ -95,27 +107,25 @@ links2.forEach(([a, b]) => {
   linked2.add(b);
 });
 const looseOrder = shuffled(
-  lattice.map((_, i) => i).filter((i) => !linked2.has(i)),
+  cloud.map((_, i) => i).filter((i) => !linked2.has(i)),
   97,
 );
-const linkedOrder = shuffled([...linked2], 53);
 const stage2Tier = (i: number) => {
-  if (linked2.has(i))
-    return linkedOrder.indexOf(i) < Math.round(linkedOrder.length * 0.7) ? 't0' : 't1';
+  if (linked2.has(i)) return 't0';
   const p = looseOrder.indexOf(i);
-  if (p < Math.ceil(looseOrder.length * 0.3)) return 't2';
-  if (p < Math.ceil(looseOrder.length * 0.65)) return 't3';
+  if (p < Math.ceil(looseOrder.length * 0.34)) return 't2';
+  if (p < Math.ceil(looseOrder.length * 0.7)) return 't3';
   return 't4';
 };
 
-// stage 3: every point carries, plus a few links that jump rings
+// stage 3: every point carries, plus a few links that cross the cloud
 const seen = new Set<string>();
 const links3: [number, number][] = [];
 const key = (a: number, b: number) => (a < b ? `${a}-${b}` : `${b}-${a}`);
 for (let i = 0; i < N; i++) {
-  const near = lattice
+  const near = cloud
     .map((_, j) => j)
-    .filter((j) => j !== i && dist(i, j) <= RING * 2.0)
+    .filter((j) => j !== i && dist(i, j) <= 108)
     .sort((a, b) => dist(i, a) - dist(i, b))
     .slice(0, 3);
   for (const j of near) {
@@ -127,11 +137,11 @@ for (let i = 0; i < N; i++) {
   }
 }
 const rb = mulberry32(29);
-for (let n = 0; n < 10; n++) {
+for (let n = 0; n < 12; n++) {
   let a = Math.floor(rb() * N);
   let b = Math.floor(rb() * N);
   let guard = 0;
-  while ((a === b || dist(a, b) < RING * 2.2 || dist(a, b) > RING * 4.6) && guard++ < 200) {
+  while ((a === b || dist(a, b) < 150 || dist(a, b) > 330) && guard++ < 300) {
     a = Math.floor(rb() * N);
     b = Math.floor(rb() * N);
   }
@@ -141,27 +151,25 @@ for (let n = 0; n < 10; n++) {
     links3.push([a, b]);
   }
 }
-const deg3 = lattice.map(() => 0);
+const deg3 = cloud.map(() => 0);
 links3.forEach(([a, b]) => {
   deg3[a]++;
   deg3[b]++;
 });
-const hubs: number[] = [];
-for (const [, i] of deg3.map((d, i) => [d, i] as [number, number]).sort((a, b) => b[0] - a[0])) {
-  if (hubs.length >= 5) break;
-  if (hubs.every((h) => dist(h, i) >= 120)) hubs.push(i);
-}
+// what compounding looks like: the spread in size, not more points
+const r3 = (i: number) => +(DOT * 0.82 + Math.min(deg3[i], 7) * 0.62).toFixed(2);
 
-// a handful of points say what they are. Only on the outer rings, so the label
-// has room and never covers the disc.
+// a handful of points say what they are, on hover and on focus. Only out
+// towards the edge, so the label has room and never covers the cloud.
 const named: { at: [number, number]; type: string; title: string }[] = [
-  { at: [208, 200], type: 'Meeting', title: 'Call with Anna' },
-  { at: [208, 310], type: 'Web research', title: 'Context platforms, 2026' },
-  { at: [156, 250], type: 'Voice note', title: 'Tuesday, on the walk' },
-  { at: [208, 20], type: 'Decision', title: 'Pilot moves to Q1' },
-  { at: [208, 95], type: 'Principle', title: 'No start dates before the review' },
-  { at: [156, 55], type: 'Article', title: 'The future of knowledge work' },
-  { at: [156, 150], type: 'Insight', title: 'Context compounds when connected' },
+  { at: [206, 198], type: 'Person', title: 'Anna Berger' },
+  { at: [212, 252], type: 'Meeting', title: 'The call on Thursday' },
+  { at: [196, 306], type: 'Voice note', title: 'Tuesday, on the walk' },
+  { at: [208, 20], type: 'Decision', title: 'The pilot moves to Q1' },
+  { at: [200, 88], type: 'Principle', title: 'No start dates before the review' },
+  { at: [150, 146], type: 'Insight', title: 'Context compounds when connected' },
+  { at: [158, 44], type: 'Assumption', title: 'They will host it themselves' },
+  { at: [164, 340], type: 'Article', title: 'The future of knowledge work' },
 ];
 function nearestTo(radius: number, deg: number) {
   const t = [
@@ -170,7 +178,7 @@ function nearestTo(radius: number, deg: number) {
   ];
   let best = 0;
   let bd = Infinity;
-  lattice.forEach((p, i) => {
+  cloud.forEach((p, i) => {
     const d = Math.hypot(p[0] - t[0], p[1] - t[1]);
     if (d < bd) {
       bd = d;
@@ -186,13 +194,11 @@ for (const n of named) {
 }
 
 const path = (segs: [number, number][]) =>
-  segs
-    .map(([a, b]) => `M${lattice[a][0]} ${lattice[a][1]}L${lattice[b][0]} ${lattice[b][1]}`)
-    .join('');
+  segs.map(([a, b]) => `M${cloud[a][0]} ${cloud[a][1]}L${cloud[b][0]} ${cloud[b][1]}`).join('');
 
 const figureClass = ['context-graphic', animated ? '' : 'is-final'].filter(Boolean).join(' ');
 const ariaLabel =
-  'The same knowledge in three states: scattered and unconnected before EKHO, brought into one form with first connections, and finally densely connected without a single new point.';
+  'The same knowledge in three states: scattered and unconnected before EKHO, gathered into one form with the first connections, and finally densely connected without a single new point.';
 ---
 
 <figure
@@ -209,19 +215,19 @@ const ariaLabel =
       ))}
     </g>
 
-    <!-- stages 2 and 3: the grille -->
+    <!-- stages 2 and 3: the cloud -->
     <g class="cg-grid">
       <path class="cg-link cg-link-2" d={path(links2)} />
       <path class="cg-link cg-link-3" d={path(links3)} />
       <g class="cg-dots">
-        {lattice.map((p, i) => {
+        {cloud.map((p, i) => {
           const label = labels.get(i);
-          const cls = ['cg-dot', stage2Tier(i), hubs.includes(i) ? 'is-hub' : '']
-            .filter(Boolean)
-            .join(' ');
-          if (!label) return <circle class={cls} cx={p[0]} cy={p[1]} r={DOT} />;
+          const cls = ['cg-dot', stage2Tier(i)].join(' ');
+          const big = r3(i);
+          if (!label)
+            return <circle class={cls} cx={p[0]} cy={p[1]} r={DOT} style={`--r3:${big}px`} />;
           const right = p[0] >= C;
-          const lx = right ? p[0] + 18 : p[0] - 18;
+          const lx = right ? p[0] + 16 : p[0] - 16;
           return (
             <g
               class="cg-pt"
@@ -231,29 +237,29 @@ const ariaLabel =
               data-side={right ? 'right' : 'left'}
             >
               <title>{`${label.type}: ${label.title}`}</title>
-              <circle class="cg-halo" cx={p[0]} cy={p[1]} r={13} />
-              <circle class={cls} cx={p[0]} cy={p[1]} r={DOT} />
+              <circle class="cg-halo" cx={p[0]} cy={p[1]} r={11} />
+              <circle class={cls} cx={p[0]} cy={p[1]} r={DOT} style={`--r3:${big}px`} />
               <g class="cg-tip">
                 <line
                   class="cg-tip-tick"
-                  x1={right ? p[0] + 9 : p[0] - 9}
+                  x1={right ? p[0] + 7 : p[0] - 7}
                   y1={p[1]}
-                  x2={lx - (right ? 4 : -4)}
+                  x2={lx - (right ? 3 : -3)}
                   y2={p[1]}
                 />
-                <text class="cg-tip-type" x={lx} y={p[1] - 7} text-anchor={right ? 'start' : 'end'}>
+                <text class="cg-tip-type" x={lx} y={p[1] - 6} text-anchor={right ? 'start' : 'end'}>
                   {label.type}
                 </text>
                 <text
                   class="cg-tip-title"
                   x={lx}
-                  y={p[1] + 13}
+                  y={p[1] + 12}
                   text-anchor={right ? 'start' : 'end'}
                 >
                   {label.title}
                 </text>
               </g>
-              <circle class="cg-hit" cx={p[0]} cy={p[1]} r={17} />
+              <circle class="cg-hit" cx={p[0]} cy={p[1]} r={15} />
             </g>
           );
         })}

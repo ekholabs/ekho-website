@@ -105,7 +105,9 @@ and meetings and notes that know nothing of each other.`
 And again.`
   3. `The model is the same for everyone. Your context is the only part that is
 yours.`
-- **Right** `ContextGraphic` stage 1, scattered. Hover and focus reveal what a dot
+- **Right** `ContextGraphic` stage 1, scattered. The cloud is Poisson-sampled
+  inside a disc, not a lattice: small dots, hairline links, the picture carries
+  by density and never by weight. Hover and focus reveal what a dot
   is, with a tick and two lines: type above, title below.
   Types on the labelled dots: `Person` · `Decision` · `Insight` · `Principle` ·
   `Assumption` · `Voice note` · `Article` · `Meeting`.
@@ -131,8 +133,9 @@ not a memory inside somebody else's model.`
   first chords across the grid, at most two per dot. Most dots stay loose. The
   jump from 01 to 02 is the jump from before EKHO to with EKHO and has to read
   as a snap, not a fade.
-- **Left visual** a **macOS Finder window**, real chrome: traffic lights, sidebar,
-  column view. Content is the actual PARA layout:
+- **On the graph** a **macOS Finder window** with real blue folder icons, laid
+  over the cloud the way the Figma frame "What · Ordner über Graph" does it: one
+  plain list, no sidebar, no columns. Content is the actual PARA layout:
   `00 - Now` · `01 - Projects` · `02 - Areas` · `03 - Resources` · `04 - Archive`,
   one folder open showing `.md` files. This is the single most convincing frame
   on the page: it shows there is no app to adopt.
@@ -146,7 +149,7 @@ not a memory inside somebody else's model.`
   1. `No new app. EKHO docks into the chat you already use: as commands it runs
 and skills it applies.`
   2. `And it never changes anything without showing you first.`
-- **Left visual** a **chat window**, close to the clients people actually use:
+- **On the graph** a **chat window**, close to the clients people actually use:
   sidebar with recents grouped by day, user message as a bubble on the right,
   the answer as plain text with no bubble, tool use as bordered collapsible
   cards, composer as a pill with a round send button and a model line beneath.
@@ -280,6 +283,19 @@ change (N7).
 10. **Cleanup.** Done. The styles for the retired bento, tiles, overview, scene
     and gap blocks are gone, in a commit of their own (N7). `global.css` went
     from 2762 to 2244 lines.
+
+## 4a · Narrow screens
+
+The two columns cannot sit side by side, so below 64rem:
+
+- the stage becomes a band pinned under the header at 52svh, and the text
+  scrolls beneath it. The graph still builds through its three states.
+- the windows stop being overlays. Each is rendered a second time inside its
+  chapter and flows with the text; exactly one of the two copies is ever
+  displayed. A window floating over a 52svh band is unreadable at 375px.
+- the architecture rail is hidden. A fifth of a phone screen is too much to
+  spend on it, and chapter 06 carries the same five layers in full.
+- the chat window drops its sidebar, the way the real clients do at this width.
 
 ## 5 · Still open
 

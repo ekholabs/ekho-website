@@ -333,7 +333,7 @@
     gap: 0.5rem;
     padding: 0.7rem 1.25rem;
     border: 1px solid var(--border);
-    border-radius: 999px;
+    border-radius: var(--radius);
     color: var(--text);
     font-size: 0.875rem;
     font-weight: 500;
@@ -378,8 +378,8 @@
 
   @media (min-width: 64rem) {
     .story {
-      grid-template-columns: minmax(0, 42rem) minmax(0, 1fr);
-      column-gap: 3.5rem;
+      grid-template-columns: minmax(0, 29rem) minmax(0, 1fr);
+      column-gap: 0;
     }
 
     .story-text {
@@ -412,38 +412,62 @@
     min-height: 0;
   }
 
-  /* The grille graphic. One form, the same points throughout, only the
-     connections grow. Stage 1 is the scatter, stages 2 and 3 the grid. */
+  /* The companion graphic. Small dots, hairline links: the picture carries by
+     density and never by weight. Stage 1 is the scatter, 2 and 3 the cloud.
+     The resting state is the finished graphic, so it reads without the script. */
   .cg-seed,
   .cg-dot {
     fill: var(--text);
     transition:
-      opacity 600ms ease,
-      fill 400ms ease;
+      fill 700ms ease,
+      opacity 700ms ease,
+      r 700ms ease;
   }
 
   .cg-seed.s-a {
-    opacity: 1;
+    opacity: 0.88;
   }
+
   .cg-seed.s-b {
     fill: var(--muted);
-    opacity: 0.85;
+    opacity: 0.52;
   }
+
   .cg-seed.s-c {
-    fill: var(--border);
-    opacity: 0.5;
+    fill: var(--muted-deep);
+    opacity: 0.3;
   }
 
   .cg-link {
     fill: none;
-    stroke: var(--muted);
-    stroke-width: 1.2;
+    stroke: var(--line-strong);
+    stroke-width: 0.8;
+    transition: opacity 800ms ease;
+  }
+
+  .cg-scatter {
+    opacity: 0;
+  }
+
+  .cg-grid {
+    opacity: 1;
+    transition: opacity 700ms ease;
+  }
+
+  .cg-link-2 {
+    opacity: 0;
+  }
+
+  .cg-link-3 {
+    opacity: 0.42;
+  }
+
+  .cg-dot {
+    r: var(--r3);
   }
 
   .cg-halo {
-    fill: none;
-    stroke: var(--signal);
-    stroke-width: 1.5;
+    fill: var(--signal);
     opacity: 0;
     transition: opacity 180ms ease;
   }
@@ -452,34 +476,26 @@
     fill: transparent;
   }
 
-  .cg-pt {
-    cursor: default;
-  }
-
   .cg-tip {
     opacity: 0;
-    pointer-events: none;
     transition: opacity 180ms ease;
   }
 
   .cg-tip-tick {
-    stroke: var(--muted);
+    stroke: var(--line-strong);
     stroke-width: 1;
   }
 
   .cg-tip-type {
-    fill: var(--muted);
-    font-family: var(--font-sans);
-    font-size: 12px;
-    letter-spacing: 0.12em;
+    font-size: 9px;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
+    fill: var(--muted-deep);
   }
 
   .cg-tip-title {
+    font-size: 12px;
     fill: var(--text);
-    font-family: var(--font-sans);
-    font-size: 16px;
-    font-weight: 500;
   }
 
   .cg-pt:hover .cg-tip,
@@ -494,85 +510,69 @@
   }
 
   .cg-caption {
-    min-height: 1.6em;
     margin-top: 0.75rem;
-    color: var(--text);
-    font-size: 1.125rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
     text-align: center;
+    font-size: 0.8125rem;
+    color: var(--muted);
   }
 
-  .cg-caption span {
-    display: none;
-  }
-
-  @media (max-width: 63.99rem) {
-    .cg-caption {
-      display: none;
-    }
-  }
-
-  /* Without the reveal, and in the overview tile, the finished graphic shows. */
-  .cg-scatter {
-    display: none;
-  }
-
-  .cg-caption-3 {
-    display: inline;
-  }
-
-  /* With the reveal on, the graphic builds up with the chapters. */
+  /* with the script running the graphic starts scattered and builds */
   .reveal-on [data-graphic] .cg-scatter {
-    display: block;
-  }
-
-  .reveal-on [data-graphic] .cg-grid,
-  .reveal-on [data-graphic] .cg-link-2,
-  .reveal-on [data-graphic] .cg-link-3 {
-    opacity: 0;
+    opacity: 1;
     transition: opacity 700ms ease;
   }
 
+  .reveal-on [data-graphic] .cg-grid,
+  .reveal-on [data-graphic] .cg-link-3 {
+    opacity: 0;
+  }
+
+  .reveal-on [data-graphic] .cg-dot {
+    r: 3.3px;
+  }
+
+  /* stage 2: the same points find a form, the first links appear */
   .reveal-on [data-graphic].is-2 .cg-scatter {
     opacity: 0;
-    transition: opacity 500ms ease;
+    pointer-events: none;
   }
 
-  .reveal-on [data-graphic].is-2 .cg-grid,
-  .reveal-on [data-graphic].is-2 .cg-link-2 {
+  .reveal-on [data-graphic].is-2 .cg-grid {
     opacity: 1;
   }
 
-  .reveal-on [data-graphic].is-3 .cg-link-3 {
-    opacity: 1;
-    transition-delay: 250ms;
+  .reveal-on [data-graphic].is-2:not(.is-3) .cg-link-2 {
+    opacity: 0.5;
   }
 
-  /* stage 2: most points are still loose, and unevenly worked through */
-  .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot.t1 {
-    opacity: 0.75;
-  }
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot.t2 {
     fill: var(--muted);
-    opacity: 0.9;
+    opacity: 0.62;
   }
+
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot.t3 {
-    fill: var(--muted);
-    opacity: 0.6;
+    fill: var(--muted-deep);
+    opacity: 0.55;
   }
+
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot.t4 {
-    fill: var(--border);
-    opacity: 0.45;
+    fill: var(--line-strong);
+    opacity: 0.5;
   }
 
-  /* stage 3: every point carries, and a few hold the net together */
-  .reveal-on [data-graphic].is-3 .cg-dot.is-hub,
-  .cg-dot.is-hub {
-    fill: var(--signal);
-    r: 8;
+  /* stage 3: not one new point, three times the links, and the spread in size */
+  .reveal-on [data-graphic].is-3 .cg-link-3 {
+    opacity: 0.42;
   }
 
+  .reveal-on [data-graphic].is-3 .cg-dot {
+    r: var(--r3);
+    fill: var(--text);
+    opacity: 0.92;
+  }
+
+  /* the caption only names the state the graphic is in */
+  .reveal-on [data-graphic] .cg-caption-2,
   .reveal-on [data-graphic] .cg-caption-3 {
     display: none;
   }
@@ -583,10 +583,17 @@
     display: inline;
   }
 
+  .reveal-on [data-graphic].is-2 .cg-caption-1,
+  .reveal-on [data-graphic].is-3 .cg-caption-2 {
+    display: none;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .cg-seed,
     .cg-dot,
     .cg-link,
+    .cg-grid,
+    .cg-scatter,
     .cg-tip,
     .cg-halo {
       transition: none;
@@ -1084,8 +1091,8 @@
 
   @media (min-width: 64rem) {
     .hero2 {
-      grid-template-columns: minmax(0, 42rem) minmax(0, 1fr);
-      column-gap: 3.5rem;
+      grid-template-columns: minmax(0, 29rem) minmax(0, 1fr);
+      column-gap: 0;
     }
 
     .hero2-figure {
@@ -1119,7 +1126,7 @@
 
   .signal-text {
     color: inherit;
-    box-shadow: inset 0 -0.14em 0 var(--signal);
+    box-shadow: inset 0 -3px 0 var(--signal);
   }
 
   /* ---------- the story column ---------- */
@@ -1172,15 +1179,6 @@
 
   .stack {
     margin: 0;
-  }
-
-  @media (min-width: 64rem) {
-    .story-text .stack {
-      position: sticky;
-      bottom: 1.5rem;
-      padding-top: 1.25rem;
-      background: linear-gradient(to bottom, transparent, var(--bg) 1.25rem);
-    }
   }
 
   .stack-label {
@@ -2067,12 +2065,12 @@
   .closing mark {
     background: none;
     color: inherit;
-    box-shadow: inset 0 -0.14em 0 var(--signal);
+    box-shadow: inset 0 -3px 0 var(--signal);
   }
 
   .chapter-nav a[aria-current] {
     color: var(--text);
-    box-shadow: inset 0 -0.18em 0 var(--signal);
+    box-shadow: inset 0 -1.5px 0 var(--signal);
   }
 
   .chapter-nav a[aria-current] .chapter-nav-n {
@@ -2145,36 +2143,6 @@
 }
 
 @layer components {
-  @media (min-width: 64rem) {
-    .stack--rail {
-      grid-column: 1;
-      grid-row: 1;
-      align-self: end;
-      position: sticky;
-      bottom: 1.75rem;
-      z-index: 2;
-      padding-top: 1.5rem;
-      background: linear-gradient(to bottom, transparent, var(--bg) 1.5rem);
-      pointer-events: none;
-    }
-
-    .story-text .chapter {
-      padding-bottom: 22rem;
-    }
-
-    .story-text .chapter:last-child {
-      padding-bottom: 3rem;
-    }
-  }
-
-  @media (max-width: 63.999rem) {
-    .stack--rail {
-      display: none;
-    }
-  }
-}
-
-@layer components {
   /* the architecture diagram on the Braun palette */
   .arch-core .arch-note,
   .arch-core .arch-code,
@@ -2240,5 +2208,241 @@
 
   .arch-member + .arch-member::before {
     color: var(--muted-deep);
+  }
+}
+
+@layer components {
+  /* ------------------------------------------------------------------
+     The story column, after the Figma choreography: the left side carries
+     nothing but the statement, the right side is the stage. The graph fills
+     it, the windows lie over it, and the architecture assembles underneath.
+     ------------------------------------------------------------------ */
+
+  @media (min-width: 64rem) {
+    .story-figure {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+      padding-left: 4rem;
+      border-left: 1px solid var(--line);
+    }
+
+    .story-text .chapter {
+      justify-content: center;
+      padding-block: 6rem;
+    }
+  }
+
+  .figure-stage {
+    position: relative;
+    flex: 1;
+    min-height: 20rem;
+  }
+
+  .figure-stage .context-graphic {
+    position: absolute;
+    inset: 0;
+    padding-block: 0;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition:
+      opacity 450ms ease,
+      transform 450ms ease,
+      visibility 450ms;
+    pointer-events: none;
+  }
+
+  [data-story-figure][data-show='finder'] .overlay[data-for='finder'],
+  [data-story-figure][data-show='chat'] .overlay[data-for='chat'] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  /* with the script off, no window covers the graph */
+  html:not(.js) .overlay {
+    display: none;
+  }
+
+  /* --- the Finder window: one list, real folders --- */
+
+  .win--finder {
+    width: 17.5rem;
+  }
+
+  .fin-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0.4rem 0.6rem;
+  }
+
+  .fin-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.32rem 0.6rem;
+    border-radius: var(--radius);
+    font-size: 0.8125rem;
+    color: var(--text);
+  }
+
+  .fin-list li.is-file {
+    color: var(--muted);
+  }
+
+  .ic-folder {
+    width: 18px;
+    height: 14px;
+    flex: none;
+  }
+
+  .ic-doc {
+    width: 12px;
+    height: 15px;
+    flex: none;
+  }
+
+  /* --- the chat window sits on the graph too, so it stays compact --- */
+
+  .overlay .win--chat {
+    width: min(100%, 34rem);
+  }
+
+  .overlay .win--chat .win-body {
+    height: 27rem;
+  }
+
+  .overlay .chat-side {
+    width: 8.5rem;
+  }
+
+  /* --- the architecture, assembling under the graph --- */
+
+  .stack--rail {
+    flex: none;
+  }
+
+  .stack--rail .stack-row.is-off {
+    display: none;
+  }
+
+  .stack--rail .stack-rows {
+    gap: 0.3rem;
+  }
+
+  .stack--rail .stack-label {
+    margin-bottom: 0.6rem;
+  }
+
+  @media (max-width: 63.999rem) {
+    .stack--rail .stack-row.is-off {
+      display: flex;
+    }
+  }
+}
+
+@layer components {
+  /* the graph sits in the middle of its stage, whatever the rail is doing */
+  .figure-stage .context-graphic {
+    position: absolute;
+    inset: 0;
+    justify-content: center;
+  }
+
+  /* before the first layer lights up there is nothing to label */
+  .stack--rail:not(:has(.stack-row.is-on, .stack-row.is-done)) {
+    visibility: hidden;
+  }
+}
+
+@layer components {
+  /* ------------------------------------------------------------------
+     Narrow screens. The two columns cannot sit side by side, so the stage
+     becomes a band pinned under the header and the text scrolls beneath it.
+     The choreography itself is unchanged: the graph still builds, the windows
+     still lie over it. What goes is the architecture rail, because a fifth of
+     the screen is too much to spend on it here; chapter 06 carries it instead.
+     ------------------------------------------------------------------ */
+  @media (max-width: 63.999rem) {
+    .story-figure {
+      height: 52svh;
+    }
+
+    .figure-stage {
+      min-height: 0;
+    }
+
+    .stack--rail {
+      display: none;
+    }
+
+    .story-text .chapter {
+      min-height: 0;
+      padding-block: 2.5rem 3rem;
+    }
+
+    .story-text .chapter:first-child {
+      padding-top: 1.5rem;
+    }
+
+    .win--finder {
+      width: 13.5rem;
+    }
+
+    .fin-list li {
+      font-size: 0.75rem;
+      padding: 0.26rem 0.5rem;
+    }
+
+    .overlay .win--chat {
+      width: calc(100% - 1.5rem);
+    }
+
+    .overlay .win--chat .win-body {
+      height: 19rem;
+    }
+
+    .hero2 {
+      min-height: 0;
+      padding-block: 4rem 3rem;
+    }
+  }
+}
+
+@layer components {
+  /* On a phone a window floating over a 52svh band is unreadable, so the same
+     window is rendered a second time inside the chapter and simply flows with
+     the text. Exactly one of the two is ever displayed. */
+  .flow-window {
+    display: none;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 63.999rem) {
+    .flow-window {
+      display: block;
+    }
+
+    .overlay {
+      display: none;
+    }
+
+    .flow-window .win--finder {
+      width: 100%;
+      max-width: 20rem;
+    }
+
+    .flow-window .win--chat .win-body {
+      height: 24rem;
+    }
   }
 }

@@ -74,7 +74,16 @@ const people = [
   {/* ---------- the story: graphic right, everything else left ---------- */}
   <div class="wrap wrap-wide story">
     <div class="story-figure" data-story-figure>
-      <ContextGraphic />
+      <div class="figure-stage">
+        <ContextGraphic caption={false} />
+        <div class="overlay" data-for="finder">
+          <FinderWindow />
+        </div>
+        <div class="overlay" data-for="chat">
+          <ChatWindow />
+        </div>
+      </div>
+      <ArchStack rail label={false} />
     </div>
 
     <div class="story-text">
@@ -116,6 +125,7 @@ const people = [
         data-stage="2"
         data-layers="vault"
         data-done=""
+        data-overlay="finder"
       >
         <div class="chapter-body measure">
           <p class="chapter-label">
@@ -131,7 +141,9 @@ const people = [
             inside somebody else's model.
           </p>
         </div>
-        <FinderWindow />
+        <div class="flow-window">
+          <FinderWindow />
+        </div>
       </section>
 
       <section
@@ -142,6 +154,7 @@ const people = [
         data-stage="2"
         data-layers="conversation llm harness"
         data-done="vault"
+        data-overlay="chat"
       >
         <div class="chapter-body measure">
           <p class="chapter-label">
@@ -154,7 +167,9 @@ const people = [
           </p>
           <p class="statement">And it never changes anything without showing you first.</p>
         </div>
-        <ChatWindow />
+        <div class="flow-window">
+          <ChatWindow />
+        </div>
         <ol class="steps-strip">
           <li>
             <span>01</span> Throw it in.
@@ -195,8 +210,6 @@ const people = [
         </div>
       </section>
     </div>
-
-    <ArchStack rail />
   </div>
 
   {/* ---------- 05 · what EKHO is ---------- */}
@@ -315,6 +328,7 @@ const people = [
   const graphics = [...document.querySelectorAll<HTMLElement>('[data-graphic]')];
   const arch = document.querySelector<HTMLElement>('[data-arch]');
   const railRows = [...document.querySelectorAll<HTMLElement>('[data-rail] [data-layer]')];
+  const figure = document.querySelector<HTMLElement>('[data-story-figure]');
   let lastNav: string | undefined;
 
   function update() {
@@ -345,6 +359,9 @@ const people = [
         chapterNav.scrollLeft = 0;
       }
     }
+
+    // the windows lie over the graph, one chapter at a time
+    if (figure) figure.dataset.show = current?.dataset.overlay ?? '';
 
     // the architecture rail: one stack for the whole story, moved through its
     // states by whichever chapter is being read
