@@ -1,20 +1,25 @@
 ---
 // The companion graphic. One set of points for the whole page, moved between
-// four states rather than cross-faded between four pictures, so the reader
-// watches the same knowledge settle:
+// four states rather than cross-faded between four pictures:
 //
-//   stage 0 (no class)  field        the hero. More points, spread wide, all
-//                                    one grey. Nothing has a place yet
+//   stage 0 (no class)  field        the hero. Every point there is, spread
+//                                    over the frame, all one grey, no edges
 //   stage 1 (.is-1)     scattered    the extra points go, the rest draw in
 //   stage 2 (.is-2)     connected    the points find a form, first links
-//   stage 3 (.is-3)     compounding  no new point, three times the links
+//   stage 3 (.is-3)     compounding  no new point, the whole net
+//
+// The net is grown, not drawn: a handful of hubs, every other point attached
+// inward towards its nearest hub, which is what gives the radiating clusters
+// of a real knowledge graph instead of an even mesh. Edges are quadratic
+// curves; straight lines at this density read as a grid.
 //
 // Every dot is drawn once, at its scattered position, and the other two states
-// are a CSS translate away. The transform carries the movement, so the browser
-// animates it on the compositor and nothing is redrawn per frame.
+// are a CSS translate away, so the browser animates the movement on the
+// compositor. Sizes come from degree and never animate: animating `r` on
+// several hundred circles would cost a relayout per frame.
 //
-// Without JavaScript the graphic rests in the finished state, which reads on
-// its own. animated={false} pins it there.
+// Colour is the page's: greys and the near-white ink, with the one yellow
+// reserved for the points that are named, which are the ones that are yours.
 
 interface Props {
   animated?: boolean;
@@ -24,10 +29,9 @@ const { animated = true, caption = true } = Astro.props;
 
 const SIZE = 560;
 const C = SIZE / 2;
-const R = 232; // radius of the formed cloud
-const DOT = 3.3;
-const N = 64; // points that carry through every state
-const EXTRA = 52; // points that exist only in the hero
+const R = 244;
+const N = 420; // points that carry through every state
+const EXTRA = 140; // points that exist only in the hero
 
 function mulberry32(a: number) {
   return function () {
@@ -48,7 +52,6 @@ function shuffled<T>(arr: T[], seed: number) {
   return out;
 }
 type P = [number, number];
-const round = (p: P): P => [+p[0].toFixed(1), +p[1].toFixed(1)];
 
 // dart throwing with a shrinking minimum distance: fills evenly, reads organic
 function sample(seed: number, count: number, minDist: number, place: (r: () => number) => P) {
@@ -56,145 +59,172 @@ function sample(seed: number, count: number, minDist: number, place: (r: () => n
   const pts: P[] = [];
   let d = minDist;
   let guard = 0;
-  while (pts.length < count && guard++ < 80000) {
+  while (pts.length < count && guard++ < 400000) {
     const p = place(rnd);
     if (pts.every((q) => Math.hypot(q[0] - p[0], q[1] - p[1]) >= d)) pts.push(p);
-    if (guard % 4000 === 0) d *= 0.93;
+    if (guard % 6000 === 0) d *= 0.94;
   }
-  return pts.map(round);
+  return pts.map((p) => [+p[0].toFixed(1), +p[1].toFixed(1)] as P);
 }
 
-// stage 0: the hero. More points than anywhere else, spread over the whole
-// frame rather than gathered, and every one the same grey.
-const field = sample(19, N + EXTRA, 34, (r) => [24 + r() * (SIZE - 48), 24 + r() * (SIZE - 48)]);
+const field = sample(19, N + EXTRA, 17, (r) => [14 + r() * (SIZE - 28), 14 + r() * (SIZE - 28)]);
+const scatter = sample(41, N, 19, (r) => [34 + r() * (SIZE - 68), 40 + r() * (SIZE - 80)]);
+// The formed state is a sphere seen from outside, not a flat disc: points sit
+// evenly on the surface, and an orthographic projection crowds them towards the
+// rim exactly as a real one does. Depth then gives the near side its weight and
+// lets the far side fall back, so the form reads as round without any shading.
+const TILT = (-21 * Math.PI) / 180;
+const sphere: [number, number, number][] = [];
+for (let i = 0; i < N; i++) {
+  const y0 = 1 - (i / (N - 1)) * 2;
+  const rad = Math.sqrt(Math.max(0, 1 - y0 * y0));
+  const th = i * Math.PI * (3 - Math.sqrt(5));
+  const x = Math.cos(th) * rad;
+  const y = y0;
+  const z = Math.sin(th) * rad;
+  // tilt about x so the poles are not on the outline
+  sphere.push([
+    x,
+    y * Math.cos(TILT) - z * Math.sin(TILT),
+    y * Math.sin(TILT) + z * Math.cos(TILT),
+  ]);
+}
+const cloudPts: P[] = sphere.map(([x, y]) => [+(C + x * R).toFixed(1), +(C + y * R).toFixed(1)]);
+const depth = sphere.map(([, , z]) => z); // -1 far, +1 near
 
-// stage 1: loose, still formless, but pulled in from the edges
-const scatter = sample(41, N, 42, (r) => [62 + r() * (SIZE - 124), 70 + r() * (SIZE - 140)]);
+const d2 = (a: P, b: P) => Math.hypot(a[0] - b[0], a[1] - b[1]);
 
-// stage 2 and 3: the cloud, Poisson-sampled inside a disc
-const cloud = sample(7, N, 46, (r) => {
-  const a = r() * Math.PI * 2;
-  const rad = R * Math.sqrt(r());
-  return [C + Math.cos(a) * rad, C + Math.sin(a) * rad];
-});
-
-// which field point becomes which scattered point. Nearest first, so the hero
-// settles by contracting rather than by shuffling everything past everything.
-const takenField = new Set<number>();
+// which field point becomes which scattered point: nearest first, so the hero
+// settles by contracting rather than by shuffling everything past everything
+const taken = new Set<number>();
 const origin: P[] = scatter.map((s) => {
-  let best = -1;
+  let best = 0;
   let bd = Infinity;
   field.forEach((f, i) => {
-    if (takenField.has(i)) return;
-    const d = Math.hypot(f[0] - s[0], f[1] - s[1]);
+    if (taken.has(i)) return;
+    const d = d2(f, s);
     if (d < bd) {
       bd = d;
       best = i;
     }
   });
-  takenField.add(best);
+  taken.add(best);
   return field[best];
 });
-// everything the hero has on top of that leaves when the first chapter starts
-const extras = field.filter((_, i) => !takenField.has(i));
-const extraOrder = shuffled(
-  extras.map((_, i) => i),
-  5,
-);
+const extras = field.filter((_, i) => !taken.has(i));
 
-const dist = (i: number, j: number) =>
-  Math.hypot(cloud[i][0] - cloud[j][0], cloud[i][1] - cloud[j][1]);
+// ---- the net -------------------------------------------------------------
 
-const sOrder = shuffled(
-  scatter.map((_, i) => i),
-  3,
-);
-const scatterTier = (i: number) => {
-  const p = sOrder.indexOf(i);
-  return p < 15 ? 'a' : p < 36 ? 'b' : 'c';
+// Each point links to its nearest neighbours on the surface, which triangulates
+// the hull: that is where the density comes from, not from drawing more. A few
+// chords cut straight across the sphere, and those are the only curved ones,
+// because a chord that bows reads as reaching across rather than as one more
+// line in the mesh.
+const d3 = (a: number, b: number) => {
+  const p1 = sphere[a];
+  const p2 = sphere[b];
+  return Math.hypot(p1[0] - p2[0], p1[1] - p2[1], p1[2] - p2[2]);
 };
 
-// stage 2: a few links across the cloud, at most two per point
-const candidates: P[] = [];
-for (let i = 0; i < N; i++) {
-  for (let j = i + 1; j < N; j++) {
-    const d = dist(i, j);
-    if (d > 44 && d < 132) candidates.push([i, j]);
-  }
-}
-const deg2 = cloud.map(() => 0);
-const links2: P[] = [];
-for (const [i, j] of shuffled(candidates, 211)) {
-  if (links2.length >= 22) break;
-  if (deg2[i] >= 2 || deg2[j] >= 2) continue;
-  links2.push([i, j]);
-  deg2[i]++;
-  deg2[j]++;
-}
-const linked2 = new Set<number>();
-links2.forEach(([a, b]) => {
-  linked2.add(a);
-  linked2.add(b);
-});
-const looseOrder = shuffled(
-  cloud.map((_, i) => i).filter((i) => !linked2.has(i)),
-  97,
-);
-const stage2Tier = (i: number) => {
-  if (linked2.has(i)) return 't0';
-  const p = looseOrder.indexOf(i);
-  if (p < Math.ceil(looseOrder.length * 0.34)) return 't2';
-  if (p < Math.ceil(looseOrder.length * 0.7)) return 't3';
-  return 't4';
-};
-
-// stage 3: every point carries, plus a few links that cross the cloud
 const seen = new Set<string>();
-const links3: P[] = [];
+const edges: [number, number][] = [];
 const key = (a: number, b: number) => (a < b ? `${a}-${b}` : `${b}-${a}`);
+const add = (a: number, b: number) => {
+  if (a === b) return;
+  const k = key(a, b);
+  if (seen.has(k)) return;
+  seen.add(k);
+  edges.push([a, b]);
+};
+
+const K = 5;
 for (let i = 0; i < N; i++) {
-  const near = cloud
+  const near = sphere
     .map((_, j) => j)
-    .filter((j) => j !== i && dist(i, j) <= 108)
-    .sort((a, b) => dist(i, a) - dist(i, b))
-    .slice(0, 3);
-  for (const j of near) {
-    const k = key(i, j);
-    if (!seen.has(k)) {
-      seen.add(k);
-      links3.push([i, j]);
-    }
-  }
+    .filter((j) => j !== i)
+    .sort((a, b) => d3(i, a) - d3(i, b))
+    .slice(0, K);
+  for (const j of near) add(i, j);
 }
-const rb = mulberry32(29);
-for (let n = 0; n < 12; n++) {
-  let a = Math.floor(rb() * N);
-  let b = Math.floor(rb() * N);
+
+// the chords: long links that cross the body rather than follow the surface
+const rn = mulberry32(61);
+const chords: [number, number][] = [];
+for (let n = 0; n < 34; n++) {
+  let a = Math.floor(rn() * N);
+  let b = Math.floor(rn() * N);
   let guard = 0;
-  while ((a === b || dist(a, b) < 150 || dist(a, b) > 330) && guard++ < 300) {
-    a = Math.floor(rb() * N);
-    b = Math.floor(rb() * N);
+  while ((a === b || d3(a, b) < 1.45) && guard++ < 400) {
+    a = Math.floor(rn() * N);
+    b = Math.floor(rn() * N);
   }
   const k = key(a, b);
-  if (!seen.has(k)) {
-    seen.add(k);
-    links3.push([a, b]);
-  }
+  if (seen.has(k)) continue;
+  seen.add(k);
+  chords.push([a, b]);
 }
-const deg3 = cloud.map(() => 0);
-links3.forEach(([a, b]) => {
-  deg3[a]++;
-  deg3[b]++;
-});
-const r3 = (i: number) => +(DOT * 0.82 + Math.min(deg3[i], 7) * 0.62).toFixed(2);
 
-// a handful of points say what they are. In the scattered chapter they come in
-// one after another by themselves; everywhere else they answer to hover and focus.
-//
-// Which dot carries which label is worked out, not hand-placed: each label is
-// given a rough corner to sit in, and the nearest dot that can actually hold the
-// text without running out of the frame, and without crowding a label already
-// placed, takes it. That way the text can change without labels falling off.
+// One region is yours. It is a cap of the sphere, so it reads as a part of the
+// same body rather than as a layer on top, and it is the only place the yellow
+// appears besides the points that are named.
+const AXIS = (() => {
+  const v = [0.72, -0.42, 0.55];
+  const l = Math.hypot(v[0], v[1], v[2]);
+  return [v[0] / l, v[1] / l, v[2] / l];
+})();
+const mine = new Set<number>();
+sphere.forEach(([x, y, z], i) => {
+  if (x * AXIS[0] + y * AXIS[1] + z * AXIS[2] > 0.66) mine.add(i);
+});
+
+// the far side falls back, the near side carries, and yours is drawn apart
+const near: [number, number][] = [];
+const far: [number, number][] = [];
+const own: [number, number][] = [];
+for (const e of edges) {
+  if (mine.has(e[0]) && mine.has(e[1])) own.push(e);
+  else if ((depth[e[0]] + depth[e[1]]) / 2 < 0) far.push(e);
+  else near.push(e);
+}
+
+const deg = cloudPts.map(() => 0);
+edges.forEach(([a, b]) => {
+  deg[a]++;
+  deg[b]++;
+});
+// size follows depth: the near side is nearer, and reads that way
+const radius = (i: number) => +(1.15 + (depth[i] + 1) * 0.62).toFixed(2);
+
+// stage 2: the first links only, at most one per point, so most still sit loose
+const deg2 = cloudPts.map(() => 0);
+const first: [number, number][] = [];
+for (const [a, b] of shuffled(edges, 211)) {
+  if (first.length >= 130) break;
+  if (deg2[a] || deg2[b]) continue;
+  first.push([a, b]);
+  deg2[a]++;
+  deg2[b]++;
+}
+const linked = new Set<number>();
+first.forEach(([a, b]) => {
+  linked.add(a);
+  linked.add(b);
+});
+
+const line = ([a, b]: [number, number]) =>
+  `M${cloudPts[a][0]} ${cloudPts[a][1]}L${cloudPts[b][0]} ${cloudPts[b][1]}`;
+const bow = ([a, b]: [number, number]) => {
+  const [x1, y1] = cloudPts[a];
+  const [x2, y2] = cloudPts[b];
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const k = 0.08 * ((a + b) % 2 ? 1 : -1);
+  return `M${x1} ${y1}Q${((x1 + x2) / 2 - dy * k).toFixed(1)} ${((y1 + y2) / 2 + dx * k).toFixed(1)} ${x2} ${y2}`;
+};
+const path = (segs: [number, number][]) => segs.map(line).join('');
+
+// ---- the points that say what they are -----------------------------------
+
 const named: { at: P; type: string; title: string }[] = [
   { at: [206, 198], type: 'Person', title: 'Anna Berger' },
   { at: [212, 252], type: 'Meeting', title: 'The call on Thursday' },
@@ -205,13 +235,10 @@ const named: { at: P; type: string; title: string }[] = [
   { at: [158, 44], type: 'Assumption', title: 'They will host it themselves' },
   { at: [164, 340], type: 'Article', title: 'The future of knowledge work' },
 ];
-
-const PAD = 8; // how close a label may come to the edge of the frame
-const GAP = 11; // between the dot and its text
-// the widest the two lines get. Title at 12px, type at 9px with wide tracking.
+const PAD = 8;
+const GAP = 11;
 const textWidth = (n: { type: string; title: string }) =>
   Math.max(n.title.length * 6.15, n.type.length * 6.3 + 4);
-
 type Box = { x: number; y: number; r: number; b: number };
 const box = (x: number, y: number, w: number, side: 'l' | 'r'): Box => ({
   x: side === 'r' ? x + GAP : x - GAP - w,
@@ -221,60 +248,54 @@ const box = (x: number, y: number, w: number, side: 'l' | 'r'): Box => ({
 });
 const hits = (a: Box, b: Box) => a.x < b.r + 6 && b.x < a.r + 6 && a.y < b.b + 4 && b.y < a.b + 4;
 
-const placed: Box[] = [];
+const placedBoxes: Box[] = [];
 const labels = new Map<number, { type: string; title: string; side: 'l' | 'r' }>();
-
 for (const n of named) {
   const target: P = [
     C + Math.cos((n.at[1] * Math.PI) / 180) * n.at[0],
     C + Math.sin((n.at[1] * Math.PI) / 180) * n.at[0],
   ];
   const w = textWidth(n);
-  const order = scatter
-    .map((p, i) => ({ i, p, d: Math.hypot(p[0] - target[0], p[1] - target[1]) }))
-    .sort((a, b) => a.d - b.d);
-
+  const order = scatter.map((p, i) => ({ i, p, d: d2(p, target) })).sort((a, b) => a.d - b.d);
   for (const cand of order) {
     if (labels.has(cand.i)) continue;
     const [x, y] = cand.p;
-    // the two lines sit above and below the dot, so both need room
     if (y < PAD + 14 || y > SIZE - PAD - 16) continue;
-    // the text leaves the cloud: prefer the side that points away from the middle
     const sides: ('l' | 'r')[] = x >= C ? ['r', 'l'] : ['l', 'r'];
     const side = sides.find((sd) => {
       const fits = sd === 'r' ? x + GAP + w <= SIZE - PAD : x - GAP - w >= PAD;
-      // a label must not land on top of one already placed
-      return fits && !placed.some((q) => hits(box(x, y, w, sd), q));
+      return fits && !placedBoxes.some((q) => hits(box(x, y, w, sd), q));
     });
     if (!side) continue;
-
     labels.set(cand.i, { type: n.type, title: n.title, side });
-    placed.push(box(x, y, w, side));
+    placedBoxes.push(box(x, y, w, side));
     break;
   }
 }
-
-// the labels come in one after another, top to bottom of the scattered field
 const labelOrder = new Map(
   [...labels.keys()].sort((a, b) => scatter[a][1] - scatter[b][1]).map((i, n) => [i, n]),
 );
 
-// every dot is drawn at its scattered position; the other states are a shift
+const tierOrder = shuffled(
+  scatter.map((_, i) => i),
+  3,
+);
+const tier = (i: number) => {
+  const p = tierOrder.indexOf(i);
+  return p < N * 0.22 ? 'a' : p < N * 0.6 ? 'b' : 'c';
+};
+
 const shift = (i: number) =>
   [
     `--dx0:${(origin[i][0] - scatter[i][0]).toFixed(1)}px`,
     `--dy0:${(origin[i][1] - scatter[i][1]).toFixed(1)}px`,
-    `--dx2:${(cloud[i][0] - scatter[i][0]).toFixed(1)}px`,
-    `--dy2:${(cloud[i][1] - scatter[i][1]).toFixed(1)}px`,
-    `--r3:${r3(i)}px`,
+    `--dx2:${(cloudPts[i][0] - scatter[i][0]).toFixed(1)}px`,
+    `--dy2:${(cloudPts[i][1] - scatter[i][1]).toFixed(1)}px`,
   ].join(';');
-
-const path = (segs: P[]) =>
-  segs.map(([a, b]) => `M${cloud[a][0]} ${cloud[a][1]}L${cloud[b][0]} ${cloud[b][1]}`).join('');
 
 const figureClass = ['context-graphic', animated ? '' : 'is-final'].filter(Boolean).join(' ');
 const ariaLabel =
-  'The same knowledge in four states: spread wide and formless at first, then scattered, then gathered into one form with the first connections, and finally densely connected without a single new point.';
+  'The same knowledge in four states: spread wide and formless at first, then scattered, then gathered into one form with the first connections, and finally a dense network of several hundred points without a single new one.';
 ---
 
 <figure
@@ -284,27 +305,34 @@ const ariaLabel =
   aria-label={ariaLabel}
 >
   <svg viewBox={`0 0 ${SIZE} ${SIZE}`} aria-hidden="true">
-    <!-- what the hero has on top: it leaves when the first chapter starts -->
     <g class="cg-extra">
-      {extras.map((p, i) => (
-        <circle
-          class="cg-seed"
-          cx={p[0]}
-          cy={p[1]}
-          r={DOT}
-          style={`--i:${extraOrder.indexOf(i)}`}
-        />
+      {extras.map((p) => (
+        <circle class="cg-seed" cx={p[0]} cy={p[1]} r="1.7" />
       ))}
     </g>
 
-    <path class="cg-link cg-link-2" d={path(links2)} />
-    <path class="cg-link cg-link-3" d={path(links3)} />
+    <path class="cg-link cg-link-2" d={path(first)} />
+    <g class="cg-mesh">
+      <path class="cg-link cg-far" d={path(far)} />
+      <path class="cg-link cg-chord" d={chords.map(bow).join('')} />
+      <path class="cg-link cg-near" d={path(near)} />
+      <path class="cg-link cg-own" d={path(own)} />
+    </g>
 
     <g class="cg-dots">
       {scatter.map((p, i) => {
         const label = labels.get(i);
-        const cls = ['cg-dot', `s-${scatterTier(i)}`, stage2Tier(i)].join(' ');
-        if (!label) return <circle class={cls} cx={p[0]} cy={p[1]} r={DOT} style={shift(i)} />;
+        const cls = [
+          'cg-dot',
+          `s-${tier(i)}`,
+          linked.has(i) ? 't0' : '',
+          mine.has(i) ? 'is-mine' : '',
+          depth[i] < 0 ? 'is-far' : '',
+        ]
+          .filter(Boolean)
+          .join(' ');
+        if (!label)
+          return <circle class={cls} cx={p[0]} cy={p[1]} r={radius(i)} style={shift(i)} />;
         const right = label.side === 'r';
         const lx = right ? p[0] + 11 : p[0] - 11;
         return (
@@ -316,8 +344,8 @@ const ariaLabel =
             aria-label={`${label.type}: ${label.title}`}
           >
             <title>{`${label.type}: ${label.title}`}</title>
-            <circle class="cg-halo" cx={p[0]} cy={p[1]} r={11} />
-            <circle class={cls} cx={p[0]} cy={p[1]} r={DOT} />
+            <circle class="cg-halo" cx={p[0]} cy={p[1]} r="9" />
+            <circle class={`${cls} is-named`} cx={p[0]} cy={p[1]} r="3.2" />
             <g class="cg-tip">
               <text class="cg-tip-type" x={lx} y={p[1] - 5} text-anchor={right ? 'start' : 'end'}>
                 {label.type}
@@ -326,7 +354,7 @@ const ariaLabel =
                 {label.title}
               </text>
             </g>
-            <circle class="cg-hit" cx={p[0]} cy={p[1]} r={15} />
+            <circle class="cg-hit" cx={p[0]} cy={p[1]} r="14" />
           </g>
         );
       })}
@@ -339,9 +367,7 @@ const ariaLabel =
       <span class="cg-caption-2">
         With EKHO: the same knowledge, in one form. The first links form.
       </span>
-      <span class="cg-caption-3">
-        It compounds: not one new point, three times the connections.
-      </span>
+      <span class="cg-caption-3">It compounds: not one new point, the whole net.</span>
     </figcaption>
   )}
 </figure>

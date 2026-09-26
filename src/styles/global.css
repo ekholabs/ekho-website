@@ -418,26 +418,31 @@
     min-height: 0;
   }
 
-  /* The companion graphic. One set of points for the whole page, moved between
-     four states instead of cross-faded between four pictures. Every dot is
-     drawn once, at its scattered position; the hero and the cloud are a
-     translate away, so the browser animates the movement on the compositor.
+  /* The companion graphic. Several hundred points, one set for the whole page,
+     moved between four states instead of cross-faded between four pictures.
+     Every dot is drawn once at its scattered position and the other states are
+     a translate, so the movement runs on the compositor. Sizes come from the
+     markup and never animate: animating `r` on this many circles would cost a
+     relayout every frame.
 
-     The resting state, with no script, is the finished graphic. */
+     The resting state, with no script, is the finished net. */
   .cg-dot,
   .cg-pt {
     transform: translate(var(--dx2), var(--dy2));
     transition:
       transform 950ms cubic-bezier(0.22, 0.61, 0.36, 1),
       fill 700ms ease,
-      opacity 700ms ease,
-      r 700ms ease;
+      opacity 700ms ease;
   }
 
   .cg-dot {
     fill: var(--text);
-    opacity: 0.92;
-    r: var(--r3);
+    opacity: 0.9;
+  }
+
+  .cg-dot.is-named {
+    fill: var(--signal);
+    opacity: 1;
   }
 
   .cg-seed {
@@ -452,8 +457,9 @@
 
   .cg-link {
     fill: none;
-    stroke: var(--line-strong);
-    stroke-width: 0.8;
+    stroke: var(--muted-deep);
+    stroke-width: 0.62;
+    stroke-linecap: round;
     transition: opacity 800ms ease;
   }
 
@@ -461,8 +467,39 @@
     opacity: 0;
   }
 
-  .cg-link-3 {
-    opacity: 0.42;
+  .cg-mesh {
+    opacity: 1;
+    transition: opacity 800ms ease;
+  }
+
+  /* the far side of the hull falls back, the near side carries */
+  .cg-far {
+    stroke: var(--muted-deep);
+    opacity: 0.2;
+  }
+
+  .cg-near {
+    stroke: var(--muted);
+    opacity: 0.7;
+  }
+
+  .cg-chord {
+    stroke: var(--muted);
+    opacity: 0.32;
+  }
+
+  /* the one region that is yours */
+  .cg-own {
+    stroke: var(--signal);
+    opacity: 0.55;
+  }
+
+  .cg-dot.is-mine {
+    fill: var(--signal);
+  }
+
+  .cg-dot.is-far {
+    opacity: 0.32;
   }
 
   .cg-halo {
@@ -510,23 +547,23 @@
     color: var(--muted);
   }
 
-  /* stage 0, the hero: more points, spread wide, every one the same grey */
+  /* stage 0, the hero: every point there is, spread wide, all one grey */
   .reveal-on [data-graphic] .cg-dot,
   .reveal-on [data-graphic] .cg-pt {
     transform: translate(var(--dx0), var(--dy0));
   }
 
-  .reveal-on [data-graphic] .cg-dot {
+  .reveal-on [data-graphic] .cg-dot,
+  .reveal-on [data-graphic] .cg-dot.is-named {
     fill: var(--muted-deep);
-    opacity: 0.58;
-    r: 3.3px;
+    opacity: 0.5;
   }
 
   .reveal-on [data-graphic] .cg-extra {
-    opacity: 0.58;
+    opacity: 0.5;
   }
 
-  .reveal-on [data-graphic] .cg-link-3 {
+  .reveal-on [data-graphic] .cg-mesh {
     opacity: 0;
   }
 
@@ -534,7 +571,8 @@
     pointer-events: none;
   }
 
-  /* stage 1: the extra points go, the rest draw in and take their weight */
+  /* stage 1: the extra points go, and the named ones step forward so their
+     labels have something to be read against */
   .reveal-on [data-graphic].is-1 .cg-dot,
   .reveal-on [data-graphic].is-1 .cg-pt {
     transform: none;
@@ -550,58 +588,61 @@
 
   .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-a {
     fill: var(--text);
-    opacity: 0.88;
+    opacity: 0.6;
   }
 
   .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-b {
     fill: var(--muted);
-    opacity: 0.52;
+    opacity: 0.38;
   }
 
   .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-c {
     fill: var(--muted-deep);
-    opacity: 0.3;
+    opacity: 0.26;
   }
 
-  /* stage 2: the points find a form and the first links appear */
+  .reveal-on [data-graphic].is-1 .cg-dot.is-named {
+    fill: var(--signal);
+    opacity: 1;
+  }
+
+  /* stage 2: the points find their form and the first links appear */
   .reveal-on [data-graphic].is-2 .cg-dot,
   .reveal-on [data-graphic].is-2 .cg-pt {
     transform: translate(var(--dx2), var(--dy2));
   }
 
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-link-2 {
-    opacity: 0.5;
+    opacity: 0.8;
+  }
+
+  .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot {
+    fill: var(--muted-deep);
+    opacity: 0.42;
   }
 
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot.t0 {
     fill: var(--text);
-    opacity: 0.88;
+    opacity: 0.85;
   }
 
-  .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot.t2 {
-    fill: var(--muted);
-    opacity: 0.62;
-  }
-
-  .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot.t3 {
-    fill: var(--muted-deep);
-    opacity: 0.55;
-  }
-
-  .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot.t4 {
-    fill: var(--line-strong);
-    opacity: 0.5;
-  }
-
-  /* stage 3: not one new point, three times the links, and the spread in size */
-  .reveal-on [data-graphic].is-3 .cg-link-3 {
-    opacity: 0.42;
+  /* stage 3: not one new point, the whole net */
+  .reveal-on [data-graphic].is-3 .cg-mesh {
+    opacity: 1;
   }
 
   .reveal-on [data-graphic].is-3 .cg-dot {
-    r: var(--r3);
     fill: var(--text);
-    opacity: 0.92;
+    opacity: 0.9;
+  }
+
+  .reveal-on [data-graphic].is-3 .cg-dot.is-mine {
+    fill: var(--signal);
+    opacity: 1;
+  }
+
+  .reveal-on [data-graphic].is-3 .cg-dot.is-far {
+    opacity: 0.32;
   }
 
   /* the caption only names the state the graphic is in */
