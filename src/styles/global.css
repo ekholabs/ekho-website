@@ -3084,3 +3084,22 @@
     transition: none;
   }
 }
+
+@layer components {
+  /* the two names lead to the two people */
+  .people-link {
+    color: inherit;
+    text-decoration: none;
+    box-shadow: inset 0 -1.5px 0 transparent;
+    transition: box-shadow 180ms ease;
+  }
+
+  .people-link span {
+    font-size: 0.75em;
+    color: var(--muted-deep);
+  }
+
+  .people-link:hover {
+    box-shadow: inset 0 -1.5px 0 var(--signal);
+  }
+}

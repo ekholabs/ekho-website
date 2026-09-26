@@ -20,12 +20,18 @@ const chapters = [
   { id: 'architecture', n: '04', label: 'Architecture' },
 ];
 
-// The two founders. Names on a public page are the one thing never to guess.
+// The two founders. Names and profiles on a public page are the one thing never
+// to guess; both URLs come from their own contact notes in EKHO_brain.
 const people = [
-  { name: 'Lorenz Vierecke', line: 'Puts EKHO in front of real work and writes down what breaks.' },
+  {
+    name: 'Lorenz Vierecke',
+    line: 'Puts EKHO in front of real work and writes down what breaks.',
+    href: 'https://www.linkedin.com/in/lorenz-vierecke-7b896079',
+  },
   {
     name: 'Stephan Georg',
     line: 'Builds the harness underneath: the CLI, the grammar, the workflows.',
+    href: 'https://www.linkedin.com/in/stephangeorg',
   },
 ];
 ---
@@ -296,7 +302,11 @@ const people = [
       {people.map((p) => (
         <li>
           <span class="people-sq" aria-hidden="true"></span>
-          <b>{p.name}</b>
+          <b>
+            <a class="people-link" href={p.href}>
+              {p.name} <span aria-hidden="true">↗</span>
+            </a>
+          </b>
           <span>{p.line}</span>
         </li>
       ))}

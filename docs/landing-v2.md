@@ -254,12 +254,11 @@ make them repeatable, and compatible with every other EKHO vault.`
   square sits on the vault row and nowhere else, so the one thing the reader
   owns is the one thing marked.
 
-**EKHO's definition of knowledge sits on the Ontology layer**, taken from
-**I-256** in `EKHO_brain`: knowledge is not content but a contract about what is
-true, layered over shared understanding, shared language and shared intent.
-Between people that contract is spoken; the ontology is the same contract
-written down for machines. That is also what makes the chapter 03 headline
-literal rather than figurative.
+**Open: EKHO's definition of knowledge.** It belongs on the Ontology layer and
+it should not be written fresh for the website. I-256 in `EKHO_brain` was tried
+and pulled again; Lorenz has a better one from a piece of project work and is
+looking it out. Until then the layer says what the ontology does and makes no
+claim about what knowledge is.
 
 > **Sharpening carried into the copy.** `Conversation` means the conversation
 > between people first. The LLM is the means by which those conversations get
