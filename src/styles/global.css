@@ -2787,3 +2787,44 @@
     color: var(--muted-deep);
   }
 }
+
+@layer components {
+  /* the sphere can be taken hold of once it has formed */
+  [data-graphic].is-grabbable svg {
+    cursor: grab;
+    touch-action: none;
+  }
+
+  [data-graphic].is-turning svg {
+    cursor: grabbing;
+  }
+
+  /* while it turns, nothing eases: every frame would chase the last one */
+  [data-graphic].is-turning .cg-dot,
+  [data-graphic].is-turning .cg-pt {
+    transition: none;
+  }
+
+  /* what the pointer is on, and what it is joined to */
+  .cg-hot {
+    stroke: var(--signal);
+    stroke-width: 1;
+    opacity: 0;
+    transition: opacity 140ms ease;
+  }
+
+  [data-graphic].is-2 .cg-hot {
+    opacity: 0.9;
+  }
+
+  .cg-dot.is-hot,
+  .cg-pt.is-hot .cg-dot {
+    fill: var(--signal);
+    opacity: 1;
+  }
+
+  .cg-pt.is-hot .cg-tip,
+  .cg-pt.is-hot .cg-halo {
+    opacity: 1;
+  }
+}
