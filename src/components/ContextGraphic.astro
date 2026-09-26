@@ -30,8 +30,11 @@ const { animated = true, caption = true } = Astro.props;
 const SIZE = 560;
 const C = SIZE / 2;
 const R = 222; // the formed body is smaller than the field it gathers from
-const N = 420; // points that carry through every state
-const EXTRA = 140; // points that exist only in the hero
+// One set of points for the whole page. The hero looks denser because the same
+// circles are spread over the whole screen rather than into a column, not
+// because there are more of them: nothing appears and nothing is taken away,
+// which is what lets the opening run into the first chapter without a seam.
+const N = 560;
 
 function mulberry32(a: number) {
   return function () {
@@ -67,8 +70,8 @@ function sample(seed: number, count: number, minDist: number, place: (r: () => n
   return pts.map((p) => [+p[0].toFixed(1), +p[1].toFixed(1)] as P);
 }
 
-const field = sample(19, N + EXTRA, 17, (r) => [14 + r() * (SIZE - 28), 14 + r() * (SIZE - 28)]);
-const scatter = sample(41, N, 18, (r) => [10 + r() * (SIZE - 20), 14 + r() * (SIZE - 28)]);
+const field = sample(19, N, 15, (r) => [12 + r() * (SIZE - 24), 12 + r() * (SIZE - 24)]);
+const scatter = sample(41, N, 16, (r) => [10 + r() * (SIZE - 20), 14 + r() * (SIZE - 28)]);
 // The formed state is a sphere seen from outside, not a flat disc: points sit
 // evenly on the surface, and an orthographic projection crowds them towards the
 // rim exactly as a real one does. Depth then gives the near side its weight and
@@ -111,7 +114,6 @@ const origin: P[] = scatter.map((s) => {
   taken.add(best);
   return field[best];
 });
-const extras = field.filter((_, i) => !taken.has(i));
 
 // ---- the net -------------------------------------------------------------
 
@@ -307,7 +309,6 @@ const geometry = JSON.stringify({
   p: flat3(sphere),
   s: flat2(scatter),
   d0: flat2(origin), // where each point waits before the first chapter
-  x0: flat2(extras), // the points that exist only there
   e: pairs([...near, ...far]),
   o: pairs(own),
   k: pairs(chords),
@@ -325,13 +326,27 @@ const ariaLabel =
   aria-label={ariaLabel}
 >
   <svg viewBox={`0 0 ${SIZE} ${SIZE}`} aria-hidden="true">
-    <g class="cg-extra">
-      {extras.map((p, i) => (
-        <circle class="cg-seed" cx={p[0]} cy={p[1]} r="1.7" data-s={i} />
+    {/* The first links are their own elements, not one path with many pieces:
+        each is drawn from its point to the other over half a second, and they
+        start one after another. As a single path the whole set was laid down in
+        the time it takes to draw one line, which reads as a fade, not as
+        drawing. The mesh below stays one path per group, because fourteen
+        hundred elements cannot be moved per frame while the sphere turns. */}
+    <g class="cg-firsts">
+      {first.map(([a, b], i) => (
+        <line
+          class="cg-first"
+          x1={cloudPts[a][0]}
+          y1={cloudPts[a][1]}
+          x2={cloudPts[b][0]}
+          y2={cloudPts[b][1]}
+          pathLength="1"
+          style={`--e:${i}`}
+          data-fa={a}
+          data-fb={b}
+        />
       ))}
     </g>
-
-    <path class="cg-link cg-link-2" pathLength="1" d={path(first)} />
     <g class="cg-mesh">
       <path class="cg-link cg-far" pathLength="1" d={path(far)} />
       <path class="cg-link cg-chord" pathLength="1" d={chords.map(bow).join('')} />
@@ -415,8 +430,10 @@ const ariaLabel =
     const g = JSON.parse(raw.textContent ?? '{}') as {
       c: number;
       r: number;
+      size: number;
       p: number[];
       s: number[];
+      d0: number[];
       e: number[];
       o: number[];
       k: number[];
@@ -427,6 +444,9 @@ const ariaLabel =
     const targets: (SVGElement | null)[] = Array.from({ length: N }, (_, i) =>
       figure.querySelector<SVGElement>(`[data-i="${i}"]`),
     );
+    // the first links are individual elements so each can be drawn on its own,
+    // which means they have to be moved individually when the sphere turns
+    const firstEls = Array.from(figure.querySelectorAll<SVGLineElement>('.cg-first'));
     const near = figure.querySelector<SVGPathElement>('.cg-near');
     const far = figure.querySelector<SVGPathElement>('.cg-far');
     const chord = figure.querySelector<SVGPathElement>('.cg-chord');
@@ -496,6 +516,15 @@ const ariaLabel =
       for (let i = 0; i < g.k.length; i += 2) dChord += bow(g.k[i], g.k[i + 1]);
       chord?.setAttribute('d', dChord);
 
+      for (const el of firstEls) {
+        const a = Number(el.dataset.fa);
+        const b = Number(el.dataset.fb);
+        el.setAttribute('x1', px[a].toFixed(1));
+        el.setAttribute('y1', py[a].toFixed(1));
+        el.setAttribute('x2', px[b].toFixed(1));
+        el.setAttribute('y2', py[b].toFixed(1));
+      }
+
       for (let i = 0; i < N; i++) {
         const t = targets[i];
         if (!t) continue;
@@ -521,9 +550,7 @@ const ariaLabel =
     // than in step. The phases come off the golden ratio, which spreads them
     // without any two landing together.
     const size = g.size ?? 560;
-    const extraEls = Array.from(figure.querySelectorAll<SVGElement>('[data-s]'));
     const coreOpen = new Float32Array(N * 2);
-    const extraOpen = new Float32Array(extraEls.length * 2);
     const PHASE = 0.42;
     const ease = (t: number) => (t <= 0 ? 0 : t >= 1 ? 1 : 1 - Math.pow(1 - t, 3));
 
@@ -536,10 +563,6 @@ const ariaLabel =
       for (let i = 0; i < N; i++) {
         coreOpen[i * 2] = ((g.d0[i * 2] / size) * window.innerWidth - ox) / k;
         coreOpen[i * 2 + 1] = ((g.d0[i * 2 + 1] / size) * window.innerHeight - oy) / k;
-      }
-      for (let i = 0; i < extraEls.length; i++) {
-        extraOpen[i * 2] = ((g.x0[i * 2] / size) * window.innerWidth - ox) / k;
-        extraOpen[i * 2 + 1] = ((g.x0[i * 2 + 1] / size) * window.innerHeight - oy) / k;
       }
       return true;
     }
@@ -559,19 +582,6 @@ const ariaLabel =
         const sy = g.s[i * 2 + 1];
         el.style.setProperty('--dx0', `${((coreOpen[i * 2] - sx) * (1 - t)).toFixed(1)}px`);
         el.style.setProperty('--dy0', `${((coreOpen[i * 2 + 1] - sy) * (1 - t)).toFixed(1)}px`);
-      }
-      for (let i = 0; i < extraEls.length; i++) {
-        const t = ease((p - phaseOf(i)) / (1 - PHASE));
-        const fx = g.x0[i * 2];
-        const fy = g.x0[i * 2 + 1];
-        extraEls[i].style.setProperty(
-          '--dx0',
-          `${((extraOpen[i * 2] - fx) * (1 - t)).toFixed(1)}px`,
-        );
-        extraEls[i].style.setProperty(
-          '--dy0',
-          `${((extraOpen[i * 2 + 1] - fy) * (1 - t)).toFixed(1)}px`,
-        );
       }
     };
 

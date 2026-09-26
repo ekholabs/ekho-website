@@ -445,26 +445,12 @@
     opacity: 1;
   }
 
-  .cg-seed {
-    fill: var(--muted-deep);
-    transition: opacity 700ms ease;
-  }
-
-  .cg-extra {
-    opacity: 0;
-    transition: opacity 700ms ease;
-  }
-
   .cg-link {
     fill: none;
     stroke: var(--muted-deep);
     stroke-width: 0.62;
     stroke-linecap: round;
     transition: opacity 800ms ease;
-  }
-
-  .cg-link-2 {
-    opacity: 0;
   }
 
   .cg-mesh {
@@ -561,10 +547,6 @@
     opacity: 0.5;
   }
 
-  .reveal-on [data-graphic] .cg-extra {
-    opacity: 0.5;
-  }
-
   .reveal-on [data-graphic] .cg-mesh {
     opacity: 0;
   }
@@ -582,10 +564,6 @@
 
   .reveal-on [data-graphic].is-1 .cg-pt {
     pointer-events: auto;
-  }
-
-  .reveal-on [data-graphic].is-1 .cg-extra {
-    opacity: 0;
   }
 
   .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-a:not(.is-named) {
@@ -617,10 +595,6 @@
   .reveal-on [data-graphic].is-2 .cg-dot,
   .reveal-on [data-graphic].is-2 .cg-pt {
     transform: translate(var(--dx2), var(--dy2));
-  }
-
-  .reveal-on [data-graphic].is-2:not(.is-3) .cg-link-2 {
-    opacity: 0.8;
   }
 
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot:not(.is-named) {
@@ -663,18 +637,6 @@
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-caption-2,
   .reveal-on [data-graphic].is-3 .cg-caption-3 {
     display: inline;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cg-dot,
-    .cg-pt,
-    .cg-seed,
-    .cg-extra,
-    .cg-link,
-    .cg-tip,
-    .cg-halo {
-      transition: none;
-    }
   }
 
   /* architecture chapter: full width, after the story */
@@ -2842,7 +2804,6 @@
 
      It starts after the points have begun to gather, because the form has to
      arrive before the connections have anywhere to be. */
-  .cg-link-2,
   .cg-far,
   .cg-near,
   .cg-chord,
@@ -2855,7 +2816,6 @@
     transition-delay: 0s, 450ms;
   }
 
-  .reveal-on [data-graphic]:not(.is-2) .cg-link-2,
   .reveal-on [data-graphic]:not(.is-3) .cg-far,
   .reveal-on [data-graphic]:not(.is-3) .cg-near,
   .reveal-on [data-graphic]:not(.is-3) .cg-chord,
@@ -2871,7 +2831,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .cg-link-2,
     .cg-far,
     .cg-near,
     .cg-chord,
@@ -2915,8 +2874,12 @@
     }
 
     .chapter--hero .hero-title {
-      transform-origin: center center;
-      will-change: transform;
+      /* grows to the right from the page's left edge, never towards the middle */
+      transform-origin: left center;
+      /* deliberately no will-change: it pins the text to a layer rasterised at
+         its resting size, and everything above that scale is then a stretched
+         bitmap. Letting the compositor re-raster costs a little and keeps the
+         letters sharp, which is the whole point of showing them that large. */
     }
 
     .figure-stage {
@@ -2938,19 +2901,76 @@
     overflow: visible;
   }
 
-  .cg-seed {
-    transform: translate(var(--dx0, 0px), var(--dy0, 0px));
+  .figure-stage {
+    will-change: auto;
+  }
+}
+
+@layer components {
+  /* Each first link is drawn from one point to the other, and they start one
+     after another. Half a second per stroke, eleven milliseconds between them,
+     so the web is visibly built rather than switched on. */
+  .cg-first {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 0.62;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
   }
 
-  /* the opening is driven by the scroll position, so nothing may ease: each
-     frame would set off a transition towards the frame before it */
-  [data-graphic].is-opening .cg-dot,
-  [data-graphic].is-opening .cg-pt,
-  [data-graphic].is-opening .cg-seed {
+  .reveal-on [data-graphic].is-2:not(.is-3) .cg-first {
+    opacity: 0.8;
+    stroke-dashoffset: 0;
+    transition:
+      stroke-dashoffset 520ms ease-out calc(var(--e) * 11ms),
+      opacity 100ms linear calc(var(--e) * 11ms);
+  }
+
+  [data-graphic].is-turning .cg-first {
     transition: none;
   }
 
-  .figure-stage {
-    will-change: auto;
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-on [data-graphic].is-2:not(.is-3) .cg-first {
+      transition: opacity 400ms ease;
+      stroke-dashoffset: 0;
+    }
+  }
+}
+
+@layer components {
+  /* Scroll snapping: each chapter comes to rest at the top rather than being
+     left halfway. Proximity, not mandatory, and the hero is not a target: its
+     track is where the opening plays out, and a mandatory snap would have no
+     point to hold inside it and would throw the reader straight past it to the
+     first chapter. Proximity snaps when you come to rest near an edge and
+     leaves long moves alone.
+
+     scroll-margin clears the sticky header, or every chapter would come to rest
+     with its label underneath it. */
+  @media (min-width: 64rem) {
+    html {
+      scroll-snap-type: y proximity;
+    }
+
+    .story-text .chapter,
+    .chapter--wide {
+      scroll-snap-align: start;
+      scroll-margin-top: 4rem;
+    }
+
+    /* has to out-specify the rule above it, or the hero becomes a target and
+       the opening is skipped on the first flick of the wheel */
+    .story-text .chapter--hero {
+      scroll-snap-align: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-snap-type: none;
+    }
   }
 }
