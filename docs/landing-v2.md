@@ -114,7 +114,7 @@ below it. The bento was the old table of contents and the chapters now do that j
 ### 01 · Why — scattered
 
 - **Label** `01 WHY`
-- **H2** `Everything is already there. None of it is connected.`
+- **H2** `Everything is already there. But it is not fully connected.`
 - **Statements** (one per reading line, the nearest one full, the rest dim, as
   `[data-seq]` already does)
   1. `Your decisions, the people you work with, what you have read, what you
