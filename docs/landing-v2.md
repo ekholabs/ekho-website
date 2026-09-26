@@ -183,6 +183,16 @@ and skills it applies.`
 - **Right** the graphic stays connected; links start multiplying around the dot
   the digest just touched.
 
+**The sovereignty claim lives here, in one line:** _And swapping is worth
+nothing if your memory stays behind with the old one._ It is not an appeal to
+privacy. The providers are moving into the memory layer, so a vault that lives
+there is not portable however portable the model is. Grounded in **I-195** in
+`EKHO_brain`.
+
+**The chapter ends by collapsing into the next.** Leaving it, the chat window
+shrinks into the one dot its confirm table just made, the decision, which is a
+named point on the sphere. The conversation becomes a note.
+
 > **Open, needs Stephan.** The chat window in Figma is built close to a real
 > client. Shipping a recognisable third-party interface on our own landing page
 > is a brand decision, not a design one. Either it stays generic, or we decide
@@ -240,6 +250,13 @@ make them repeatable, and compatible with every other EKHO vault.`
   The vault opens onto its three parts with their repositories. The yellow
   square sits on the vault row and nowhere else, so the one thing the reader
   owns is the one thing marked.
+
+**EKHO's definition of knowledge sits on the Ontology layer**, taken from
+**I-256** in `EKHO_brain`: knowledge is not content but a contract about what is
+true, layered over shared understanding, shared language and shared intent.
+Between people that contract is spoken; the ontology is the same contract
+written down for machines. That is also what makes the chapter 03 headline
+literal rather than figurative.
 
 > **Sharpening carried into the copy.** `Conversation` means the conversation
 > between people first. The LLM is the means by which those conversations get

@@ -197,11 +197,14 @@ edges.forEach(([a, b]) => {
 // size follows depth: the near side is nearer, and reads that way
 const radius = (i: number) => +(1.15 + (depth[i] + 1) * 0.62).toFixed(2);
 
-// stage 2: the first links only, at most one per point, so most still sit loose
+// stage 2: the first links only, at most one per point, so most still sit loose.
+// Every named point gets one of them, so the yellow in this chapter is not a
+// handful of lone dots but the first few things of yours that found each other.
 const deg2 = cloudPts.map(() => 0);
 const first: [number, number][] = [];
+const keyOf = (a: number, b: number) => (a < b ? `${a}-${b}` : `${b}-${a}`);
 for (const [a, b] of shuffled(edges, 211)) {
-  if (first.length >= 130) break;
+  if (first.length >= 128) break;
   if (deg2[a] || deg2[b]) continue;
   first.push([a, b]);
   deg2[a]++;
@@ -274,6 +277,18 @@ for (const n of named) {
     break;
   }
 }
+// Every named point gets one of the first links, so the yellow in this chapter
+// is not a handful of lone dots but the first few things of yours that found
+// each other. Those links are drawn in the signal colour.
+const yours = new Set<string>();
+for (const i of labels.keys()) {
+  const j = edges.find(([a, b]) => a === i || b === i);
+  if (!j) continue;
+  const k = keyOf(j[0], j[1]);
+  if (!first.some(([a, b]) => keyOf(a, b) === k)) first.push(j);
+  yours.add(k);
+}
+
 const labelOrder = new Map(
   [...labels.keys()].sort((a, b) => scatter[a][1] - scatter[b][1]).map((i, n) => [i, n]),
 );
@@ -335,7 +350,7 @@ const ariaLabel =
     <g class="cg-firsts">
       {first.map(([a, b], i) => (
         <line
-          class="cg-first"
+          class:list={['cg-first', { 'is-yours': yours.has(keyOf(a, b)) }]}
           x1={cloudPts[a][0]}
           y1={cloudPts[a][1]}
           x2={cloudPts[b][0]}
@@ -554,7 +569,9 @@ const ariaLabel =
     const PHASE = 0.42;
     const ease = (t: number) => (t <= 0 ? 0 : t >= 1 ? 1 : 1 - Math.pow(1 - t, 3));
 
-    function measureField() {
+    // an arrow, not a declaration: a hoisted function would lose the narrowing
+    // that proves holder is here
+    const measureField = () => {
       const rect = holder.getBoundingClientRect();
       const k = Math.min(rect.width, rect.height) / size;
       if (!k) return false;
@@ -565,7 +582,7 @@ const ariaLabel =
         coreOpen[i * 2 + 1] = ((g.d0[i * 2 + 1] / size) * window.innerHeight - oy) / k;
       }
       return true;
-    }
+    };
 
     const phaseOf = (i: number) => ((i * 0.6180339887) % 1) * PHASE;
 

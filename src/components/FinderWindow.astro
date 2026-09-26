@@ -7,7 +7,11 @@ const folders = ['00 - Now', '01 - Projects', '02 - Areas', '03 - Resources', '0
 const files = ['AGENTS.md', 'index.md', 'log.md'];
 ---
 
-<figure class="win win--finder" aria-label="A vault is an ordinary folder: myEKHO in Finder">
+<figure
+  class="win win--finder"
+  style="position: relative"
+  aria-label="A vault is an ordinary folder: myEKHO in Finder"
+>
   <div class="win-bar">
     <span class="win-lights" aria-hidden="true">
       <i></i>
@@ -16,6 +20,18 @@ const files = ['AGENTS.md', 'index.md', 'log.md'];
     </span>
     <span class="win-title">myEKHO</span>
   </div>
+  {/* A yellow line traces the window while the first links are being drawn
+      below it: the folder and the graph are the same thing arriving. */}
+  <svg class="win-trace" aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 100 100">
+    <rect
+      x="0.4"
+      y="0.4"
+      width="99.2"
+      height="99.2"
+      pathLength="1"
+      vector-effect="non-scaling-stroke"
+    />
+  </svg>
   <ul class="fin-list" aria-hidden="true">
     {folders.map((f) => (
       <li>

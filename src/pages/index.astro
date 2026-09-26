@@ -199,6 +199,13 @@ const people = [
             Your vault is Markdown on your own disk. Anything that can read a file can read it, so
             the model is the part you are free to swap.
           </p>
+          {/* The sovereignty claim, in one line. Not an appeal to privacy: the
+              providers are moving into the memory layer, and a vault that lives
+              there is not portable however portable the model is. Grounded in
+              I-195 in EKHO_brain. */}
+          <p class="models-edge">
+            And swapping is worth nothing if your memory stays behind with the old one.
+          </p>
         </div>
       </section>
 
@@ -346,6 +353,10 @@ const people = [
   const introTitle = document.querySelector<HTMLElement>('[data-intro-title]');
   const introFades = [...document.querySelectorAll<HTMLElement>('[data-intro-fade]')];
   const stage = document.querySelector<HTMLElement>('.figure-stage');
+  const compound = document.getElementById('compound');
+  const chatOverlay = document.querySelector<HTMLElement>('.overlay[data-for="chat"]');
+  // the dot the window collapses into is the decision its confirm table makes
+  const collapseTarget = document.querySelector<SVGElement>('.cg-pt[aria-label^="Decision"]');
   const wideIntro = window.matchMedia('(min-width: 64rem)');
   let lastNav: string | undefined;
 
@@ -427,8 +438,34 @@ const people = [
     // the windows lie over the graph, one chapter at a time, and the column
     // divider only appears once the two columns start doing different jobs
     if (figure) {
-      figure.dataset.show = current?.dataset.overlay ?? '';
       figure.dataset.stage = current?.dataset.stage ?? '0';
+
+      // Leaving chapter 03, the chat window collapses into the one point it
+      // just made: the decision in its confirm table is a dot on the sphere,
+      // and the window shrinks into it. The window is held on screen until the
+      // collapse is done, or it would fade out from under the movement.
+      let collapse = 0;
+      const chatWin = chatOverlay?.querySelector<HTMLElement>('.win');
+      if (compound && chatWin) {
+        const top = compound.getBoundingClientRect().top;
+        collapse = Math.min(1, Math.max(0, (vh - top) / (vh * 0.8)));
+        if (collapse > 0 && collapse < 1) {
+          const w = chatWin.getBoundingClientRect();
+          const target = collapseTarget?.getBoundingClientRect();
+          const tx = target ? target.left + target.width / 2 - (w.left + w.width / 2) : 0;
+          const ty = target ? target.top + target.height / 2 - (w.top + w.height / 2) : 0;
+          const e = collapse * collapse;
+          chatWin.style.transform = `translate(${(tx * e).toFixed(1)}px, ${(ty * e).toFixed(1)}px) scale(${(1 - e * 0.985).toFixed(4)})`;
+          chatWin.style.opacity = String(Math.max(0, 1 - Math.max(0, (collapse - 0.7) / 0.3)));
+        } else {
+          chatWin.style.transform = '';
+          chatWin.style.opacity = '';
+        }
+      }
+
+      figure.dataset.show =
+        collapse > 0 && collapse < 1 ? 'chat' : (current?.dataset.overlay ?? '');
+      figure.classList.toggle('is-collapsing', collapse > 0 && collapse < 1);
     }
 
     // the architecture rail: one stack for the whole story, moved through its
