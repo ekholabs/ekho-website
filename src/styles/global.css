@@ -2010,7 +2010,7 @@
 
     .story-text .chapter {
       justify-content: center;
-      padding-block: 6rem;
+      padding-block: clamp(3.5rem, 8vh, 6rem);
     }
   }
 
@@ -2701,5 +2701,60 @@
     .win--chat {
       background: var(--panel);
     }
+  }
+}
+
+@layer components {
+  /* The architecture has to be graspable in one look, which means it has to fit
+     on the screen. Its measurements follow the viewport height rather than a
+     fixed rem, so the five layers stay inside the frame on a laptop as well as
+     on a large display. Opening a layer may of course push past it. */
+  .chapter--wide {
+    padding-block: clamp(3.5rem, 9vh, 6rem) clamp(2.5rem, 6vh, 4rem);
+  }
+
+  .chapter--wide h2 {
+    font-size: clamp(1.5rem, 3vw, 2.125rem);
+  }
+
+  .chapter--wide .chapter-lede {
+    line-height: 1.55;
+  }
+
+  .arch {
+    margin-top: clamp(1.25rem, 3.5vh, 2.5rem);
+    gap: clamp(0.2rem, 0.55vh, 0.4rem);
+  }
+
+  .arch-head {
+    padding: clamp(0.7rem, 1.9vh, 1.4rem) clamp(1rem, 2vw, 1.6rem);
+  }
+
+  .arch-title {
+    font-size: clamp(1.0625rem, 1.7vw, 1.625rem);
+  }
+
+  .arch-note {
+    font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
+  }
+}
+
+@layer components {
+  /* the viewer is a product shot and follows the same rule: one screen, one look */
+  .viewer {
+    margin-top: clamp(1.25rem, 3vh, 2.5rem);
+    padding: clamp(1.25rem, 3.4vh, 3rem);
+  }
+
+  .win--app .win-body {
+    height: clamp(12.5rem, 29vh, 20rem);
+  }
+
+  .phone-screen {
+    height: clamp(15rem, 36vh, 25rem);
+  }
+
+  .fig-note {
+    margin-top: clamp(0.85rem, 2vh, 1.5rem);
   }
 }
