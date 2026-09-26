@@ -1997,7 +1997,13 @@
   @media (min-width: 64rem) {
     .story-figure {
       padding-left: 4rem;
-      border-left: 1px solid var(--line);
+      border-left: 1px solid transparent;
+      transition: border-color 400ms ease;
+    }
+
+    /* nothing to divide in the hero: the line arrives with the first chapter */
+    .story-figure:not([data-stage='0']) {
+      border-left-color: var(--line);
     }
 
     .story-text .chapter {

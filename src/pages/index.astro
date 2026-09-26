@@ -371,8 +371,12 @@ const people = [
       }
     }
 
-    // the windows lie over the graph, one chapter at a time
-    if (figure) figure.dataset.show = current?.dataset.overlay ?? '';
+    // the windows lie over the graph, one chapter at a time, and the column
+    // divider only appears once the two columns start doing different jobs
+    if (figure) {
+      figure.dataset.show = current?.dataset.overlay ?? '';
+      figure.dataset.stage = current?.dataset.stage ?? '0';
+    }
 
     // the architecture rail: one stack for the whole story, moved through its
     // states by whichever chapter is being read
