@@ -3136,15 +3136,22 @@
      that does not exist yet: it says so before the note underneath does, which
      is what N4 asks for. */
   .command {
-    margin: 1.5rem 0 0;
-    padding: 0.7rem 0.9rem;
-    border: 1px dashed var(--line-strong);
+    /* a terminal is black in either mode, because a terminal is black */
+    --term: #0a0a09;
+    max-width: 27rem;
+    margin: 2.25rem 0 0;
+    padding: 0.85rem 1rem 0.9rem;
+    /* the same hairline the windows use, not a dashed one: the note underneath
+       is what marks this as unshipped, and N4 asks for the marking, not for a
+       particular border */
+    border: 1px solid var(--panel-line);
     border-radius: var(--radius);
-    background: var(--surface);
+    background: var(--term);
   }
 
   .command-label {
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.5rem;
+    color: #7c776f;
     font-size: 0.625rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -3155,14 +3162,44 @@
     display: block;
     font-family: var(--font-mono);
     font-size: 0.8125rem;
-    line-height: 1.5;
-    color: var(--text);
+    line-height: 1.55;
+    color: #e9e7e2;
     overflow-wrap: anywhere;
+  }
+
+  .command-prompt {
+    margin-right: 0.35rem;
+    color: #7c776f;
   }
 
   .command-note {
     margin: 0.55rem 0 0;
     font-size: 0.75rem;
     color: var(--muted-deep);
+  }
+}
+
+@layer components {
+  /* In the snapped position the content has to sit the same distance from the
+     top of the screen as from the bottom. The section rests with its top at the
+     viewport top, and the header covers the first 4rem of that, so the two gaps
+     are only equal if the top padding carries the header's height on top of the
+     bottom padding. Centring in the box alone puts the block too high by
+     exactly the header. */
+  @media (min-width: 64rem) {
+    /* The header covers the first 4rem, so that much is padded off the top and
+       nothing is padded off the bottom: centring in what is left then puts the
+       block the same distance from the header as from the bottom edge. Fixed
+       padding on both sides cannot do it, because the denser chapters need
+       every pixel and would be pushed out of the top instead. */
+    .story-text .chapter,
+    .chapter--wide {
+      padding-block: 4rem 0;
+      justify-content: center;
+    }
+
+    .story-text .chapter--hero {
+      padding-block: 0;
+    }
   }
 }

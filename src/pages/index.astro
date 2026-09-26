@@ -172,7 +172,12 @@ const people = [
               are the ones the repo already used. */}
           <figure class="command">
             <figcaption class="command-label">One command</figcaption>
-            <code>curl -fsSL https://get.ekholabs.eu/i/&lt;key&gt; | sh</code>
+            <code>
+              <span class="command-prompt" aria-hidden="true">
+                $
+              </span>{' '}
+              curl -fsSL https://get.ekholabs.eu/i/&lt;key&gt; | sh
+            </code>
           </figure>
           <p class="command-note">In early access, by invitation. The installer is not live yet.</p>
         </div>
