@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import ContextGraphic from '../components/ContextGraphic.astro';
 import Architecture from '../components/Architecture.astro';
-import ArchStack from '../components/ArchStack.astro';
 import FinderWindow from '../components/FinderWindow.astro';
 import ChatWindow from '../components/ChatWindow.astro';
 import ViewerMockup from '../components/ViewerMockup.astro';
@@ -78,7 +77,11 @@ const people = [
           <ChatWindow />
         </div>
       </div>
-      <ArchStack rail label={false} />
+      {/* The architecture rail used to sit here and assemble as you scroll. It
+          was taking a fifth of the stage from the window above it, so it is out
+          while we settle how the model should be shown. The chapters keep their
+          data-layers, which is the record of which layer each one is about, and
+          the script still drives a rail if one is put back. */}
     </div>
 
     <div class="story-text">

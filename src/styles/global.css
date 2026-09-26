@@ -933,12 +933,12 @@
        surface, so it keeps the radius those windows actually have. Every EKHO
        surface on the page stays on --radius (4px). */
     --panel: #fff;
-    --panel-line: #e6e2da;
-    --panel-sub: #f2f0ea;
+    --panel-line: #ddd8cf;
+    --panel-sub: #f4f2ec;
     --win-radius: 10px;
     /* the windows that float over the graph are glass: a lit rim, a top
        highlight and a halo that lifts them off whatever is behind */
-    --glass: 94%;
+    --glass: 97%;
     --glass-rim: rgb(255 255 255 / 0.9);
     --glass-top: rgb(255 255 255 / 0.8);
     --glass-halo: rgb(26 26 24 / 0.05);
@@ -947,11 +947,11 @@
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --panel: #232220;
-      --panel-line: #34332f;
-      --panel-sub: #1f1e1c;
-      --glass: 90%;
-      --glass-rim: rgb(255 255 255 / 0.09);
+      --panel: #2b2a27;
+      --panel-line: #3d3b37;
+      --panel-sub: #232220;
+      --glass: 95%;
+      --glass-rim: rgb(255 255 255 / 0.14);
       --glass-top: rgb(255 255 255 / 0.07);
       --glass-halo: rgb(237 235 230 / 0.05);
       --glass-cast: rgb(0 0 0 / 0.5);
@@ -1101,7 +1101,7 @@
   .stack-row.is-on {
     background: var(--surface);
     border-top-color: transparent;
-    padding: 0.8rem 1rem;
+    padding: 0.68rem 1rem;
     box-shadow: var(--lift);
   }
 
@@ -2094,16 +2094,31 @@
 
   /* --- the chat window sits on the graph too, so it stays compact --- */
 
+  /* The window may never grow past its stage: below it sits the architecture,
+     and a window that bleeds over those rows makes both unreadable. It is the
+     window that matters here, so it takes the room it can get and the bar and
+     the body share what is left. */
+  .overlay .win {
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+  }
+
+  .overlay .win-body {
+    min-height: 0;
+  }
+
   .overlay .win--chat {
-    width: min(100%, 34rem);
+    width: min(95%, 45rem);
   }
 
   .overlay .win--chat .win-body {
-    height: 32.5rem;
+    height: 34rem;
+    flex: 0 1 auto;
   }
 
   .overlay .chat-side {
-    width: 8.5rem;
+    width: 11rem;
   }
 
   /* --- the architecture, assembling under the graph --- */
