@@ -154,7 +154,10 @@ not a memory inside somebody else's model.`
   as a snap, not a fade.
 - **On the graph** a **macOS Finder window** with real blue folder icons, laid
   over the cloud the way the Figma frame "What · Ordner über Graph" does it: one
-  plain list, no sidebar, no columns. Content is the actual PARA layout:
+  plain list, no sidebar, no columns. While the first links are drawn below it
+  the window takes on a faint yellow edge, fading up with a wide soft glow
+  rather than being traced: a line drawing itself around a box is a second
+  mechanism competing with the one that matters. Content is the actual PARA layout:
   `00 - Now` · `01 - Projects` · `02 - Areas` · `03 - Resources` · `04 - Archive`,
   one folder open showing `.md` files. This is the single most convincing frame
   on the page: it shows there is no app to adopt.
