@@ -1,23 +1,23 @@
 ---
-// The companion graphic. One cloud of points, the same 64 throughout, three
-// states, after the Figma choreography (file "EKHO CI · Vorschlag", pages 11
-// and 13):
+// The companion graphic. One set of points for the whole page, moved between
+// four states rather than cross-faded between four pictures, so the reader
+// watches the same knowledge settle:
 //
-//   stage 1 (no class)  scattered    before EKHO, no form, nothing connected
-//   stage 2 (.is-2)     connected    the same points find a form, first links
+//   stage 0 (no class)  field        the hero. More points, spread wide, all
+//                                    one grey. Nothing has a place yet
+//   stage 1 (.is-1)     scattered    the extra points go, the rest draw in
+//   stage 2 (.is-2)     connected    the points find a form, first links
 //   stage 3 (.is-3)     compounding  no new point, three times the links
 //
-// The layout is organic, not a lattice: points are Poisson-sampled inside a
-// disc, so the form reads as a cloud that found an edge rather than a grid.
-// Dots are small and the links are hairlines; the picture carries by density,
-// never by weight.
+// Every dot is drawn once, at its scattered position, and the other two states
+// are a CSS translate away. The transform carries the movement, so the browser
+// animates it on the compositor and nothing is redrawn per frame.
 //
-// Without JavaScript every stage collapses to the finished graphic, so the
-// figure still reads. animated={false} pins it to the finished state.
+// Without JavaScript the graphic rests in the finished state, which reads on
+// its own. animated={false} pins it there.
 
 interface Props {
   animated?: boolean;
-  idPrefix?: string;
   caption?: boolean;
 }
 const { animated = true, caption = true } = Astro.props;
@@ -25,10 +25,10 @@ const { animated = true, caption = true } = Astro.props;
 const SIZE = 560;
 const C = SIZE / 2;
 const R = 232; // radius of the formed cloud
-const DOT = 3.3; // the resting dot, small on purpose
-const N = 64;
+const DOT = 3.3;
+const N = 64; // points that carry through every state
+const EXTRA = 52; // points that exist only in the hero
 
-// deterministic: the same picture on every build, and the same as in Figma
 function mulberry32(a: number) {
   return function () {
     a |= 0;
@@ -47,34 +47,64 @@ function shuffled<T>(arr: T[], seed: number) {
   }
   return out;
 }
+type P = [number, number];
+const round = (p: P): P => [+p[0].toFixed(1), +p[1].toFixed(1)];
 
-// stage 2 and 3: Poisson-sampled inside the disc. Dart throwing with a
-// shrinking minimum distance, so the cloud fills evenly without a grid.
-function sample(seed: number, radius: number, count: number, minDist: number) {
+// dart throwing with a shrinking minimum distance: fills evenly, reads organic
+function sample(seed: number, count: number, minDist: number, place: (r: () => number) => P) {
   const rnd = mulberry32(seed);
-  const pts: [number, number][] = [];
+  const pts: P[] = [];
   let d = minDist;
   let guard = 0;
-  while (pts.length < count && guard++ < 40000) {
-    const a = rnd() * Math.PI * 2;
-    const r = radius * Math.sqrt(rnd());
-    const p: [number, number] = [C + Math.cos(a) * r, C + Math.sin(a) * r];
+  while (pts.length < count && guard++ < 80000) {
+    const p = place(rnd);
     if (pts.every((q) => Math.hypot(q[0] - p[0], q[1] - p[1]) >= d)) pts.push(p);
-    if (guard % 3000 === 0) d *= 0.92;
+    if (guard % 4000 === 0) d *= 0.93;
   }
-  return pts.map((p) => [+p[0].toFixed(1), +p[1].toFixed(1)] as [number, number]);
+  return pts.map(round);
 }
 
-const cloud = sample(7, R, N, 46);
+// stage 0: the hero. More points than anywhere else, spread over the whole
+// frame rather than gathered, and every one the same grey.
+const field = sample(19, N + EXTRA, 34, (r) => [24 + r() * (SIZE - 48), 24 + r() * (SIZE - 48)]);
+
+// stage 1: loose, still formless, but pulled in from the edges
+const scatter = sample(41, N, 42, (r) => [62 + r() * (SIZE - 124), 70 + r() * (SIZE - 140)]);
+
+// stage 2 and 3: the cloud, Poisson-sampled inside a disc
+const cloud = sample(7, N, 46, (r) => {
+  const a = r() * Math.PI * 2;
+  const rad = R * Math.sqrt(r());
+  return [C + Math.cos(a) * rad, C + Math.sin(a) * rad];
+});
+
+// which field point becomes which scattered point. Nearest first, so the hero
+// settles by contracting rather than by shuffling everything past everything.
+const takenField = new Set<number>();
+const origin: P[] = scatter.map((s) => {
+  let best = -1;
+  let bd = Infinity;
+  field.forEach((f, i) => {
+    if (takenField.has(i)) return;
+    const d = Math.hypot(f[0] - s[0], f[1] - s[1]);
+    if (d < bd) {
+      bd = d;
+      best = i;
+    }
+  });
+  takenField.add(best);
+  return field[best];
+});
+// everything the hero has on top of that leaves when the first chapter starts
+const extras = field.filter((_, i) => !takenField.has(i));
+const extraOrder = shuffled(
+  extras.map((_, i) => i),
+  5,
+);
+
 const dist = (i: number, j: number) =>
   Math.hypot(cloud[i][0] - cloud[j][0], cloud[i][1] - cloud[j][1]);
 
-// stage 1: the same count, spread loose, no form and no edge
-const rs = mulberry32(41);
-const scatter: [number, number][] = [];
-for (let i = 0; i < N; i++) {
-  scatter.push([+(46 + rs() * (SIZE - 92)).toFixed(1), +(58 + rs() * (SIZE - 116)).toFixed(1)]);
-}
 const sOrder = shuffled(
   scatter.map((_, i) => i),
   3,
@@ -84,8 +114,8 @@ const scatterTier = (i: number) => {
   return p < 15 ? 'a' : p < 36 ? 'b' : 'c';
 };
 
-// stage 2: a few links across the cloud, at most two per point, most stay loose
-const candidates: [number, number][] = [];
+// stage 2: a few links across the cloud, at most two per point
+const candidates: P[] = [];
 for (let i = 0; i < N; i++) {
   for (let j = i + 1; j < N; j++) {
     const d = dist(i, j);
@@ -93,7 +123,7 @@ for (let i = 0; i < N; i++) {
   }
 }
 const deg2 = cloud.map(() => 0);
-const links2: [number, number][] = [];
+const links2: P[] = [];
 for (const [i, j] of shuffled(candidates, 211)) {
   if (links2.length >= 22) break;
   if (deg2[i] >= 2 || deg2[j] >= 2) continue;
@@ -120,7 +150,7 @@ const stage2Tier = (i: number) => {
 
 // stage 3: every point carries, plus a few links that cross the cloud
 const seen = new Set<string>();
-const links3: [number, number][] = [];
+const links3: P[] = [];
 const key = (a: number, b: number) => (a < b ? `${a}-${b}` : `${b}-${a}`);
 for (let i = 0; i < N; i++) {
   const near = cloud
@@ -156,12 +186,10 @@ links3.forEach(([a, b]) => {
   deg3[a]++;
   deg3[b]++;
 });
-// what compounding looks like: the spread in size, not more points
 const r3 = (i: number) => +(DOT * 0.82 + Math.min(deg3[i], 7) * 0.62).toFixed(2);
 
-// a handful of points say what they are, on hover and on focus. Only out
-// towards the edge, so the label has room and never covers the cloud.
-const named: { at: [number, number]; type: string; title: string }[] = [
+// a handful of points say what they are, on hover and on focus
+const named: { at: P; type: string; title: string }[] = [
   { at: [206, 198], type: 'Person', title: 'Anna Berger' },
   { at: [212, 252], type: 'Meeting', title: 'The call on Thursday' },
   { at: [196, 306], type: 'Voice note', title: 'Tuesday, on the walk' },
@@ -193,12 +221,22 @@ for (const n of named) {
   if (!labels.has(idx)) labels.set(idx, { type: n.type, title: n.title });
 }
 
-const path = (segs: [number, number][]) =>
+// every dot is drawn at its scattered position; the other states are a shift
+const shift = (i: number) =>
+  [
+    `--dx0:${(origin[i][0] - scatter[i][0]).toFixed(1)}px`,
+    `--dy0:${(origin[i][1] - scatter[i][1]).toFixed(1)}px`,
+    `--dx2:${(cloud[i][0] - scatter[i][0]).toFixed(1)}px`,
+    `--dy2:${(cloud[i][1] - scatter[i][1]).toFixed(1)}px`,
+    `--r3:${r3(i)}px`,
+  ].join(';');
+
+const path = (segs: P[]) =>
   segs.map(([a, b]) => `M${cloud[a][0]} ${cloud[a][1]}L${cloud[b][0]} ${cloud[b][1]}`).join('');
 
 const figureClass = ['context-graphic', animated ? '' : 'is-final'].filter(Boolean).join(' ');
 const ariaLabel =
-  'The same knowledge in three states: scattered and unconnected before EKHO, gathered into one form with the first connections, and finally densely connected without a single new point.';
+  'The same knowledge in four states: spread wide and formless at first, then scattered, then gathered into one form with the first connections, and finally densely connected without a single new point.';
 ---
 
 <figure
@@ -208,62 +246,59 @@ const ariaLabel =
   aria-label={ariaLabel}
 >
   <svg viewBox={`0 0 ${SIZE} ${SIZE}`} aria-hidden="true">
-    <!-- stage 1: no form -->
-    <g class="cg-scatter">
-      {scatter.map((p, i) => (
-        <circle class={`cg-seed s-${scatterTier(i)}`} cx={p[0]} cy={p[1]} r={DOT} />
+    <!-- what the hero has on top: it leaves when the first chapter starts -->
+    <g class="cg-extra">
+      {extras.map((p, i) => (
+        <circle
+          class="cg-seed"
+          cx={p[0]}
+          cy={p[1]}
+          r={DOT}
+          style={`--i:${extraOrder.indexOf(i)}`}
+        />
       ))}
     </g>
 
-    <!-- stages 2 and 3: the cloud -->
-    <g class="cg-grid">
-      <path class="cg-link cg-link-2" d={path(links2)} />
-      <path class="cg-link cg-link-3" d={path(links3)} />
-      <g class="cg-dots">
-        {cloud.map((p, i) => {
-          const label = labels.get(i);
-          const cls = ['cg-dot', stage2Tier(i)].join(' ');
-          const big = r3(i);
-          if (!label)
-            return <circle class={cls} cx={p[0]} cy={p[1]} r={DOT} style={`--r3:${big}px`} />;
-          const right = p[0] >= C;
-          const lx = right ? p[0] + 16 : p[0] - 16;
-          return (
-            <g
-              class="cg-pt"
-              tabindex="0"
-              role="img"
-              aria-label={`${label.type}: ${label.title}`}
-              data-side={right ? 'right' : 'left'}
-            >
-              <title>{`${label.type}: ${label.title}`}</title>
-              <circle class="cg-halo" cx={p[0]} cy={p[1]} r={11} />
-              <circle class={cls} cx={p[0]} cy={p[1]} r={DOT} style={`--r3:${big}px`} />
-              <g class="cg-tip">
-                <line
-                  class="cg-tip-tick"
-                  x1={right ? p[0] + 7 : p[0] - 7}
-                  y1={p[1]}
-                  x2={lx - (right ? 3 : -3)}
-                  y2={p[1]}
-                />
-                <text class="cg-tip-type" x={lx} y={p[1] - 6} text-anchor={right ? 'start' : 'end'}>
-                  {label.type}
-                </text>
-                <text
-                  class="cg-tip-title"
-                  x={lx}
-                  y={p[1] + 12}
-                  text-anchor={right ? 'start' : 'end'}
-                >
-                  {label.title}
-                </text>
-              </g>
-              <circle class="cg-hit" cx={p[0]} cy={p[1]} r={15} />
+    <path class="cg-link cg-link-2" d={path(links2)} />
+    <path class="cg-link cg-link-3" d={path(links3)} />
+
+    <g class="cg-dots">
+      {scatter.map((p, i) => {
+        const label = labels.get(i);
+        const cls = ['cg-dot', `s-${scatterTier(i)}`, stage2Tier(i)].join(' ');
+        if (!label) return <circle class={cls} cx={p[0]} cy={p[1]} r={DOT} style={shift(i)} />;
+        const right = cloud[i][0] >= C;
+        const lx = right ? p[0] + 16 : p[0] - 16;
+        return (
+          <g
+            class="cg-pt"
+            style={shift(i)}
+            tabindex="0"
+            role="img"
+            aria-label={`${label.type}: ${label.title}`}
+          >
+            <title>{`${label.type}: ${label.title}`}</title>
+            <circle class="cg-halo" cx={p[0]} cy={p[1]} r={11} />
+            <circle class={cls} cx={p[0]} cy={p[1]} r={DOT} />
+            <g class="cg-tip">
+              <line
+                class="cg-tip-tick"
+                x1={right ? p[0] + 7 : p[0] - 7}
+                y1={p[1]}
+                x2={lx - (right ? 3 : -3)}
+                y2={p[1]}
+              />
+              <text class="cg-tip-type" x={lx} y={p[1] - 6} text-anchor={right ? 'start' : 'end'}>
+                {label.type}
+              </text>
+              <text class="cg-tip-title" x={lx} y={p[1] + 12} text-anchor={right ? 'start' : 'end'}>
+                {label.title}
+              </text>
             </g>
-          );
-        })}
-      </g>
+            <circle class="cg-hit" cx={p[0]} cy={p[1]} r={15} />
+          </g>
+        );
+      })}
     </g>
   </svg>
 

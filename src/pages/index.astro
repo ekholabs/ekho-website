@@ -65,30 +65,6 @@ const people = [
     </ol>
   </nav>
 
-  {/* ---------- hero ---------- */}
-  <section class="wrap wrap-wide hero2" aria-labelledby="hero-title">
-    <div class="hero2-text">
-      <h1 class="hero2-title" id="hero-title">
-        AI is only as good as your context. <span class="signal-text">Own it.</span>
-      </h1>
-      <p class="hero2-lede">
-        EKHO turns what you know into one connected context your AI can work with. Every time you
-        use it, you get more out of it. And it stays yours.
-      </p>
-      <p class="cta-row">
-        <a class="pill pill--solid" href="#waitlist">
-          Join the waitlist
-        </a>
-        <a class="pill" href="#why">
-          See how it works <span aria-hidden="true">↓</span>
-        </a>
-      </p>
-    </div>
-    <div class="hero2-figure" aria-hidden="true">
-      <ContextGraphic animated={false} idPrefix="hero" caption={false} />
-    </div>
-  </section>
-
   {/* ---------- the story: graphic right, everything else left ---------- */}
   <div class="wrap wrap-wide story">
     <div class="story-figure" data-story-figure>
@@ -105,6 +81,26 @@ const people = [
     </div>
 
     <div class="story-text">
+      <section class="chapter chapter--hero" id="hero" data-chapter data-stage="0">
+        <div class="chapter-body">
+          <h1 class="hero-title">
+            AI is only as good as your context. <span class="signal-text">Own it.</span>
+          </h1>
+          <p class="hero-lede">
+            EKHO turns what you know into one connected context your AI can work with. Every time
+            you use it, you get more out of it. And it stays yours.
+          </p>
+          <p class="cta-row">
+            <a class="pill pill--solid" href="#waitlist">
+              Join the waitlist
+            </a>
+            <a class="pill" href="#why">
+              See how it works <span aria-hidden="true">↓</span>
+            </a>
+          </p>
+        </div>
+      </section>
+
       <section
         class="chapter"
         id="why"
@@ -392,11 +388,11 @@ const people = [
       }
     }
 
-    // the graphic: 1 scattered, 2 connected, 3 compounding
+    // the graphic: 0 field, 1 scattered, 2 connected, 3 compounding
     {
-      const stage = Number(current?.dataset.stage ?? 1);
+      const stage = Number(current?.dataset.stage ?? 0);
       for (const g of graphics)
-        for (let n = 2; n <= 3; n++) g.classList.toggle(`is-${n}`, stage >= n);
+        for (let n = 1; n <= 3; n++) g.classList.toggle(`is-${n}`, stage >= n);
     }
 
     // architecture: its rows come in once the chapter is in view

@@ -413,30 +413,36 @@
     min-height: 0;
   }
 
-  /* The companion graphic. Small dots, hairline links: the picture carries by
-     density and never by weight. Stage 1 is the scatter, 2 and 3 the cloud.
-     The resting state is the finished graphic, so it reads without the script. */
-  .cg-seed,
-  .cg-dot {
-    fill: var(--text);
+  /* The companion graphic. One set of points for the whole page, moved between
+     four states instead of cross-faded between four pictures. Every dot is
+     drawn once, at its scattered position; the hero and the cloud are a
+     translate away, so the browser animates the movement on the compositor.
+
+     The resting state, with no script, is the finished graphic. */
+  .cg-dot,
+  .cg-pt {
+    transform: translate(var(--dx2), var(--dy2));
     transition:
+      transform 950ms cubic-bezier(0.22, 0.61, 0.36, 1),
       fill 700ms ease,
       opacity 700ms ease,
       r 700ms ease;
   }
 
-  .cg-seed.s-a {
-    opacity: 0.88;
+  .cg-dot {
+    fill: var(--text);
+    opacity: 0.92;
+    r: var(--r3);
   }
 
-  .cg-seed.s-b {
-    fill: var(--muted);
-    opacity: 0.52;
-  }
-
-  .cg-seed.s-c {
+  .cg-seed {
     fill: var(--muted-deep);
-    opacity: 0.3;
+    transition: opacity 700ms ease;
+  }
+
+  .cg-extra {
+    opacity: 0;
+    transition: opacity 700ms ease;
   }
 
   .cg-link {
@@ -446,25 +452,12 @@
     transition: opacity 800ms ease;
   }
 
-  .cg-scatter {
-    opacity: 0;
-  }
-
-  .cg-grid {
-    opacity: 1;
-    transition: opacity 700ms ease;
-  }
-
   .cg-link-2 {
     opacity: 0;
   }
 
   .cg-link-3 {
     opacity: 0.42;
-  }
-
-  .cg-dot {
-    r: var(--r3);
   }
 
   .cg-halo {
@@ -517,33 +510,72 @@
     color: var(--muted);
   }
 
-  /* with the script running the graphic starts scattered and builds */
-  .reveal-on [data-graphic] .cg-scatter {
-    opacity: 1;
-    transition: opacity 700ms ease;
+  /* stage 0, the hero: more points, spread wide, every one the same grey */
+  .reveal-on [data-graphic] .cg-dot,
+  .reveal-on [data-graphic] .cg-pt {
+    transform: translate(var(--dx0), var(--dy0));
   }
 
-  .reveal-on [data-graphic] .cg-grid,
+  .reveal-on [data-graphic] .cg-dot {
+    fill: var(--muted-deep);
+    opacity: 0.58;
+    r: 3.3px;
+  }
+
+  .reveal-on [data-graphic] .cg-extra {
+    opacity: 0.58;
+  }
+
   .reveal-on [data-graphic] .cg-link-3 {
     opacity: 0;
   }
 
-  .reveal-on [data-graphic] .cg-dot {
-    r: 3.3px;
-  }
-
-  /* stage 2: the same points find a form, the first links appear */
-  .reveal-on [data-graphic].is-2 .cg-scatter {
-    opacity: 0;
+  .reveal-on [data-graphic] .cg-pt {
     pointer-events: none;
   }
 
-  .reveal-on [data-graphic].is-2 .cg-grid {
-    opacity: 1;
+  /* stage 1: the extra points go, the rest draw in and take their weight */
+  .reveal-on [data-graphic].is-1 .cg-dot,
+  .reveal-on [data-graphic].is-1 .cg-pt {
+    transform: none;
+  }
+
+  .reveal-on [data-graphic].is-1 .cg-pt {
+    pointer-events: auto;
+  }
+
+  .reveal-on [data-graphic].is-1 .cg-extra {
+    opacity: 0;
+  }
+
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-a {
+    fill: var(--text);
+    opacity: 0.88;
+  }
+
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-b {
+    fill: var(--muted);
+    opacity: 0.52;
+  }
+
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-c {
+    fill: var(--muted-deep);
+    opacity: 0.3;
+  }
+
+  /* stage 2: the points find a form and the first links appear */
+  .reveal-on [data-graphic].is-2 .cg-dot,
+  .reveal-on [data-graphic].is-2 .cg-pt {
+    transform: translate(var(--dx2), var(--dy2));
   }
 
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-link-2 {
     opacity: 0.5;
+  }
+
+  .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot.t0 {
+    fill: var(--text);
+    opacity: 0.88;
   }
 
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot.t2 {
@@ -573,28 +605,24 @@
   }
 
   /* the caption only names the state the graphic is in */
+  .reveal-on [data-graphic] .cg-caption-1,
   .reveal-on [data-graphic] .cg-caption-2,
   .reveal-on [data-graphic] .cg-caption-3 {
     display: none;
   }
 
-  .reveal-on [data-graphic]:not(.is-2) .cg-caption-1,
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-caption-1,
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-caption-2,
   .reveal-on [data-graphic].is-3 .cg-caption-3 {
     display: inline;
   }
 
-  .reveal-on [data-graphic].is-2 .cg-caption-1,
-  .reveal-on [data-graphic].is-3 .cg-caption-2 {
-    display: none;
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .cg-seed,
     .cg-dot,
+    .cg-pt,
+    .cg-seed,
+    .cg-extra,
     .cg-link,
-    .cg-grid,
-    .cg-scatter,
     .cg-tip,
     .cg-halo {
       transition: none;
@@ -925,50 +953,6 @@
       --panel: #232220;
       --panel-line: #34332f;
       --panel-sub: #1f1e1c;
-    }
-  }
-
-  /* ---------- hero ---------- */
-
-  .hero2 {
-    display: grid;
-    align-items: center;
-    gap: 3rem;
-    min-height: calc(100svh - 4rem);
-    padding-block: 5rem 4rem;
-  }
-
-  .hero2-title {
-    margin: 0 0 1.5rem;
-    font-size: clamp(2.25rem, 6.5vw, 4.25rem);
-    font-weight: 400;
-    line-height: 1.05;
-    letter-spacing: -0.035em;
-    max-width: 18ch;
-  }
-
-  .hero2-lede {
-    margin: 0 0 2rem;
-    max-width: 46ch;
-    font-size: clamp(1rem, 1.5vw, 1.125rem);
-    line-height: 1.6;
-    color: var(--muted);
-  }
-
-  .hero2-figure {
-    display: none;
-  }
-
-  @media (min-width: 64rem) {
-    .hero2 {
-      grid-template-columns: minmax(0, 29rem) minmax(0, 1fr);
-      column-gap: 0;
-    }
-
-    .hero2-figure {
-      display: block;
-      opacity: 0.22;
-      height: min(30rem, 52svh);
     }
   }
 
@@ -2199,11 +2183,6 @@
     .overlay .win--chat .win-body {
       height: 19rem;
     }
-
-    .hero2 {
-      min-height: 0;
-      padding-block: 4rem 3rem;
-    }
   }
 }
 
@@ -2519,6 +2498,49 @@
     .arch-parts span {
       grid-column: 1;
       grid-row: auto;
+    }
+  }
+}
+
+@layer components {
+  /* The hero is the first chapter of the story, not a section of its own: one
+     stage carries the graphic from the top of the page, so the hero settling
+     into chapter 01 is a movement and not a change of picture. */
+  .chapter--hero {
+    justify-content: center;
+  }
+
+  .hero-title {
+    margin: 0 0 1.5rem;
+    font-size: clamp(2.125rem, 4.6vw, 3.25rem);
+    font-weight: 400;
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+  }
+
+  .hero-lede {
+    margin: 0 0 2.25rem;
+    max-width: 44ch;
+    font-size: clamp(1rem, 1.3vw, 1.0625rem);
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  @media (max-width: 63.999rem) {
+    .chapter--hero {
+      min-height: 0;
+      padding-block: 2rem 3rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 8.5vw, 2.75rem);
     }
   }
 }

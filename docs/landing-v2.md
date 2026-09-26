@@ -15,9 +15,16 @@
 movement, three states of the same picture:
 
 ```
-scattered            connected             compounding
-before EKHO    ->    with EKHO       ->    EKHO compounds
+field           scattered        connected          compounding
+the hero   ->   before EKHO  ->  with EKHO     ->   EKHO compounds
 ```
+
+**It is one set of points, moved, not four pictures cross-faded.** Every dot is
+drawn once, at its scattered position; the hero and the cloud are a CSS
+translate away, so the browser animates the movement on the compositor. The
+hero carries 52 points more than any later state, spread over the whole frame
+and all in one grey: nothing has a place yet. Scrolling into chapter 01 sends
+those extra points away and lets the rest draw in and take their weight.
 
 Everything else hangs off that movement. The graphic on the right is a permanent
 companion that builds. The left side builds in parallel: the statement text, the
@@ -90,8 +97,10 @@ with a yellow square rather than colouring the row.
 
 ### 00 · Hero
 
-Full height, nothing on the right yet except the empty disc at very low opacity:
-the form that is about to fill.
+The hero is the **first chapter of the story**, not a section of its own, so the
+graphic is already the companion here and settles into chapter 01 by moving
+rather than by being replaced. Stage 0 on the right: 116 points, spread wide,
+every one the same grey.
 
 - **H1** `AI is only as good as your context. Own it.`
   ("Own it." in signal.)
@@ -115,9 +124,9 @@ and meetings and notes that know nothing of each other.`
 And again.`
   3. `The model is the same for everyone. Your context is the only part that is
 yours.`
-- **Right** `ContextGraphic` stage 1, scattered. The cloud is Poisson-sampled
-  inside a disc, not a lattice: small dots, hairline links, the picture carries
-  by density and never by weight. Hover and focus reveal what a dot
+- **Right** `ContextGraphic` stage 1, scattered: the hero's extra points leave
+  and the remaining 64 contract into place. Poisson-sampled, not a lattice:
+  small dots, hairline links, the picture carries by density, never by weight. Hover and focus reveal what a dot
   is, with a tick and two lines: type above, title below.
   Types on the labelled dots: `Person` · `Decision` · `Insight` · `Principle` ·
   `Assumption` · `Voice note` · `Article` · `Meeting`.
