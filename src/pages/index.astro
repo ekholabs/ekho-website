@@ -1,16 +1,31 @@
 ---
 import Base from '../layouts/Base.astro';
 import ContextGraphic from '../components/ContextGraphic.astro';
-import GapExample from '../components/GapExample.astro';
 import Architecture from '../components/Architecture.astro';
+import ArchStack from '../components/ArchStack.astro';
+import FinderWindow from '../components/FinderWindow.astro';
+import ChatWindow from '../components/ChatWindow.astro';
+import ViewerMockup from '../components/ViewerMockup.astro';
+import Waitlist from '../components/Waitlist.astro';
 
-const readers = ['You', 'Codex', 'OpenCode', 'Any agent'];
-
+// The scroll is the lifecycle of a vault: scattered before EKHO, connected with
+// it, compounding once it runs. The graphic on the right holds that movement,
+// the column on the left carries the statement, the environment the reader
+// already works in, and the architecture assembling layer by layer.
+// Full spec: docs/landing-v2.md
 const chapters = [
-  { id: 'context', n: '01', label: 'Context' },
-  { id: 'why', n: '02', label: 'Why' },
+  { id: 'why', n: '01', label: 'Why' },
+  { id: 'what', n: '02', label: 'What' },
   { id: 'how', n: '03', label: 'How' },
   { id: 'architecture', n: '04', label: 'Architecture' },
+];
+
+const people = [
+  { name: 'Lorenz Vierecke', line: 'Puts EKHO in front of real work and writes down what breaks.' },
+  {
+    name: 'Stephan Schulze',
+    line: 'Builds the harness underneath: the CLI, the grammar, the workflows.',
+  },
 ];
 ---
 
@@ -32,185 +47,185 @@ const chapters = [
     </ol>
   </nav>
 
-  <div class="intro-track" data-intro>
-    <section class="wrap wrap-wide overview" aria-labelledby="overview-title">
-      <div class="overview-head">
-        <div class="overview-intro">
-          <h1 class="overview-title" id="overview-title" data-intro-title>
-            AI is only as good as your context. <span class="signal-text">Own it!</span>
-          </h1>
-          <div class="cta-row" data-intro-fade>
-            <a class="pill pill--solid" href="#how">
-              See how it works <span aria-hidden="true">↓</span>
-            </a>
-            <a class="pill" href="#architecture">
-              See the architecture
-            </a>
-          </div>
-        </div>
-        <p class="overview-lede" data-intro-fade>
-          EKHO turns what you know into one connected context your AI can work with. Every time you
-          use it, you get more out of it, and it stays yours.
-        </p>
-      </div>
-
-      <div class="bento" data-intro-fade>
-        <a class="tile tile--graphic" href="#context">
-          <ContextGraphic animated={false} idPrefix="ov" caption={false} />
-          <span class="tile-arrow" aria-hidden="true">
-            ↘
-          </span>
-          <span class="tile-foot">
-            <span class="tile-title">Your context, your EKHO</span>
-            <span class="tile-text">Everything you bring in, linked into one source.</span>
-          </span>
+  {/* ---------- hero ---------- */}
+  <section class="wrap wrap-wide hero2" aria-labelledby="hero-title">
+    <div class="hero2-text">
+      <h1 class="hero2-title" id="hero-title">
+        AI is only as good as your context. <span class="signal-text">Own it.</span>
+      </h1>
+      <p class="hero2-lede">
+        EKHO turns what you know into one connected context your AI can work with. Every time you
+        use it, you get more out of it. And it stays yours.
+      </p>
+      <p class="cta-row">
+        <a class="pill pill--solid" href="#waitlist">
+          Join the waitlist
         </a>
-
-        <a class="tile tile--dots" href="#context">
-          <span class="tile-pill">01 · Context</span>
-          <span class="tile-statement">
-            Everything an AI would need to know to answer the way you would.
-          </span>
+        <a class="pill" href="#why">
+          See how it works <span aria-hidden="true">↓</span>
         </a>
+      </p>
+    </div>
+    <div class="hero2-figure" aria-hidden="true">
+      <ContextGraphic animated={false} idPrefix="hero" caption={false} />
+    </div>
+  </section>
 
-        <a class="tile tile--signal" href="#why">
-          <span class="tile-pill">Why it matters</span>
-          <span class="tile-statement">
-            The model is the same for everyone. Your context isn’t. It has to stay yours.
-          </span>
-        </a>
-
-        <a class="tile tile--how" href="#how">
-          <span class="tile-pill">03 · How it works</span>
-          <ol class="how-steps">
-            <li>
-              <span>01</span> Throw it in.
-            </li>
-            <li>
-              <span>02</span> Let it be digested.
-            </li>
-            <li>
-              <span>03</span> Ask.
-            </li>
-          </ol>
-          <span class="tile-text">
-            An agent condenses what you bring in and links it to everything you already have. Sorted
-            before you ask, not searched for when you do.
-          </span>
-          <span class="readers" aria-label="Read by you and your agents">
-            {readers.map((r) => (
-              <span class="reader">{r}</span>
-            ))}
-          </span>
-        </a>
-      </div>
-    </section>
-  </div>
-
-  <div class="wrap wrap-wide landing story">
+  {/* ---------- the story: graphic right, everything else left ---------- */}
+  <div class="wrap wrap-wide story">
     <div class="story-figure" data-story-figure>
       <ContextGraphic />
     </div>
+
     <div class="story-text">
-      <section class="chapter measure" id="context" data-chapter>
-        <p class="chapter-label">
-          <span>01</span> Context
-        </p>
-        <h2>What context is</h2>
-        <div data-seq>
-          <p class="statement" data-step>
-            Context is everything an AI would need to know to answer the way you would, if you had
-            the time to explain. Your situation, your goals, what you have already decided and why,
-            what you have read and what you concluded from it.
+      <section
+        class="chapter"
+        id="why"
+        data-chapter
+        data-nav="why"
+        data-stage="1"
+        data-layers=""
+        data-done=""
+      >
+        <div class="chapter-body measure">
+          <p class="chapter-label">
+            <span>01</span> Why
           </p>
-          <p class="statement" data-step>
-            The model brings intelligence. It is the same for everyone. You bring context. It exists
-            only with you.
+          <h2>Everything is already there. None of it is connected.</h2>
+          <div data-seq>
+            <p class="statement" data-step>
+              Your decisions, the people you work with, what you have read and what you concluded
+              from it. It exists. In your head, in chats that close, in mails and meetings and notes
+              that know nothing of each other.
+            </p>
+            <p class="statement" data-step>
+              So every session with an AI starts near zero. You explain yourself again. And again.
+            </p>
+            <p class="statement" data-step>
+              The model is the same for everyone. Your context is the only part that is yours.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="chapter"
+        id="what"
+        data-chapter
+        data-nav="what"
+        data-stage="2"
+        data-layers="vault"
+        data-done=""
+      >
+        <div class="chapter-body measure">
+          <p class="chapter-label">
+            <span>02</span> What
           </p>
-          <p class="statement" data-step>
-            The context window is where context gets used. EKHO is where it lives.
+          <h2>One place your knowledge actually lives.</h2>
+          <p class="statement">
+            EKHO is a folder on your machine. Markdown files, one form, one grammar. Readable by you
+            and by any agent you let near it.
+          </p>
+          <p class="statement">
+            Nothing is locked in. You can open it, read it, move it, delete it. It is not a memory
+            inside somebody else's model.
           </p>
         </div>
-        <GapExample />
+        <FinderWindow />
       </section>
 
-      <section class="chapter measure" id="why" data-chapter>
-        <p class="chapter-label">
-          <span>02</span> Why
-        </p>
-        <h2>Why context matters</h2>
-        <ol class="cards">
-          <li class="card">
-            <h3>Everyone has the same models. Nobody has your context.</h3>
-            <p>
-              As intelligence gets cheap, context is what separates a generic answer from one that
-              actually helps you. It is the part of AI you control.
-            </p>
+      <section
+        class="chapter"
+        id="how"
+        data-chapter
+        data-nav="how"
+        data-stage="2"
+        data-layers="conversation llm harness"
+        data-done="vault"
+      >
+        <div class="chapter-body measure">
+          <p class="chapter-label">
+            <span>03</span> How
+          </p>
+          <h2>The conversation is the interface.</h2>
+          <p class="statement">
+            No new app. EKHO docks into the chat you already use: as commands it runs and skills it
+            applies.
+          </p>
+          <p class="statement">And it never changes anything without showing you first.</p>
+        </div>
+        <ChatWindow />
+        <ol class="steps-strip">
+          <li>
+            <span>01</span> Throw it in.
           </li>
-          <li class="card">
-            <h3>Most of it is implicit, or scattered.</h3>
-            <p>
-              In your head, in chats that close, in mails, meetings and notes that know nothing of
-              each other. So every session starts near zero.
-            </p>
+          <li>
+            <span>02</span> Let it be digested.
           </li>
-          <li class="card">
-            <h3>Connected, context compounds.</h3>
-            <p>
-              EKHO turns what was scattered into one highly connected source: every insight knows
-              where it came from, what supports it and what contradicts it. Each new piece links to
-              everything already there.
-            </p>
-          </li>
-          <li class="card">
-            <h3>An asset needs an owner.</h3>
-            <p>
-              If your context decides how much AI does for you, it has to stay yours. Not locked in
-              a model provider's memory.
-            </p>
+          <li>
+            <span>03</span> Ask.
           </li>
         </ol>
       </section>
 
-      <section class="chapter measure" id="how" data-chapter>
-        <p class="chapter-label">
-          <span>03</span> How
-        </p>
-        <h2>How it works</h2>
-        <p class="chapter-lede">
-          AI does the bookkeeping. That is why it compounds instead of gathering dust.
-        </p>
-        <ol class="steps">
-          <li>
-            <span class="steps-n">01</span>
-            <h3>Throw it in.</h3>
-            <p>
-              A meeting transcript, an article, a voice note, a decision. Whatever comes up, as it
-              is.
+      <section
+        class="chapter"
+        id="compound"
+        data-chapter
+        data-nav="how"
+        data-stage="3"
+        data-layers="ontology"
+        data-done="conversation llm harness vault"
+      >
+        <div class="chapter-body measure">
+          <p class="chapter-label">
+            <span>03</span> How
+          </p>
+          <h2>Not one new point. Three times the connections.</h2>
+          <div data-seq>
+            <p class="statement" data-step>
+              Every source you bring in links to everything already there. An insight knows where it
+              came from, what supports it and what contradicts it.
             </p>
-          </li>
-          <li>
-            <span class="steps-n">02</span>
-            <h3>Let it be digested.</h3>
-            <p>
-              An agent condenses it, links it to what you already have, and marks what confirms or
-              contradicts what. One source often touches ten notes or more.
+            <p class="statement" data-step>
+              That is why it compounds instead of gathering dust. The bookkeeping is the part people
+              give up on, and it is the part the agent does.
             </p>
-          </li>
-          <li>
-            <span class="steps-n">03</span>
-            <h3>Ask.</h3>
-            <p>
-              Your knowledge is sorted before you ask, not searched for when you do. Good answers go
-              back in, so the next question starts further ahead.
-            </p>
-          </li>
-        </ol>
+          </div>
+        </div>
       </section>
     </div>
+
+    <ArchStack rail />
   </div>
 
-  <section class="wrap wrap-wide chapter chapter--wide" id="architecture" data-chapter>
+  {/* ---------- 05 · what EKHO is ---------- */}
+  <section
+    class="wrap wrap-wide chapter chapter--wide"
+    id="viewer"
+    data-chapter
+    data-nav="how"
+    data-stage="3"
+  >
+    <div class="measure">
+      <h2>This is what it looks like.</h2>
+      <p class="chapter-lede">Your vault, readable. On your desk and in your pocket.</p>
+    </div>
+    <ViewerMockup />
+    <p class="fig-note measure">
+      710 notes, read only, your files stay files. The viewer is in build. The vault underneath it
+      is not: it is the one this site was written in.
+    </p>
+  </section>
+
+  {/* ---------- 06 · architecture ---------- */}
+  <section
+    class="wrap wrap-wide chapter chapter--wide"
+    id="architecture"
+    data-chapter
+    data-nav="architecture"
+    data-stage="3"
+  >
     <div class="measure">
       <p class="chapter-label">
         <span>04</span> Architecture
@@ -221,7 +236,55 @@ const chapters = [
         and compatible with every other EKHO vault.
       </p>
     </div>
-    <Architecture />
+    <div class="arch-pair">
+      <ArchStack full label={false} />
+      <Architecture />
+    </div>
+  </section>
+
+  {/* ---------- 07 · who ---------- */}
+  <section
+    class="wrap wrap-wide chapter chapter--wide"
+    id="who"
+    data-chapter
+    data-nav="architecture"
+    data-stage="3"
+  >
+    <div class="measure">
+      <h2>Who is building this</h2>
+      <p class="chapter-lede">
+        EKHO Labs is two founders. We build EKHO in the open and we use it every day for EKHO
+        itself: the vault behind this site holds 710 notes, and every decision on this page is one
+        of them.
+      </p>
+    </div>
+    <ul class="people">
+      {people.map((p) => (
+        <li>
+          <span class="people-sq" aria-hidden="true"></span>
+          <b>{p.name}</b>
+          <span>{p.line}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {/* ---------- 08 · where we are, and the waitlist ---------- */}
+  <section
+    class="wrap wrap-wide chapter chapter--wide"
+    id="waitlist"
+    data-chapter
+    data-nav="architecture"
+    data-stage="3"
+  >
+    <div class="measure">
+      <h2>Where we are</h2>
+      <p class="chapter-lede">
+        The CLI works and we use it daily. The viewer is in build. There is no hosted product, no
+        account and no pricing yet. If you want to be there when there is, leave your mail.
+      </p>
+      <Waitlist />
+    </div>
   </section>
 
   <div class="wrap wrap-wide landing">
@@ -232,18 +295,14 @@ const chapters = [
 </Base>
 
 <script>
-  // Deck-style reveal and chapter navigation. Progressive enhancement only:
-  // without JavaScript, or with reduced motion, every phrase is fully visible
-  // and the scenes take no extra scroll room.
+  // Progressive enhancement only. Without JavaScript, or with reduced motion,
+  // every statement is fully visible, the graphic rests in its finished state
+  // and the architecture stack renders in the state the markup gives it.
   const root = document.documentElement;
   root.classList.add('js');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduceMotion) root.classList.add('reveal-on');
 
-  const scenes = [...document.querySelectorAll<HTMLElement>('[data-scene]')];
-  const intro = document.querySelector<HTMLElement>('[data-intro]');
-  const introTitle = document.querySelector<HTMLElement>('[data-intro-title]');
-  const introFades = [...document.querySelectorAll<HTMLElement>('[data-intro-fade]')];
   const chapters = [...document.querySelectorAll<HTMLElement>('[data-chapter]')];
   const links = new Map(
     [...document.querySelectorAll<HTMLAnchorElement>('[data-chapter-link]')].map((a) => [
@@ -255,57 +314,27 @@ const chapters = [
   const chapterNav = document.querySelector<HTMLElement>('[data-chapter-nav]');
   const graphics = [...document.querySelectorAll<HTMLElement>('[data-graphic]')];
   const arch = document.querySelector<HTMLElement>('[data-arch]');
-  let lastChapter: string | undefined;
+  const railRows = [...document.querySelectorAll<HTMLElement>('[data-rail] [data-layer]')];
+  let lastNav: string | undefined;
 
   function update() {
     const vh = window.innerHeight;
 
-    // scenes: one statement per screen; while the statement stays in place,
-    // the highlight moves from phrase to phrase as the scene scrolls past
-    if (!reduceMotion) {
-      for (const scene of scenes) {
-        const phrases = [...scene.querySelectorAll<HTMLElement>('[data-phrase]')];
-        const scrollable = scene.offsetHeight - vh;
-        const r = scene.getBoundingClientRect();
-        const progress = scrollable > 0 ? Math.min(1, Math.max(0, -r.top / scrollable)) : 0;
-        const current = Math.min(phrases.length - 1, Math.floor(progress * phrases.length));
-        phrases.forEach((p, i) => p.classList.toggle('is-current', i === current));
-      }
-    }
+    // the chapter whose top has passed a third of the viewport is the one
+    // being read; it decides the nav, and which stage the graphic is in
+    let current: HTMLElement | undefined;
+    for (const c of chapters) if (c.getBoundingClientRect().top <= vh / 3) current = c;
 
-    // intro: the statement starts full-width and vertically centred, and
-    // shrinks into its place in the grid while the rest fades in
-    if (intro && introTitle && !reduceMotion) {
-      const scrollable = intro.offsetHeight - vh;
-      const raw =
-        scrollable > 0
-          ? Math.min(1, Math.max(0, -intro.getBoundingClientRect().top / scrollable))
-          : 1;
-      const p = raw < 0.5 ? 2 * raw * raw : 1 - Math.pow(-2 * raw + 2, 2) / 2;
-      const box = (introTitle.parentElement ?? introTitle).getBoundingClientRect();
-      const avail = Math.min(window.innerWidth - 32, 1248);
-      const s0 = Math.min(Math.max(avail / introTitle.offsetWidth, 1), 2.4);
-      const s = s0 + (1 - s0) * p;
-      const dy = (vh / 2 - (introTitle.offsetHeight * s0) / 2 - box.top) * (1 - p);
-      introTitle.style.transform = p >= 1 ? '' : `translateY(${dy}px) scale(${s})`;
-      const fade = Math.min(1, Math.max(0, (p - 0.55) / 0.45));
-      for (const el of introFades) {
-        el.style.opacity = String(fade);
-        el.style.pointerEvents = fade < 0.5 ? 'none' : '';
-      }
-    }
-
-    // chapter nav: the chapter whose top has passed a third of the viewport
-    let currentChapter: string | undefined;
-    for (const c of chapters) if (c.getBoundingClientRect().top <= vh / 3) currentChapter = c.id;
+    const nav = current?.dataset.nav;
     links.forEach((a, id) => {
-      if (id === currentChapter) a.setAttribute('aria-current', 'true');
+      if (id === nav) a.setAttribute('aria-current', 'true');
       else a.removeAttribute('aria-current');
     });
+
     // on narrow screens the chapter list scrolls sideways: keep the active one in view
-    if (chapterNav && currentChapter !== lastChapter) {
-      lastChapter = currentChapter;
-      const active = currentChapter ? links.get(currentChapter) : undefined;
+    if (chapterNav && nav !== lastNav) {
+      lastNav = nav;
+      const active = nav ? links.get(nav) : undefined;
       if (active) {
         const navBox = chapterNav.getBoundingClientRect();
         const box = active.getBoundingClientRect();
@@ -317,11 +346,25 @@ const chapters = [
       }
     }
 
-    // the graphic builds up chapter by chapter: stage n adds is-2 … is-n
+    // the architecture rail: one stack for the whole story, moved through its
+    // states by whichever chapter is being read
     {
-      const stage = currentChapter ? chapters.findIndex((c) => c.id === currentChapter) + 1 : 1;
+      const on = (current?.dataset.layers ?? '').split(' ').filter(Boolean);
+      const done = (current?.dataset.done ?? '').split(' ').filter(Boolean);
+      for (const r of railRows) {
+        const k = r.dataset.layer ?? '';
+        const isOn = on.includes(k);
+        r.classList.toggle('is-on', isOn);
+        r.classList.toggle('is-done', !isOn && done.includes(k));
+        r.classList.toggle('is-off', !isOn && !done.includes(k));
+      }
+    }
+
+    // the graphic: 1 scattered, 2 connected, 3 compounding
+    {
+      const stage = Number(current?.dataset.stage ?? 1);
       for (const g of graphics)
-        for (let n = 2; n <= 5; n++) g.classList.toggle(`is-${n}`, stage >= n);
+        for (let n = 2; n <= 3; n++) g.classList.toggle(`is-${n}`, stage >= n);
     }
 
     // architecture: its rows come in once the chapter is in view

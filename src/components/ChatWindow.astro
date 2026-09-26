@@ -1,0 +1,125 @@
+---
+// Chapter 03: the conversation is the interface. The point only lands if the
+// window looks like the client the reader already has open, so this follows the
+// shape those clients share: recents grouped by day, the question as a bubble,
+// the answer as plain text with no bubble, tool use as bordered cards, and a
+// composer pill with the model underneath.
+//
+// It is deliberately unbranded. Showing a recognisable third-party client on
+// our own landing page is a brand decision, not a design one (docs/landing-v2.md).
+const recents = [
+  { day: 'Today', items: ['Working through the call with Anna', 'Preparing the roadmap review'] },
+  { day: 'Yesterday', items: ['Replacing the ontology', 'Sharpening the pitch story'] },
+];
+const rows = [
+  ['new', 'Decision', 'The pilot moves to Q1'],
+  ['new', 'Insight', 'Data hosting is the blocker'],
+  ['new', 'Contact', 'Anna Berger'],
+  ['link', '—', '7 notes you already have'],
+];
+---
+
+<figure
+  class="win win--chat"
+  aria-label="EKHO running inside an ordinary chat client: a command it runs and a skill it applies"
+>
+  <div class="win-bar">
+    <span class="win-lights" aria-hidden="true">
+      <i></i>
+      <i></i>
+      <i></i>
+    </span>
+    <span class="win-title">Working through the call with Anna</span>
+  </div>
+  <div class="win-body">
+    <nav class="chat-side" aria-hidden="true">
+      <p class="chat-new">
+        <span class="chat-plus">+</span> New chat
+      </p>
+      {recents.map((g) => (
+        <>
+          <p class="chat-day">{g.day}</p>
+          <ul>
+            {g.items.map((i, n) => (
+              <li class:list={[{ 'is-sel': g.day === 'Today' && n === 0 }]}>{i}</li>
+            ))}
+          </ul>
+        </>
+      ))}
+      <p class="chat-vault">
+        <span class="chat-sq" aria-hidden="true"></span>
+        <span>
+          myEKHO<small>vault connected</small>
+        </span>
+      </p>
+    </nav>
+
+    <div class="chat-thread">
+      <div class="chat-scroll">
+        <p class="chat-ask">Throw yesterday's call with Anna into EKHO.</p>
+
+        <div class="chat-answer">
+          <span class="chat-mark" aria-hidden="true"></span>
+          <div>
+            <p class="chat-said">I will transcribe the recording and put it in your inbox.</p>
+
+            <div class="tool">
+              <p class="tool-head">
+                <span class="tool-kind">Terminal</span>
+                <span class="tool-chev" aria-hidden="true">
+                  ⌄
+                </span>
+              </p>
+              <p class="tool-mono">$ ekho tools transcribe 260925_anna.m4a</p>
+              <p class="tool-mono tool-mono--dim">
+                → 00 - Now/Inbox/2026-09-25 — Call with Anna.md
+              </p>
+            </div>
+
+            <div class="tool tool--skill">
+              <p class="tool-head">
+                <span class="tool-sq" aria-hidden="true"></span>
+                <span class="tool-kind">Skill · ekho-inbox-digest</span>
+                <span class="tool-chev" aria-hidden="true">
+                  ⌄
+                </span>
+              </p>
+              <p class="tool-said">This is what I would write into your vault:</p>
+              <table class="tool-table">
+                <tbody>
+                  {rows.map(([op, type, what]) => (
+                    <tr>
+                      <td class="tool-op">{op}</td>
+                      <td class="tool-type">{type}</td>
+                      <td>{what}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p class="chat-acts">
+              <span class="chat-btn chat-btn--solid">Confirm</span>
+              <span class="chat-btn">Adjust</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-foot">
+        <p class="chat-composer">
+          <span class="chat-plus" aria-hidden="true">
+            +
+          </span>
+          <span class="chat-ph">Reply…</span>
+          <span class="chat-send" aria-hidden="true">
+            ↑
+          </span>
+        </p>
+        <p class="chat-model">
+          <span class="chat-sq" aria-hidden="true"></span> myEKHO · vault connected
+        </p>
+      </div>
+    </div>
+  </div>
+</figure>

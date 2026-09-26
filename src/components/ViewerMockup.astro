@@ -1,0 +1,97 @@
+---
+// Chapter 05: what EKHO is, shown rather than described. The reading view of a
+// vault, on a desk and in a pocket. The numbers are the real ones from the
+// vault this site was written in; the viewer itself is in build, which the
+// chapter says in words (N4).
+const nav = ['Overview', 'Timeline', 'Graph', 'Meta'];
+const stats = [
+  ['710', 'notes'],
+  ['1,240', 'links'],
+  ['12', 'types'],
+];
+const items = [
+  ['Decision', 'ADR-0027 · The Braun formal language', 'accepted · today'],
+  ['Insight', 'Context compounds when it is connected', 'validates H-24'],
+  ['Principle', 'Clarity beats automation', 'P-0001 · 9 references'],
+  ['Contact', 'Anna Berger', 'Goyatz · 4 sessions'],
+  ['Reference', 'Karpathy, LLM wiki', 'source tier 1'],
+];
+const phone = items.slice(0, 4);
+---
+
+<div class="viewer">
+  <figure
+    class="win win--app"
+    aria-label="The EKHO viewer on a desktop: the reading view of a vault"
+  >
+    <div class="win-bar win-bar--app">
+      <span class="win-lights" aria-hidden="true">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+      <span class="win-title">EKHO_brain</span>
+    </div>
+    <div class="win-body">
+      <nav class="app-side" aria-hidden="true">
+        <p class="app-brand">
+          <span class="app-sq"></span> EKHO
+        </p>
+        <ul>
+          {nav.map((n, i) => (
+            <li class:list={[{ 'is-sel': i === 0 }]}>{n}</li>
+          ))}
+        </ul>
+        <p class="app-side-foot">read only</p>
+      </nav>
+      <div class="app-main" aria-hidden="true">
+        <p class="app-h">Overview</p>
+        <ul class="app-stats">
+          {stats.map(([n, l]) => (
+            <li>
+              <b>{n}</b>
+              <span>{l}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="app-sub">Recently touched</p>
+        <ul class="app-list">
+          {items.map(([type, title, meta]) => (
+            <li>
+              <span class="app-type">{type}</span>
+              <span class="app-title">{title}</span>
+              <span class="app-meta">{meta}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </figure>
+
+  <figure class="phone" aria-label="The same vault on a phone">
+    <div class="phone-screen">
+      <p class="phone-status" aria-hidden="true">
+        <span>9:41</span>
+        <span>▮</span>
+      </p>
+      <p class="app-h app-h--phone">Overview</p>
+      <ul class="app-stats app-stats--phone">
+        {stats.slice(0, 2).map(([n, l]) => (
+          <li>
+            <b>{n}</b>
+            <span>{l}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="app-sub">Recently touched</p>
+      <ul class="app-list app-list--phone">
+        {phone.map(([type, title]) => (
+          <li>
+            <span class="app-type">{type}</span>
+            <span class="app-title">{title}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </figure>
+</div>
