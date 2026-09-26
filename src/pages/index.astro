@@ -110,6 +110,8 @@ const people = [
             </a>
           </p>
         </div>
+        {/* the second resting place of the opening: everything settled */}
+        <div class="intro-anchor" aria-hidden="true"></div>
       </section>
 
       <section
@@ -163,6 +165,16 @@ const people = [
             Nothing is locked in. You can open it, read it, move it, delete it. It is not a memory
             inside somebody else's model.
           </p>
+
+          {/* The one line you paste. Marked as unshipped, which N4 requires and
+              which the dashed edge says before the note does. Recovered from
+              the page this one replaced, so the address and the key placeholder
+              are the ones the repo already used. */}
+          <figure class="command">
+            <figcaption class="command-label">One command</figcaption>
+            <code>curl -fsSL https://get.ekholabs.eu/i/&lt;key&gt; | sh</code>
+          </figure>
+          <p class="command-note">In early access, by invitation. The installer is not live yet.</p>
         </div>
         <div class="flow-window">
           <FinderWindow />
