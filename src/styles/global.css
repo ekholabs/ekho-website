@@ -503,7 +503,9 @@
   }
 
   .cg-halo {
-    fill: var(--signal);
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 1;
     opacity: 0;
     transition: opacity 180ms ease;
   }
@@ -586,22 +588,27 @@
     opacity: 0;
   }
 
-  .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-a {
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-a:not(.is-named) {
     fill: var(--text);
     opacity: 0.6;
   }
 
-  .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-b {
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-b:not(.is-named) {
     fill: var(--muted);
     opacity: 0.38;
   }
 
-  .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-c {
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-c:not(.is-named) {
     fill: var(--muted-deep);
     opacity: 0.26;
   }
 
-  .reveal-on [data-graphic].is-1 .cg-dot.is-named {
+  /* A point that carries a name is one of yours, so it is yellow from the moment
+     it settles into place, not only when a pointer finds it. In the hero
+     nothing is named yet and it stays grey with the rest. */
+  .reveal-on [data-graphic].is-1 .cg-dot.is-named,
+  .reveal-on [data-graphic].is-2 .cg-dot.is-named,
+  .reveal-on [data-graphic].is-3 .cg-dot.is-named {
     fill: var(--signal);
     opacity: 1;
   }
@@ -616,7 +623,7 @@
     opacity: 0.8;
   }
 
-  .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot {
+  .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot:not(.is-named) {
     fill: var(--muted-deep);
     opacity: 0.42;
   }
@@ -631,7 +638,7 @@
     opacity: 1;
   }
 
-  .reveal-on [data-graphic].is-3 .cg-dot {
+  .reveal-on [data-graphic].is-3 .cg-dot:not(.is-named) {
     fill: var(--text);
     opacity: 0.9;
   }
@@ -988,9 +995,9 @@
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --panel: #2b2a27;
-      --panel-line: #3d3b37;
-      --panel-sub: #232220;
+      --panel: #36342e;
+      --panel-line: #4a473f;
+      --panel-sub: #2c2a26;
       --glass: 95%;
       --glass-rim: rgb(255 255 255 / 0.14);
       --glass-top: rgb(255 255 255 / 0.07);
