@@ -303,8 +303,11 @@ const pairs = (a: [number, number][]) => a.flatMap(([x, y]) => [x, y]);
 const geometry = JSON.stringify({
   c: C,
   r: R,
+  size: SIZE,
   p: flat3(sphere),
   s: flat2(scatter),
+  d0: flat2(origin), // where each point waits before the first chapter
+  x0: flat2(extras), // the points that exist only there
   e: pairs([...near, ...far]),
   o: pairs(own),
   k: pairs(chords),
@@ -323,8 +326,8 @@ const ariaLabel =
 >
   <svg viewBox={`0 0 ${SIZE} ${SIZE}`} aria-hidden="true">
     <g class="cg-extra">
-      {extras.map((p) => (
-        <circle class="cg-seed" cx={p[0]} cy={p[1]} r="1.7" />
+      {extras.map((p, i) => (
+        <circle class="cg-seed" cx={p[0]} cy={p[1]} r="1.7" data-s={i} />
       ))}
     </g>
 
@@ -506,6 +509,71 @@ const ariaLabel =
     function settleDepth() {
       for (let i = 0; i < N; i++) targets[i]?.classList.toggle('is-far', pz[i] < 0);
     }
+
+    // ---- the opening ------------------------------------------------------
+
+    // The field is not a picture being scaled: the drawing keeps its scale, so
+    // every circle keeps the size it has later, and each one travels its own
+    // way in from where it was spread across the screen. Points outside the
+    // viewBox still draw, which is what lets the field reach past the column.
+    //
+    // Each point is given its own phase, so the field arrives loosely rather
+    // than in step. The phases come off the golden ratio, which spreads them
+    // without any two landing together.
+    const size = g.size ?? 560;
+    const extraEls = Array.from(figure.querySelectorAll<SVGElement>('[data-s]'));
+    const coreOpen = new Float32Array(N * 2);
+    const extraOpen = new Float32Array(extraEls.length * 2);
+    const PHASE = 0.42;
+    const ease = (t: number) => (t <= 0 ? 0 : t >= 1 ? 1 : 1 - Math.pow(1 - t, 3));
+
+    function measureField() {
+      const rect = holder.getBoundingClientRect();
+      const k = Math.min(rect.width, rect.height) / size;
+      if (!k) return false;
+      const ox = rect.left + (rect.width - size * k) / 2;
+      const oy = rect.top + (rect.height - size * k) / 2;
+      for (let i = 0; i < N; i++) {
+        coreOpen[i * 2] = ((g.d0[i * 2] / size) * window.innerWidth - ox) / k;
+        coreOpen[i * 2 + 1] = ((g.d0[i * 2 + 1] / size) * window.innerHeight - oy) / k;
+      }
+      for (let i = 0; i < extraEls.length; i++) {
+        extraOpen[i * 2] = ((g.x0[i * 2] / size) * window.innerWidth - ox) / k;
+        extraOpen[i * 2 + 1] = ((g.x0[i * 2 + 1] / size) * window.innerHeight - oy) / k;
+      }
+      return true;
+    }
+
+    const phaseOf = (i: number) => ((i * 0.6180339887) % 1) * PHASE;
+
+    (figure as HTMLElement & { cgOpenField?: (p: number) => void }).cgOpenField = (p: number) => {
+      if (!measureField()) return;
+      // a hair short of 1 still counts as arrived: leaving the class on would
+      // keep the transitions switched off for every later stage change
+      figure.classList.toggle('is-opening', p < 0.995);
+      for (let i = 0; i < N; i++) {
+        const el = targets[i];
+        if (!el) continue;
+        const t = ease((p - phaseOf(i)) / (1 - PHASE));
+        const sx = g.s[i * 2];
+        const sy = g.s[i * 2 + 1];
+        el.style.setProperty('--dx0', `${((coreOpen[i * 2] - sx) * (1 - t)).toFixed(1)}px`);
+        el.style.setProperty('--dy0', `${((coreOpen[i * 2 + 1] - sy) * (1 - t)).toFixed(1)}px`);
+      }
+      for (let i = 0; i < extraEls.length; i++) {
+        const t = ease((p - phaseOf(i)) / (1 - PHASE));
+        const fx = g.x0[i * 2];
+        const fy = g.x0[i * 2 + 1];
+        extraEls[i].style.setProperty(
+          '--dx0',
+          `${((extraOpen[i * 2] - fx) * (1 - t)).toFixed(1)}px`,
+        );
+        extraEls[i].style.setProperty(
+          '--dy0',
+          `${((extraOpen[i * 2 + 1] - fy) * (1 - t)).toFixed(1)}px`,
+        );
+      }
+    };
 
     // ---- turning ----------------------------------------------------------
 

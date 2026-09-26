@@ -407,18 +407,14 @@ const people = [
           ? ''
           : `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${scale.toFixed(3)})`;
 
-      const host = stage.offsetParent as HTMLElement | null;
-      const hostBox = (host ?? stage).getBoundingClientRect();
-      const sw = stage.offsetWidth;
-      const sh = stage.offsetHeight;
-      const sx = hostBox.left + stage.offsetLeft;
-      const sy = hostBox.top + stage.offsetTop;
-      const cover = Math.max(window.innerWidth / sw, vh / sh) * 1.08;
-      const fs = cover + (1 - cover) * p;
-      const fx = (window.innerWidth / 2 - (sx + sw / 2)) * (1 - p);
-      const fy = (vh / 2 - (sy + sh / 2)) * (1 - p);
-      stage.style.transform =
-        p >= 1 ? '' : `translate(${fx.toFixed(1)}px, ${fy.toFixed(1)}px) scale(${fs.toFixed(3)})`;
+      // The points are not a picture being zoomed: the drawing keeps its scale,
+      // so every circle keeps its size, and each one travels its own way in
+      // from where it was spread across the screen. They are given slightly
+      // different phases, so the field arrives loosely rather than in step.
+      (
+        document.querySelector('[data-graphic]') as
+          (HTMLElement & { cgOpenField?: (v: number) => void }) | null
+      )?.cgOpenField?.(p);
 
       const fade = Math.min(1, Math.max(0, (raw - 0.55) / 0.45));
       for (const el of introFades) {

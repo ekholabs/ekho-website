@@ -2930,3 +2930,27 @@
     }
   }
 }
+
+@layer components {
+  /* Points outside the viewBox still draw, which is what lets the field reach
+     past its column and across the screen without the drawing being scaled. */
+  .context-graphic svg {
+    overflow: visible;
+  }
+
+  .cg-seed {
+    transform: translate(var(--dx0, 0px), var(--dy0, 0px));
+  }
+
+  /* the opening is driven by the scroll position, so nothing may ease: each
+     frame would set off a transition towards the frame before it */
+  [data-graphic].is-opening .cg-dot,
+  [data-graphic].is-opening .cg-pt,
+  [data-graphic].is-opening .cg-seed {
+    transition: none;
+  }
+
+  .figure-stage {
+    will-change: auto;
+  }
+}
