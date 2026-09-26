@@ -606,9 +606,8 @@
     align-items: stretch;
   }
 
-  /* the interactive architecture, after slides 23/24 of the pitch deck:
-     the EKHO core in paper, the model in grey, what the member owns in
-     yellow, dotted for the conversation and the return channel */
+  /* Chapter 06: the same five layers the rail assembles while you scroll, at
+     full size and openable. One model on the page, not two. */
   .arch {
     display: grid;
     gap: 0.75rem;
@@ -631,11 +630,6 @@
     padding: 1.35rem 1.6rem;
   }
 
-  .arch-head--stacked {
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
   summary.arch-head {
     cursor: pointer;
     list-style: none;
@@ -650,12 +644,6 @@
     font-size: 1.25rem;
     line-height: 1;
     opacity: 0.6;
-  }
-
-  .arch-head--stacked::after {
-    position: absolute;
-    top: 1.35rem;
-    right: 1.4rem;
   }
 
   details[open] > summary.arch-head::after {
@@ -696,125 +684,6 @@
     padding: 0 1.6rem 1.5rem;
     font-size: 1rem;
     line-height: 1.55;
-  }
-
-  .arch-conversation {
-    border: 2px dotted var(--muted);
-    color: var(--text);
-  }
-
-  .arch-core {
-    background: var(--core);
-    color: var(--core-ink);
-  }
-
-  .arch-llm {
-    margin-top: 0.75rem;
-    background: var(--stripe);
-    color: var(--muted);
-  }
-
-  .arch-owned {
-    display: grid;
-    gap: 0.75rem;
-    margin-top: 0.75rem;
-  }
-
-  /* what the member owns. The deck filled these three yellow; one signal area
-     per screen is the rule now (ADR-0027), so the yellow moves to the edge and
-     the block itself becomes an ordinary surface. */
-  .arch-member {
-    position: relative;
-    background: var(--surface);
-    color: var(--text);
-    border-top: 2px solid var(--signal);
-  }
-
-  .arch-member .arch-desc {
-    margin-top: 0;
-  }
-
-  .arch-return {
-    display: none;
-  }
-
-  @media (min-width: 48rem) {
-    .arch-owned {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      column-gap: 2rem;
-      align-items: start;
-    }
-
-    /* the arrow from one owned box to the next */
-    .arch-member + .arch-member::before {
-      content: '→';
-      position: absolute;
-      top: 1.3rem;
-      left: -1.55rem;
-      color: var(--text);
-      font-size: 1.1rem;
-    }
-
-    /* the return channel: from code back to knowledge, dotted */
-    .arch-return {
-      display: block;
-      position: relative;
-      height: 1.4rem;
-      margin: -0.25rem calc((100% - 4rem) / 6) 0;
-      border: 2px dotted var(--text);
-      border-top: 0;
-      border-radius: 0 0 10px 10px;
-    }
-
-    .arch-return::before {
-      content: '';
-      position: absolute;
-      top: -0.35rem;
-      left: -0.42rem;
-      border: 0.4rem solid transparent;
-      border-top: 0;
-      border-bottom: 0.55rem solid var(--text);
-    }
-  }
-
-  .arch-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 2rem;
-    margin: 1.25rem 0 0;
-    padding: 0;
-    list-style: none;
-    color: var(--muted);
-    font-size: 0.875rem;
-  }
-
-  .arch-legend li {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .arch-swatch {
-    width: 1rem;
-    height: 1rem;
-    border-radius: 4px;
-  }
-
-  .arch-swatch--core {
-    background: var(--text);
-  }
-
-  .arch-swatch--llm {
-    background: var(--stripe);
-    box-shadow: inset 0 0 0 1px var(--border);
-  }
-
-  .arch-swatch--member {
-    background: var(--signal);
-  }
-
-  .arch-swatch--return {
-    border: 2px dotted var(--text);
   }
 
   /* the rows come in top to bottom when the chapter reaches the screen */
@@ -1941,22 +1810,6 @@
     line-height: 1.4;
   }
 
-  /* ---------- 06 · architecture ---------- */
-
-  .arch-pair {
-    display: grid;
-    gap: 2.5rem;
-    margin-top: 2.5rem;
-  }
-
-  @media (min-width: 64rem) {
-    .arch-pair {
-      grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
-      gap: 3.5rem;
-      align-items: start;
-    }
-  }
-
   /* the diagram carries no shadow, only on hover (ADR-0027) */
   .arch-row {
     box-shadow: none;
@@ -2139,75 +1992,6 @@
   /* the window never spills out of its column */
   .win-body > * {
     min-width: 0;
-  }
-}
-
-@layer components {
-  /* the architecture diagram on the Braun palette */
-  .arch-core .arch-note,
-  .arch-core .arch-code,
-  .arch-core .arch-desc {
-    color: var(--core-muted);
-  }
-
-  .arch-core .arch-desc strong {
-    color: var(--core-ink);
-  }
-
-  .arch-conversation {
-    border: 1px dashed var(--line-strong);
-    color: var(--muted);
-  }
-
-  .arch-conversation .arch-title {
-    color: var(--text);
-  }
-
-  .arch-llm {
-    background: var(--surface-raised);
-  }
-
-  .arch-llm .arch-title {
-    color: var(--text);
-  }
-
-  .arch-swatch--core {
-    background: var(--core);
-  }
-
-  .arch-swatch--llm {
-    background: var(--surface-raised);
-    border: 1px solid var(--line-strong);
-  }
-
-  .arch-swatch--member {
-    background: var(--signal);
-  }
-
-  .arch-swatch--return {
-    background: none;
-    border-bottom: 2px dotted var(--muted);
-  }
-
-  .arch-return,
-  .arch-return::before {
-    border-color: var(--line-strong);
-  }
-
-  .arch-return {
-    border-top: 0;
-    border-radius: 0 0 var(--radius) var(--radius);
-  }
-
-  .arch-return::before {
-    border-top: 0;
-    border-bottom-color: var(--line-strong);
-    border-left-color: transparent;
-    border-right-color: transparent;
-  }
-
-  .arch-member + .arch-member::before {
-    color: var(--muted-deep);
   }
 }
 
@@ -2617,6 +2401,124 @@
     .burger {
       position: relative;
       z-index: 16;
+    }
+  }
+}
+
+@layer components {
+  /* the architecture at full size: the rail's rows, bigger and openable */
+  .arch {
+    gap: 0.4rem;
+    margin-top: 3rem;
+  }
+
+  .arch-row {
+    background: var(--surface);
+  }
+
+  .arch-head {
+    padding: 1.4rem 1.6rem;
+  }
+
+  .arch-title {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+
+  .arch-sq {
+    width: 11px;
+    height: 11px;
+    align-self: center;
+    border-radius: 2px;
+    background: var(--signal);
+  }
+
+  .arch-code {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    opacity: 1;
+    color: var(--muted-deep);
+  }
+
+  .arch-note {
+    color: var(--muted);
+  }
+
+  summary.arch-head::after {
+    color: var(--muted-deep);
+    font-weight: 400;
+  }
+
+  .arch-desc {
+    max-width: 68ch;
+    color: var(--muted);
+  }
+
+  .arch-desc p {
+    margin: 0;
+  }
+
+  .arch-desc strong {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* the vault opens onto its three parts */
+  .arch-parts {
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+  }
+
+  .arch-parts li {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: 0.2rem 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.9375rem;
+  }
+
+  .arch-parts b {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .arch-parts code {
+    grid-column: 1;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted-deep);
+  }
+
+  .arch-parts span {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  @media (max-width: 47.999rem) {
+    .arch-head {
+      padding: 1.1rem 1.1rem;
+    }
+
+    .arch-desc {
+      padding: 0 1.1rem 1.25rem;
+    }
+
+    .arch-parts li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .arch-parts span {
+      grid-column: 1;
+      grid-row: auto;
     }
   }
 }

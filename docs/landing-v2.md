@@ -208,29 +208,36 @@ it is not: it is the one this site was written in.`
 
 ### 06 · Architecture
 
-Unchanged in substance, changed in role: it now recaps a stack the reader watched
-assemble, so it can be quiet.
+The same five layers the rail assembles while you scroll, at full size and
+openable. **One model on the page, not two:** the compact recap next to a second,
+differently drawn diagram was a duplication, and the reader had to work out that
+both said the same thing.
 
 - **Label** `04 ARCHITECTURE`
 - **H2** `The EKHO architecture`
 - **Lede** `Any AI can keep notes. EKHO adds the grammar and the workflows that
 make them repeatable, and compatible with every other EKHO vault.`
-- **The five layers**, all lit, with their one-line right-hand notes:
+- **The five layers**, each a `<details>` that opens onto its description. Only
+  one is open at a time, and it works by keyboard and without JavaScript.
 
-  | Layer        | Note                     |
-  | ------------ | ------------------------ |
-  | Conversation | between people           |
-  | LLM          | interchangeable          |
-  | Harness      | CLI and skills           |
-  | Ontology     | types, edges, rules      |
-  | EKHO Vault   | Knowledge · Specs · Code |
+  | Layer        | Note                     | Repo           |
+  | ------------ | ------------------------ | -------------- |
+  | Conversation | between people           |                |
+  | LLM          | interchangeable          |                |
+  | Harness      | CLI and skills           | `ekho-cockpit` |
+  | Ontology     | types, edges, rules      | `ekho-core`    |
+  | EKHO Vault   | Knowledge · Specs · Code |                |
 
-> **Sharpening to carry back into the vault and the deck.** `Conversation` means
-> the conversation between people first. The LLM is the means by which those
-> conversations get processed, through the CLI and the ingest skill. The current
-> diagram reads as if conversation means chatting with a model, which is the
-> smaller half. Second dimension, for when context sharing enters the story: the
-> context is read by people and by agents, and so is the conversation.
+  The vault opens onto its three parts with their repositories. The yellow
+  square sits on the vault row and nowhere else, so the one thing the reader
+  owns is the one thing marked.
+
+> **Sharpening carried into the copy.** `Conversation` means the conversation
+> between people first. The LLM is the means by which those conversations get
+> processed, not the place the knowledge lives. The deck's version reads as if
+> conversation meant chatting with a model, which is the smaller half. Second
+> dimension, for when context sharing enters the story: the context is read by
+> people and by agents, and so is the conversation.
 
 ### 07 · Who is building this
 
