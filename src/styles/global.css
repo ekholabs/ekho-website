@@ -936,6 +936,13 @@
     --panel-line: #e6e2da;
     --panel-sub: #f2f0ea;
     --win-radius: 10px;
+    /* the windows that float over the graph are glass: a lit rim, a top
+       highlight and a halo that lifts them off whatever is behind */
+    --glass: 94%;
+    --glass-rim: rgb(255 255 255 / 0.9);
+    --glass-top: rgb(255 255 255 / 0.8);
+    --glass-halo: rgb(26 26 24 / 0.05);
+    --glass-cast: rgb(26 26 24 / 0.2);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -943,6 +950,11 @@
       --panel: #232220;
       --panel-line: #34332f;
       --panel-sub: #1f1e1c;
+      --glass: 90%;
+      --glass-rim: rgb(255 255 255 / 0.09);
+      --glass-top: rgb(255 255 255 / 0.07);
+      --glass-halo: rgb(237 235 230 / 0.05);
+      --glass-cast: rgb(0 0 0 / 0.5);
     }
   }
 
@@ -2637,5 +2649,42 @@
 
   .statement:last-child {
     margin-bottom: 0;
+  }
+}
+
+@layer components {
+  /* The Finder and the chat window lie on the graph, so the pane has an edge
+     rather than a printed outline: a hairline rim, a single-pixel highlight
+     along the top where a glass front would catch the light, and a halo so
+     faint it reads as depth and not as an effect. The cloud behind stays just
+     perceptible through it.
+
+     Deliberately not done: a saturation boost, a strong blur, or translucent
+     panels inside the window. That is the look of a particular year, and this
+     has to still be right in five. The viewer in chapter 05 is a product shot
+     on a solid ground and stays opaque. */
+  .win--finder,
+  .win--chat {
+    background: color-mix(in srgb, var(--panel) var(--glass), transparent);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border-color: var(--glass-rim);
+    box-shadow:
+      0 0 64px -12px var(--glass-halo),
+      0 22px 54px -24px var(--glass-cast),
+      inset 0 1px 0 var(--glass-top);
+  }
+
+  .win--finder .win-bar,
+  .win--chat .win-bar {
+    background: color-mix(in srgb, var(--panel-sub) 70%, transparent);
+    border-bottom-color: var(--glass-rim);
+  }
+
+  @supports not (backdrop-filter: blur(1px)) {
+    .win--finder,
+    .win--chat {
+      background: var(--panel);
+    }
   }
 }
