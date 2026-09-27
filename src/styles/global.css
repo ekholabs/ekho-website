@@ -3517,7 +3517,9 @@
   .view-step svg {
     fill: none;
     height: 0.875rem;
-    stroke: currentColor;
+    /* The one coloured thing in the bar: the label says where it goes, the
+       mark says it can be used. */
+    stroke: var(--signal);
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 1.5;
