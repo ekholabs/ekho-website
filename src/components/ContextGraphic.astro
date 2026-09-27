@@ -170,29 +170,6 @@ for (let n = 0; n < 34; n++) {
   chords.push([a, b]);
 }
 
-// One region is yours. It is a cap of the sphere, so it reads as a part of the
-// same body rather than as a layer on top, and it is the only place the yellow
-// appears besides the points that are named.
-const AXIS = (() => {
-  const v = [0.72, -0.42, 0.55];
-  const l = Math.hypot(v[0], v[1], v[2]);
-  return [v[0] / l, v[1] / l, v[2] / l];
-})();
-const mine = new Set<number>();
-sphere.forEach(([x, y, z], i) => {
-  if (x * AXIS[0] + y * AXIS[1] + z * AXIS[2] > 0.66) mine.add(i);
-});
-
-// the far side falls back, the near side carries, and yours is drawn apart
-const near: [number, number][] = [];
-const far: [number, number][] = [];
-const own: [number, number][] = [];
-for (const e of edges) {
-  if (mine.has(e[0]) && mine.has(e[1])) own.push(e);
-  else if ((depth[e[0]] + depth[e[1]]) / 2 < 0) far.push(e);
-  else near.push(e);
-}
-
 const deg = cloudPts.map(() => 0);
 edges.forEach(([a, b]) => {
   deg[a]++;
@@ -271,7 +248,16 @@ for (const n of named) {
     C + Math.sin((n.at[1] * Math.PI) / 180) * n.at[0],
   ];
   const w = textWidth(n);
-  const order = scatter.map((p, i) => ({ i, p, d: d2(p, target) })).sort((a, b) => a.d - b.d);
+  // Nearest the place this label wants to be — except for the decision, which
+  // also has to work on the sphere: it is the point the chat window collapses
+  // into and the one the yellow cap is centred on, and a point on the far rim
+  // would show both almost edge on. Scattered position and sphere position have
+  // nothing to do with each other, so this is a preference laid over the
+  // ordering rather than a different anchor.
+  const facing = n.key === 'decision' ? (i: number) => (1 - depth[i]) * 26000 : () => 0;
+  const order = scatter
+    .map((p, i) => ({ i, p, d: d2(p, target) + facing(i) }))
+    .sort((a, b) => a.d - b.d);
   for (const cand of order) {
     if (labels.has(cand.i)) continue;
     const [x, y] = cand.p;
@@ -298,6 +284,44 @@ for (const i of labels.keys()) {
   if (!first.some(([a, b]) => keyOf(a, b) === k)) first.push(j);
   yours.add(k);
 }
+
+// One region is yours, and it is the one the chat window collapsed into: the
+// cap is centred on the decision point, so the yellow is what that point is
+// joined to rather than an arbitrary patch of the sphere. It is a cap and not
+// a layer, so it reads as part of the same body.
+const decisionAt = [...labels.entries()].find(([, l]) => l.key === 'decision')?.[0] ?? 0;
+const AXIS = (() => {
+  const v = sphere[decisionAt];
+  const l = Math.hypot(v[0], v[1], v[2]) || 1;
+  return [v[0] / l, v[1] / l, v[2] / l];
+})();
+const mine = new Set<number>();
+sphere.forEach(([x, y, z], i) => {
+  if (x * AXIS[0] + y * AXIS[1] + z * AXIS[2] > 0.66) mine.add(i);
+});
+
+// How far each end of an edge is from that point, over the sphere. The paths
+// are drawn in this order, and since a path is drawn from its start, the net
+// grows outwards from the point the window became instead of filling in from
+// wherever the indices happened to fall.
+const fromDecision = (i: number) =>
+  Math.hypot(
+    sphere[i][0] - sphere[decisionAt][0],
+    sphere[i][1] - sphere[decisionAt][1],
+    sphere[i][2] - sphere[decisionAt][2],
+  );
+const outward = (e: [number, number]) => Math.min(fromDecision(e[0]), fromDecision(e[1]));
+
+// the far side falls back, the near side carries, and yours is drawn apart
+const near: [number, number][] = [];
+const far: [number, number][] = [];
+const own: [number, number][] = [];
+for (const e of [...edges].sort((a, b) => outward(a) - outward(b))) {
+  if (mine.has(e[0]) && mine.has(e[1])) own.push(e);
+  else if ((depth[e[0]] + depth[e[1]]) / 2 < 0) far.push(e);
+  else near.push(e);
+}
+chords.sort((a, b) => outward(a) - outward(b));
 
 const labelOrder = new Map(
   [...labels.keys()].sort((a, b) => scatter[a][1] - scatter[b][1]).map((i, n) => [i, n]),
