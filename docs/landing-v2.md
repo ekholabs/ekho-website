@@ -189,11 +189,17 @@ and skills it applies.`
 - **Right** the graphic stays connected; links start multiplying around the dot
   the digest just touched.
 
-**The sovereignty claim lives here, in one line:** _And swapping is worth
-nothing if your memory stays behind with the old one._ It is not an appeal to
-privacy. The providers are moving into the memory layer, so a vault that lives
-there is not portable however portable the model is. Grounded in **I-195** in
-`EKHO_brain`.
+**Context sovereignty is named here**, under the model plates, because this is
+where the reader has just seen that the model is interchangeable and is ready to
+ask what then is not. Three beats: the risk, _hand your context to a model
+provider and it becomes theirs to keep, their memory, their format, their
+terms_; what EKHO does, _keeps it on your own disk, in Markdown, where any of
+these can read it_; and the close, _it stays yours, and swapping one for another
+costs you nothing_.
+
+It is not an appeal to privacy. The providers are moving into the memory layer,
+so a vault that lives there is not portable however portable the model is.
+Grounded in **I-195** in `EKHO_brain`.
 
 **The chapter ends by collapsing into the next.** Leaving it, the chat window
 shrinks into the one dot its confirm table just made, the decision, which is a
