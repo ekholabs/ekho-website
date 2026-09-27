@@ -2005,8 +2005,6 @@
     position: absolute;
     inset: 0;
     padding-block: 0;
-    /* above the vault frame, so the net is drawn on the panel and not under it */
-    z-index: 1;
   }
 
   /* A window arrives from below and leaves upwards, so the handover has a
@@ -3561,62 +3559,54 @@
   }
 }
 
-/* The case the net is held in ----------------------------------------------
-   What the chat window leaves behind when it collapses into the decision
-   point: the same box, the same corners, nothing inside it any more but the
-   graph. Only an outline, so the sphere reads through it. The script gives it
-   the window's own measurements, which is why nothing here sets a size. */
+/* The stage behind the graph ------------------------------------------------
+   What the chat window leaves behind. Not a box around the net: the column it
+   stood in lightens as the window shrinks into the decision point, so the
+   graph ends up drawn on a ground of its own with its name in the corner. It
+   sits behind everything the page lays out, which is what lets the net be
+   drawn on it rather than under it. */
 @layer components {
-  .vault-frame {
-    /* A panel, the way every other surface on the page is a panel: a shade
-       lighter than the ground in either mode. It sits under the graphic, so
-       the net is drawn on it rather than behind it. */
-    background: color-mix(in srgb, var(--surface) 84%, transparent);
-    -webkit-backdrop-filter: blur(18px);
-    backdrop-filter: blur(18px);
-    /* No edge: the panel is held off the page by a wide, soft shadow instead,
-       the way the windows above it are. The yellow line was one more thing
-       asking to be looked at behind a net that is already the subject. */
-    border: 0;
-    border-radius: var(--win-radius);
-    box-shadow:
-      0 34px 90px -26px rgb(0 0 0 / 0.4),
-      0 6px 26px -10px rgb(0 0 0 / 0.2);
-    height: var(--vf-height, 0);
-    left: var(--vf-left, 0);
+  .stage-wash {
+    background: var(--surface);
+    bottom: 0;
+    left: var(--step-right, 100%);
     opacity: 0;
     pointer-events: none;
-    position: absolute;
-    top: var(--vf-top, 0);
-    transition: opacity 400ms ease;
-    width: var(--vf-width, 0);
-    z-index: 0;
+    position: fixed;
+    right: 0;
+    top: var(--step-top, 0);
+    transition: opacity 500ms ease;
+    z-index: -1;
   }
 
-  /* Inside the panel, top left, where a window puts its title. It used to sit
-     astride the top edge, which meant cutting the frame open to make room for
-     it. */
-  .vault-frame-title {
+  .stage-title {
     color: var(--muted);
     font-size: 0.6875rem;
     font-weight: 500;
-    left: var(--vf-left, 0);
+    left: var(--step-right, 100%);
     letter-spacing: 0.14em;
     margin: 0;
     opacity: 0;
-    padding: 0.9rem 1.05rem;
+    padding: 1.6rem 0 0 2rem;
     pointer-events: none;
-    position: absolute;
+    position: fixed;
     text-transform: uppercase;
-    top: var(--vf-top, 0);
-    transition: opacity 400ms ease;
+    top: var(--step-top, 0);
+    transition: opacity 500ms ease;
     white-space: nowrap;
-    /* over the net, unlike the panel it names */
-    z-index: 2;
+    z-index: 3;
+  }
+
+  @media (max-width: 63.999rem) {
+    .stage-wash,
+    .stage-title {
+      display: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .vault-frame {
+    .stage-wash,
+    .stage-title {
       transition: none;
     }
   }
