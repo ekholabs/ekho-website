@@ -445,11 +445,12 @@ const people = [
   let collapseP = 0;
   let collapseRun = 0;
   let collapsing = false;
-  const runCollapse = (to: number) => {
+  const runCollapse = (to: number, atOnce = false) => {
     // A page that is not on screen is served no animation frames, so a run
     // begun there would sit half done until the reader came back. Same guard
-    // as the stepper: with nothing to animate for, it simply arrives.
-    if (reduceMotion || document.hidden) {
+    // as the stepper: with nothing to animate for, it simply arrives. A jump
+    // past the chapter is the same case — there is no window to watch shrink.
+    if (atOnce || reduceMotion || document.hidden) {
       collapseP = to;
       update();
       return;
@@ -755,21 +756,29 @@ const people = [
   function goTo(i: number) {
     const next = Math.max(0, Math.min(views.length - 1, i));
     const view = views[next];
+    const from = index;
     index = next;
+    // Somebody who asked for a particular chapter — the waitlist button, a
+    // chapter link — wants to be in it, not to watch everything between here
+    // and there go past. Only a step to the next view is a movement worth
+    // seeing; anything further is a jump.
+    const far = Math.abs(next - from) > 1;
+
     // The chapter being asked for is what starts the collapse, or reverses it.
     // It runs alongside the jump rather than being driven by it, so its length
-    // is its own.
+    // is its own — unless we are jumping, in which case it is already over.
     if (compound) {
       const at = views.indexOf(compound);
-      if (at >= 0) runCollapse(next >= at ? 1 : 0);
+      if (at >= 0) runCollapse(next >= at ? 1 : 0, far);
     }
     // A page that is not on screen is served no animation frames, so a glide
     // begun there never starts and never finishes, and because every wheel
     // event is swallowed while one is running the page goes dead to the touch.
     // Nothing to animate for, so it simply arrives.
-    if (reduceMotion || document.hidden) {
+    if (far || reduceMotion || document.hidden) {
       animating = false;
       window.scrollTo(0, topOf(view));
+      update();
       return;
     }
     const start = window.scrollY;
