@@ -438,6 +438,33 @@ const people = [
   let lastTx = 0;
   let lastTy = 0;
 
+  // The collapse of the chat window into the decision point, as a value from 0
+  // to 1 that the paint below reads. It is driven here rather than by the
+  // scroll position so that it has a length of its own: long enough to be a
+  // movement and not a jump, and the same whatever brought the reader to the
+  // chapter.
+  let collapseP = 0;
+  let collapseRun = 0;
+  const runCollapse = (to: number) => {
+    if (reduceMotion) {
+      collapseP = to;
+      return;
+    }
+    const from = collapseP;
+    if (from === to) return;
+    const DUR = 1500 * Math.abs(to - from);
+    const t0 = performance.now();
+    const id = ++collapseRun;
+    const tick = (now: number) => {
+      if (id !== collapseRun) return;
+      const p = Math.min(1, (now - t0) / DUR);
+      collapseP = from + (to - from) * p;
+      update();
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
   // The outline the window leaves behind. It is measured from the window on
   // the first frame of the collapse, while the window is still untransformed,
   // so the box is the window's own and not an approximation of it.
@@ -504,8 +531,14 @@ const people = [
         !!current && current.id !== 'hero' && !current.classList.contains('chapter--wide');
 
       if (compound && chatWin) {
+        // On a stepping screen the collapse runs on its own clock, started by
+        // the step that asks for this chapter. Reading it off the scroll meant
+        // it inherited the curve of the jump and then had its own laid on top
+        // of that, and it had only the jump's seven hundred milliseconds to
+        // happen in. One curve, one and a half seconds, and it no longer
+        // matters how the reader got here.
         const top = compound.getBoundingClientRect().top;
-        collapse = Math.min(1, Math.max(0, (vh - top) / (vh * 0.8)));
+        collapse = stepping() ? collapseP : Math.min(1, Math.max(0, (vh - top) / (vh * 0.8)));
         if (collapse > 0 && collapse < 1) {
           // Both ends are read fresh every frame, and the window's own offset
           // from the frame before is taken back out first. Measuring it raw
@@ -524,9 +557,10 @@ const people = [
           // by the time there is nothing left inside it.
           showWash(washOn ? Math.min(1, collapse * 1.3) : 0);
           const target = collapseTarget?.getBoundingClientRect();
-          // Eased at both ends: it leaves gently, crosses quickly and arrives
-          // gently, instead of tearing away from a standstill.
-          const e = collapse * collapse * (3 - 2 * collapse);
+          // One easing, applied here, since the value arriving is now linear:
+          // it leaves gently, crosses at pace and settles into the dot.
+          const e =
+            collapse < 0.5 ? 2 * collapse * collapse : 1 - Math.pow(-2 * collapse + 2, 2) / 2;
           const tx = target ? (target.left + target.width / 2 - cx) * e : 0;
           const ty = target ? (target.top + target.height / 2 - cy) * e : 0;
           // What is left at the end is the size of the dot it lands on, so the
@@ -706,6 +740,13 @@ const people = [
     const next = Math.max(0, Math.min(views.length - 1, i));
     const view = views[next];
     index = next;
+    // The chapter being asked for is what starts the collapse, or reverses it.
+    // It runs alongside the jump rather than being driven by it, so its length
+    // is its own.
+    if (compound) {
+      const at = views.indexOf(compound);
+      if (at >= 0) runCollapse(next >= at ? 1 : 0);
+    }
     // A page that is not on screen is served no animation frames, so a glide
     // begun there never starts and never finishes, and because every wheel
     // event is swallowed while one is running the page goes dead to the touch.
