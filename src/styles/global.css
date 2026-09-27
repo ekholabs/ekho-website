@@ -3067,7 +3067,11 @@
     stroke-linecap: round;
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
-    opacity: 0;
+    /* Not zero: at zero the browser skips painting these 135 lines entirely,
+       and the whole raster then lands in the one frame where the window is
+       already scaling down. A hair of alpha keeps them painted and invisible,
+       so the handover has nothing left to prepare. */
+    opacity: 0.001;
     /* Leaving is a fade. These are the same links the full net contains, so
        switching them off in one frame while the net switches on in the next
        made the handover a blink instead of a dissolve. */
@@ -3084,6 +3088,12 @@
 
   [data-graphic].is-turning .cg-first {
     transition: none;
+  }
+
+  /* Promoted while the chapter before it is on screen and dropped again after,
+     so the group is on its own layer exactly when it has to move. */
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-firsts {
+    will-change: opacity;
   }
 
   @media (prefers-reduced-motion: reduce) {
