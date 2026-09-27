@@ -642,16 +642,17 @@
   .reveal-on [data-graphic].is-3 .cg-dot.is-mine {
     fill: var(--signal);
     opacity: 1;
-    /* Quick, and quickly one after another: the strike runs across the sphere
-       in a couple of seconds, point after point after point, and the
-       connections are then spun between points that are already yours. No new
-       points appear — these are the same white ones, changing colour. Each one
-       turns in a fifth of a second, because a colour that eases over most of a
-       second is a fade and not a strike. */
+    /* The strike runs out from where the window landed, point after point
+       after point, and each line is spun a quarter of a second behind its
+       point: one wave, with the colour just ahead of the connection. It starts
+       as the window lands rather than after a pause. No new points appear —
+       these are the same white ones, changing colour. Each turns in a fifth of
+       a second, because a colour that eases over most of a second is a fade
+       and not a strike. */
     transition:
       fill 220ms ease-out,
       opacity 220ms ease-out;
-    transition-delay: calc(900ms + var(--w, 0) * 2400ms);
+    transition-delay: calc(400ms + var(--w, 0) * 5000ms);
   }
 
   /* going back is not a wave, so it does not wait */
@@ -2903,9 +2904,11 @@
       /* linear, so a line's position in the drawing is exactly its --w: that
          is what lets each point be coloured a fixed moment before the line
          that reaches it, rather than drifting ahead or behind */
-        stroke-dashoffset 9000ms linear;
-    /* starts while the points are still turning, and then takes far longer */
-    transition-delay: 0s, 1400ms;
+        stroke-dashoffset 5000ms linear;
+    /* One wave, not two: the same five seconds the colouring takes, a quarter
+       of a second behind it, so every line is spun the moment after its point
+       has turned. Both begin as the window lands rather than after a pause. */
+    transition-delay: 0s, 650ms;
   }
 
   .reveal-on [data-graphic]:not(.is-3) .cg-own {
