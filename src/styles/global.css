@@ -266,25 +266,6 @@
     max-width: 80rem;
   }
 
-  /* in the large statements a highlight may wrap; each line keeps its padding */
-  .closing mark {
-    white-space: normal;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-  }
-
-  .closing {
-    display: flex;
-    align-items: center;
-    min-height: 100svh;
-    margin: 0;
-    padding-block: 5rem;
-    font-size: clamp(1.75rem, 5vw, 2.75rem);
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    font-weight: 500;
-  }
-
   /* homepage header on wide screens: chapters left, logo centred, GitHub right */
   .header-aside {
     display: none;
@@ -1973,12 +1954,6 @@
   .waitlist--mail .waitlist-note {
     margin: 0;
     max-width: 26ch;
-  }
-
-  .closing mark {
-    background: none;
-    color: inherit;
-    box-shadow: inset 0 -3px 0 var(--signal);
   }
 
   .chapter-nav a[aria-current] {
