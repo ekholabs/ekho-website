@@ -621,8 +621,9 @@
     /* It comes up while the window is still shrinking over it, so the fade is
        hidden and what the reader sees when the window has gone is a net that
        was already there. Switching it on in one frame put a blink in the
-       middle of the movement. */
-    transition: opacity 800ms ease;
+       middle of the movement — but it has to be over before the window is,
+       or the sparse net of the chapter before shows through the new one. */
+    transition: opacity 380ms ease;
   }
 
   .reveal-on [data-graphic].is-3 .cg-dot:not(.is-named) {
@@ -3062,7 +3063,7 @@
     stroke-width: 0.62;
     stroke-linecap: round;
     opacity: 0.001;
-    transition: opacity 700ms ease;
+    transition: opacity 300ms ease;
   }
 
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-wave {
@@ -3093,10 +3094,13 @@
        already scaling down. A hair of alpha keeps them painted and invisible,
        so the handover has nothing left to prepare. */
     opacity: 0.001;
-    /* Leaving is a fade. These are the same links the full net contains, so
-       switching them off in one frame while the net switches on in the next
-       made the handover a blink instead of a dissolve. */
-    transition: opacity 800ms ease;
+    /* Leaving is a fade, but a short one. These are the same links the full
+       net contains, so switching them off in one frame while the net switches
+       on in the next made the handover a blink instead of a dissolve — and
+       over most of a second it was the other fault: the loose net of two
+       chapters back stood in the finished one while the reader was already
+       looking at it. */
+    transition: opacity 300ms ease;
   }
 
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-first {
