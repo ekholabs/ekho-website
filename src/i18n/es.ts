@@ -45,7 +45,7 @@ export const es: Copy = {
     commandNote: 'En acceso anticipado, por invitación. El instalador aún no está disponible.',
   },
   how: {
-    title: 'La conversación es la interfaz.',
+    title: 'Funciona donde ya trabajas.',
     a: 'EKHO se acopla al chat que ya usas: como comandos que ejecuta y skills que aplica.',
     b: 'Y nunca cambia nada sin enseñártelo antes.',
     sovereignty: 'Soberanía del contexto',

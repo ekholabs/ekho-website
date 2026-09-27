@@ -45,7 +45,7 @@ export const fr: Copy = {
     commandNote: "En accès anticipé, sur invitation. L'installateur n'existe pas encore.",
   },
   how: {
-    title: "La conversation est l'interface.",
+    title: 'Il fonctionne là où vous travaillez déjà.',
     a: "EKHO se greffe sur la conversation que vous avez déjà : des commandes qu'il exécute et des skills qu'il applique.",
     b: "Et il ne change jamais rien sans vous le montrer d'abord.",
     sovereignty: 'Souveraineté du contexte',
