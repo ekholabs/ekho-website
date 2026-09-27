@@ -3867,3 +3867,31 @@
     }
   }
 }
+
+/* One screen per chapter on a phone -----------------------------------------
+   The same rhythm the wide layout has, where each chapter is a view of its
+   own: here nothing snaps, but every chapter still gets at least a screen and
+   sits in the middle of it, so a chapter is a thing you arrive at rather than
+   a paragraph you scroll past. Chapters that need more than a screen keep
+   whatever they need. */
+@layer components {
+  @media (max-width: 63.999rem) {
+    .story-text .chapter,
+    .chapter--wide {
+      justify-content: center;
+      min-height: calc(100svh - 4.5rem);
+    }
+
+    /* The repository name beside a layer is an aside, and here it is what
+       makes the row wrap onto a second line. */
+    .arch-code {
+      display: none;
+    }
+
+    /* The note is narrow because on a wide screen it stands beside the button.
+       Here it stands under it and can have the column. */
+    .waitlist--mail .waitlist-note {
+      max-width: none;
+    }
+  }
+}
