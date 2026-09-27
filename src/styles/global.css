@@ -1968,10 +1968,10 @@
       z-index: 0;
     }
 
-    /* nothing to divide in the hero: the line arrives with the first chapter */
-    .story-figure:not([data-stage='0']) {
-      border-left-color: var(--line);
-    }
+    /* The rule between the columns is drawn by the step bars instead, because
+       it has to run the full height of the window and this border is only as
+       tall as the graphic. The transparent border stays so the figure keeps
+       its position. */
 
     .story-text .chapter {
       justify-content: center;
@@ -3409,7 +3409,9 @@
   /* Each one is a bar across the whole left column, not a loose control: it
      runs from the edge of the window to the rule that divides the text from
      the figure, over the same blurred ground as the header, and closes the
-     text area with a hairline. The label starts where the text starts. */
+     text area with a hairline. One holds the top of the column, under the
+     header, the other the bottom of the window, and they stay there while the
+     chapters change height underneath. */
   .view-step {
     align-items: center;
     background: color-mix(in srgb, var(--bg) 70%, transparent);
@@ -3429,7 +3431,6 @@
     position: fixed;
     right: calc(100% - var(--step-right, 100%));
     transition:
-      top 0.5s cubic-bezier(0.4, 0, 0.2, 1),
       color 0.2s ease,
       background-color 0.2s ease;
     z-index: 6;
@@ -3449,13 +3450,12 @@
 
   .view-step--prev {
     border-bottom: 1px solid var(--line);
-    top: var(--step-above, 0px);
-    transform: translateY(-100%);
+    top: var(--step-top, 0px);
   }
 
   .view-step--next {
     border-top: 1px solid var(--line);
-    top: var(--step-below, 0px);
+    bottom: 0;
   }
 
   .view-step svg {
@@ -3496,6 +3496,44 @@
     .view-step,
     .view-step svg {
       transition: none;
+    }
+  }
+
+  /* The rule that divides the text from the figure. It hangs off the bars
+     because the three belong together: it starts where the back bar ends,
+     under the header, and runs to the bottom of the window, closing the column
+     on all three sides. The graphic used to carry it on its own left border,
+     which was only ever as tall as the graphic and stopped short. */
+  /* Below the story there is no second column, so there is nothing to divide. */
+  .view-steps[data-rule='off']::before {
+    display: none;
+  }
+
+  .view-steps::before {
+    background: var(--line);
+    /* Not quite touching at either end: it stops short of the header and short
+       of the bottom edge, by the same amount, so it reads as a rule set into
+       the page rather than a seam running off it. */
+    bottom: 0.75rem;
+    content: '';
+    left: calc(var(--step-right, 0px) - 1px);
+    pointer-events: none;
+    position: fixed;
+    top: calc(var(--step-top, 0px) + 0.75rem);
+    width: 1px;
+    z-index: 5;
+  }
+
+  /* Each bar takes a strip of the column with it, so the chapter gives up the
+     same again at each end and nothing ends up underneath them. Narrow screens
+     have neither bars nor a second column. */
+  @media (min-width: 64rem) {
+    .story-text .chapter {
+      /* Not symmetric, because what it has to be level with is not symmetric:
+         the header and the back bar take 103px off the top, the forward bar
+         42px off the bottom. The 61px difference is added to the top so the
+         text rests the same distance from both bars. */
+      padding-block: 9.0625rem 5.25rem;
     }
   }
 }

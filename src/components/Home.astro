@@ -404,7 +404,19 @@ const people = [
   const compound = document.getElementById('compound');
   const chatOverlay = document.querySelector<HTMLElement>('.overlay[data-for="chat"]');
   // the dot the window collapses into is the decision its confirm table makes
-  const collapseTarget = document.querySelector<SVGElement>('.cg-pt[aria-label^="Decision"]');
+  // The dot the chat window collapses into. Held by key, not by the label it
+  // shows: that text is translated, and the English match quietly found
+  // nothing on the other three languages, so the window shrank where it stood
+  // instead of travelling into the graph.
+  // The circle, not the group around it: the group's box takes in the label
+  // beside the dot, and its centre sits some eighty pixels off to one side, so
+  // the window came to rest next to the point instead of on it.
+  const collapseTarget = document.querySelector<SVGElement>('.cg-pt[data-key="decision"] .cg-dot');
+  // The translation applied to the chat window on the previous frame. Kept so
+  // the next one can subtract it back out and read where the window actually
+  // sits, untransformed, rather than where it has already been moved to.
+  let lastTx = 0;
+  let lastTy = 0;
   const wideIntro = window.matchMedia('(min-width: 64rem)');
   let lastNav: string | undefined;
 
@@ -494,18 +506,47 @@ const people = [
       // collapse is done, or it would fade out from under the movement.
       let collapse = 0;
       const chatWin = chatOverlay?.querySelector<HTMLElement>('.win');
+
       if (compound && chatWin) {
         const top = compound.getBoundingClientRect().top;
         collapse = Math.min(1, Math.max(0, (vh - top) / (vh * 0.8)));
         if (collapse > 0 && collapse < 1) {
+          // Both ends are read fresh every frame, and the window's own offset
+          // from the frame before is taken back out first. Measuring it raw
+          // reads the box it has already been moved to, so the distance left
+          // shrinks as it approaches and it never arrives — it crawled to a
+          // halt 80 pixels short of the dot. Subtracting the known translation
+          // gives the untransformed centre exactly, which means the landing is
+          // right even while the sphere behind it is still settling and the
+          // dot itself is moving. Scaling about the centre does not move it,
+          // so only the translation has to come out.
           const w = chatWin.getBoundingClientRect();
+          const cx = w.left + w.width / 2 - lastTx;
+          const cy = w.top + w.height / 2 - lastTy;
           const target = collapseTarget?.getBoundingClientRect();
-          const tx = target ? target.left + target.width / 2 - (w.left + w.width / 2) : 0;
-          const ty = target ? target.top + target.height / 2 - (w.top + w.height / 2) : 0;
-          const e = collapse * collapse;
-          chatWin.style.transform = `translate(${(tx * e).toFixed(1)}px, ${(ty * e).toFixed(1)}px) scale(${(1 - e * 0.985).toFixed(4)})`;
-          chatWin.style.opacity = String(Math.max(0, 1 - Math.max(0, (collapse - 0.7) / 0.3)));
+          // Eased at both ends: it leaves gently, crosses quickly and arrives
+          // gently, instead of tearing away from a standstill.
+          const e = collapse * collapse * (3 - 2 * collapse);
+          const tx = target ? (target.left + target.width / 2 - cx) * e : 0;
+          const ty = target ? (target.top + target.height / 2 - cy) * e : 0;
+          // What is left at the end is the size of the dot it lands on, so the
+          // last thing the eye sees is already a point, not a small window.
+          const scale = 1 - e * 0.994;
+          chatWin.style.transform = `translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px) scale(${scale.toFixed(4)})`;
+          lastTx = tx;
+          lastTy = ty;
+          // It stays solid nearly the whole way and goes out once it is already
+          // the size of a dot, so what the eye follows is the shrinking, not a
+          // fade that happens to move.
+          chatWin.style.opacity = String(Math.max(0, 1 - Math.max(0, (collapse - 0.92) / 0.08)));
+        } else if (collapse >= 1) {
+          // Arrived. Clearing the transform here would snap the window back to
+          // full size for the frame before the overlay is taken off the page,
+          // which read as a flicker at the end of an otherwise quiet move.
+          chatWin.style.opacity = '0';
         } else {
+          lastTx = 0;
+          lastTy = 0;
           chatWin.style.transform = '';
           chatWin.style.opacity = '';
         }
@@ -727,36 +768,12 @@ const people = [
   //
   // The gesture is invisible; these two are the only thing on the page that
   // says the view moves on. They run through the same stepper as the wheel, so
-  // nothing can drift apart, and they are pinned to the statement block of the
-  // chapter that is resting rather than to the viewport: the text is what they
-  // belong to, and its height changes from chapter to chapter.
+  // nothing can drift apart. They hold the top and the bottom of the left
+  // column and stay there: the chapters change height, and a pair that moved
+  // with each one meant hunting for the button that had just been used.
+  // Everything but the width of that column is fixed in CSS.
   const stepBar = document.querySelector<HTMLElement>('[data-view-steps]');
   const stepBtns = [...document.querySelectorAll<HTMLButtonElement>('[data-view-step]')];
-  const GAP = 20; // how far clear of the text they sit
-
-  // What the pair frames is everything the chapter puts in the left column,
-  // not just its .chapter-body: chapter 03 carries the sovereignty block as a
-  // sibling, and measuring only the body dropped the next button into the
-  // middle of the text. The window mockups are excluded because they belong to
-  // the figure on the right, and anything laid out at zero size is skipped —
-  // an off-screen chapter reports an empty box and would drag the pair to the
-  // top of the window.
-  const frameFor = (i: number) => {
-    const chapter = views[i]?.closest('[data-chapter]');
-    if (!chapter) return null;
-    let top = Infinity;
-    let bottom = -Infinity;
-    let left = Infinity;
-    for (const child of chapter.children) {
-      if (child.classList.contains('flow-window')) continue;
-      const r = child.getBoundingClientRect();
-      if (r.height < 1 || r.width < 1) continue;
-      top = Math.min(top, r.top);
-      bottom = Math.max(bottom, r.bottom);
-      left = Math.min(left, r.left);
-    }
-    return bottom > top ? { top, bottom, left } : null;
-  };
 
   const syncNext = () => {
     if (!stepBar) return;
@@ -773,41 +790,24 @@ const people = [
       const to = index + dir;
       b.hidden = to < 0 || to > views.length - 1;
     }
-    const r = frameFor(index);
-    if (!r) return;
 
-    // Where the text will be once the view has settled, not where it is right
-    // now. Measured against the current position the pair would ride the whole
-    // journey up the window with the chapter it belongs to; measured against
-    // the resting place it simply glides from one chapter's frame to the next.
-    const rest = topOf(views[index]);
-    const top = r.top + window.scrollY - rest;
-    const bottom = r.bottom + window.scrollY - rest;
-
-    // The back bar hangs upwards from the line it is given, so its ceiling is
-    // the underside of the header plus its own height. Anything higher left a
-    // strip of bare page between the two, which read as a gap rather than as
-    // one continuous top edge.
-    const header = document.querySelector<HTMLElement>('.site-header');
-    const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
-    const prevBtn = stepBtns.find((b) => b.dataset.viewStep === '-1');
-    const ceiling = headerBottom + (prevBtn?.offsetHeight ?? 0);
-    // A sliver of page between the header and the bar reads as a mistake, so
-    // anything closer than this closes up flush against it. Further away is a
-    // gap on purpose and stays.
-    const FLUSH = 28;
-    const clamp = (y: number) => {
-      const v = Math.round(y);
-      return Math.max(ceiling, Math.min(window.innerHeight - 8, v < ceiling + FLUSH ? ceiling : v));
-    };
-    // The bars run the full width of the left column, from the edge of the
-    // window to the rule that divides it from the figure, so they read as two
-    // edges of the text area rather than two loose controls.
-    const column = views[index]?.closest('.story-text')?.getBoundingClientRect();
-    stepBar.style.setProperty('--step-left', `${Math.round(r.left)}px`);
-    if (column) stepBar.style.setProperty('--step-right', `${Math.round(column.right)}px`);
-    stepBar.style.setProperty('--step-above', `${clamp(top - GAP)}px`);
-    stepBar.style.setProperty('--step-below', `${clamp(bottom + GAP)}px`);
+    // The bars span whatever the chapter they belong to spans: the left column
+    // while the story runs beside the graphic, the whole page once the wide
+    // chapters take over. The rule between the columns goes with them — below
+    // the story there are no two columns left to divide, and it cut straight
+    // through the architecture stack.
+    const here = views[index]?.closest('[data-chapter]') ?? views[index];
+    const wide = here?.classList.contains('chapter--wide') ?? true;
+    const span = (
+      wide ? here : document.querySelector<HTMLElement>('.story-text')
+    )?.getBoundingClientRect();
+    const header = document.querySelector<HTMLElement>('.site-header')?.getBoundingClientRect();
+    if (span) {
+      stepBar.style.setProperty('--step-left', `${Math.round(span.left)}px`);
+      stepBar.style.setProperty('--step-right', `${Math.round(span.right)}px`);
+    }
+    if (header) stepBar.style.setProperty('--step-top', `${Math.round(header.bottom)}px`);
+    stepBar.dataset.rule = wide ? 'off' : 'on';
   };
 
   for (const b of stepBtns) {

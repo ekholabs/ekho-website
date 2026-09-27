@@ -234,7 +234,11 @@ const path = (segs: [number, number][]) => segs.map(line).join('');
 
 // ---- the points that say what they are -----------------------------------
 
-const named: { at: P; type: string; title: string }[] = (
+// The key travels with the label. It is what the page outside this component
+// holds on to — the collapse of the chat window aims at the decision point —
+// and unlike the label text it is the same in every language. Matching on the
+// English words worked until the page had four of them.
+const named: { at: P; key: string; type: string; title: string }[] = (
   [
     [[206, 198], 'person'],
     [[212, 252], 'meeting'],
@@ -245,7 +249,7 @@ const named: { at: P; type: string; title: string }[] = (
     [[158, 44], 'assumption'],
     [[164, 340], 'article'],
   ] as [P, keyof typeof c.graphic.types][]
-).map(([at, key]) => ({ at, type: c.graphic.types[key], title: c.graphic.titles[key] }));
+).map(([at, key]) => ({ at, key, type: c.graphic.types[key], title: c.graphic.titles[key] }));
 const PAD = 8;
 const GAP = 11;
 const textWidth = (n: { type: string; title: string }) =>
@@ -260,7 +264,7 @@ const box = (x: number, y: number, w: number, side: 'l' | 'r'): Box => ({
 const hits = (a: Box, b: Box) => a.x < b.r + 6 && b.x < a.r + 6 && a.y < b.b + 4 && b.y < a.b + 4;
 
 const placedBoxes: Box[] = [];
-const labels = new Map<number, { type: string; title: string; side: 'l' | 'r' }>();
+const labels = new Map<number, { key: string; type: string; title: string; side: 'l' | 'r' }>();
 for (const n of named) {
   const target: P = [
     C + Math.cos((n.at[1] * Math.PI) / 180) * n.at[0],
@@ -278,7 +282,7 @@ for (const n of named) {
       return fits && !placedBoxes.some((q) => hits(box(x, y, w, sd), q));
     });
     if (!side) continue;
-    labels.set(cand.i, { type: n.type, title: n.title, side });
+    labels.set(cand.i, { key: n.key, type: n.type, title: n.title, side });
     placedBoxes.push(box(x, y, w, side));
     break;
   }
@@ -400,6 +404,7 @@ const ariaLabel = c.graphic.label;
             style={`${shift(i)};--n:${labelOrder.get(i)}`}
             tabindex="0"
             role="img"
+            data-key={label.key}
             aria-label={`${label.type}: ${label.title}`}
           >
             <title>{`${label.type}: ${label.title}`}</title>
