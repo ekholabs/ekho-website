@@ -1884,18 +1884,19 @@
   @media (min-width: 48rem) {
     .people {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 2rem;
+      gap: 1.5rem 3rem;
     }
   }
 
+  /* A rule each, not a panel each. Two filled tiles put a box around people
+     on a page whose other lists — the architecture rows, the waitlist — are
+     held by hairlines, and the box was the loudest thing in the chapter. */
   .people li {
     display: flex;
     align-items: center;
     gap: 1.1rem;
-    padding: 1.1rem;
-    background: var(--surface);
-    border-radius: var(--radius);
-    box-shadow: var(--lift);
+    padding: 1.25rem 0 0.25rem;
+    border-top: 1px solid var(--line);
   }
 
   /* The portraits are the only photographs on the page, so they take the page's
