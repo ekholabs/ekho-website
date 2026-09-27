@@ -55,7 +55,7 @@ export const fr: Copy = {
   compound: {
     title: 'Pas un point de plus. Trois fois plus de liens.',
     a: "Chaque source que vous versez se relie à tout ce qui est déjà là. Une idée sait d'où elle vient, ce qui l'appuie et ce qui la contredit.",
-    b: "C'est pour cela qu'elle fructifie au lieu de prendre la poussière. La tenue des comptes est la partie que l'on abandonne, et c'est justement celle que l'agent prend en charge.",
+    b: "C'est en cela qu'elle fructifie : les liens croissent plus vite que les notes, si bien que chaque réponse repose sur plus que la précédente. La tenue des comptes est la partie que l'on abandonne, et c'est justement celle que l'agent prend en charge.",
   },
   viewer: {
     title: 'Voilà à quoi cela ressemble.',

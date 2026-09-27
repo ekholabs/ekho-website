@@ -56,7 +56,7 @@ export const de: Copy = {
   compound: {
     title: 'Kein einziger neuer Punkt. Dreimal so viele Verbindungen.',
     a: 'Jede Quelle, die du hineingibst, verbindet sich mit allem, was schon da ist. Eine Erkenntnis weiß, woher sie kommt, was sie stützt und was ihr widerspricht.',
-    b: 'Deshalb verzinst es sich, statt Staub anzusetzen. Die Buchführung ist der Teil, den Menschen aufgeben, und genau der ist der Teil, den der Agent übernimmt.',
+    b: 'Genau darin verzinst es sich: Die Verbindungen wachsen schneller als die Notizen, also steht jede Antwort auf mehr als die vorige. Die Buchführung ist der Teil, den Menschen aufgeben, und genau der ist der Teil, den der Agent übernimmt.',
   },
   viewer: {
     title: 'So sieht das aus.',

@@ -53,7 +53,7 @@ export const en = {
   compound: {
     title: 'Not one new point. Three times the connections.',
     a: 'Every source you bring in links to everything already there. An insight knows where it came from, what supports it and what contradicts it.',
-    b: 'That is why it compounds instead of gathering dust. The bookkeeping is the part people give up on, and it is the part the agent does.',
+    b: 'That is what compounding means here: the connections grow faster than the notes do, so every answer stands on more than the one before it. The bookkeeping is the part people give up on, and it is the part the agent does.',
   },
   viewer: {
     title: 'This is what it looks like.',
