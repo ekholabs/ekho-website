@@ -3571,9 +3571,17 @@
     /* A panel, the way every other surface on the page is a panel: a shade
        lighter than the ground in either mode. It sits under the graphic, so
        the net is drawn on it rather than behind it. */
-    background: var(--surface);
-    border: 1px solid color-mix(in srgb, var(--signal) 68%, transparent);
+    background: color-mix(in srgb, var(--surface) 84%, transparent);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    /* No edge: the panel is held off the page by a wide, soft shadow instead,
+       the way the windows above it are. The yellow line was one more thing
+       asking to be looked at behind a net that is already the subject. */
+    border: 0;
     border-radius: var(--win-radius);
+    box-shadow:
+      0 34px 90px -26px rgb(0 0 0 / 0.4),
+      0 6px 26px -10px rgb(0 0 0 / 0.2);
     height: var(--vf-height, 0);
     left: var(--vf-left, 0);
     opacity: 0;
