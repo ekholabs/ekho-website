@@ -3079,26 +3079,42 @@
 }
 
 @layer components {
-  /* The bulk of the first links arrive as waves rather than as 135 drawn
-     strokes: one path per wave, fading, nine paints instead of 135 per frame.
-     The window collapse is driven by the scroll position, so anything the main
-     thread is still painting shows up as a stutter in the window itself. */
+  /* The bulk of the first links arrive as waves rather than as 135 separate
+     strokes: one path per wave, nine paints instead of 135 per frame. Each
+     wave is still drawn rather than faded in — a connection that appears is
+     not a connection being made — and the dash runs over the whole path, so
+     the lines inside a wave lay themselves down one after another.
+
+     Nothing starts before the points are nearly home. The lines are fixed to
+     where the points end up, so a line drawn while its two ends are still
+     travelling stands in empty space, which is what made the build look like
+     two separate events. */
   .cg-wave {
     fill: none;
     stroke: var(--muted);
     stroke-width: 0.62;
     stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
     opacity: 0.001;
     transition: opacity 300ms ease;
   }
 
   .reveal-on [data-graphic].is-2:not(.is-net) .cg-wave {
     opacity: 0.8;
-    transition: opacity 420ms ease calc(var(--w) * 120ms);
+    stroke-dashoffset: 0;
+    transition:
+      stroke-dashoffset 560ms ease-out calc(760ms + var(--w) * 110ms),
+      opacity 90ms linear calc(760ms + var(--w) * 110ms);
+  }
+
+  [data-graphic].is-turning .cg-wave {
+    transition: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .reveal-on [data-graphic].is-2:not(.is-net) .cg-wave {
+      stroke-dashoffset: 0;
       transition: opacity 400ms ease;
     }
   }
@@ -3133,8 +3149,8 @@
     opacity: 0.8;
     stroke-dashoffset: 0;
     transition:
-      stroke-dashoffset 520ms ease-out calc(var(--e) * 90ms),
-      opacity 100ms linear calc(var(--e) * 90ms);
+      stroke-dashoffset 520ms ease-out calc(760ms + var(--e) * 90ms),
+      opacity 100ms linear calc(760ms + var(--e) * 90ms);
   }
 
   [data-graphic].is-turning .cg-first {

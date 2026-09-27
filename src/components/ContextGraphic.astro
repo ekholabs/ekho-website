@@ -466,6 +466,7 @@ const ariaLabel = c.graphic.label;
       {waves.map((edges, w) => (
         <path
           class="cg-wave"
+          pathLength="1"
           d={path(edges)}
           style={`--w:${w}`}
           data-wave={edges.map(([a, b]) => `${a},${b}`).join(' ')}
