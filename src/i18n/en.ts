@@ -43,7 +43,7 @@ export const en = {
     commandNote: 'In early access, by invitation. The installer is not live yet.',
   },
   how: {
-    title: 'It works where you already work.',
+    title: 'EKHO works where you work.',
     a: 'EKHO docks into the chat you already use: as commands it runs and skills it applies.',
     b: 'And it never changes anything without showing you first.',
     sovereignty: 'Context sovereignty',

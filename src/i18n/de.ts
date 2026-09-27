@@ -46,7 +46,7 @@ export const de: Copy = {
     commandNote: 'Early Access, auf Einladung. Den Installer gibt es noch nicht.',
   },
   how: {
-    title: 'Es arbeitet dort, wo du ohnehin arbeitest.',
+    title: 'EKHO arbeitet dort, wo du arbeitest.',
     a: 'EKHO dockt an den Chat an, den du ohnehin benutzt: als Befehle, die es ausführt, und Skills, die es anwendet.',
     b: 'Und es ändert nie etwas, ohne es dir vorher zu zeigen.',
     sovereignty: 'Kontextsouveränität',
