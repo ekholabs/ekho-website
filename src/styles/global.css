@@ -1471,8 +1471,16 @@
     width: 22px;
     height: 22px;
     flex: none;
+    display: grid;
+    place-items: center;
     border-radius: 5px;
     background: var(--text);
+  }
+
+  .chat-mark svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--panel);
   }
 
   .chat-said {

@@ -5,8 +5,12 @@
 // the answer as plain text with no bubble, tool use as bordered cards, and a
 // composer pill with the model underneath.
 //
-// It is deliberately unbranded. Showing a recognisable third-party client on
-// our own landing page is a brand decision, not a design one (docs/landing-v2.md).
+// The client stays unbranded except for the mark on the answer, which is
+// Claude's (Lorenz, 2026-09-27). The mark comes from simple-icons like the ones
+// in the model row, and like that row it says compatibility, not endorsement.
+// Whether a third-party mark belongs on our landing page at all is a brand
+// decision, not a design one (docs/landing-v2.md).
+import * as si from 'simple-icons';
 import { t, type Lang } from '../i18n';
 
 interface Props {
@@ -62,7 +66,11 @@ const rows = c.chat.rows;
         <p class="chat-ask">{c.chat.ask}</p>
 
         <div class="chat-answer">
-          <span class="chat-mark" aria-hidden="true"></span>
+          <span class="chat-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-label="Claude">
+              <path d={si.siClaude.path} />
+            </svg>
+          </span>
           <div>
             <p class="chat-said">{c.chat.said}</p>
 
