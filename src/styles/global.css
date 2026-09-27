@@ -3139,12 +3139,16 @@
     max-width: 27rem;
     margin: 2.25rem 0 0;
     padding: 0.85rem 1rem 0.9rem;
-    /* the same hairline the windows use, not a dashed one: the note underneath
-       is what marks this as unshipped, and N4 asks for the marking, not for a
-       particular border */
-    border: 1px solid var(--panel-line);
+    /* No edge at all: the panel is held off the page by a wide, soft shadow
+       instead, which is what a terminal window on a desk actually looks like.
+       The note underneath is what marks this as unshipped; N4 asks for the
+       marking, not for a border. */
+    border: 0;
     border-radius: var(--radius);
     background: var(--term);
+    box-shadow:
+      0 26px 72px -16px rgb(0 0 0 / 0.72),
+      0 6px 22px -8px rgb(0 0 0 / 0.5);
   }
 
   .command-label {
