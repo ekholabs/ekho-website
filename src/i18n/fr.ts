@@ -31,7 +31,7 @@ export const fr: Copy = {
     seeHow: 'Voir comment',
   },
   why: {
-    title: "Tout est déjà là. Mais rien n'est vraiment relié.",
+    title: "Votre contexte est déjà là, il n'est simplement pas relié.",
     a: "Vos décisions, les gens avec qui vous travaillez, ce que vous avez lu et ce que vous en avez conclu. Cela existe. Dans votre tête, dans des conversations qui se ferment, dans des mails, des réunions et des notes qui s'ignorent.",
     b: 'Alors chaque séance avec une IA repart presque de zéro. Vous vous expliquez encore. Et encore.',
     c: 'Le modèle est le même pour tout le monde. Votre contexte est la seule part qui vous appartienne.',

@@ -31,7 +31,7 @@ export const es: Copy = {
     seeHow: 'Cómo funciona',
   },
   why: {
-    title: 'Ya está todo ahí. Pero no está del todo conectado.',
+    title: 'Tu contexto ya está ahí, solo que no está conectado.',
     a: 'Tus decisiones, las personas con las que trabajas, lo que has leído y lo que concluiste de ello. Existe. En tu cabeza, en chats que se cierran, en correos, reuniones y notas que no saben nada unos de otros.',
     b: 'Por eso cada sesión con una IA empieza casi de cero. Te explicas otra vez. Y otra.',
     c: 'El modelo es el mismo para todos. Tu contexto es la única parte que es tuya.',

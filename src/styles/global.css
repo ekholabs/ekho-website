@@ -3462,6 +3462,20 @@
     display: none;
   }
 
+  /* The hero's second button carries the same mark as the step bars, since it
+     does the same thing: it moves the reader on one view. */
+  .pill-mark {
+    fill: none;
+    height: 0.875rem;
+    margin-left: 0.15rem;
+    stroke: var(--signal);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+    vertical-align: -0.15em;
+    width: 0.875rem;
+  }
+
   /* Each one is a bar across the whole left column, not a loose control: it
      runs from the edge of the window to the rule that divides the text from
      the figure, over the same blurred ground as the header, and closes the

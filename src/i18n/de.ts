@@ -32,7 +32,7 @@ export const de: Copy = {
     seeHow: 'So funktioniert es',
   },
   why: {
-    title: 'Alles ist längst da. Nur nicht vollständig verbunden.',
+    title: 'Dein Kontext ist bereits da, er ist nur nicht verbunden.',
     a: 'Deine Entscheidungen, die Menschen, mit denen du arbeitest, was du gelesen und was du daraus geschlossen hast. Es existiert. In deinem Kopf, in Chats, die sich schließen, in Mails und Meetings und Notizen, die nichts voneinander wissen.',
     b: 'Also fängt jede Sitzung mit einer KI fast bei null an. Du erklärst dich noch einmal. Und noch einmal.',
     c: 'Das Modell ist für alle dasselbe. Dein Kontext ist der einzige Teil, der dir gehört.',

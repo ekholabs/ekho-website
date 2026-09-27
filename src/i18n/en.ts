@@ -29,7 +29,7 @@ export const en = {
     seeHow: 'See how it works',
   },
   why: {
-    title: 'Everything is already there. But it is not fully connected.',
+    title: 'Your context is already there, it is just not connected.',
     a: 'Your decisions, the people you work with, what you have read and what you concluded from it. It exists. In your head, in chats that close, in mails and meetings and notes that know nothing of each other.',
     b: 'So every session with an AI starts near zero. You explain yourself again. And again.',
     c: 'The model is the same for everyone. Your context is the only part that is yours.',

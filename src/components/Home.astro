@@ -138,7 +138,10 @@ const people = [
               {c.hero.cta}
             </a>
             <a class="pill" href="#why">
-              {c.hero.seeHow} <span aria-hidden="true">↓</span>
+              {c.hero.seeHow}
+              <svg class="pill-mark" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M3.5 6 8 10.5 12.5 6" />
+              </svg>
             </a>
           </p>
         </div>
@@ -492,9 +495,13 @@ const people = [
       // collapse is done, or it would fade out from under the movement.
       let collapse = 0;
       const chatWin = chatOverlay?.querySelector<HTMLElement>('.win');
-      // below the story the chapters take the whole page, and a lit strip down
-      // one side of them would be a leftover rather than a ground
-      const washOn = !current?.classList.contains('chapter--wide');
+      // The lit stage belongs to the story chapters only: not to the opening,
+      // where there is nothing yet to be a ground for, and not below the
+      // story, where the chapters take the whole page and a lit strip down one
+      // side would be a leftover. Keyed on the chapter rather than on the
+      // collapse, so no route back to the top can leave it standing.
+      const washOn =
+        !!current && current.id !== 'hero' && !current.classList.contains('chapter--wide');
 
       if (compound && chatWin) {
         const top = compound.getBoundingClientRect().top;
