@@ -1808,19 +1808,31 @@
   }
 
   .people li {
-    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    padding: 1.1rem;
     background: var(--surface);
     border-radius: var(--radius);
     box-shadow: var(--lift);
   }
 
-  .people-sq {
-    display: block;
-    width: 10px;
-    height: 10px;
-    margin-bottom: 0.9rem;
-    border-radius: 2px;
-    background: var(--signal);
+  /* The portraits are the only photographs on the page, so they take the page's
+     own palette rather than bringing their own: grey, and a shade quieter than
+     the text beside them until the tile is hovered. */
+  .people-face {
+    flex: none;
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: var(--radius);
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.02);
+    opacity: 0.86;
+    transition: opacity 260ms ease;
+  }
+
+  .people li:hover .people-face {
+    opacity: 1;
   }
 
   .people b {
@@ -1906,6 +1918,11 @@
   /* Narrow screens: the windows drop their sidebars rather than being scaled
      down into illegibility, which is what the real clients do at this width. */
   @media (max-width: 47.999rem) {
+    .people-face {
+      width: 4.25rem;
+      height: 4.25rem;
+    }
+
     .viewer {
       gap: 1.5rem;
     }
