@@ -2175,15 +2175,17 @@
 
 @layer components {
   /* ------------------------------------------------------------------
-     Narrow screens. The two columns cannot sit side by side, so the stage
-     becomes a band pinned under the header and the text scrolls beneath it.
-     The choreography itself is unchanged: the graph still builds, the windows
-     still lie over it. What goes is the architecture rail, because a fifth of
-     the screen is too much to spend on it here; chapter 06 carries it instead.
+     Narrow screens. The two columns cannot sit side by side, and the answer
+     used to be a band pinned under the header with the text scrolling beneath
+     it. That band showed the same scattered field in every chapter, spent half
+     the screen doing it, and covered whatever the chapter had put at the top —
+     the install command among other things. A phone reads one thing at a time,
+     so the stage goes and each chapter carries its own picture in the flow:
+     the windows through .flow-window, the net through .flow-graphic.
      ------------------------------------------------------------------ */
   @media (max-width: 63.999rem) {
     .story-figure {
-      height: 44svh;
+      display: none;
     }
 
     .figure-stage {
@@ -2226,14 +2228,24 @@
   /* On a phone a window floating over a 52svh band is unreadable, so the same
      window is rendered a second time inside the chapter and simply flows with
      the text. Exactly one of the two is ever displayed. */
-  .flow-window {
+  .flow-window,
+  .flow-graphic {
     display: none;
     margin-top: 2rem;
   }
 
   @media (max-width: 63.999rem) {
-    .flow-window {
+    .flow-window,
+    .flow-graphic {
       display: block;
+    }
+
+    /* The small net is a pattern rather than a diagram here, so it is given a
+       square of its own and left to be read as one. */
+    .flow-graphic .context-graphic {
+      margin: 0 auto;
+      max-width: 22rem;
+      padding: 0;
     }
 
     .overlay {
@@ -2247,6 +2259,13 @@
 
     .flow-window .win--chat .win-body {
       height: 24rem;
+    }
+
+    /* The list of other conversations is context for the one being shown, and
+       on a phone it takes half the width away from the thing it is context
+       for: the message, the command and the table of what would be written. */
+    .flow-window .chat-side {
+      display: none;
     }
   }
 }
@@ -3770,6 +3789,67 @@
       .arch-row::details-content {
         transition: none;
       }
+    }
+  }
+}
+
+/* The model marks on a phone -------------------------------------------------
+   Seven in one row rather than six and a stranded one: the row is a statement
+   about not being tied to any of them, and it only reads as that if they are
+   seen together. Here rather than up with the narrow-screen rules, because the
+   plate's own size is set further down the file and a media query does not
+   make a rule win. */
+@layer components {
+  @media (max-width: 63.999rem) {
+    .plates {
+      gap: 0.35rem;
+    }
+
+    .plate {
+      width: 2.6rem;
+      height: 2.6rem;
+    }
+  }
+}
+
+/* The chat window on a phone -------------------------------------------------
+   On a wide screen the window shows a slice of a conversation and the crop is
+   part of the picture. Here it is the picture: the whole point of the chapter
+   is that nothing is written without being shown first, and the confirm was
+   below the crop. So the window is as tall as what it contains, and the
+   terminal line is set small enough to fit the width rather than run under the
+   edge. */
+@layer components {
+  @media (max-width: 63.999rem) {
+    .flow-window .win--chat .win-body {
+      height: auto;
+    }
+
+    .flow-window .chat-scroll {
+      overflow: visible;
+      padding-bottom: 0.9rem;
+    }
+
+    .flow-window .tool-mono {
+      font-size: 0.625rem;
+      overflow-wrap: anywhere;
+    }
+  }
+}
+
+/* The viewer on a phone ------------------------------------------------------
+   Same trade as the chat window: the navigation down the left is context, and
+   at this width it takes half the frame away from what it is context for. What
+   the shot has to show is that the vault is readable — the counts, the recent
+   entries, the two screens side by side. */
+@layer components {
+  @media (max-width: 63.999rem) {
+    .viewer .app-side {
+      display: none;
+    }
+
+    .viewer .app-meta {
+      overflow-wrap: anywhere;
     }
   }
 }

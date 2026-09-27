@@ -277,6 +277,21 @@ const people = [
           <p class="statement">{c.compound.a}</p>
           <p class="statement">{c.compound.b}</p>
         </div>
+        {/* The net, for a phone. The companion on the right is a wide-screen
+            thing: it lives in a column beside the text and moves through four
+            states as the reader steps. Here the chapters simply scroll, so the
+            one state this chapter is about is drawn in place, smaller and
+            without the labels, and everything else in the graphic's story is
+            carried by the words. Exactly one of the two is ever displayed. */}
+        <div class="flow-graphic">
+          <ContextGraphic
+            lang={lang}
+            animated={false}
+            caption={false}
+            points={200}
+            labelled={false}
+          />
+        </div>
       </section>
     </div>
   </div>

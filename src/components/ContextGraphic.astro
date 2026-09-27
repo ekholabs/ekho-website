@@ -26,9 +26,19 @@ import { t, type Lang } from '../i18n';
 interface Props {
   animated?: boolean;
   caption?: boolean;
+  /**
+   * How many points to draw. The full set is what the companion on a wide
+   * screen is made of; a phone gets a smaller one, because several hundred
+   * circles at that size are a grey smudge and the markup for them is most of
+   * the page's weight. Everything below derives from this, so the smaller net
+   * is the same net, not a different drawing.
+   */
+  points?: number;
+  /** the labelled points, which need room for their text beside them */
+  labelled?: boolean;
   lang: Lang;
 }
-const { animated = true, caption = true, lang } = Astro.props;
+const { animated = true, caption = true, points = 560, labelled = true, lang } = Astro.props;
 const c = t(lang);
 
 const SIZE = 560;
@@ -38,7 +48,7 @@ const R = 222; // the formed body is smaller than the field it gathers from
 // circles are spread over the whole screen rather than into a column, not
 // because there are more of them: nothing appears and nothing is taken away,
 // which is what lets the opening run into the first chapter without a seam.
-const N = 560;
+const N = points;
 
 function mulberry32(a: number) {
   return function () {
@@ -242,7 +252,11 @@ const hits = (a: Box, b: Box) => a.x < b.r + 6 && b.x < a.r + 6 && a.y < b.b + 4
 
 const placedBoxes: Box[] = [];
 const labels = new Map<number, { key: string; type: string; title: string; side: 'l' | 'r' }>();
-for (const n of named) {
+// On a phone the labels have nowhere to go: eight captions beside a 350px
+// drawing are unreadable at any size that fits. The points stay, the names do
+// not, and the yellow cap then centres on the first point rather than on the
+// decision, which is the right trade for a net shown as a pattern.
+for (const n of labelled ? named : []) {
   const target: P = [
     C + Math.cos((n.at[1] * Math.PI) / 180) * n.at[0],
     C + Math.sin((n.at[1] * Math.PI) / 180) * n.at[0],
