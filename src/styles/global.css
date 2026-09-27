@@ -1432,14 +1432,8 @@
     flex: none;
   }
 
-  /* What belongs to EKHO inside somebody else's client carries a signal edge
-     on its left. Enough to find it at a glance, not enough to colour the
-     window. */
-  .tool--skill,
-  .chat-vault {
-    box-shadow: inset 2px 0 0 var(--signal);
-  }
-
+  /* What belongs to EKHO inside somebody else's client is marked by its label,
+     not by a decoration: the square, and the kind in full text colour. */
   .tool--skill .tool-kind {
     color: var(--text);
   }
