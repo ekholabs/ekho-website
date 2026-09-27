@@ -405,6 +405,16 @@ const geometry = JSON.stringify({
   k: pairs(chords),
 });
 
+// The eight that touch a point of yours stay individual lines; the others are
+// bucketed, in the same order, into nine paths that fade one after another.
+const mineFirst = first.filter(([a, b]) => yours.has(keyOf(a, b)));
+const restFirst = first.filter(([a, b]) => !yours.has(keyOf(a, b)));
+const WAVES = 9;
+const perWave = Math.ceil(restFirst.length / WAVES);
+const waves: [number, number][][] = Array.from({ length: WAVES }, (_, w) =>
+  restFirst.slice(w * perWave, (w + 1) * perWave),
+).filter((w) => w.length > 0);
+
 const figureClass = ['context-graphic', animated ? '' : 'is-final'].filter(Boolean).join(' ');
 const ariaLabel = c.graphic.label;
 ---
@@ -416,16 +426,25 @@ const ariaLabel = c.graphic.label;
   aria-label={ariaLabel}
 >
   <svg viewBox={`0 0 ${SIZE} ${SIZE}`} aria-hidden="true">
-    {/* The first links are their own elements, not one path with many pieces:
-        each is drawn from its point to the other over half a second, and they
-        start one after another. As a single path the whole set was laid down in
-        the time it takes to draw one line, which reads as a fade, not as
-        drawing. The mesh below stays one path per group, because fourteen
-        hundred elements cannot be moved per frame while the sphere turns. */}
+    {/* The first links used to be 135 separate lines, each drawing its own
+        stroke. That is 135 paths re-rastered on every frame, on the main
+        thread, in exactly the frames where the window is being scaled by the
+        scroll position — so the collapse stuttered and the net seemed to jump
+        in. Now only the eight links that touch a point of yours are drawn line
+        by line, which is the part worth watching. The rest arrive as nine
+        waves, one path each, fading. Nine elements instead of 135. */}
     <g class="cg-firsts">
-      {first.map(([a, b], i) => (
+      {waves.map((edges, w) => (
+        <path
+          class="cg-wave"
+          d={path(edges)}
+          style={`--w:${w}`}
+          data-wave={edges.map(([a, b]) => `${a},${b}`).join(' ')}
+        />
+      ))}
+      {mineFirst.map(([a, b], i) => (
         <line
-          class:list={['cg-first', { 'is-yours': yours.has(keyOf(a, b)) }]}
+          class="cg-first is-yours"
           x1={cloudPts[a][0]}
           y1={cloudPts[a][1]}
           x2={cloudPts[b][0]}
@@ -538,6 +557,13 @@ const ariaLabel = c.graphic.label;
     // the first links are individual elements so each can be drawn on its own,
     // which means they have to be moved individually when the sphere turns
     const firstEls = Array.from(figure.querySelectorAll<SVGLineElement>('.cg-first'));
+    const waveEls = Array.from(figure.querySelectorAll<SVGPathElement>('.cg-wave'));
+    const waveEdges = waveEls.map((el) =>
+      (el.dataset.wave ?? '')
+        .split(' ')
+        .filter(Boolean)
+        .map((pair) => pair.split(',').map(Number) as [number, number]),
+    );
     const near = figure.querySelector<SVGPathElement>('.cg-near');
     const far = figure.querySelector<SVGPathElement>('.cg-far');
     const chord = figure.querySelector<SVGPathElement>('.cg-chord');
@@ -614,6 +640,12 @@ const ariaLabel = c.graphic.label;
         el.setAttribute('y1', py[a].toFixed(1));
         el.setAttribute('x2', px[b].toFixed(1));
         el.setAttribute('y2', py[b].toFixed(1));
+      }
+
+      for (let w = 0; w < waveEls.length; w++) {
+        let dw = '';
+        for (const [a, b] of waveEdges[w]) dw += seg(a, b);
+        waveEls[w].setAttribute('d', dw);
       }
 
       for (let i = 0; i < N; i++) {

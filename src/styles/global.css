@@ -3032,6 +3032,32 @@
 }
 
 @layer components {
+  /* The bulk of the first links arrive as waves rather than as 135 drawn
+     strokes: one path per wave, fading, nine paints instead of 135 per frame.
+     The window collapse is driven by the scroll position, so anything the main
+     thread is still painting shows up as a stutter in the window itself. */
+  .cg-wave {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 0.62;
+    stroke-linecap: round;
+    opacity: 0.001;
+    transition: opacity 700ms ease;
+  }
+
+  .reveal-on [data-graphic].is-2:not(.is-3) .cg-wave {
+    opacity: 0.8;
+    transition: opacity 420ms ease calc(var(--w) * 120ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-on [data-graphic].is-2:not(.is-3) .cg-wave {
+      transition: opacity 400ms ease;
+    }
+  }
+}
+
+@layer components {
   /* Each first link is drawn from one point to the other, and they start one
      after another. Half a second per stroke, eleven milliseconds between them,
      so the web is visibly built rather than switched on. */
@@ -3057,8 +3083,8 @@
     opacity: 0.8;
     stroke-dashoffset: 0;
     transition:
-      stroke-dashoffset 520ms ease-out calc(var(--e) * 11ms),
-      opacity 100ms linear calc(var(--e) * 11ms);
+      stroke-dashoffset 520ms ease-out calc(var(--e) * 90ms),
+      opacity 100ms linear calc(var(--e) * 90ms);
   }
 
   [data-graphic].is-turning .cg-first {
@@ -3222,6 +3248,13 @@
   [data-story-figure].is-collapsing .win--chat {
     transform-origin: center center;
     transition: none;
+    /* The blur behind the window is recomputed for every size it passes
+       through, and the size is driven by the scroll position: the most
+       expensive thing on the page during the one second it can least afford
+       it. The window is over the dark field here, where its own translucent
+       ground reads the same without it. */
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 
