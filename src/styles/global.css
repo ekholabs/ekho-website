@@ -728,7 +728,7 @@
 
   summary.arch-head:focus-visible {
     outline: 2px solid var(--signal);
-    outline-offset: 3px;
+    outline-offset: -2px;
     border-radius: var(--radius);
   }
 
@@ -756,7 +756,7 @@
 
   .arch-desc {
     max-width: 62ch;
-    margin: -0.5rem 0 0;
+    margin: 0;
     padding: 0 1.6rem 1.5rem;
     font-size: 1rem;
     line-height: 1.55;
