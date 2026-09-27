@@ -1448,20 +1448,23 @@
     gap: 0.7rem;
   }
 
+  /* The mark sits on the window's own ground, like the plates in the model
+     row: a bright plate made the assistant the loudest thing in a window whose
+     subject is what EKHO writes. */
   .chat-mark {
     width: 22px;
     height: 22px;
     flex: none;
     display: grid;
     place-items: center;
+    border: 1px solid var(--panel-line);
     border-radius: 5px;
-    background: var(--text);
   }
 
   .chat-mark svg {
-    width: 14px;
-    height: 14px;
-    fill: var(--panel);
+    width: 13px;
+    height: 13px;
+    fill: var(--muted);
   }
 
   .chat-said {
