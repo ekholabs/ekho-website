@@ -440,25 +440,31 @@ const people = [
 
   // The collapse of the chat window into the decision point, as a value from 0
   // to 1 that the paint below reads. It is driven here rather than by the
-  // scroll position so that it has a length of its own: long enough to be a
-  // movement and not a jump, and the same whatever brought the reader to the
-  // chapter.
+  // scroll position so that it has a length of its own: quick, but a movement
+  // rather than a jump, and the same whatever brought the reader here.
   let collapseP = 0;
   let collapseRun = 0;
+  let collapsing = false;
   const runCollapse = (to: number) => {
-    if (reduceMotion) {
+    // A page that is not on screen is served no animation frames, so a run
+    // begun there would sit half done until the reader came back. Same guard
+    // as the stepper: with nothing to animate for, it simply arrives.
+    if (reduceMotion || document.hidden) {
       collapseP = to;
+      update();
       return;
     }
     const from = collapseP;
     if (from === to) return;
-    const DUR = 1500 * Math.abs(to - from);
+    const DUR = 900 * Math.abs(to - from);
     const t0 = performance.now();
     const id = ++collapseRun;
+    collapsing = true;
     const tick = (now: number) => {
       if (id !== collapseRun) return;
       const p = Math.min(1, (now - t0) / DUR);
       collapseP = from + (to - from) * p;
+      if (p >= 1) collapsing = false;
       update();
       if (p < 1) requestAnimationFrame(tick);
     };
@@ -529,6 +535,16 @@ const people = [
       // collapse, so no route back to the top can leave it standing.
       const washOn =
         !!current && current.id !== 'hero' && !current.classList.contains('chapter--wide');
+
+      // Whatever moved the page — a step, a chapter link, a restored position,
+      // a resize — the collapse belongs to the chapter being read. While a run
+      // is in flight it is left alone; otherwise it is brought into line here,
+      // so no route into the chapter can leave the window half shrunk.
+      if (compound && stepping() && !collapsing) {
+        const at = views.indexOf(compound);
+        const want = at >= 0 && index >= at ? 1 : 0;
+        if (collapseP !== want) collapseP = want;
+      }
 
       if (compound && chatWin) {
         // On a stepping screen the collapse runs on its own clock, started by
