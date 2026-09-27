@@ -107,20 +107,9 @@ export const es: Copy = {
       },
       vault: {
         title: 'EKHO Vault',
-        note: 'Conocimiento · Specs · Código',
+        note: 'formato abierto',
         lead: 'Lo que es tuyo:',
         text: 'Markdown sencillo en tu propio disco. Vale más con cada sesión, y ninguna de las capas de encima puede retenerlo.',
-        parts: [
-          ['Conocimiento', 'Fuentes, ideas, hipótesis y decisiones. Aquí vive el pensamiento.'],
-          [
-            'Specs',
-            'El puente entre el conocimiento validado y requisitos construibles. Todo lo construido se puede rastrear hasta su porqué.',
-          ],
-          [
-            'Código',
-            'El software en marcha, construido desde las specs y devuelto como evidencia. Cada entrega cierra el círculo.',
-          ],
-        ],
       },
     },
   },

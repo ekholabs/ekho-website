@@ -19,15 +19,11 @@ const layers = [
   { key: 'llm', ...L.llm },
   { key: 'harness', code: 'ekho-cockpit', ...L.harness },
   { key: 'ontology', code: 'ekho-core', ...L.ontology },
-  {
-    key: 'vault',
-    ...L.vault,
-    parts: L.vault.parts.map(([title, text], i) => ({
-      title,
-      text,
-      code: ['ekho-knowledge-vault', 'ekho-spec-vault', 'ekho-applications'][i],
-    })),
-  },
+  // The vault used to break into knowledge, specs and code here. The split is
+  // out for now — it describes how the vault is worked with rather than what
+  // the layer is — and the .arch-parts styles are still in place for when it
+  // comes back.
+  { key: 'vault', ...L.vault },
 ] as {
   key: string;
   title: string;
@@ -35,7 +31,6 @@ const layers = [
   lead: string;
   text: string;
   code?: string;
-  parts?: { title: string; code: string; text: string }[];
 }[];
 ---
 
@@ -54,17 +49,6 @@ const layers = [
         <p>
           <strong>{l.lead}</strong> {l.text}
         </p>
-        {l.parts && (
-          <ul class="arch-parts">
-            {l.parts.map((p) => (
-              <li>
-                <b>{p.title}</b>
-                <code>{p.code}</code>
-                <span>{p.text}</span>
-              </li>
-            ))}
-          </ul>
-        )}
       </div>
     </details>
   ))}

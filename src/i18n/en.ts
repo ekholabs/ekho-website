@@ -105,20 +105,9 @@ export const en = {
       },
       vault: {
         title: 'EKHO Vault',
-        note: 'Knowledge · Specs · Code',
+        note: 'an open format',
         lead: 'What you own:',
         text: 'plain Markdown on your own disk. It becomes more valuable with every session, and nothing in the layers above it is allowed to hold it hostage.',
-        parts: [
-          ['Knowledge', 'Sources, insights, hypotheses and decisions. Where the thinking lives.'],
-          [
-            'Specs',
-            'The bridge from validated knowledge to buildable requirements. Anything built can be traced back to why.',
-          ],
-          [
-            'Code',
-            'The running software, built from specs and fed back in as evidence. Every shipped feature closes the loop.',
-          ],
-        ],
       },
     },
   },
