@@ -30,13 +30,13 @@ const chapters = [
 const people = [
   {
     name: 'Lorenz Vierecke',
-    line: 'Semantics and ontology, and the front end.',
+    line: 'Semantics and ontology design, and the front end.',
     href: 'https://www.linkedin.com/in/lorenz-vierecke-7b896079',
     portrait: lorenzPortrait,
   },
   {
     name: 'Stephan Georg',
-    line: 'The harness, data engineering, and the back end.',
+    line: 'Harness and data engineering, and the back end.',
     href: 'https://www.linkedin.com/in/stephangeorg',
     portrait: stephanPortrait,
   },
@@ -626,30 +626,47 @@ const people = [
     goTo(index + dir);
   }
 
+  // One gesture moves one section, however long it is. A wheel or a trackpad
+  // keeps firing while the flick decays, so the guard is not a timer but a
+  // silence: the next step is only accepted once the events have stopped
+  // arriving for a moment. Without it a long swipe carries the reader two or
+  // three sections past where they let go.
+  let lastWheel = 0;
+  const QUIET = 90;
+
   window.addEventListener(
     'wheel',
     (e) => {
       if (!stepping()) return;
       e.preventDefault();
+      const now = performance.now();
+      const gap = now - lastWheel;
+      lastWheel = now;
       if (Math.abs(e.deltaY) < 2) return;
+      if (gap < QUIET) return;
       step(e.deltaY > 0 ? 1 : -1);
     },
     { passive: false },
   );
 
+  // the same for a finger: one swipe, one section, and nothing more until it
+  // has been lifted
   let touchY = 0;
+  let touchSpent = false;
   window.addEventListener('touchstart', (e) => {
     touchY = e.touches[0]?.clientY ?? 0;
+    touchSpent = false;
   });
   window.addEventListener(
     'touchmove',
     (e) => {
       if (!stepping()) return;
       e.preventDefault();
+      if (touchSpent) return;
       const dy = touchY - (e.touches[0]?.clientY ?? 0);
       if (Math.abs(dy) > 24) {
+        touchSpent = true;
         step(dy > 0 ? 1 : -1);
-        touchY = e.touches[0]?.clientY ?? 0;
       }
     },
     { passive: false },
