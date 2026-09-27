@@ -170,6 +170,7 @@ export const es: Copy = {
     reply: 'Responder…',
   },
   graphic: {
+    frameTitle: 'Tu EKHO',
     label:
       'El mismo conocimiento en cuatro estados: primero disperso y sin forma, luego esparcido, después reunido en una forma con las primeras conexiones, y por último una red densa de varios cientos de puntos sin uno solo nuevo.',
     types: {

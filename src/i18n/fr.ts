@@ -170,6 +170,7 @@ export const fr: Copy = {
     reply: 'Répondre…',
   },
   graphic: {
+    frameTitle: 'Votre EKHO',
     label:
       "Le même savoir en quatre états : d'abord dispersé et sans forme, puis éparpillé, puis rassemblé en une forme avec les premiers liens, et enfin un réseau dense de plusieurs centaines de points sans un seul nouveau.",
     types: {

@@ -168,6 +168,7 @@ export const en = {
     reply: 'Reply…',
   },
   graphic: {
+    frameTitle: 'Your EKHO',
     label:
       'The same knowledge in four states: spread wide and formless at first, then scattered, then gathered into one form with the first connections, and finally a dense network of several hundred points without a single new one.',
     types: {

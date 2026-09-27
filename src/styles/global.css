@@ -20,6 +20,11 @@
   --signal: #f5c400;
   --signal-ink: #1a1a18;
   --shadow: rgb(26 26 24 / 0.045);
+  /* One size for running text, set by the opening and used by every chapter
+     after it, so the page reads at one pitch rather than a different one per
+     section. */
+  --body-size: clamp(1rem, 1.3vw, 1.0625rem);
+  --body-leading: 1.6;
   /* the dark panel: EKHO core in the architecture, and the ground behind a screen */
   --core: #1a1a18;
   --core-ink: #edebe6;
@@ -1028,11 +1033,8 @@
 
   .statement {
     font-weight: 400;
-    /* A shade smaller than it was: at the old size the lines ran right up to
-       the rule beside them with nothing left over, and a column that tight
-       reads as cramped however good the measure is. */
-    font-size: clamp(1rem, 1.35vw, 1.125rem);
-    line-height: 1.62;
+    font-size: var(--body-size);
+    line-height: var(--body-leading);
     letter-spacing: 0;
     color: var(--muted);
     max-width: 52ch;
@@ -1045,7 +1047,8 @@
   .chapter-lede {
     max-width: 58ch;
     color: var(--muted);
-    line-height: 1.65;
+    font-size: var(--body-size);
+    line-height: var(--body-leading);
   }
 
   .fig-note {
@@ -2531,8 +2534,8 @@
   .hero-lede {
     margin: 0 0 2.25rem;
     max-width: 44ch;
-    font-size: clamp(1rem, 1.3vw, 1.0625rem);
-    line-height: 1.6;
+    font-size: var(--body-size);
+    line-height: var(--body-leading);
     color: var(--muted);
   }
 
@@ -2640,11 +2643,11 @@
      to dim everything but the line nearest the middle of the screen, which is a
      deck mannerism: on a page where all three are in view at once it leaves two
      thirds of the text unreadable while the graph is already carrying the
-     movement. They all stand now, and they stand bigger. */
+     movement. They all stand now, at the size the opening sets for running
+     text: one pitch for the whole page rather than a louder one per chapter. */
   .statement {
-    font-size: clamp(1.1875rem, 1.9vw, 1.5rem);
-    line-height: 1.34;
-    letter-spacing: -0.014em;
+    font-size: var(--body-size);
+    line-height: var(--body-leading);
     max-width: 44ch;
     margin: 0 0 1rem;
   }
@@ -3559,6 +3562,48 @@
          42px off the bottom. The 61px difference is added to the top so the
          text rests the same distance from both bars. */
       padding-block: 9.0625rem 5.25rem;
+    }
+  }
+}
+
+/* The case the net is held in ----------------------------------------------
+   What the chat window leaves behind when it collapses into the decision
+   point: the same box, the same corners, nothing inside it any more but the
+   graph. Only an outline, so the sphere reads through it. The script gives it
+   the window's own measurements, which is why nothing here sets a size. */
+@layer components {
+  .vault-frame {
+    border: 1px solid color-mix(in srgb, var(--signal) 68%, transparent);
+    border-radius: var(--win-radius);
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    transition: opacity 400ms ease;
+    z-index: 2;
+  }
+
+  /* Sitting on the top edge, the way the window carried its own title. The
+     ground behind the words closes the line so it reads as a caption cut into
+     the frame rather than a label laid over it. */
+  .vault-frame-title {
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    left: 50%;
+    letter-spacing: 0.14em;
+    margin: 0;
+    padding: 0 0.75rem;
+    position: absolute;
+    text-transform: uppercase;
+    top: 0;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vault-frame {
+      transition: none;
     }
   }
 }

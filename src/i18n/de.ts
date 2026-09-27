@@ -174,6 +174,7 @@ export const de: Copy = {
     reply: 'Antworten…',
   },
   graphic: {
+    frameTitle: 'Dein EKHO',
     label:
       'Dasselbe Wissen in vier Zuständen: zuerst weit verteilt und formlos, dann gestreut, dann zu einer Form gesammelt mit den ersten Verbindungen, und schließlich ein dichtes Netz aus mehreren hundert Punkten, ohne einen einzigen neuen.',
     types: {
