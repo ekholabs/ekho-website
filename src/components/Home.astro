@@ -456,6 +456,16 @@ const people = [
   let collapseP = 0;
   let collapseRun = 0;
   let collapsing = false;
+
+  // Blur is the most expensive thing on this page and there are seven layers of
+  // it: the header, the windows, the step buttons. Recomputing all of them for
+  // every position the page passes through is what a glide and a collapse both
+  // do. They are suspended while anything is moving and come back when it
+  // stops; over a second of movement nobody sees the difference, and on a
+  // browser that rasterises blur on the CPU it is the whole difference.
+  const setMoving = () => {
+    document.documentElement.classList.toggle('is-moving', animating || collapsing);
+  };
   const runCollapse = (to: number, atOnce = false) => {
     // A page that is not on screen is served no animation frames, so a run
     // begun there would sit half done until the reader came back. Same guard
@@ -472,11 +482,15 @@ const people = [
     const t0 = performance.now();
     const id = ++collapseRun;
     collapsing = true;
+    setMoving();
     const tick = (now: number) => {
       if (id !== collapseRun) return;
       const p = Math.min(1, (now - t0) / DUR);
       collapseP = from + (to - from) * p;
-      if (p >= 1) collapsing = false;
+      if (p >= 1) {
+        collapsing = false;
+        setMoving();
+      }
       update();
       if (p < 1) requestAnimationFrame(tick);
     };
@@ -814,6 +828,7 @@ const people = [
     // Nothing to animate for, so it simply arrives.
     if (far || reduceMotion || document.hidden) {
       animating = false;
+      setMoving();
       window.scrollTo(0, topOf(view));
       update();
       return;
@@ -825,6 +840,7 @@ const people = [
     const duration = Math.min(1100, Math.max(520, 420 + span * 0.35));
     const t0 = performance.now();
     animating = true;
+    setMoving();
     const tick = (now: number) => {
       const p = Math.min(1, (now - t0) / duration);
       const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
@@ -838,6 +854,7 @@ const people = [
       else {
         window.scrollTo(0, topOf(view));
         animating = false;
+        setMoving();
         // a trackpad keeps sending events after the fingers lift; this stops
         // the tail of one flick from being read as the next one
         lockUntil = performance.now() + 220;
@@ -850,6 +867,7 @@ const people = [
     window.clearTimeout(release);
     release = window.setTimeout(() => {
       animating = false;
+      setMoving();
     }, duration + 600);
   }
 
@@ -859,6 +877,7 @@ const people = [
     if (!document.hidden || !animating) return;
     window.clearTimeout(release);
     animating = false;
+    setMoving();
     lockUntil = 0;
     window.scrollTo(0, topOf(views[index]));
   });

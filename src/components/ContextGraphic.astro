@@ -364,6 +364,35 @@ const reach = new Map<number, number>();
   }
 }
 
+// The yellow used to be one path pulled across a dash offset over five
+// seconds. A dash offset is a paint property: every one of those frames
+// re-records and re-rasters a path that covers half the drawing, and the run
+// lands exactly where the chat window is being scaled by the clock. The first
+// pass through the chapter paid for that raster and stuttered; every later one
+// found it cached, which is why it only ever happened once.
+//
+// So the spread is bucketed instead: equal lengths of the drawing, in the same
+// outward order, each its own path, each fading in as the wave reaches it. The
+// geometry is rastered once while it is still invisible, and what moves after
+// that is opacity, which the compositor can do on its own.
+const OWN_WAVES = 22;
+const ownWaves: { at: number; edges: [number, number][] }[] = [];
+{
+  let run = 0;
+  let at = 0;
+  let bucket: [number, number][] = [];
+  for (const e of own) {
+    if (!bucket.length) at = run / ownTotal;
+    bucket.push(e);
+    run += segLen(e);
+    if (run / ownTotal >= (ownWaves.length + 1) / OWN_WAVES) {
+      ownWaves.push({ at: +at.toFixed(3), edges: bucket });
+      bucket = [];
+    }
+  }
+  if (bucket.length) ownWaves.push({ at: +at.toFixed(3), edges: bucket });
+}
+
 const labelOrder = new Map(
   [...labels.keys()].sort((a, b) => scatter[a][1] - scatter[b][1]).map((i, n) => [i, n]),
 );
@@ -460,7 +489,14 @@ const ariaLabel = c.graphic.label;
       <path class="cg-link cg-far" pathLength="1" d={path(far)} />
       <path class="cg-link cg-chord" pathLength="1" d={chords.map(bow).join('')} />
       <path class="cg-link cg-near" pathLength="1" d={path(near)} />
-      <path class="cg-link cg-own" pathLength="1" d={path(own)} />
+      {ownWaves.map((w) => (
+        <path
+          class="cg-link cg-own"
+          style={`--w:${w.at}`}
+          data-own={w.edges.map(([a, b]) => `${a},${b}`).join(' ')}
+          d={path(w.edges)}
+        />
+      ))}
       <path class="cg-link cg-hot" d="" />
     </g>
 
@@ -567,7 +603,14 @@ const ariaLabel = c.graphic.label;
     const near = figure.querySelector<SVGPathElement>('.cg-near');
     const far = figure.querySelector<SVGPathElement>('.cg-far');
     const chord = figure.querySelector<SVGPathElement>('.cg-chord');
-    const ownPath = figure.querySelector<SVGPathElement>('.cg-own');
+    // the yellow is a stack of waves now, each with its own share of the edges
+    const ownEls = Array.from(figure.querySelectorAll<SVGPathElement>('.cg-own'));
+    const ownEdges = ownEls.map((el) =>
+      (el.dataset.own ?? '')
+        .split(' ')
+        .filter(Boolean)
+        .map((pair) => pair.split(',').map(Number) as [number, number]),
+    );
     const hotPath = figure.querySelector<SVGPathElement>('.cg-hot');
 
     // what each point is joined to, for the highlight
@@ -625,9 +668,11 @@ const ariaLabel = c.graphic.label;
       near?.setAttribute('d', dNear);
       far?.setAttribute('d', dFar);
 
-      let dOwn = '';
-      for (let i = 0; i < g.o.length; i += 2) dOwn += seg(g.o[i], g.o[i + 1]);
-      ownPath?.setAttribute('d', dOwn);
+      for (let w = 0; w < ownEls.length; w++) {
+        let dw = '';
+        for (const [a, b] of ownEdges[w]) dw += seg(a, b);
+        ownEls[w].setAttribute('d', dw);
+      }
 
       let dChord = '';
       for (let i = 0; i < g.k.length; i += 2) dChord += bow(g.k[i], g.k[i + 1]);
