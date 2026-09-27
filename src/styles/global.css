@@ -646,14 +646,15 @@
     /* The strike runs out from where the window landed, point after point
        after point, and each line is spun a fifth of a second behind its
        point: one wave, with the colour just ahead of the connection. It starts
-       as the window lands rather than after a pause. No new points appear —
+       while the window is still becoming that point, not after it has
+       landed. No new points appear —
        these are the same white ones, changing colour. Each turns in a fifth of
        a second, because a colour that eases over most of a second is a fade
        and not a strike. */
     transition:
       fill 220ms ease-out,
       opacity 220ms ease-out;
-    transition-delay: calc(300ms + var(--w, 0) * 2600ms);
+    transition-delay: calc(120ms + var(--w, 0) * 2600ms);
   }
 
   /* going back is not a wave, so it does not wait */
@@ -2960,7 +2961,7 @@
   }
 
   .reveal-on [data-graphic].is-3 .cg-own {
-    transition-delay: calc(520ms + var(--w, 0) * 2600ms);
+    transition-delay: calc(320ms + var(--w, 0) * 2600ms);
   }
 
   /* before the chapter turns the waves are held at a hair of alpha, painted
