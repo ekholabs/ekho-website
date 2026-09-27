@@ -49,12 +49,15 @@ const indexable = false;
           { 'wrap-wide': wide, 'header-centred': Astro.slots.has('header-nav') },
         ]}
       >
-        <a class="brand" href="/">
+        {/* Home in the language being read. A bare "/" sent a reader of the
+            German page to the English one, which is a strange thing for the
+            wordmark to do. */}
+        <a class="brand" href={pathFor(lang)}>
           EKHO
         </a>
         <slot name="header-nav">
           <nav class="nav">
-            <a href="/">Home</a>
+            <a href={pathFor(lang)}>Home</a>
             <a href="https://github.com/ekholabs">GitHub</a>
           </nav>
         </slot>

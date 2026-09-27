@@ -35,7 +35,7 @@ export const en = {
     c: 'The model is the same for everyone. Your context is the only part that is yours.',
   },
   what: {
-    title: 'One place your knowledge actually lives.',
+    title: 'One place where your knowledge actually lives.',
     a: 'EKHO is just a folder on your machine. Markdown files, one form, one grammar. Readable by you and by any agent you let access it.',
     b: "Nothing is locked in. You can open it, read it, move it, delete it. It is not a memory inside somebody else's model.",
     commandLabel: 'Installs the EKHO CLI',

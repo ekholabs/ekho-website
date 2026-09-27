@@ -2892,17 +2892,20 @@
 }
 
 @layer components {
-  /* The opening. The hero gets its own stretch of scroll: the statement is held
-     in place while the track runs past, and the page script shrinks it from as
-     large as the frame allows into its place in the column, with the point
-     field pulling back from the whole screen into its stage at the same time.
-     Both are transforms, so neither reflows anything on the way.
+  /* The opening. The page script shrinks the statement from as large as the
+     frame allows into its place in the column, with the point field pulling
+     back from the whole screen into its stage at the same time. Both are
+     transforms, so neither reflows anything on the way.
 
-     Below the breakpoint, and with reduced motion, there is no track and the
+     It used to run off a stretch of scroll under the hero, which cost the
+     reader a stop of their own on a view belonging to no chapter. It runs on
+     its own clock now and the hero is one screen like every other chapter.
+
+     Below the breakpoint, and with reduced motion, there is no opening and the
      hero is simply the first chapter. */
   @media (min-width: 64rem) {
     .reveal-on .chapter--hero {
-      min-height: 190svh;
+      min-height: 100svh;
       justify-content: flex-start;
       padding-block: 0;
     }
@@ -3010,26 +3013,13 @@
       scroll-snap-stop: always;
     }
 
-    /* The hero has two resting places, not none: the top of the page with the
-       statement at full size, and the end of its track with everything settled.
-       The anchor marks the second. Without it a mandatory snap has nothing to
-       hold inside the track and throws the reader straight past the opening. */
+    /* One resting place, since the opening no longer runs off the scroll: the
+       top of the page, with everything settled by the time the reader gets
+       there. */
     .story-text .chapter--hero {
       position: relative;
       scroll-snap-align: start;
       scroll-margin-top: 0;
-    }
-
-    .intro-anchor {
-      position: absolute;
-      top: 90svh;
-      left: 0;
-      width: 1px;
-      height: 1px;
-      scroll-snap-align: start;
-      scroll-margin-top: 0;
-      scroll-snap-stop: always;
-      pointer-events: none;
     }
   }
 
@@ -3556,7 +3546,10 @@
       padding-right: 3rem;
     }
 
-    .story-text .chapter {
+    /* The hero is exempt: its body is sticky and centred on a screen of its
+       own, so padding here only adds empty page between it and the first
+       chapter. */
+    .story-text .chapter:not(.chapter--hero) {
       /* Not symmetric, because what it has to be level with is not symmetric:
          the header and the back bar take 103px off the top, the forward bar
          42px off the bottom. The 61px difference is added to the top so the
