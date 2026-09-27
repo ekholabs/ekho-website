@@ -2590,7 +2590,6 @@
 
   @media (max-width: 63.999rem) {
     .chapter--hero {
-      min-height: 0;
       padding-block: 2rem 3rem;
     }
 
@@ -3850,6 +3849,21 @@
 
     .viewer .app-meta {
       overflow-wrap: anywhere;
+    }
+  }
+}
+
+/* The opening on a phone -----------------------------------------------------
+   A screen of its own, the way it has one on a desktop. There is no graphic
+   beside it here, so the statement stands alone and needs the room to be read
+   before the first chapter arrives; at its natural height it slid past before
+   anyone had. Down here because .story-text .chapter sets the height these
+   chapters otherwise take, and a media query does not make a rule win. */
+@layer components {
+  @media (max-width: 63.999rem) {
+    .story-text .chapter--hero {
+      justify-content: center;
+      min-height: calc(100svh - 3.5rem);
     }
   }
 }
