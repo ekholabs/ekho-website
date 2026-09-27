@@ -3528,15 +3528,14 @@
 
   .view-steps::before {
     background: var(--line);
-    /* Not quite touching at either end: it stops short of the header and short
-       of the bottom edge, by the same amount, so it reads as a rule set into
-       the page rather than a seam running off it. */
-    bottom: 0.75rem;
+    /* Edge to edge: it meets the header at the top and the bottom of the
+       window at the other end, with nothing left over at either. */
+    bottom: 0;
     content: '';
     left: calc(var(--step-right, 0px) - 1px);
     pointer-events: none;
     position: fixed;
-    top: calc(var(--step-top, 0px) + 0.75rem);
+    top: var(--step-top, 0px);
     width: 1px;
     /* Over the bars, not under them. Their glass is only partly opaque, so a
        line behind it still showed through, just dimmer — which read as two
