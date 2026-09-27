@@ -1,0 +1,883 @@
+---
+import Base from '../layouts/Base.astro';
+import ContextGraphic from './ContextGraphic.astro';
+import Architecture from './Architecture.astro';
+import FinderWindow from './FinderWindow.astro';
+import ChatWindow from './ChatWindow.astro';
+import ViewerMockup from './ViewerMockup.astro';
+import Waitlist from './Waitlist.astro';
+import ModelRow from './ModelRow.astro';
+import { Image } from 'astro:assets';
+import lorenzPortrait from '../assets/people/lorenz-vierecke.jpg';
+import stephanPortrait from '../assets/people/stephan-georg.jpg';
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = t(lang);
+
+// The scroll is the lifecycle of a vault: scattered before EKHO, connected with
+// it, compounding once it runs. The graphic on the right holds that movement,
+// the column on the left carries the statement, the environment the reader
+// already works in, and the architecture assembling layer by layer.
+// Full spec: docs/landing-v2.md
+const chapters = [
+  { id: 'why', n: '01', label: c.nav.why },
+  { id: 'what', n: '02', label: c.nav.what },
+  { id: 'how', n: '03', label: c.nav.how },
+  { id: 'architecture', n: '04', label: c.nav.architecture },
+];
+
+// The two founders. Names, faces and profiles on a public page are the one
+// thing never to guess. The URLs come from their own contact notes in
+// EKHO_brain, and the portraits are named after the people in them, confirmed
+// by Lorenz. The first pass guessed the order and had them the wrong way round.
+const people = [
+  {
+    name: 'Lorenz Vierecke',
+    line: c.who.lorenz,
+    href: 'https://www.linkedin.com/in/lorenz-vierecke-7b896079',
+    portrait: lorenzPortrait,
+  },
+  {
+    name: 'Stephan Georg',
+    line: c.who.stephan,
+    href: 'https://www.linkedin.com/in/stephangeorg',
+    portrait: stephanPortrait,
+  },
+];
+---
+
+<Base title={c.meta.title} description={c.meta.description} layout="wide" lang={lang}>
+  <nav
+    class="chapter-nav"
+    id="chapter-nav"
+    aria-label={c.nav.chapters}
+    slot="header-nav"
+    data-chapter-nav
+  >
+    <ol>
+      {chapters.map((c) => (
+        <li>
+          <a href={`#${c.id}`} data-chapter-link={c.id}>
+            <span class="chapter-nav-n">{c.n}</span>
+            {c.label}
+          </a>
+        </li>
+      ))}
+      <li class="chapter-nav-extra">
+        <a href="#waitlist">
+          <span class="chapter-nav-n">05</span>
+          {c.nav.waitlist}
+        </a>
+      </li>
+      <li class="chapter-nav-extra">
+        <a href="https://github.com/ekholabs">
+          <span class="chapter-nav-n">↗</span>
+          GitHub
+        </a>
+      </li>
+    </ol>
+  </nav>
+
+  {/* ---------- the story: graphic right, everything else left ---------- */}
+  <div class="wrap wrap-wide story">
+    <div class="story-figure" data-story-figure>
+      <div class="figure-stage">
+        <ContextGraphic caption={false} lang={lang} />
+        <div class="overlay" data-for="finder">
+          <FinderWindow lang={lang} />
+        </div>
+        <div class="overlay" data-for="chat">
+          <ChatWindow lang={lang} />
+        </div>
+      </div>
+      {/* The architecture rail used to sit here and assemble as you scroll. It
+          was taking a fifth of the stage from the window above it, so it is out
+          while we settle how the model should be shown. The chapters keep their
+          data-layers, which is the record of which layer each one is about, and
+          the script still drives a rail if one is put back. */}
+    </div>
+
+    <div class="story-text">
+      <section
+        class="chapter chapter--hero"
+        id="hero"
+        data-chapter
+        data-stage="0"
+        data-intro
+        data-view
+      >
+        <div class="chapter-body">
+          <h1 class="hero-title" data-intro-title>
+            {c.hero.titleBefore} <span class="signal-text">{c.hero.titleSignal}</span>
+          </h1>
+          <p class="hero-lede" data-intro-fade>
+            {c.hero.lede}
+          </p>
+          <p class="cta-row" data-intro-fade>
+            <a class="pill pill--solid" href="#waitlist">
+              {c.hero.cta}
+            </a>
+            <a class="pill" href="#why">
+              {c.hero.seeHow} <span aria-hidden="true">↓</span>
+            </a>
+          </p>
+        </div>
+        {/* the second resting place of the opening: everything settled */}
+        <div class="intro-anchor" aria-hidden="true" data-view></div>
+      </section>
+
+      <section
+        class="chapter"
+        id="why"
+        data-view
+        data-chapter
+        data-nav="why"
+        data-stage="1"
+        data-layers=""
+        data-done=""
+      >
+        <div class="chapter-body measure">
+          <p class="chapter-label">
+            <span>01</span> {c.nav.why}
+          </p>
+          <h2>{c.why.title}</h2>
+          <p class="statement">{c.why.a}</p>
+          <p class="statement">{c.why.b}</p>
+          <p class="statement">{c.why.c}</p>
+        </div>
+      </section>
+
+      <section
+        class="chapter"
+        id="what"
+        data-view
+        data-chapter
+        data-nav="what"
+        data-stage="2"
+        data-layers="vault"
+        data-done=""
+        data-overlay="finder"
+      >
+        <div class="chapter-body measure">
+          <p class="chapter-label">
+            <span>02</span> {c.nav.what}
+          </p>
+          <h2>{c.what.title}</h2>
+          <p class="statement">{c.what.a}</p>
+          <p class="statement">{c.what.b}</p>
+
+          {/* The one line you paste. Marked as unshipped, which N4 requires and
+              which the dashed edge says before the note does. Recovered from
+              the page this one replaced, so the address and the key placeholder
+              are the ones the repo already used. */}
+          <figure class="command" data-command>
+            <figcaption class="command-label">{c.what.commandLabel}</figcaption>
+            <button
+              class="command-copy"
+              type="button"
+              data-command-copy
+              data-idle={c.nav.copy}
+              data-done={c.nav.copied}
+            >
+              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
+                <path d="M10.5 3.5A1.5 1.5 0 0 0 9 2H4a2 2 0 0 0-2 2v5a1.5 1.5 0 0 0 1.5 1.5" />
+              </svg>
+              <span data-command-copy-label>{c.nav.copy}</span>
+            </button>
+            <code data-command-text>
+              <span class="command-prompt" aria-hidden="true">
+                $
+              </span>{' '}
+              curl -fsSL https://get.ekholabs.eu/i/&lt;key&gt; | sh
+            </code>
+          </figure>
+          <p class="command-note">{c.what.commandNote}</p>
+        </div>
+        <div class="flow-window">
+          <FinderWindow lang={lang} />
+        </div>
+      </section>
+
+      <section
+        class="chapter"
+        id="how"
+        data-view
+        data-chapter
+        data-nav="how"
+        data-stage="2"
+        data-layers="conversation llm harness"
+        data-done="vault"
+        data-overlay="chat"
+      >
+        <div class="chapter-body measure">
+          <p class="chapter-label">
+            <span>03</span> {c.nav.how}
+          </p>
+          <h2>{c.how.title}</h2>
+          <p class="statement">{c.how.a}</p>
+          <p class="statement">{c.how.b}</p>
+        </div>
+        <div class="flow-window">
+          <ChatWindow lang={lang} />
+        </div>
+        {/* The second thing this chapter has to land, besides the confirm: EKHO
+            is not tied to one model. Set as names rather than badges, because a
+            row of other companies' marks is a licensing question before it is a
+            design one, and because the claim here is about a file format and
+            not about a partnership. See docs/landing-v2.md. */}
+        <div class="models">
+          <p class="models-label">{c.how.sovereignty}</p>
+          <ModelRow lang={lang} />
+          <p class="models-note">{c.how.note}</p>
+          {/* The sovereignty claim, in one line. Not an appeal to privacy: the
+              providers are moving into the memory layer, and a vault that lives
+              there is not portable however portable the model is. Grounded in
+              I-195 in EKHO_brain. */}
+          <p class="models-edge">{c.how.edge}</p>
+        </div>
+      </section>
+
+      <section
+        class="chapter"
+        id="compound"
+        data-view
+        data-chapter
+        data-nav="how"
+        data-stage="3"
+        data-layers="ontology"
+        data-done="conversation llm harness vault"
+      >
+        <div class="chapter-body measure">
+          <p class="chapter-label">
+            <span>03</span> How
+          </p>
+          <h2>{c.compound.title}</h2>
+          <p class="statement">{c.compound.a}</p>
+          <p class="statement">{c.compound.b}</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  {/* ---------- 05 · what EKHO is ---------- */}
+  <section
+    class="wrap wrap-wide chapter chapter--wide"
+    id="viewer"
+    data-view
+    data-chapter
+    data-nav="how"
+    data-stage="3"
+  >
+    <div class="measure">
+      <h2>{c.viewer.title}</h2>
+      <p class="chapter-lede">{c.viewer.lede}</p>
+    </div>
+    <ViewerMockup lang={lang} />
+    <p class="fig-note measure">{c.viewer.note}</p>
+  </section>
+
+  {/* ---------- 06 · architecture ---------- */}
+  <section
+    class="wrap wrap-wide chapter chapter--wide"
+    id="architecture"
+    data-view
+    data-chapter
+    data-nav="architecture"
+    data-stage="3"
+  >
+    <div class="measure">
+      <p class="chapter-label">
+        <span>04</span> {c.nav.architecture}
+      </p>
+      <h2>{c.architecture.title}</h2>
+      <p class="chapter-lede">{c.architecture.lede}</p>
+    </div>
+    <Architecture lang={lang} />
+  </section>
+
+  {/* ---------- 07 · who ---------- */}
+  <section
+    class="wrap wrap-wide chapter chapter--wide"
+    id="who"
+    data-view
+    data-chapter
+    data-nav="architecture"
+    data-stage="3"
+  >
+    <div class="measure">
+      <h2>{c.who.title}</h2>
+      <p class="chapter-lede">{c.who.lede}</p>
+    </div>
+    <ul class="people">
+      {people.map((p) => (
+        <li>
+          <Image class="people-face" src={p.portrait} alt={p.name} width={176} height={176} />
+          <div>
+            <b>
+              <a class="people-link" href={p.href}>
+                {p.name} <span aria-hidden="true">↗</span>
+              </a>
+            </b>
+            <span>{p.line}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {/* ---------- 08 · where we are, and the waitlist ---------- */}
+  <section
+    class="wrap wrap-wide chapter chapter--wide"
+    id="waitlist"
+    data-view
+    data-chapter
+    data-nav="architecture"
+    data-stage="3"
+  >
+    <div class="measure">
+      <h2>{c.waitlist.title}</h2>
+      <p class="chapter-lede">{c.waitlist.lede}</p>
+      <Waitlist lang={lang} />
+    </div>
+  </section>
+
+  <div class="wrap wrap-wide landing" data-view>
+    <p class="closing measure">
+      {c.closing.before} <mark>{c.closing.mark}</mark>
+    </p>
+  </div>
+
+  {/*
+    The page moves one fixed view at a time, and until now a wheel or a swipe
+    was the only thing that said so. These two give that gesture a handle. They
+    sit in the left column, above and below the statement, and the script pins
+    them to the text block itself so they frame whatever chapter is resting.
+    Each one hides at the end it cannot go past, because a button that does
+    nothing is worse than no button.
+  */}
+  <div class="view-steps" data-view-steps hidden>
+    <button class="view-step view-step--prev" type="button" data-view-step="-1">
+      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path d="M3.5 10 8 5.5 12.5 10" />
+      </svg>
+      <span>{c.nav.prev}</span>
+    </button>
+    <button class="view-step view-step--next" type="button" data-view-step="1">
+      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path d="M3.5 6 8 10.5 12.5 6" />
+      </svg>
+      <span>{c.nav.next}</span>
+    </button>
+  </div>
+</Base>
+
+<script>
+  // Progressive enhancement only. Without JavaScript, or with reduced motion,
+  // every statement is fully visible, the graphic rests in its finished state
+  // and the architecture stack renders in the state the markup gives it.
+  const root = document.documentElement;
+  root.classList.add('js');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduceMotion) root.classList.add('reveal-on');
+
+  const chapters = [...document.querySelectorAll<HTMLElement>('[data-chapter]')];
+  const links = new Map(
+    [...document.querySelectorAll<HTMLAnchorElement>('[data-chapter-link]')].map((a) => [
+      a.dataset.chapterLink,
+      a,
+    ]),
+  );
+  const chapterNav = document.querySelector<HTMLElement>('[data-chapter-nav]');
+  const graphics = [...document.querySelectorAll<HTMLElement>('[data-graphic]')];
+  const arch = document.querySelector<HTMLElement>('[data-arch]');
+  const railRows = [...document.querySelectorAll<HTMLElement>('[data-rail] [data-layer]')];
+  const figure = document.querySelector<HTMLElement>('[data-story-figure]');
+  const intro = document.querySelector<HTMLElement>('[data-intro]');
+  const introTitle = document.querySelector<HTMLElement>('[data-intro-title]');
+  const introFades = [...document.querySelectorAll<HTMLElement>('[data-intro-fade]')];
+  const stage = document.querySelector<HTMLElement>('.figure-stage');
+  const compound = document.getElementById('compound');
+  const chatOverlay = document.querySelector<HTMLElement>('.overlay[data-for="chat"]');
+  // the dot the window collapses into is the decision its confirm table makes
+  const collapseTarget = document.querySelector<SVGElement>('.cg-pt[aria-label^="Decision"]');
+  const wideIntro = window.matchMedia('(min-width: 64rem)');
+  let lastNav: string | undefined;
+
+  function update() {
+    const vh = window.innerHeight;
+
+    // the chapter whose top has passed a third of the viewport is the one
+    // being read; it decides the nav, and which stage the graphic is in
+    let current: HTMLElement | undefined;
+    for (const c of chapters) if (c.getBoundingClientRect().top <= vh / 3) current = c;
+
+    const nav = current?.dataset.nav;
+    links.forEach((a, id) => {
+      if (id === nav) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    });
+
+    // on narrow screens the chapter list scrolls sideways: keep the active one in view
+    if (chapterNav && nav !== lastNav) {
+      lastNav = nav;
+      const active = nav ? links.get(nav) : undefined;
+      if (active) {
+        const navBox = chapterNav.getBoundingClientRect();
+        const box = active.getBoundingClientRect();
+        if (box.left < navBox.left || box.right > navBox.right) {
+          chapterNav.scrollLeft += box.left - navBox.left - 8;
+        }
+      } else {
+        chapterNav.scrollLeft = 0;
+      }
+    }
+
+    // The opening: the statement starts as large as the page can hold it and the
+    // points cover the whole screen, and both settle into their places as the
+    // track scrolls past. Transforms only, so nothing reflows while it runs,
+    // and every measurement is taken off an untransformed parent.
+    if (intro && introTitle && stage && !reduceMotion && wideIntro.matches) {
+      const track = intro.offsetHeight - vh;
+      const raw =
+        track > 0 ? Math.min(1, Math.max(0, -intro.getBoundingClientRect().top / track)) : 1;
+      const p = raw < 0.5 ? 2 * raw * raw : 1 - Math.pow(-2 * raw + 2, 2) / 2;
+
+      // The statement stays flush with the page's left edge and grows to the
+      // right, which is what the origin on the left does: no centring, so it
+      // never drifts away from the column it will end up in. It sits low,
+      // leaving the field the upper two thirds, and rises into place as it
+      // shrinks. Measurements come off the offset parent, because a box that
+      // is being scaled cannot be asked where it is.
+      const host = introTitle.offsetParent as HTMLElement | null;
+      const hostBox = (host ?? introTitle).getBoundingClientRect();
+      const titleTop = hostBox.top + introTitle.offsetTop;
+      const titleLeft = hostBox.left + introTitle.offsetLeft;
+      const titleH = introTitle.offsetHeight;
+      const avail = window.innerWidth - titleLeft * 2;
+      const s0 = Math.min(Math.max(avail / introTitle.offsetWidth, 1), 1.95);
+      const scale = s0 + (1 - s0) * p;
+      const restY = titleTop + titleH / 2 + (titleH * s0) / 2;
+      const dy = (vh - vh * 0.16 - restY) * (1 - p);
+      introTitle.style.transform =
+        p >= 1 ? '' : `translateY(${dy.toFixed(1)}px) scale(${scale.toFixed(3)})`;
+
+      // The points are not a picture being zoomed: the drawing keeps its scale,
+      // so every circle keeps its size, and each one travels its own way in
+      // from where it was spread across the screen. They are given slightly
+      // different phases, so the field arrives loosely rather than in step.
+      (
+        document.querySelector('[data-graphic]') as
+          (HTMLElement & { cgOpenField?: (v: number) => void }) | null
+      )?.cgOpenField?.(p);
+
+      const fade = Math.min(1, Math.max(0, (raw - 0.55) / 0.45));
+      for (const el of introFades) {
+        el.style.opacity = String(fade);
+        el.style.pointerEvents = fade < 0.5 ? 'none' : '';
+      }
+      intro.classList.toggle('is-opening', p < 1);
+    }
+
+    // the windows lie over the graph, one chapter at a time, and the column
+    // divider only appears once the two columns start doing different jobs
+    if (figure) {
+      figure.dataset.stage = current?.dataset.stage ?? '0';
+
+      // Leaving chapter 03, the chat window collapses into the one point it
+      // just made: the decision in its confirm table is a dot on the sphere,
+      // and the window shrinks into it. The window is held on screen until the
+      // collapse is done, or it would fade out from under the movement.
+      let collapse = 0;
+      const chatWin = chatOverlay?.querySelector<HTMLElement>('.win');
+      if (compound && chatWin) {
+        const top = compound.getBoundingClientRect().top;
+        collapse = Math.min(1, Math.max(0, (vh - top) / (vh * 0.8)));
+        if (collapse > 0 && collapse < 1) {
+          const w = chatWin.getBoundingClientRect();
+          const target = collapseTarget?.getBoundingClientRect();
+          const tx = target ? target.left + target.width / 2 - (w.left + w.width / 2) : 0;
+          const ty = target ? target.top + target.height / 2 - (w.top + w.height / 2) : 0;
+          const e = collapse * collapse;
+          chatWin.style.transform = `translate(${(tx * e).toFixed(1)}px, ${(ty * e).toFixed(1)}px) scale(${(1 - e * 0.985).toFixed(4)})`;
+          chatWin.style.opacity = String(Math.max(0, 1 - Math.max(0, (collapse - 0.7) / 0.3)));
+        } else {
+          chatWin.style.transform = '';
+          chatWin.style.opacity = '';
+        }
+      }
+
+      figure.dataset.show =
+        collapse > 0 && collapse < 1 ? 'chat' : (current?.dataset.overlay ?? '');
+      figure.classList.toggle('is-collapsing', collapse > 0 && collapse < 1);
+    }
+
+    // the architecture rail: one stack for the whole story, moved through its
+    // states by whichever chapter is being read
+    {
+      const on = (current?.dataset.layers ?? '').split(' ').filter(Boolean);
+      const done = (current?.dataset.done ?? '').split(' ').filter(Boolean);
+      for (const r of railRows) {
+        const k = r.dataset.layer ?? '';
+        const isOn = on.includes(k);
+        r.classList.toggle('is-on', isOn);
+        r.classList.toggle('is-done', !isOn && done.includes(k));
+        r.classList.toggle('is-off', !isOn && !done.includes(k));
+      }
+    }
+
+    // the graphic: 0 field, 1 scattered, 2 connected, 3 compounding
+    {
+      const stage = Number(current?.dataset.stage ?? 0);
+      for (const g of graphics)
+        for (let n = 1; n <= 3; n++) g.classList.toggle(`is-${n}`, stage >= n);
+    }
+
+    // architecture: its rows come in once the chapter is in view
+    if (arch && arch.getBoundingClientRect().top < vh * 0.8) arch.classList.add('is-in');
+  }
+
+  // ---- one gesture, one view --------------------------------------------
+  //
+  // The page does not scroll freely on a wide screen: a wheel turn, a swipe or
+  // an arrow key asks for the next fixed view and the page animates there,
+  // ignoring everything else until it arrives. CSS scroll snapping cannot do
+  // this. Snapping still lets the reader drag through the middle of a chapter
+  // and only settles afterwards; here there is no middle to be in.
+  //
+  // It stays out of the way where it would do harm: narrow screens keep their
+  // native scrolling, and with reduced motion the page jumps instead of gliding.
+  const views = [...document.querySelectorAll<HTMLElement>('[data-view]')];
+  const wideViews = window.matchMedia('(min-width: 64rem)');
+  const stepping = () => wideViews.matches && views.length > 1;
+
+  let index = 0;
+  let animating = false;
+  let lockUntil = 0;
+  let release = 0;
+
+  const topOf = (el: HTMLElement) => Math.round(el.getBoundingClientRect().top + window.scrollY);
+
+  // whichever view the page is actually resting on, so a jump from the nav or a
+  // hash does not leave the counter behind
+  function syncIndex() {
+    const y = window.scrollY;
+    let best = 0;
+    let bd = Infinity;
+    views.forEach((v, i) => {
+      const d = Math.abs(topOf(v) - y);
+      if (d < bd) {
+        bd = d;
+        best = i;
+      }
+    });
+    index = best;
+  }
+
+  function goTo(i: number) {
+    const next = Math.max(0, Math.min(views.length - 1, i));
+    const view = views[next];
+    index = next;
+    // A page that is not on screen is served no animation frames, so a glide
+    // begun there never starts and never finishes, and because every wheel
+    // event is swallowed while one is running the page goes dead to the touch.
+    // Nothing to animate for, so it simply arrives.
+    if (reduceMotion || document.hidden) {
+      animating = false;
+      window.scrollTo(0, topOf(view));
+      return;
+    }
+    const start = window.scrollY;
+    if (Math.abs(topOf(view) - start) < 2) return;
+    // the further it travels the longer it takes, within reason
+    const span = Math.abs(topOf(view) - start);
+    const duration = Math.min(1100, Math.max(520, 420 + span * 0.35));
+    const t0 = performance.now();
+    animating = true;
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - t0) / duration);
+      const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      // The target is an element, not a number. Chapters reveal themselves and
+      // the architecture stack grows while the page is moving, so an offset
+      // measured once at the start lands short and the next gesture is spent
+      // correcting it. Reading it every frame lands on the view itself.
+      const target = topOf(view);
+      window.scrollTo(0, Math.round(start + (target - start) * e));
+      if (p < 1) requestAnimationFrame(tick);
+      else {
+        window.scrollTo(0, topOf(view));
+        animating = false;
+        // a trackpad keeps sending events after the fingers lift; this stops
+        // the tail of one flick from being read as the next one
+        lockUntil = performance.now() + 220;
+      }
+    };
+    requestAnimationFrame(tick);
+    // A hidden tab stops serving animation frames, so a move begun just before
+    // the reader switched away would never finish and every gesture after it
+    // would be ignored. A timer is not throttled the same way and lets go.
+    window.clearTimeout(release);
+    release = window.setTimeout(() => {
+      animating = false;
+    }, duration + 600);
+  }
+
+  // Same guard from the other side: if the reader leaves mid-glide, the move is
+  // finished at once rather than left hanging until they come back.
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden || !animating) return;
+    window.clearTimeout(release);
+    animating = false;
+    lockUntil = 0;
+    window.scrollTo(0, topOf(views[index]));
+  });
+
+  function step(dir: number) {
+    if (animating || performance.now() < lockUntil) return;
+    // read where the page actually is before moving, rather than trusting a
+    // counter: anything that scrolls the page by other means, a hash, a focus,
+    // a resize, would otherwise cost the reader one gesture to correct
+    syncIndex();
+    goTo(index + dir);
+  }
+
+  // One gesture moves one section, however long it is. A wheel or a trackpad
+  // keeps firing while the flick decays, so the guard is not a timer but a
+  // silence: the next step is only accepted once the events have stopped
+  // arriving for a moment. Without it a long swipe carries the reader two or
+  // three sections past where they let go.
+  let lastWheel = 0;
+  const QUIET = 90;
+
+  window.addEventListener(
+    'wheel',
+    (e) => {
+      if (!stepping()) return;
+      e.preventDefault();
+      const now = performance.now();
+      const gap = now - lastWheel;
+      lastWheel = now;
+      if (Math.abs(e.deltaY) < 2) return;
+      if (gap < QUIET) return;
+      step(e.deltaY > 0 ? 1 : -1);
+    },
+    { passive: false },
+  );
+
+  // the same for a finger: one swipe, one section, and nothing more until it
+  // has been lifted
+  let touchY = 0;
+  let touchSpent = false;
+  window.addEventListener('touchstart', (e) => {
+    touchY = e.touches[0]?.clientY ?? 0;
+    touchSpent = false;
+  });
+  window.addEventListener(
+    'touchmove',
+    (e) => {
+      if (!stepping()) return;
+      e.preventDefault();
+      if (touchSpent) return;
+      const dy = touchY - (e.touches[0]?.clientY ?? 0);
+      if (Math.abs(dy) > 24) {
+        touchSpent = true;
+        step(dy > 0 ? 1 : -1);
+      }
+    },
+    { passive: false },
+  );
+
+  window.addEventListener('keydown', (e) => {
+    if (!stepping()) return;
+    const tag = (e.target as HTMLElement)?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+      e.preventDefault();
+      step(1);
+    } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
+      e.preventDefault();
+      step(-1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goTo(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goTo(views.length - 1);
+    }
+  });
+
+  // the chapter links and the two hero buttons hand over to the same mechanism
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')) {
+    a.addEventListener('click', (e) => {
+      if (!stepping()) return;
+      const el = document.querySelector<HTMLElement>(a.getAttribute('href') ?? '');
+      if (!el) return;
+      const i = views.indexOf(el);
+      if (i < 0) return;
+      e.preventDefault();
+      goTo(i);
+    });
+  }
+
+  // ---- the visible handle -----------------------------------------------
+  //
+  // The gesture is invisible; these two are the only thing on the page that
+  // says the view moves on. They run through the same stepper as the wheel, so
+  // nothing can drift apart, and they are pinned to the statement block of the
+  // chapter that is resting rather than to the viewport: the text is what they
+  // belong to, and its height changes from chapter to chapter.
+  const stepBar = document.querySelector<HTMLElement>('[data-view-steps]');
+  const stepBtns = [...document.querySelectorAll<HTMLButtonElement>('[data-view-step]')];
+  const GAP = 20; // how far clear of the text they sit
+
+  // What the pair frames is everything the chapter puts in the left column,
+  // not just its .chapter-body: chapter 03 carries the sovereignty block as a
+  // sibling, and measuring only the body dropped the next button into the
+  // middle of the text. The window mockups are excluded because they belong to
+  // the figure on the right, and anything laid out at zero size is skipped —
+  // an off-screen chapter reports an empty box and would drag the pair to the
+  // top of the window.
+  const frameFor = (i: number) => {
+    const chapter = views[i]?.closest('[data-chapter]');
+    if (!chapter) return null;
+    let top = Infinity;
+    let bottom = -Infinity;
+    let left = Infinity;
+    for (const child of chapter.children) {
+      if (child.classList.contains('flow-window')) continue;
+      const r = child.getBoundingClientRect();
+      if (r.height < 1 || r.width < 1) continue;
+      top = Math.min(top, r.top);
+      bottom = Math.max(bottom, r.bottom);
+      left = Math.min(left, r.left);
+    }
+    return bottom > top ? { top, bottom, left } : null;
+  };
+
+  const syncNext = () => {
+    if (!stepBar) return;
+    if (!stepping()) {
+      stepBar.hidden = true;
+      return;
+    }
+    // The opening has its own two buttons and its own choreography; a third
+    // one there would be noise, so the pair joins once the chapters start.
+    stepBar.hidden = index < 2;
+    if (stepBar.hidden) return;
+    for (const b of stepBtns) {
+      const dir = Number(b.dataset.viewStep);
+      const to = index + dir;
+      b.hidden = to < 0 || to > views.length - 1;
+    }
+    const r = frameFor(index);
+    if (!r) return;
+
+    // Where the text will be once the view has settled, not where it is right
+    // now. Measured against the current position the pair would ride the whole
+    // journey up the window with the chapter it belongs to; measured against
+    // the resting place it simply glides from one chapter's frame to the next.
+    const rest = topOf(views[index]);
+    const top = r.top + window.scrollY - rest;
+    const bottom = r.bottom + window.scrollY - rest;
+
+    // The back bar hangs upwards from the line it is given, so its ceiling is
+    // the underside of the header plus its own height. Anything higher left a
+    // strip of bare page between the two, which read as a gap rather than as
+    // one continuous top edge.
+    const header = document.querySelector<HTMLElement>('.site-header');
+    const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
+    const prevBtn = stepBtns.find((b) => b.dataset.viewStep === '-1');
+    const ceiling = headerBottom + (prevBtn?.offsetHeight ?? 0);
+    // A sliver of page between the header and the bar reads as a mistake, so
+    // anything closer than this closes up flush against it. Further away is a
+    // gap on purpose and stays.
+    const FLUSH = 28;
+    const clamp = (y: number) => {
+      const v = Math.round(y);
+      return Math.max(ceiling, Math.min(window.innerHeight - 8, v < ceiling + FLUSH ? ceiling : v));
+    };
+    // The bars run the full width of the left column, from the edge of the
+    // window to the rule that divides it from the figure, so they read as two
+    // edges of the text area rather than two loose controls.
+    const column = views[index]?.closest('.story-text')?.getBoundingClientRect();
+    stepBar.style.setProperty('--step-left', `${Math.round(r.left)}px`);
+    if (column) stepBar.style.setProperty('--step-right', `${Math.round(column.right)}px`);
+    stepBar.style.setProperty('--step-above', `${clamp(top - GAP)}px`);
+    stepBar.style.setProperty('--step-below', `${clamp(bottom + GAP)}px`);
+  };
+
+  for (const b of stepBtns) {
+    b.addEventListener('click', () => {
+      step(Number(b.dataset.viewStep));
+      syncNext();
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    syncIndex();
+    syncNext();
+  });
+  syncIndex();
+  syncNext();
+
+  // ---- the one line you paste --------------------------------------------
+  //
+  // A command on a page is there to be taken, so it can be taken: the box
+  // answers the pointer and hands the line over on a click. The prompt is
+  // stripped, because nobody wants a dollar sign in their shell.
+  const copyBtn = document.querySelector<HTMLButtonElement>('[data-command-copy]');
+  const copyText = document.querySelector<HTMLElement>('[data-command-text]');
+  const copyLabel = copyBtn?.querySelector<HTMLElement>('[data-command-copy-label]');
+  let copyBack = 0;
+
+  copyBtn?.addEventListener('click', async () => {
+    const line = (copyText?.textContent ?? '').replace(/^\s*\$\s*/, '').trim();
+    if (!line) return;
+    try {
+      await navigator.clipboard.writeText(line);
+    } catch {
+      // Clipboard access can be refused, and silently doing nothing would look
+      // like a broken button. Selecting the line leaves the reader one
+      // keystroke away instead.
+      const sel = window.getSelection();
+      if (copyText && sel) {
+        const range = document.createRange();
+        range.selectNodeContents(copyText);
+        // start after the prompt, so what gets selected is what would have been
+        // copied rather than a dollar sign the reader then has to delete
+        const prompt = copyText.querySelector('.command-prompt');
+        if (prompt) range.setStartAfter(prompt);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+      return;
+    }
+    if (!copyBtn || !copyLabel) return;
+    copyBtn.classList.add('is-done');
+    copyLabel.textContent = copyBtn.dataset.done ?? '';
+    window.clearTimeout(copyBack);
+    copyBack = window.setTimeout(() => {
+      copyBtn.classList.remove('is-done');
+      copyLabel.textContent = copyBtn.dataset.idle ?? '';
+    }, 1800);
+  });
+
+  let queued = false;
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      update();
+      syncIndex();
+      syncNext();
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+</script>

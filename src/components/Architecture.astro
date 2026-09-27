@@ -6,65 +6,37 @@
 // Built on <details name="arch">, so it works without JavaScript and by
 // keyboard, and only one layer is open at a time.
 
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const L = t(lang).architecture.layers;
+
 const layers = [
-  {
-    key: 'conversation',
-    title: 'Conversation',
-    note: 'between people',
-    lead: 'Where knowledge starts:',
-    text: 'the conversations you have with the people you work with. A call, a meeting, a decision made out loud. Almost none of it is written down, and that is the part EKHO is after.',
-  },
-  {
-    key: 'llm',
-    title: 'LLM',
-    note: 'interchangeable',
-    lead: 'The means, not the place:',
-    text: 'the engine that reads, writes and links. EKHO works with any model, frontier, open or locally hosted, so you can swap the model and your knowledge stays exactly where it was.',
-  },
-  {
-    key: 'harness',
-    title: 'Harness',
-    code: 'ekho-cockpit',
-    note: 'CLI and skills',
-    lead: 'The layer that puts the grammar to work:',
-    text: 'skills, workflows and a linter that take in sources, answer questions and keep everything consistent. It turns something one person prompted once into behaviour anyone can repeat.',
-  },
-  {
-    key: 'ontology',
-    title: 'Ontology',
-    code: 'ekho-core',
-    note: 'types, edges, rules',
-    // EKHO's own definition of knowledge belongs here and will come from a
-    // source Lorenz is looking up. Until then this layer describes what the
-    // ontology does and makes no claim about what knowledge is.
-    lead: 'The shared grammar of a vault:',
-    text: 'what a note is (insight, hypothesis, decision), how notes relate, and which rules they follow. It is declared rather than prompted, so every vault behaves the same and each field can extend it without breaking the core.',
-  },
+  { key: 'conversation', ...L.conversation },
+  { key: 'llm', ...L.llm },
+  { key: 'harness', code: 'ekho-cockpit', ...L.harness },
+  { key: 'ontology', code: 'ekho-core', ...L.ontology },
   {
     key: 'vault',
-    title: 'EKHO Vault',
-    note: 'Knowledge · Specs · Code',
-    lead: 'What you own:',
-    text: 'plain Markdown on your own disk. It becomes more valuable with every session, and nothing in the layers above it is allowed to hold it hostage.',
-    parts: [
-      {
-        title: 'Knowledge',
-        code: 'ekho-knowledge-vault',
-        text: 'Sources, insights, hypotheses and decisions. Where the thinking lives.',
-      },
-      {
-        title: 'Specs',
-        code: 'ekho-spec-vault',
-        text: 'The bridge from validated knowledge to buildable requirements. Anything built can be traced back to why.',
-      },
-      {
-        title: 'Code',
-        code: 'ekho-applications',
-        text: 'The running software, built from specs and fed back in as evidence. Every shipped feature closes the loop.',
-      },
-    ],
+    ...L.vault,
+    parts: L.vault.parts.map(([title, text], i) => ({
+      title,
+      text,
+      code: ['ekho-knowledge-vault', 'ekho-spec-vault', 'ekho-applications'][i],
+    })),
   },
-];
+] as {
+  key: string;
+  title: string;
+  note: string;
+  lead: string;
+  text: string;
+  code?: string;
+  parts?: { title: string; code: string; text: string }[];
+}[];
 ---
 
 <div class="arch" data-arch>

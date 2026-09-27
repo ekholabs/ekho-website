@@ -21,11 +21,15 @@
 // Colour is the page's: greys and the near-white ink, with the one yellow
 // reserved for the points that are named, which are the ones that are yours.
 
+import { t, type Lang } from '../i18n';
+
 interface Props {
   animated?: boolean;
   caption?: boolean;
+  lang: Lang;
 }
-const { animated = true, caption = true } = Astro.props;
+const { animated = true, caption = true, lang } = Astro.props;
+const c = t(lang);
 
 const SIZE = 560;
 const C = SIZE / 2;
@@ -230,16 +234,18 @@ const path = (segs: [number, number][]) => segs.map(line).join('');
 
 // ---- the points that say what they are -----------------------------------
 
-const named: { at: P; type: string; title: string }[] = [
-  { at: [206, 198], type: 'Person', title: 'Anna Berger' },
-  { at: [212, 252], type: 'Meeting', title: 'The call on Thursday' },
-  { at: [196, 306], type: 'Voice note', title: 'Tuesday, on the walk' },
-  { at: [208, 20], type: 'Decision', title: 'The pilot moves to Q1' },
-  { at: [200, 88], type: 'Principle', title: 'No start dates before the review' },
-  { at: [150, 146], type: 'Insight', title: 'Context compounds when connected' },
-  { at: [158, 44], type: 'Assumption', title: 'They will host it themselves' },
-  { at: [164, 340], type: 'Article', title: 'The future of knowledge work' },
-];
+const named: { at: P; type: string; title: string }[] = (
+  [
+    [[206, 198], 'person'],
+    [[212, 252], 'meeting'],
+    [[196, 306], 'voice'],
+    [[208, 20], 'decision'],
+    [[200, 88], 'principle'],
+    [[150, 146], 'insight'],
+    [[158, 44], 'assumption'],
+    [[164, 340], 'article'],
+  ] as [P, keyof typeof c.graphic.types][]
+).map(([at, key]) => ({ at, type: c.graphic.types[key], title: c.graphic.titles[key] }));
 const PAD = 8;
 const GAP = 11;
 const textWidth = (n: { type: string; title: string }) =>
@@ -330,8 +336,7 @@ const geometry = JSON.stringify({
 });
 
 const figureClass = ['context-graphic', animated ? '' : 'is-final'].filter(Boolean).join(' ');
-const ariaLabel =
-  'The same knowledge in four states: spread wide and formless at first, then scattered, then gathered into one form with the first connections, and finally a dense network of several hundred points without a single new one.';
+const ariaLabel = c.graphic.label;
 ---
 
 <figure

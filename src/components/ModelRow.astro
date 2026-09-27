@@ -10,6 +10,13 @@
 // for it to be removed. So GPT is set in type on the same plate rather than
 // approximated. A drawn-from-memory logo would be both wrong and theirs.
 import * as si from 'simple-icons';
+import { type Lang } from '../i18n';
+
+interface Props {
+  /** the marks carry no copy; the prop keeps the call sites uniform */
+  lang: Lang;
+}
+void Astro.props.lang;
 
 type Plate = { label: string; icon?: { path: string; title: string }; text?: string };
 

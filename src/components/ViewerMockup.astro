@@ -3,27 +3,22 @@
 // vault, on a desk and in a pocket. The numbers are the real ones from the
 // vault this site was written in; the viewer itself is in build, which the
 // chapter says in words (N4).
-const nav = ['Overview', 'Timeline', 'Graph', 'Meta'];
-const stats = [
-  ['710', 'notes'],
-  ['1,240', 'links'],
-  ['12', 'types'],
-];
-const items = [
-  ['Decision', 'ADR-0027 · The Braun formal language', 'accepted · today'],
-  ['Insight', 'Context compounds when it is connected', 'validates H-24'],
-  ['Principle', 'Clarity beats automation', 'P-0001 · 9 references'],
-  ['Contact', 'Anna Berger', 'Goyatz · 4 sessions'],
-  ['Reference', 'Karpathy, LLM wiki', 'source tier 1'],
-];
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = t(lang);
+
+const nav = c.viewer.nav;
+const stats = c.viewer.stats;
+const items = c.viewer.items;
 const phone = items.slice(0, 4);
 ---
 
 <div class="viewer">
-  <figure
-    class="win win--app"
-    aria-label="The EKHO viewer on a desktop: the reading view of a vault"
-  >
+  <figure class="win win--app" aria-label={c.viewer.title}>
     <div class="win-bar win-bar--app">
       <span class="win-lights" aria-hidden="true">
         <i></i>
@@ -42,10 +37,10 @@ const phone = items.slice(0, 4);
             <li class:list={[{ 'is-sel': i === 0 }]}>{n}</li>
           ))}
         </ul>
-        <p class="app-side-foot">read only</p>
+        <p class="app-side-foot">{c.viewer.readOnly}</p>
       </nav>
       <div class="app-main" aria-hidden="true">
-        <p class="app-h">Overview</p>
+        <p class="app-h">{nav[0]}</p>
         <ul class="app-stats">
           {stats.map(([n, l]) => (
             <li>
@@ -54,7 +49,7 @@ const phone = items.slice(0, 4);
             </li>
           ))}
         </ul>
-        <p class="app-sub">Recently touched</p>
+        <p class="app-sub">{c.viewer.recent}</p>
         <ul class="app-list">
           {items.map(([type, title, meta]) => (
             <li>
@@ -68,13 +63,13 @@ const phone = items.slice(0, 4);
     </div>
   </figure>
 
-  <figure class="phone" aria-label="The same vault on a phone">
+  <figure class="phone" aria-label={c.viewer.title}>
     <div class="phone-screen">
       <p class="phone-status" aria-hidden="true">
         <span>9:41</span>
         <span>▮</span>
       </p>
-      <p class="app-h app-h--phone">Overview</p>
+      <p class="app-h app-h--phone">{nav[0]}</p>
       <ul class="app-stats app-stats--phone">
         {stats.slice(0, 2).map(([n, l]) => (
           <li>
@@ -83,7 +78,7 @@ const phone = items.slice(0, 4);
           </li>
         ))}
       </ul>
-      <p class="app-sub">Recently touched</p>
+      <p class="app-sub">{c.viewer.recent}</p>
       <ul class="app-list app-list--phone">
         {phone.map(([type, title]) => (
           <li>

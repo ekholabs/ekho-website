@@ -1,0 +1,200 @@
+import type { Copy } from './en';
+
+// Deutsch. Übersetzt, nicht Wort für Wort übertragen: „compounds" heißt hier
+// „verzinst sich", weil das der Begriff ist, den EKHO selbst benutzt, und
+// Gedankenstriche kommen in deutschem Fließtext nicht vor.
+export const de: Copy = {
+  meta: {
+    title: 'EKHO Labs — KI ist nur so gut wie dein Kontext',
+    description:
+      'EKHO macht aus dem, was du weißt, einen zusammenhängenden Kontext, der sich verzinst. So holst du mit jeder Nutzung mehr aus deiner KI heraus, und er bleibt deiner.',
+  },
+  nav: {
+    chapters: 'Kapitel',
+    why: 'Warum',
+    what: 'Was',
+    how: 'Wie',
+    architecture: 'Architektur',
+    waitlist: 'Auf die Warteliste',
+    language: 'Sprache',
+    menuOpen: 'Menü öffnen',
+    menuClose: 'Menü schließen',
+    next: 'Weiter',
+    prev: 'Zurück',
+    copy: 'Kopieren',
+    copied: 'Kopiert',
+  },
+  hero: {
+    titleBefore: 'KI ist nur so gut wie dein Kontext.',
+    titleSignal: 'Nimm ihn dir.',
+    lede: 'EKHO macht aus dem, was du weißt, einen zusammenhängenden Kontext, mit dem deine KI arbeiten kann. Mit jeder Nutzung holst du mehr heraus. Und er bleibt deiner.',
+    cta: 'Auf die Warteliste',
+    seeHow: 'So funktioniert es',
+  },
+  why: {
+    title: 'Alles ist längst da. Nur nicht vollständig verbunden.',
+    a: 'Deine Entscheidungen, die Menschen, mit denen du arbeitest, was du gelesen und was du daraus geschlossen hast. Es existiert. In deinem Kopf, in Chats, die sich schließen, in Mails und Meetings und Notizen, die nichts voneinander wissen.',
+    b: 'Also fängt jede Sitzung mit einer KI fast bei null an. Du erklärst dich noch einmal. Und noch einmal.',
+    c: 'Das Modell ist für alle dasselbe. Dein Kontext ist der einzige Teil, der dir gehört.',
+  },
+  what: {
+    title: 'Ein Ort, an dem dein Wissen wirklich liegt.',
+    a: 'EKHO ist einfach ein Ordner auf deinem Rechner. Markdown-Dateien, eine Form, eine Grammatik. Lesbar für dich und für jeden Agenten, dem du Zugriff gibst.',
+    b: 'Nichts ist eingesperrt. Du kannst ihn öffnen, lesen, verschieben, löschen. Er ist kein Gedächtnis im Modell von jemand anderem.',
+    commandLabel: 'Installiert die EKHO CLI',
+    commandNote: 'Early Access, auf Einladung. Den Installer gibt es noch nicht.',
+  },
+  how: {
+    title: 'Das Gespräch ist das Interface.',
+    a: 'Keine neue App. EKHO dockt an den Chat an, den du ohnehin benutzt: als Befehle, die es ausführt, und Skills, die es anwendet.',
+    b: 'Und es ändert nie etwas, ohne es dir vorher zu zeigen.',
+    sovereignty: 'Kontextsouveränität',
+    note: 'Gib deinen Kontext einem Modellanbieter, und er gehört ihm: sein Speicher, sein Format, seine Bedingungen. EKHO lässt ihn auf deiner eigenen Festplatte liegen, in Markdown, wo jedes dieser Modelle ihn lesen kann.',
+    edge: 'Er bleibt deiner, und eines gegen ein anderes zu tauschen kostet dich nichts.',
+  },
+  compound: {
+    title: 'Kein einziger neuer Punkt. Dreimal so viele Verbindungen.',
+    a: 'Jede Quelle, die du hineingibst, verbindet sich mit allem, was schon da ist. Eine Erkenntnis weiß, woher sie kommt, was sie stützt und was ihr widerspricht.',
+    b: 'Deshalb verzinst es sich, statt Staub anzusetzen. Die Buchführung ist der Teil, den Menschen aufgeben, und genau der ist der Teil, den der Agent übernimmt.',
+  },
+  viewer: {
+    title: 'So sieht das aus.',
+    lede: 'Dein Vault, lesbar. Auf dem Schreibtisch und in der Tasche.',
+    note: '710 Notizen, nur lesend, deine Dateien bleiben Dateien. Der Viewer ist im Bau. Der Vault darunter nicht: es ist der, in dem diese Seite geschrieben wurde.',
+    nav: ['Überblick', 'Zeitachse', 'Graph', 'Meta'],
+    readOnly: 'nur lesend',
+    stats: [
+      ['710', 'Notizen'],
+      ['1.240', 'Verbindungen'],
+      ['12', 'Typen'],
+    ],
+    recent: 'Zuletzt angefasst',
+    items: [
+      ['Decision', 'ADR-0027 · Die Braun-Formensprache', 'accepted · heute'],
+      ['Insight', 'Kontext verzinst sich, wenn er verbunden ist', 'stützt H-24'],
+      ['Principle', 'Klarheit schlägt Automatisierung', 'P-0001 · 9 Verweise'],
+      ['Contact', 'Anna Berger', 'Goyatz · 4 Sitzungen'],
+      ['Reference', 'Karpathy, LLM wiki', 'Quellenstufe 1'],
+    ],
+  },
+  architecture: {
+    title: 'Die EKHO-Architektur',
+    lede: 'Notizen führen kann jede KI. EKHO ergänzt die Grammatik und die Workflows, die sie wiederholbar machen und mit jedem anderen EKHO-Vault verträglich.',
+    layers: {
+      conversation: {
+        title: 'Conversation',
+        note: 'zwischen Menschen',
+        lead: 'Wo Wissen entsteht:',
+        text: 'in den Gesprächen mit den Menschen, mit denen du arbeitest. Ein Anruf, ein Meeting, eine Entscheidung, die laut ausgesprochen wird. Fast nichts davon wird aufgeschrieben, und genau darauf zielt EKHO.',
+      },
+      llm: {
+        title: 'LLM',
+        note: 'austauschbar',
+        lead: 'Das Mittel, nicht der Ort:',
+        text: 'die Maschine, die liest, schreibt und verknüpft. EKHO arbeitet mit jedem Modell, ob Frontier, offen oder lokal betrieben. Du kannst das Modell wechseln, und dein Wissen bleibt genau dort, wo es war.',
+      },
+      harness: {
+        title: 'Harness',
+        note: 'CLI und Skills',
+        lead: 'Die Schicht, die die Grammatik arbeiten lässt:',
+        text: 'Skills, Workflows und ein Linter, die Quellen aufnehmen, Fragen beantworten und alles konsistent halten. Aus etwas, das eine Person einmal geprompted hat, wird ein Verhalten, das jeder wiederholen kann.',
+      },
+      ontology: {
+        title: 'Ontology',
+        note: 'Typen, Kanten, Regeln',
+        lead: 'Die gemeinsame Grammatik eines Vaults:',
+        text: 'was eine Notiz ist (Erkenntnis, Hypothese, Entscheidung), wie Notizen zusammenhängen und welchen Regeln sie folgen. Sie wird deklariert statt geprompted, deshalb verhält sich jeder Vault gleich, und jedes Fachgebiet kann sie erweitern, ohne den Kern zu brechen.',
+      },
+      vault: {
+        title: 'EKHO Vault',
+        note: 'Wissen · Specs · Code',
+        lead: 'Was dir gehört:',
+        text: 'schlichtes Markdown auf deiner eigenen Festplatte. Es wird mit jeder Sitzung wertvoller, und keine der Schichten darüber darf es als Geisel nehmen.',
+        parts: [
+          [
+            'Wissen',
+            'Quellen, Erkenntnisse, Hypothesen und Entscheidungen. Hier liegt das Denken.',
+          ],
+          [
+            'Specs',
+            'Die Brücke von geprüftem Wissen zu baubaren Anforderungen. Alles Gebaute lässt sich auf sein Warum zurückführen.',
+          ],
+          [
+            'Code',
+            'Die laufende Software, aus Specs gebaut und als Beleg zurückgespielt. Jedes ausgelieferte Feature schließt den Kreis.',
+          ],
+        ],
+      },
+    },
+  },
+  who: {
+    title: 'Wer das hier baut',
+    lede: 'EKHO Labs sind zwei Gründer. Wir bauen EKHO offen und benutzen es jeden Tag für EKHO selbst: der Vault hinter dieser Seite hält 710 Notizen, und jede Entscheidung auf dieser Seite ist eine davon.',
+    lorenz: 'Semantik- und Ontologie-Design, und das Frontend.',
+    stephan: 'Harness- und Data-Engineering, und das Backend.',
+  },
+  waitlist: {
+    title: 'Wo wir stehen',
+    lede: 'Die CLI läuft, wir benutzen sie täglich. Der Viewer ist im Bau. Es gibt noch kein gehostetes Produkt, keinen Account und keine Preise. Wenn du dabei sein willst, sobald es das gibt, lass uns deine Mailadresse da.',
+    cta: 'Auf die Warteliste',
+    note: 'Vorerst ist das eine Mail an uns. Eine Antwort, sobald es etwas zu sehen gibt, und kein Tracking.',
+    label: 'Deine Mailadresse',
+    formNote: 'Eine Mail, sobald es etwas zu sehen gibt. Sonst nichts, und kein Tracking.',
+  },
+  closing: {
+    before: 'Wir bauen EKHO, damit Menschen ihren Kontext verzinsen können',
+    mark: 'und ihn behalten.',
+  },
+  finder: { title: 'myEKHO' },
+  chat: {
+    windowTitle: 'Das Gespräch mit Anna aufarbeiten',
+    newChat: 'Neuer Chat',
+    today: 'Heute',
+    yesterday: 'Gestern',
+    recents: [
+      'Das Gespräch mit Anna aufarbeiten',
+      'Roadmap-Review vorbereiten',
+      'Ontologie ablösen',
+      'Pitch-Story schärfen',
+    ],
+    vault: 'Vault verbunden',
+    ask: 'Wirf das Gespräch mit Anna von gestern in EKHO.',
+    said: 'Ich transkribiere die Aufnahme und lege sie in deine Inbox.',
+    terminal: 'Terminal',
+    skill: 'Skill · ekho-inbox-digest',
+    wouldWrite: 'Das würde ich in deinen Vault schreiben:',
+    rows: [
+      ['neu', 'Decision', 'Der Pilot rutscht auf Q1'],
+      ['neu', 'Insight', 'Data Hosting ist der Blocker'],
+      ['neu', 'Contact', 'Anna Berger'],
+      ['link', '—', '7 Notizen, die du schon hast'],
+    ],
+    confirm: 'Bestätigen',
+    adjust: 'Anpassen',
+    reply: 'Antworten…',
+  },
+  graphic: {
+    label:
+      'Dasselbe Wissen in vier Zuständen: zuerst weit verteilt und formlos, dann gestreut, dann zu einer Form gesammelt mit den ersten Verbindungen, und schließlich ein dichtes Netz aus mehreren hundert Punkten, ohne einen einzigen neuen.',
+    types: {
+      person: 'Person',
+      meeting: 'Meeting',
+      voice: 'Sprachnotiz',
+      decision: 'Entscheidung',
+      principle: 'Prinzip',
+      insight: 'Erkenntnis',
+      assumption: 'Annahme',
+      article: 'Artikel',
+    },
+    titles: {
+      person: 'Anna Berger',
+      meeting: 'Das Gespräch am Donnerstag',
+      voice: 'Dienstag, beim Spazieren',
+      decision: 'Der Pilot rutscht auf Q1',
+      principle: 'Keine Starttermine vor dem Review',
+      insight: 'Kontext verzinst sich, wenn er verbunden ist',
+      assumption: 'Sie hosten es selbst',
+      article: 'Die Zukunft der Wissensarbeit',
+    },
+  },
+};

@@ -3,6 +3,14 @@
 // way the reader already sees folders. After the Figma frame "What · Ordner
 // über Graph": one plain list, real macOS folder icons, floating over the
 // graph, so the same knowledge is a picture and a directory at once.
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = t(lang);
+
 const folders = ['00 - Now', '01 - Projects', '02 - Areas', '03 - Resources', '04 - Archive'];
 const files = ['AGENTS.md', 'index.md', 'log.md'];
 ---
@@ -18,7 +26,7 @@ const files = ['AGENTS.md', 'index.md', 'log.md'];
       <i></i>
       <i></i>
     </span>
-    <span class="win-title">myEKHO</span>
+    <span class="win-title">{c.finder.title}</span>
   </div>
   <ul class="fin-list" aria-hidden="true">
     {folders.map((f) => (

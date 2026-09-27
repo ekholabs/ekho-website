@@ -1,14 +1,17 @@
 ---
 import '../styles/global.css';
+import { languages, langs, pathFor, defaultLang, t, type Lang } from '../i18n';
 
 interface Props {
   title: string;
   description?: string;
   /** 'wide': no content column, the page lays out its own sections on the wide grid */
   layout?: 'page' | 'wide';
+  lang?: Lang;
 }
 
-const { title, description = 'EKHO Labs', layout = 'page' } = Astro.props;
+const { title, description = 'EKHO Labs', layout = 'page', lang = defaultLang } = Astro.props;
+const c = t(lang);
 const year = new Date().getFullYear();
 const wide = layout === 'wide';
 
@@ -18,7 +21,7 @@ const indexable = false;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,6 +29,13 @@ const indexable = false;
     <meta name="description" content={description} />
     {!indexable && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    {/* every language points at every other, including itself, and x-default at
+        the root, so a search engine is told which version is which rather than
+        left to guess from the text */}
+    {langs.map((l) => (
+      <link rel="alternate" hreflang={l} href={new URL(pathFor(l), Astro.site)} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site)} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -49,9 +59,27 @@ const indexable = false;
           </nav>
         </slot>
         {Astro.slots.has('header-nav') && (
-          <a class="header-aside" href="https://github.com/ekholabs">
-            GitHub <span aria-hidden="true">↗</span>
-          </a>
+          <div class="header-aside">
+            {/* A plain select: it is the one control every platform already
+                knows how to open, reach by keyboard and read out, and each
+                option is a real URL, so it still works with the script off. */}
+            <label class="lang-picker">
+              <span class="visually-hidden">{c.nav.language}</span>
+              <select class="lang-select" data-lang-select>
+                {langs.map((l) => (
+                  <option value={pathFor(l)} selected={l === lang}>
+                    {languages[l].short}
+                  </option>
+                ))}
+              </select>
+              <span class="lang-caret" aria-hidden="true">
+                ⌄
+              </span>
+            </label>
+            <a class="header-github" href="https://github.com/ekholabs">
+              GitHub <span aria-hidden="true">↗</span>
+            </a>
+          </div>
         )}
         {Astro.slots.has('header-nav') && (
           <button
@@ -126,6 +154,12 @@ const indexable = false;
           if (e.matches) set(false);
         });
       }
+
+      // the select carries the destination in its value, so choosing goes there
+      const picker = document.querySelector<HTMLSelectElement>('[data-lang-select]');
+      picker?.addEventListener('change', () => {
+        window.location.pathname = picker.value;
+      });
     </script>
   </body>
 </html>
