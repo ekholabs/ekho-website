@@ -330,6 +330,26 @@ for (const raw of [...edges].sort((a, b) => outward(a) - outward(b))) {
 }
 chords.sort((a, b) => outward(a) - outward(b));
 
+// Where each of your points sits along that spread, as a fraction of the whole
+// drawing. A dash offset runs over path length, not over distance, so this is
+// measured the same way: the running length of the yellow path up to the first
+// line that reaches the point. The page uses it to colour each point at the
+// moment the wave arrives at it, instead of turning them all yellow at once
+// and making a single movement look like two.
+const segLen = ([a, b]: [number, number]) =>
+  Math.hypot(cloudPts[a][0] - cloudPts[b][0], cloudPts[a][1] - cloudPts[b][1]);
+const ownTotal = own.reduce((t, e) => t + segLen(e), 0) || 1;
+const reach = new Map<number, number>();
+{
+  let run = 0;
+  for (const e of own) {
+    run += segLen(e);
+    const at = run / ownTotal;
+    if (!reach.has(e[0])) reach.set(e[0], at);
+    if (!reach.has(e[1])) reach.set(e[1], at);
+  }
+}
+
 const labelOrder = new Map(
   [...labels.keys()].sort((a, b) => scatter[a][1] - scatter[b][1]).map((i, n) => [i, n]),
 );
@@ -345,6 +365,7 @@ const tier = (i: number) => {
 
 const shift = (i: number) =>
   [
+    ...(reach.has(i) ? [`--w:${reach.get(i)!.toFixed(3)}`] : []),
     `--dx0:${(origin[i][0] - scatter[i][0]).toFixed(1)}px`,
     `--dy0:${(origin[i][1] - scatter[i][1]).toFixed(1)}px`,
     `--dx2:${(cloudPts[i][0] - scatter[i][0]).toFixed(1)}px`,

@@ -632,9 +632,21 @@
     opacity: 0.9;
   }
 
+  /* Each of your points turns as the wave reaches it, not all of them at the
+     moment the chapter turns: --w is where that point sits along the drawing,
+     so the colour and the lines are one movement rather than two. */
   .reveal-on [data-graphic].is-3 .cg-dot.is-mine {
     fill: var(--signal);
     opacity: 1;
+    transition:
+      fill 700ms ease,
+      opacity 700ms ease;
+    transition-delay: calc(1200ms + var(--w, 0) * 14000ms);
+  }
+
+  /* going back is not a wave, so it does not wait */
+  .reveal-on [data-graphic]:not(.is-3) .cg-dot.is-mine {
+    transition-delay: 0s;
   }
 
   .reveal-on [data-graphic].is-3 .cg-dot.is-far {
