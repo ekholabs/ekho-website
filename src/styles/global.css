@@ -549,7 +549,7 @@
 
   /* and it is on its own layer for the chapter before the one it comes up in,
      so the fade itself is a compositor job */
-  .reveal-on [data-graphic].is-2:not(.is-3) .cg-mesh {
+  .reveal-on [data-graphic].is-2:not(.is-net) .cg-mesh {
     will-change: opacity;
   }
 
@@ -600,12 +600,12 @@
     transform: translate(var(--dx2), var(--dy2));
   }
 
-  .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot:not(.is-named) {
+  .reveal-on [data-graphic].is-2:not(.is-net) .cg-dot:not(.is-named) {
     fill: var(--muted-deep);
     opacity: 0.42;
   }
 
-  .reveal-on [data-graphic].is-2:not(.is-3) .cg-dot.t0 {
+  .reveal-on [data-graphic].is-2:not(.is-net) .cg-dot.t0 {
     fill: var(--text);
     opacity: 0.85;
   }
@@ -616,7 +616,13 @@
      faint, by the time the first edge finished — it read as appearing rather
      than as being built. Leaving is still a fade, which is why the transition
      is only dropped in this state. */
-  .reveal-on [data-graphic].is-3 .cg-mesh {
+  /* is-net, not is-3: the full net is switched in a moment before the window
+     begins to collapse, not as the chapter arrives. What should uncover it is
+     the window shrinking away, so the swap happens while the window still
+     stands at full size and the reader never watches the loose net of the
+     chapter before being taken down. The yellow still waits for is-3, which
+     is the chapter itself. */
+  .reveal-on [data-graphic].is-net .cg-mesh {
     opacity: 1;
     /* It comes up while the window is still shrinking over it, so the fade is
        hidden and what the reader sees when the window has gone is a net that
@@ -626,7 +632,7 @@
     transition: opacity 380ms ease;
   }
 
-  .reveal-on [data-graphic].is-3 .cg-dot:not(.is-named) {
+  .reveal-on [data-graphic].is-net .cg-dot:not(.is-named) {
     fill: var(--text);
     opacity: 0.9;
   }
@@ -655,7 +661,7 @@
     transition-delay: 0s;
   }
 
-  .reveal-on [data-graphic].is-3 .cg-dot.is-far {
+  .reveal-on [data-graphic].is-net .cg-dot.is-far {
     opacity: 0.32;
   }
 
@@ -3066,13 +3072,13 @@
     transition: opacity 300ms ease;
   }
 
-  .reveal-on [data-graphic].is-2:not(.is-3) .cg-wave {
+  .reveal-on [data-graphic].is-2:not(.is-net) .cg-wave {
     opacity: 0.8;
     transition: opacity 420ms ease calc(var(--w) * 120ms);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .reveal-on [data-graphic].is-2:not(.is-3) .cg-wave {
+    .reveal-on [data-graphic].is-2:not(.is-net) .cg-wave {
       transition: opacity 400ms ease;
     }
   }
@@ -3103,7 +3109,7 @@
     transition: opacity 300ms ease;
   }
 
-  .reveal-on [data-graphic].is-2:not(.is-3) .cg-first {
+  .reveal-on [data-graphic].is-2:not(.is-net) .cg-first {
     opacity: 0.8;
     stroke-dashoffset: 0;
     transition:
@@ -3122,7 +3128,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .reveal-on [data-graphic].is-2:not(.is-3) .cg-first {
+    .reveal-on [data-graphic].is-2:not(.is-net) .cg-first {
       transition: opacity 400ms ease;
       stroke-dashoffset: 0;
     }
@@ -3232,7 +3238,7 @@
     stroke: var(--signal);
   }
 
-  .reveal-on [data-graphic].is-2:not(.is-3) .cg-first.is-yours {
+  .reveal-on [data-graphic].is-2:not(.is-net) .cg-first.is-yours {
     opacity: 1;
   }
 

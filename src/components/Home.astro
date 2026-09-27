@@ -466,6 +466,18 @@ const people = [
   const setMoving = () => {
     document.documentElement.classList.toggle('is-moving', animating || collapsing);
   };
+  // Which net the graphic is showing. It is not the chapter: the full net is
+  // switched in a moment before the window starts collapsing, so what uncovers
+  // it is the window going rather than the graph changing while the reader
+  // watches. Outside the stepper — a phone, a jump, reduced motion — it simply
+  // follows the chapter, which is what update() below does.
+  let netOn = false;
+  let netLead = 0;
+  const setNet = (on: boolean) => {
+    netOn = on;
+    for (const g of graphics) g.classList.toggle('is-net', on);
+  };
+
   const runCollapse = (to: number, atOnce = false) => {
     // A page that is not on screen is served no animation frames, so a run
     // begun there would sit half done until the reader came back. Same guard
@@ -672,8 +684,10 @@ const people = [
     // the graphic: 0 field, 1 scattered, 2 connected, 3 compounding
     {
       const stage = Number(current?.dataset.stage ?? 0);
-      for (const g of graphics)
+      for (const g of graphics) {
         for (let n = 1; n <= 3; n++) g.classList.toggle(`is-${n}`, stage >= n);
+        g.classList.toggle('is-net', netOn || stage >= 3);
+      }
     }
 
     // architecture: its rows come in once the chapter is in view
@@ -820,7 +834,18 @@ const people = [
     // is its own — unless we are jumping, in which case it is already over.
     if (compound) {
       const at = views.indexOf(compound);
-      if (at >= 0) runCollapse(next >= at ? 1 : 0, far);
+      if (at >= 0) {
+        const want = next >= at ? 1 : 0;
+        // The net first, the window a third of a second later: by the time
+        // anything moves, the net behind it is the finished one. Going back is
+        // the same trade in reverse, and there the window is growing over it,
+        // so the swap needs no lead.
+        setNet(want === 1);
+        window.clearTimeout(netLead);
+        if (want === 1 && !far && !reduceMotion && !document.hidden)
+          netLead = window.setTimeout(() => runCollapse(1), 300);
+        else runCollapse(want, far);
+      }
     }
     // A page that is not on screen is served no animation frames, so a glide
     // begun there never starts and never finishes, and because every wheel
