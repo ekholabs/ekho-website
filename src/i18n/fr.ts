@@ -55,7 +55,7 @@ export const fr: Copy = {
   compound: {
     title: 'Pas un point de plus. Trois fois plus de liens.',
     a: "Chaque source que vous versez se relie à tout ce qui est déjà là. Une idée sait d'où elle vient, ce qui l'appuie et ce qui la contredit.",
-    b: "C'est en cela qu'elle fructifie : chaque note ajoutée multiplie les liens, si bien que la qualité de ce qui revient croît de façon exponentielle plutôt que pas à pas. La tenue des comptes est la partie que l'on abandonne, et c'est justement celle que l'agent prend en charge.",
+    b: "C'est en cela qu'elle fructifie : chaque note ajoutée multiplie les liens, si bien que la qualité de ce qui revient croît de façon exponentielle plutôt que pas à pas. La tenue des comptes est la partie que l'on abandonne, et c'est justement celle qu'EKHO prend en charge.",
   },
   viewer: {
     title: 'Voilà à quoi cela ressemble.',

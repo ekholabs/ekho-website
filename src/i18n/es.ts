@@ -55,7 +55,7 @@ export const es: Copy = {
   compound: {
     title: 'Ni un punto nuevo. El triple de conexiones.',
     a: 'Cada fuente que incorporas se enlaza con todo lo que ya está ahí. Una idea sabe de dónde viene, qué la sostiene y qué la contradice.',
-    b: 'En eso consiste capitalizarse: cada nota que añades multiplica las conexiones, así que la calidad de lo que recibes crece de forma exponencial en lugar de paso a paso. La contabilidad es la parte que la gente abandona, y es justo la parte que hace el agente.',
+    b: 'En eso consiste capitalizarse: cada nota que añades multiplica las conexiones, así que la calidad de lo que recibes crece de forma exponencial en lugar de paso a paso. La contabilidad es la parte que la gente abandona, y es justo la parte que hace EKHO.',
   },
   viewer: {
     title: 'Así se ve.',
