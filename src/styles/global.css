@@ -535,8 +535,11 @@
     color: var(--muted);
   }
 
-  /* stage 0, the hero: every point there is, spread wide, all one grey */
-  .reveal-on [data-graphic] .cg-dot,
+  /* stage 0, the hero: every point there is, spread wide, all one grey.
+     A named point is a circle inside a group that already carries the move, so
+     it is left out here or it travels the distance twice and ends up off the
+     form the others make. */
+  .reveal-on [data-graphic] .cg-dot:not(.is-named),
   .reveal-on [data-graphic] .cg-pt {
     transform: translate(var(--dx0), var(--dy0));
   }
@@ -591,8 +594,9 @@
     opacity: 1;
   }
 
-  /* stage 2: the points find their form and the first links appear */
-  .reveal-on [data-graphic].is-2 .cg-dot,
+  /* stage 2: the points find their form and the first links appear. Named
+     points are moved by their group only, for the same reason as in stage 0. */
+  .reveal-on [data-graphic].is-2 .cg-dot:not(.is-named),
   .reveal-on [data-graphic].is-2 .cg-pt {
     transform: translate(var(--dx2), var(--dy2));
   }
@@ -607,9 +611,15 @@
     opacity: 0.85;
   }
 
-  /* stage 3: not one new point, the whole net */
+  /* stage 3: not one new point, the whole net.
+     The group comes on at once and the lines draw themselves in. Fading the
+     group in over the same moment meant the net was already all there, just
+     faint, by the time the first edge finished — it read as appearing rather
+     than as being built. Leaving is still a fade, which is why the transition
+     is only dropped in this state. */
   .reveal-on [data-graphic].is-3 .cg-mesh {
     opacity: 1;
+    transition: none;
   }
 
   .reveal-on [data-graphic].is-3 .cg-dot:not(.is-named) {
@@ -1018,8 +1028,11 @@
 
   .statement {
     font-weight: 400;
-    font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
-    line-height: 1.6;
+    /* A shade smaller than it was: at the old size the lines ran right up to
+       the rule beside them with nothing left over, and a column that tight
+       reads as cramped however good the measure is. */
+    font-size: clamp(1rem, 1.35vw, 1.125rem);
+    line-height: 1.62;
     letter-spacing: 0;
     color: var(--muted);
     max-width: 52ch;
@@ -2844,8 +2857,10 @@
     stroke-dashoffset: 0;
     transition:
       opacity 500ms ease,
-      stroke-dashoffset 1700ms cubic-bezier(0.33, 0.7, 0.4, 1);
-    transition-delay: 0s, 450ms;
+      stroke-dashoffset 2000ms cubic-bezier(0.33, 0.7, 0.4, 1);
+    /* barely any wait: nothing is covering the start any more, so the drawing
+       is what the reader sees the moment the chapter lands */
+    transition-delay: 0s, 120ms;
   }
 
   .reveal-on [data-graphic]:not(.is-3) .cg-far,
@@ -3184,7 +3199,9 @@
   .command code {
     display: block;
     font-family: var(--font-mono);
-    font-size: 0.8125rem;
+    /* sized so the line fits the column in one piece: a command broken across
+       two lines looks like two commands */
+    font-size: 0.75rem;
     line-height: 1.55;
     color: #e9e7e2;
     overflow-wrap: anywhere;
@@ -3521,13 +3538,22 @@
     position: fixed;
     top: calc(var(--step-top, 0px) + 0.75rem);
     width: 1px;
-    z-index: 5;
+    /* Over the bars, not under them. Their glass is only partly opaque, so a
+       line behind it still showed through, just dimmer — which read as two
+       breaks in a line that is meant to run the whole way. */
+    z-index: 7;
   }
 
   /* Each bar takes a strip of the column with it, so the chapter gives up the
      same again at each end and nothing ends up underneath them. Narrow screens
      have neither bars nor a second column. */
   @media (min-width: 64rem) {
+    /* Room between the text and the rule. The column ends at the rule, so
+       without this the last word of a full line sits against it. */
+    .story-text .chapter {
+      padding-right: 3rem;
+    }
+
     .story-text .chapter {
       /* Not symmetric, because what it has to be level with is not symmetric:
          the header and the back bar take 103px off the top, the forward bar
