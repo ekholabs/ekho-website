@@ -2852,24 +2852,36 @@
 
      It starts after the points have begun to gather, because the form has to
      arrive before the connections have anywhere to be. */
+  /* What this has to read as: the net is already there, the conversation in
+     the window lands in it as one node, and the connections the digest makes
+     are spun outwards from that node.
+
+     So the white net is not drawn at all. It stands complete behind the chat
+     window from the moment the chapter turns, and what uncovers it is the
+     window shrinking away. That is true to what is being shown: those
+     connections were there before this conversation.
+
+     Only the yellow is drawn. It is ordered outwards from the node, it waits
+     for the window to finish becoming that node, and it takes its time,
+     because it is the one thing this chapter is about. The curve is close to
+     even: a thing spreading spreads at its own pace rather than rushing the
+     first half of the way. */
   .cg-far,
   .cg-near,
   .cg-chord,
   .cg-own {
     stroke-dasharray: 1;
     stroke-dashoffset: 0;
-    transition:
-      opacity 500ms ease,
-      stroke-dashoffset 4200ms cubic-bezier(0.33, 0.7, 0.4, 1);
-    /* It waits for the window to finish becoming a point, and then takes its
-       time: the drawing is the whole content of this chapter, and it starts
-       from the point the window became. */
-    transition-delay: 0s, 700ms;
+    transition: opacity 500ms ease;
   }
 
-  .reveal-on [data-graphic]:not(.is-3) .cg-far,
-  .reveal-on [data-graphic]:not(.is-3) .cg-near,
-  .reveal-on [data-graphic]:not(.is-3) .cg-chord,
+  .cg-own {
+    transition:
+      opacity 500ms ease,
+      stroke-dashoffset 4600ms cubic-bezier(0.35, 0.1, 0.45, 1);
+    transition-delay: 0s, 1200ms;
+  }
+
   .reveal-on [data-graphic]:not(.is-3) .cg-own {
     stroke-dashoffset: 1;
     transition-delay: 0s, 0s;
