@@ -637,7 +637,7 @@
     fill: var(--signal);
     opacity: 1;
     /* The strike runs out from where the window landed, point after point
-       after point, and each line is spun a quarter of a second behind its
+       after point, and each line is spun a fifth of a second behind its
        point: one wave, with the colour just ahead of the connection. It starts
        as the window lands rather than after a pause. No new points appear —
        these are the same white ones, changing colour. Each turns in a fifth of
@@ -646,7 +646,7 @@
     transition:
       fill 220ms ease-out,
       opacity 220ms ease-out;
-    transition-delay: calc(400ms + var(--w, 0) * 5000ms);
+    transition-delay: calc(300ms + var(--w, 0) * 2600ms);
   }
 
   /* going back is not a wave, so it does not wait */
@@ -2944,17 +2944,16 @@
   }
 
   /* The yellow arrives in waves rather than being pulled across a dash. Same
-     five seconds, same outward order, same moment relative to the point each
-     line reaches — --w is where this wave sits along the drawing, so it lands
-     a quarter of a second after its points have turned. What changed is the
-     property: a dash offset is repainted on every frame of those five seconds,
-     an opacity is not. */
+     outward order, and each wave still lands a fifth of a second after the
+     points it reaches have turned — --w is where it sits along the drawing.
+     What changed is the property: a dash offset is repainted on every frame of
+     the run, an opacity is not. */
   .cg-own {
-    transition: opacity 320ms ease;
+    transition: opacity 260ms ease;
   }
 
   .reveal-on [data-graphic].is-3 .cg-own {
-    transition-delay: calc(650ms + var(--w, 0) * 5000ms);
+    transition-delay: calc(520ms + var(--w, 0) * 2600ms);
   }
 
   /* before the chapter turns the waves are held at a hair of alpha, painted
