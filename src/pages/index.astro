@@ -8,8 +8,8 @@ import ViewerMockup from '../components/ViewerMockup.astro';
 import Waitlist from '../components/Waitlist.astro';
 import ModelRow from '../components/ModelRow.astro';
 import { Image } from 'astro:assets';
-import portraitA from '../assets/people/portrait-a.jpg';
-import portraitB from '../assets/people/portrait-b.jpg';
+import lorenzPortrait from '../assets/people/lorenz-vierecke.jpg';
+import stephanPortrait from '../assets/people/stephan-georg.jpg';
 
 // The scroll is the lifecycle of a vault: scattered before EKHO, connected with
 // it, compounding once it runs. The graphic on the right holds that movement,
@@ -25,21 +25,20 @@ const chapters = [
 
 // The two founders. Names, faces and profiles on a public page are the one
 // thing never to guess. The URLs come from their own contact notes in
-// EKHO_brain. The portraits were handed over as a pair without being named, so
-// which belongs to whom follows the order the tiles were already in and is
-// waiting on Lorenz to confirm before this goes anywhere public.
+// EKHO_brain, and the portraits are named after the people in them, confirmed
+// by Lorenz. The first pass guessed the order and had them the wrong way round.
 const people = [
   {
     name: 'Lorenz Vierecke',
-    line: 'Puts EKHO in front of real work and writes down what breaks.',
+    line: 'Semantics and ontology, and the front end.',
     href: 'https://www.linkedin.com/in/lorenz-vierecke-7b896079',
-    portrait: portraitA,
+    portrait: lorenzPortrait,
   },
   {
     name: 'Stephan Georg',
-    line: 'Builds the harness underneath: the CLI, the grammar, the workflows.',
+    line: 'The harness, data engineering, and the back end.',
     href: 'https://www.linkedin.com/in/stephangeorg',
-    portrait: portraitB,
+    portrait: stephanPortrait,
   },
 ];
 ---
