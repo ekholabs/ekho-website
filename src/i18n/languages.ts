@@ -1,4 +1,4 @@
-// The four the page is offered in. English is the default and lives at the
+// The languages the page exists in. English is the default and lives at the
 // root; the others get their own path, their own built page and their own
 // hreflang, because this site is static and a language switch that swapped text
 // with JavaScript would be invisible to anything that is not a browser.
@@ -11,7 +11,16 @@ export const languages = {
 
 export type Lang = keyof typeof languages;
 export const defaultLang: Lang = 'en';
-export const langs = Object.keys(languages) as Lang[];
+
+/**
+ * The ones actually offered: built, listed in the language menu, and declared
+ * to search engines. Existing in the codebase is not the same as being
+ * published, and es and fr are machine translations that no native speaker has
+ * read — which is fine in a repository and not fine on a page that speaks for
+ * EKHO, since nobody here would notice a mistake in them. Add them back to this
+ * list once somebody has.
+ */
+export const langs: Lang[] = ['en', 'de'];
 
 /** '/' for English, '/de/' for the rest. */
 export const pathFor = (lang: Lang) => (lang === defaultLang ? '/' : `/${lang}/`);
