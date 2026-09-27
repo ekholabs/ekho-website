@@ -391,6 +391,9 @@ const people = [
   // every statement is fully visible, the graphic rests in its finished state
   // and the architecture stack renders in the state the markup gives it.
   const root = document.documentElement;
+  // Both classes are already on: the head sets them inline, before the first
+  // paint. Setting them again here is harmless and keeps this script readable
+  // on its own.
   root.classList.add('js');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduceMotion) root.classList.add('reveal-on');

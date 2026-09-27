@@ -40,6 +40,17 @@ const indexable = false;
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {/* These two classes decide what the page looks like before anything moves:
+        without them the graphic renders in its finished state, which is correct
+        for a reader without JavaScript and wrong for everyone else, who saw the
+        finished net for a frame before the opening took hold of it. Inline and
+        in the head, so it is set before the first paint rather than whenever
+        the module for the page happens to load. */}
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
+        document.documentElement.classList.add('reveal-on');
+    </script>
   </head>
   <body>
     <header class="site-header">
