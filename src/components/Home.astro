@@ -36,6 +36,13 @@ const chapters = [
 // thing never to guess. The URLs come from their own contact notes in
 // EKHO_brain, and the portraits are named after the people in them, confirmed
 // by Lorenz. The first pass guessed the order and had them the wrong way round.
+// LinkedIn's "in" bug, used to say where the two links go. It is not in the
+// simple-icons package — LinkedIn asked to be taken out of it — so the path
+// sits here, drawn on the same 24-unit grid as the marks that do come from
+// there, and is tinted like every other mark on the page.
+const LINKEDIN =
+  'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z';
+
 const people = [
   {
     name: 'Lorenz Vierecke',
@@ -350,11 +357,17 @@ const people = [
     <ul class="people">
       {people.map((p) => (
         <li>
-          <Image class="people-face" src={p.portrait} alt={p.name} width={176} height={176} />
+          <Image class="people-face" src={p.portrait} alt={p.name} width={256} height={256} />
           <div>
             <b>
-              <a class="people-link" href={p.href}>
-                {p.name} <Arrow />
+              {/* The mark says where the link goes, which the arrow only
+                  implied. It is LinkedIn's own, from simple-icons like the
+                  others on the page. */}
+              <a class="people-link" href={p.href} aria-label={`${p.name} on LinkedIn`}>
+                {p.name}
+                <svg class="people-in" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d={LINKEDIN} />
+                </svg>
               </a>
             </b>
             <span>{p.line}</span>

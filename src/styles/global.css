@@ -1904,8 +1904,8 @@
      the text beside them until the tile is hovered. */
   .people-face {
     flex: none;
-    width: 5.5rem;
-    height: 5.5rem;
+    width: 8rem;
+    height: 8rem;
     border-radius: var(--radius);
     object-fit: cover;
     filter: grayscale(1) contrast(1.02);
@@ -1915,6 +1915,24 @@
 
   .people li:hover .people-face {
     opacity: 1;
+  }
+
+  .people-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .people-in {
+    width: 0.9375rem;
+    height: 0.9375rem;
+    fill: var(--muted);
+    transition: fill 200ms ease;
+  }
+
+  .people li:hover .people-in,
+  .people-link:focus-visible .people-in {
+    fill: var(--text);
   }
 
   .people b {
