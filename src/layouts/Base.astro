@@ -1,4 +1,5 @@
 ---
+import Arrow from '../components/Arrow.astro';
 import '../styles/global.css';
 import { languages, langs, pathFor, defaultLang, t, type Lang } from '../i18n';
 
@@ -91,7 +92,7 @@ const indexable = false;
               </span>
             </label>
             <a class="header-github" href="https://github.com/ekholabs">
-              GitHub <span aria-hidden="true">↗</span>
+              GitHub <Arrow />
             </a>
           </div>
         )}

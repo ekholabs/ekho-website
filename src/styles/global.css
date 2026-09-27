@@ -1604,6 +1604,29 @@
     color: var(--muted-deep);
   }
 
+  /* the arrows: hairlines at the weight of the rest of the line work */
+  .arrow {
+    width: 1em;
+    height: 1em;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vertical-align: -0.12em;
+  }
+
+  .chat-send .arrow {
+    width: 15px;
+    height: 15px;
+    stroke-width: 1.8;
+  }
+
+  .chapter-nav-arrow {
+    width: 0.85em;
+    height: 0.85em;
+  }
+
   .chat-send {
     width: 26px;
     height: 26px;

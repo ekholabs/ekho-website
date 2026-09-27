@@ -11,6 +11,7 @@
 // Whether a third-party mark belongs on our landing page at all is a brand
 // decision, not a design one (docs/landing-v2.md).
 import * as si from 'simple-icons';
+import Arrow from './Arrow.astro';
 import { t, type Lang } from '../i18n';
 
 interface Props {
@@ -124,7 +125,7 @@ const rows = c.chat.rows;
           </span>
           <span class="chat-ph">{c.chat.reply}</span>
           <span class="chat-send" aria-hidden="true">
-            ↑
+            <Arrow kind="send" />
           </span>
         </p>
         <p class="chat-model">
