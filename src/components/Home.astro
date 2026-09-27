@@ -497,7 +497,74 @@ const people = [
   const wideIntro = window.matchMedia('(min-width: 64rem)');
   let lastNav: string | undefined;
 
+  // What a frame of the collapse needs, and nothing else. The run drives this
+  // at 60fps for nearly a second; the full update measures every chapter, the
+  // window, the dot and the opening on each call, and interleaves those reads
+  // with the writes of the frame before, so the browser relaid out the whole
+  // tree, SVG included, 60 times. The window is moved by the scroll clock, so
+  // every one of those relayouts was visible as a stutter in the window.
+  let lastWashOn = false;
+  let winCentre: { x: number; y: number } | undefined;
+  let dotAt: { x: number; y: number } | undefined;
+  let dotAge = 0;
+
+  function paintCollapse(collapse: number) {
+    const chatWin = chatOverlay?.querySelector<HTMLElement>('.win');
+    if (!figure || !chatWin) return;
+
+    if (collapse > 0 && collapse < 1) {
+      // Measured once at the start of the run, off the window as it stands
+      // before it is moved, and off the dot every fourth frame: both are
+      // steady enough that reading them every frame only bought a relayout.
+      if (!winCentre) {
+        const w = chatWin.getBoundingClientRect();
+        winCentre = { x: w.left + w.width / 2 - lastTx, y: w.top + w.height / 2 - lastTy };
+      }
+      if (!dotAt || dotAge % 4 === 0) {
+        const t = collapseTarget?.getBoundingClientRect();
+        if (t) dotAt = { x: t.left + t.width / 2, y: t.top + t.height / 2 };
+      }
+      dotAge++;
+
+      showWash(lastWashOn ? Math.min(1, collapse * 1.3) : 0);
+      const e = collapse < 0.5 ? 2 * collapse * collapse : 1 - Math.pow(-2 * collapse + 2, 2) / 2;
+      const tx = dotAt ? (dotAt.x - winCentre.x) * e : 0;
+      const ty = dotAt ? (dotAt.y - winCentre.y) * e : 0;
+      const scale = 1 - e * 0.994;
+      chatWin.style.transform = `translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px) scale(${scale.toFixed(4)})`;
+      lastTx = tx;
+      lastTy = ty;
+      chatWin.style.opacity = String(Math.max(0, 1 - Math.max(0, (collapse - 0.92) / 0.08)));
+    } else {
+      winCentre = undefined;
+      dotAt = undefined;
+      dotAge = 0;
+      if (collapse >= 1) {
+        chatWin.style.opacity = '0';
+        showWash(lastWashOn ? 1 : 0);
+      } else {
+        lastTx = 0;
+        lastTy = 0;
+        chatWin.style.transform = '';
+        chatWin.style.opacity = '';
+        showWash(0);
+      }
+    }
+
+    const moving = collapse > 0 && collapse < 1;
+    if (moving) figure.dataset.show = 'chat';
+    figure.classList.toggle('is-collapsing', moving);
+  }
+
   function update() {
+    // While a run is in flight the frame is spent on the window alone. The
+    // chapter the reader is in cannot change under a collapse, so nothing the
+    // rest of this function decides can have changed either.
+    if (collapsing) {
+      paintCollapse(collapseP);
+      return;
+    }
+
     const vh = window.innerHeight;
 
     // the chapter whose top has passed a third of the viewport is the one
@@ -557,6 +624,7 @@ const people = [
         if (collapseP !== want) collapseP = want;
       }
 
+      lastWashOn = washOn;
       if (compound && chatWin) {
         // On a stepping screen the collapse runs on its own clock, started by
         // the step that asks for this chapter. Reading it off the scroll meant
@@ -566,58 +634,10 @@ const people = [
         // matters how the reader got here.
         const top = compound.getBoundingClientRect().top;
         collapse = stepping() ? collapseP : Math.min(1, Math.max(0, (vh - top) / (vh * 0.8)));
-        if (collapse > 0 && collapse < 1) {
-          // Both ends are read fresh every frame, and the window's own offset
-          // from the frame before is taken back out first. Measuring it raw
-          // reads the box it has already been moved to, so the distance left
-          // shrinks as it approaches and it never arrives — it crawled to a
-          // halt 80 pixels short of the dot. Subtracting the known translation
-          // gives the untransformed centre exactly, which means the landing is
-          // right even while the sphere behind it is still settling and the
-          // dot itself is moving. Scaling about the centre does not move it,
-          // so only the translation has to come out.
-          const w = chatWin.getBoundingClientRect();
-          const cx = w.left + w.width / 2 - lastTx;
-          const cy = w.top + w.height / 2 - lastTy;
-
-          // It comes up as the window goes, so the outline is already standing
-          // by the time there is nothing left inside it.
-          showWash(washOn ? Math.min(1, collapse * 1.3) : 0);
-          const target = collapseTarget?.getBoundingClientRect();
-          // One easing, applied here, since the value arriving is now linear:
-          // it leaves gently, crosses at pace and settles into the dot.
-          const e =
-            collapse < 0.5 ? 2 * collapse * collapse : 1 - Math.pow(-2 * collapse + 2, 2) / 2;
-          const tx = target ? (target.left + target.width / 2 - cx) * e : 0;
-          const ty = target ? (target.top + target.height / 2 - cy) * e : 0;
-          // What is left at the end is the size of the dot it lands on, so the
-          // last thing the eye sees is already a point, not a small window.
-          const scale = 1 - e * 0.994;
-          chatWin.style.transform = `translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px) scale(${scale.toFixed(4)})`;
-          lastTx = tx;
-          lastTy = ty;
-          // It stays solid nearly the whole way and goes out once it is already
-          // the size of a dot, so what the eye follows is the shrinking, not a
-          // fade that happens to move.
-          chatWin.style.opacity = String(Math.max(0, 1 - Math.max(0, (collapse - 0.92) / 0.08)));
-        } else if (collapse >= 1) {
-          // Arrived. Clearing the transform here would snap the window back to
-          // full size for the frame before the overlay is taken off the page,
-          // which read as a flicker at the end of an otherwise quiet move.
-          chatWin.style.opacity = '0';
-          showWash(washOn ? 1 : 0);
-        } else {
-          lastTx = 0;
-          lastTy = 0;
-          chatWin.style.transform = '';
-          chatWin.style.opacity = '';
-          showWash(0);
-        }
+        paintCollapse(collapse);
       }
 
-      figure.dataset.show =
-        collapse > 0 && collapse < 1 ? 'chat' : (current?.dataset.overlay ?? '');
-      figure.classList.toggle('is-collapsing', collapse > 0 && collapse < 1);
+      if (!(collapse > 0 && collapse < 1)) figure.dataset.show = current?.dataset.overlay ?? '';
     }
 
     // the architecture rail: one stack for the whole story, moved through its
@@ -657,8 +677,14 @@ const people = [
   // it is.
   let introP = 1;
 
+  // Once it has arrived there is nothing left to paint, and every call after
+  // that was four forced layouts for a transform that is already cleared.
+  let introSettled = false;
+
   const paintIntro = () => {
     if (!intro || !introTitle || !stage || reduceMotion || !wideIntro.matches) return;
+    if (introSettled && introP >= 1) return;
+    introSettled = introP >= 1;
     const vh = window.innerHeight;
     const raw = introP;
     const p = raw < 0.5 ? 2 * raw * raw : 1 - Math.pow(-2 * raw + 2, 2) / 2;
