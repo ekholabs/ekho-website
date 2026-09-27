@@ -33,9 +33,9 @@ export const fr: Copy = {
   },
   why: {
     title: "Qu'est-ce qui devient rare quand l'intelligence abonde ?",
-    a: 'Le contexte. Tout ce que vous savez : vos décisions et pourquoi, les gens avec qui vous travaillez, ce que vous avez lu et ce que vous en avez conclu.',
-    b: "Mais le savoir est dispersé par nature, entre votre tête, des conversations, des mails et des notes. Le rassembler était peine perdue. Jusqu'à l'IA.",
-    c: 'Le modèle est le même pour tout le monde. Votre contexte est la seule part qui vous appartienne.',
+    a: 'Le modèle est le même pour tout le monde, votre contexte est unique.',
+    b: 'Le contexte. Tout ce que vous savez : vos décisions et pourquoi, les gens avec qui vous travaillez, ce que vous avez lu et ce que vous en avez conclu.',
+    c: "Mais le savoir est dispersé par nature, entre votre tête, des conversations, des mails et des notes. Le rassembler était peine perdue. Jusqu'à l'IA.",
   },
   what: {
     title: 'Un portefeuille pour votre actif le plus précieux.',
@@ -46,7 +46,7 @@ export const fr: Copy = {
   },
   how: {
     title: "La conversation est l'interface.",
-    a: "Aucune nouvelle application. EKHO se greffe sur la conversation que vous avez déjà : des commandes qu'il exécute et des skills qu'il applique.",
+    a: "EKHO se greffe sur la conversation que vous avez déjà : des commandes qu'il exécute et des skills qu'il applique.",
     b: "Et il ne change jamais rien sans vous le montrer d'abord.",
     sovereignty: 'Souveraineté du contexte',
     note: 'Confiez votre contexte à un fournisseur de modèle et il devient le sien : sa mémoire, son format, ses conditions. EKHO le garde sur votre propre disque, en Markdown, là où chacun de ceux-ci peut le lire.',

@@ -31,9 +31,9 @@ export const en = {
   },
   why: {
     title: 'What becomes scarce when intelligence is abundant?',
-    a: 'Context. Everything you know: your decisions and why you made them, the people you work with, what you have read and what you concluded.',
-    b: 'But knowledge is scattered by nature, across your head, chats, emails and notes. Pulling it together was a lost cause. Until AI.',
-    c: 'The model is the same for everyone. Your context is the only part that is yours.',
+    a: 'The model is the same for everyone - your context is unique.',
+    b: 'Context. Everything you know: your decisions and why you made them, the people you work with, what you have read and what you concluded.',
+    c: 'But knowledge is scattered by nature, across your head, chats, emails and notes. Pulling it together was a lost cause. Until AI.',
   },
   what: {
     title: 'A wallet for your most valuable asset.',
@@ -44,7 +44,7 @@ export const en = {
   },
   how: {
     title: 'The conversation is the interface.',
-    a: 'No new app. EKHO docks into the chat you already use: as commands it runs and skills it applies.',
+    a: 'EKHO docks into the chat you already use: as commands it runs and skills it applies.',
     b: 'And it never changes anything without showing you first.',
     sovereignty: 'Context sovereignty',
     note: 'Hand your context to a model provider and it becomes theirs to keep: their memory, their format, their terms. EKHO keeps it on your own disk, in Markdown, where any of these can read it.',

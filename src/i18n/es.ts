@@ -33,9 +33,9 @@ export const es: Copy = {
   },
   why: {
     title: '¿Qué se vuelve escaso cuando la inteligencia abunda?',
-    a: 'El contexto. Todo lo que sabes: tus decisiones y por qué, las personas con las que trabajas, lo que has leído y lo que concluiste.',
-    b: 'Pero el conocimiento está disperso por naturaleza, entre tu cabeza, chats, correos y notas. Reunirlo era una causa perdida. Hasta la IA.',
-    c: 'El modelo es el mismo para todos. Tu contexto es la única parte que es tuya.',
+    a: 'El modelo es el mismo para todos, tu contexto es único.',
+    b: 'El contexto. Todo lo que sabes: tus decisiones y por qué, las personas con las que trabajas, lo que has leído y lo que concluiste.',
+    c: 'Pero el conocimiento está disperso por naturaleza, entre tu cabeza, chats, correos y notas. Reunirlo era una causa perdida. Hasta la IA.',
   },
   what: {
     title: 'Una cartera para tu activo más valioso.',
@@ -46,7 +46,7 @@ export const es: Copy = {
   },
   how: {
     title: 'La conversación es la interfaz.',
-    a: 'Ninguna aplicación nueva. EKHO se acopla al chat que ya usas: como comandos que ejecuta y skills que aplica.',
+    a: 'EKHO se acopla al chat que ya usas: como comandos que ejecuta y skills que aplica.',
     b: 'Y nunca cambia nada sin enseñártelo antes.',
     sovereignty: 'Soberanía del contexto',
     note: 'Entrega tu contexto a un proveedor de modelos y pasa a ser suyo: su memoria, su formato, sus condiciones. EKHO lo mantiene en tu propio disco, en Markdown, donde cualquiera de estos puede leerlo.',

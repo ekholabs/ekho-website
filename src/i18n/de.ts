@@ -34,9 +34,9 @@ export const de: Copy = {
   },
   why: {
     title: 'Was wird knapp, wenn Intelligenz im Überfluss da ist?',
-    a: 'Kontext. Alles, was du weißt: deine Entscheidungen und warum, die Menschen, mit denen du arbeitest, was du gelesen und daraus geschlossen hast.',
-    b: 'Doch Wissen ist von Natur aus verstreut, über deinen Kopf, Chats, Mails und Notizen. Es zusammenzuführen war aussichtslos. Bis KI kam.',
-    c: 'Das Modell ist für alle dasselbe. Dein Kontext ist der einzige Teil, der dir gehört.',
+    a: 'Das Modell ist für alle dasselbe, dein Kontext ist einzigartig.',
+    b: 'Kontext. Alles, was du weißt: deine Entscheidungen und warum, die Menschen, mit denen du arbeitest, was du gelesen und daraus geschlossen hast.',
+    c: 'Doch Wissen ist von Natur aus verstreut, über deinen Kopf, Chats, Mails und Notizen. Es zusammenzuführen war aussichtslos. Bis KI kam.',
   },
   what: {
     title: 'Ein Wallet für dein wertvollstes Asset.',
@@ -47,7 +47,7 @@ export const de: Copy = {
   },
   how: {
     title: 'Das Gespräch ist das Interface.',
-    a: 'Keine neue App. EKHO dockt an den Chat an, den du ohnehin benutzt: als Befehle, die es ausführt, und Skills, die es anwendet.',
+    a: 'EKHO dockt an den Chat an, den du ohnehin benutzt: als Befehle, die es ausführt, und Skills, die es anwendet.',
     b: 'Und es ändert nie etwas, ohne es dir vorher zu zeigen.',
     sovereignty: 'Kontextsouveränität',
     note: 'Gib deinen Kontext einem Modellanbieter, und er gehört ihm: sein Speicher, sein Format, seine Bedingungen. EKHO lässt ihn auf deiner eigenen Festplatte liegen, in Markdown, wo jedes dieser Modelle ihn lesen kann.',
