@@ -3268,11 +3268,11 @@
 @layer components {
   /* Nothing blurs while the page is in motion. See Home.astro: a glide and a
      collapse both walk the page through a position per frame, and every one of
-     those positions would otherwise have seven backdrop layers recomputed
-     against it. */
+     those positions would otherwise have the backdrop layers recomputed
+     against it. The step bars are not in here because they no longer blur at
+     all. */
   .is-moving .site-header,
-  .is-moving .win,
-  .is-moving .view-step {
+  .is-moving .win {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
@@ -3601,9 +3601,11 @@
      chapters change height underneath. */
   .view-step {
     align-items: center;
-    background: color-mix(in srgb, var(--bg) 70%, transparent);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
+    /* Solid, not glass. These two bars sit over whatever the column happens
+       to hold at that scroll position, and a translucent ground let the text
+       underneath read through them — worse while the page was moving, where
+       the blur that carried them is switched off. */
+    background: var(--bg);
     border: 0;
     color: var(--muted-deep);
     cursor: pointer;
@@ -3621,14 +3623,6 @@
       color 0.2s ease,
       background-color 0.2s ease;
     z-index: 6;
-  }
-
-  /* Without the blur the bar has to carry the ground on its own, or the text
-     underneath would read straight through it. */
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .view-step {
-      background: var(--bg);
-    }
   }
 
   .view-step[hidden] {
@@ -3658,11 +3652,10 @@
     width: 0.875rem;
   }
 
-  /* The hover settles the glass rather than lighting it: the same ground, a
-     little less see-through. A brighter panel was the loudest thing on the
-     page for a control that only moves the view on. */
+  /* The hover is in the type, not in the panel: a brighter bar was the
+     loudest thing on the page for a control that only moves the view on. */
   .view-step:hover {
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    background: var(--surface);
     color: var(--text);
   }
 
