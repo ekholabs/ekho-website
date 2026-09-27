@@ -311,12 +311,19 @@ const fromDecision = (i: number) =>
     sphere[i][2] - sphere[decisionAt][2],
   );
 const outward = (e: [number, number]) => Math.min(fromDecision(e[0]), fromDecision(e[1]));
+// Each line is turned so its nearer end comes first. A path is drawn from its
+// start, so this is what makes a line grow away from the node rather than
+// towards it: without it half of them crept inwards and the spread had no
+// direction.
+const awayFromNode = (e: [number, number]): [number, number] =>
+  fromDecision(e[0]) <= fromDecision(e[1]) ? e : [e[1], e[0]];
 
 // the far side falls back, the near side carries, and yours is drawn apart
 const near: [number, number][] = [];
 const far: [number, number][] = [];
 const own: [number, number][] = [];
-for (const e of [...edges].sort((a, b) => outward(a) - outward(b))) {
+for (const raw of [...edges].sort((a, b) => outward(a) - outward(b))) {
+  const e = awayFromNode(raw);
   if (mine.has(e[0]) && mine.has(e[1])) own.push(e);
   else if ((depth[e[0]] + depth[e[1]]) / 2 < 0) far.push(e);
   else near.push(e);
