@@ -29,6 +29,7 @@ const chapters = [
   { id: 'what', n: '02', label: c.nav.what },
   { id: 'how', n: '03', label: c.nav.how },
   { id: 'architecture', n: '04', label: c.nav.architecture },
+  { id: 'who', n: '05', label: c.nav.team },
 ];
 
 // The two founders. Names, faces and profiles on a public page are the one
@@ -69,8 +70,8 @@ const people = [
         </li>
       ))}
       <li class="chapter-nav-extra">
-        <a href="#waitlist">
-          <span class="chapter-nav-n">05</span>
+        <a href="#waitlist" data-chapter-link="waitlist">
+          <span class="chapter-nav-n">06</span>
           {c.nav.waitlist}
         </a>
       </li>
@@ -339,7 +340,7 @@ const people = [
     id="who"
     data-view
     data-chapter
-    data-nav="architecture"
+    data-nav="who"
     data-stage="3"
   >
     <div class="measure">
@@ -369,7 +370,7 @@ const people = [
     id="waitlist"
     data-view
     data-chapter
-    data-nav="architecture"
+    data-nav="waitlist"
     data-stage="3"
   >
     <div class="measure">
