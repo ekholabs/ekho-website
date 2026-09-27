@@ -3096,19 +3096,15 @@
      so the folder and the graph read as the same thing. The colour moves in the
      window's own border rather than in a ring laid over it: an overlay sits
      inside the border it covers, and the two lines a pixel apart looked like a
-     mistake. One line, warming up, with a wide faint glow carrying it outwards
-     so the edge arrives radially instead of switching on. */
+     mistake. The edge alone carries it, warming up over a second. The shadow
+     stays the dark one every other panel casts: a yellow glow made the window
+     look lit from within, which is a second thing happening for no reason. */
   .win--finder {
-    transition:
-      border-color 1100ms ease 350ms,
-      box-shadow 1100ms ease 350ms;
+    transition: border-color 1100ms ease 350ms;
   }
 
   [data-story-figure][data-show='finder'] .win--finder {
     border-color: color-mix(in srgb, var(--signal) 72%, var(--panel-line));
-    box-shadow:
-      0 18px 48px -18px rgb(26 26 24 / 0.22),
-      0 0 44px -6px color-mix(in srgb, var(--signal) 24%, transparent);
   }
 
   @media (prefers-reduced-motion: reduce) {
