@@ -827,13 +827,19 @@ const people = [
     goTo(index + dir);
   }
 
-  // One gesture moves one section, however long it is. A wheel or a trackpad
-  // keeps firing while the flick decays, so the guard is not a timer but a
-  // silence: the next step is only accepted once the events have stopped
-  // arriving for a moment. Without it a long swipe carries the reader two or
-  // three sections past where they let go.
+  // One gesture moves one section, however long it is — but somebody who keeps
+  // scrolling has to keep moving. A wheel or a trackpad goes on firing while
+  // the flick decays, so a fresh gesture is recognised by the silence in front
+  // of it: events that stop arriving for a moment and then start again step at
+  // once. Inside a continuous stream that test never passes, which left a
+  // reader who simply kept scrolling stuck on one section, so the distance is
+  // added up as well and a step is taken every screenful or so. Both are
+  // needed: the silence makes a flick feel immediate, the distance keeps a
+  // steady scroll moving.
   let lastWheel = 0;
+  let travelled = 0;
   const QUIET = 90;
+  const TRAVEL = 140;
 
   window.addEventListener(
     'wheel',
@@ -844,7 +850,16 @@ const people = [
       const gap = now - lastWheel;
       lastWheel = now;
       if (Math.abs(e.deltaY) < 2) return;
-      if (gap < QUIET) return;
+      // a change of direction is a new gesture, not a continuation of this one
+      if (travelled !== 0 && Math.sign(e.deltaY) !== Math.sign(travelled)) travelled = 0;
+      if (gap >= QUIET) {
+        travelled = 0;
+        step(e.deltaY > 0 ? 1 : -1);
+        return;
+      }
+      travelled += e.deltaY;
+      if (Math.abs(travelled) < TRAVEL) return;
+      travelled = 0;
       step(e.deltaY > 0 ? 1 : -1);
     },
     { passive: false },
