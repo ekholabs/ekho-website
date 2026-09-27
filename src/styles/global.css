@@ -624,7 +624,11 @@
      is only dropped in this state. */
   .reveal-on [data-graphic].is-3 .cg-mesh {
     opacity: 1;
-    transition: none;
+    /* It comes up while the window is still shrinking over it, so the fade is
+       hidden and what the reader sees when the window has gone is a net that
+       was already there. Switching it on in one frame put a blink in the
+       middle of the movement. */
+    transition: opacity 800ms ease;
   }
 
   .reveal-on [data-graphic].is-3 .cg-dot:not(.is-named) {
@@ -641,7 +645,11 @@
     transition:
       fill 700ms ease,
       opacity 700ms ease;
-    transition-delay: calc(1200ms + var(--w, 0) * 14000ms);
+    /* A breath ahead of the line that reaches it: the node lights, then the
+       connection arrives. Waiting for the line instead left the sphere with
+       no yellow in it at all for the first few seconds, which reads as
+       something missing rather than something on its way. */
+    transition-delay: calc(900ms + var(--w, 0) * 8400ms);
   }
 
   /* going back is not a wave, so it does not wait */
@@ -2890,7 +2898,7 @@
   .cg-own {
     transition:
       opacity 500ms ease,
-      stroke-dashoffset 14000ms cubic-bezier(0.45, 0.12, 0.55, 0.92);
+      stroke-dashoffset 9000ms cubic-bezier(0.45, 0.12, 0.55, 0.92);
     transition-delay: 0s, 1200ms;
   }
 
@@ -2996,6 +3004,10 @@
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
     opacity: 0;
+    /* Leaving is a fade. These are the same links the full net contains, so
+       switching them off in one frame while the net switches on in the next
+       made the handover a blink instead of a dissolve. */
+    transition: opacity 800ms ease;
   }
 
   .reveal-on [data-graphic].is-2:not(.is-3) .cg-first {
