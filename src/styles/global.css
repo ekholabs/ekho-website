@@ -517,9 +517,21 @@
      behind it and a shape in an SVG cannot: what shows through here shows
      through sharp, and at the bars' own 70% the points were legible straight
      across the text. */
+  /* The small form of the widgets: the same ground, the same generous corner,
+     the same soft shadow and no frame. What is left out is what a card this
+     size cannot carry — the date, the quoted line, what it is joined to. */
   .cg-card {
-    fill: color-mix(in srgb, var(--bg) 90%, transparent);
-    filter: drop-shadow(0 3px 18px rgb(26 26 24 / 0.14));
+    fill: color-mix(in srgb, var(--surface) 94%, transparent);
+    filter: drop-shadow(0 4px 20px rgb(26 26 24 / 0.12));
+  }
+
+  /* the tile the mark sits in, held by a hairline rather than filled: the
+     drawing is monochrome and eight coloured tiles would be the loudest thing
+     on it */
+  .cg-tile {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 1;
   }
 
   /* a filter re-rasters on every frame, and turning moves all eight of them */

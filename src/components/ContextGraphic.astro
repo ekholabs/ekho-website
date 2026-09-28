@@ -319,7 +319,11 @@ const advance = (s: string, size: number) => {
 };
 
 const ICON = 12;
-const ICON_GAP = 5;
+// The mark sits in a tile, the way it does on the widgets these cards are the
+// small form of. The tile is what makes a label read as a thing rather than as
+// two lines of type on a panel.
+const TILE = 18;
+const ICON_GAP = 7;
 // Room around the two lines. The card used to sit six units off the text on
 // every side, which read as a box drawn around a label rather than as a thing
 // the label sits on.
@@ -330,7 +334,7 @@ const textWidth = (n: { type: string; title: string }) =>
     advance(n.title, 12),
     // the type is set in caps with a tenth of an em between the letters, and
     // the mark sits in front of it
-    ICON + ICON_GAP + advance(n.type.toUpperCase(), 9) + n.type.length * 0.9,
+    TILE + ICON_GAP + advance(n.type.toUpperCase(), 9) + n.type.length * 0.9,
   );
 type Box = { x: number; y: number; r: number; b: number };
 const box = (x: number, y: number, w: number, side: 'l' | 'r'): Box => ({
@@ -685,8 +689,9 @@ const ariaLabel = c.graphic.label;
         // The mark sits on the side the point is on, not always on the left:
         // a card to the left of its point had the mark at the far end of it,
         // pointing away from the thing it names.
-        const typeX = right ? lx + ICON + ICON_GAP : lx - ICON - ICON_GAP;
-        const iconX = right ? lx : lx - ICON;
+        const typeX = right ? lx + TILE + ICON_GAP : lx - TILE - ICON_GAP;
+        const tileX = right ? lx : lx - TILE;
+        const iconX = tileX + (TILE - ICON) / 2;
         return (
           <g
             class="cg-pt"
@@ -704,25 +709,33 @@ const ariaLabel = c.graphic.label;
               <rect
                 class="cg-card"
                 x={right ? lx - PAD_X : lx - lw - PAD_X}
-                y={p[1] - 24}
+                y={p[1] - 26}
                 width={lw + PAD_X * 2}
-                height={46}
-                rx="4"
+                height={52}
+                rx="10"
+              />
+              <rect
+                class="cg-tile"
+                x={tileX}
+                y={p[1] - 20}
+                width={TILE}
+                height={TILE}
+                rx="5"
               />
               <path
                 class="cg-ico"
                 d={ICONS[label.key] ?? ICONS.article}
-                transform={`translate(${iconX.toFixed(1)} ${(p[1] - 15).toFixed(1)})`}
+                transform={`translate(${iconX.toFixed(1)} ${(p[1] - 17).toFixed(1)})`}
               />
               <text
                 class="cg-tip-type"
                 x={typeX}
-                y={p[1] - 5}
+                y={p[1] - 7}
                 text-anchor={right ? 'start' : 'end'}
               >
                 {label.type}
               </text>
-              <text class="cg-tip-title" x={lx} y={p[1] + 13} text-anchor={right ? 'start' : 'end'}>
+              <text class="cg-tip-title" x={lx} y={p[1] + 15} text-anchor={right ? 'start' : 'end'}>
                 {label.title}
               </text>
             </g>
@@ -1069,16 +1082,49 @@ const ariaLabel = c.graphic.label;
         requestAnimationFrame(frame);
       }
 
-      holder.addEventListener('pointerdown', (e) => {
-        if (!grabbable() || e.button !== 0) return;
+      // A finger that lands here has not said yet what it came to do. Taking
+      // the pointer at that moment answers for it: a captured touch pointer is
+      // no longer the browser's, so the scroll it was about to start never
+      // happens — the sphere ends up holding the page still. So the decision
+      // waits for the first movement. Sideways turns the sphere and the pointer
+      // is taken then; downwards belongs to the page, and the browser cancels
+      // us on its own once the pan begins.
+      let pending: number | null = null;
+      let startX = 0;
+      let startY = 0;
+
+      const begin = (e: PointerEvent) => {
         dragging = true;
+        pending = null;
         lastX = e.clientX;
         lastY = e.clientY;
         figure.classList.add('is-turning');
         holder.setPointerCapture(e.pointerId);
+      };
+
+      holder.addEventListener('pointerdown', (e) => {
+        if (!grabbable() || e.button !== 0) return;
+        startX = e.clientX;
+        startY = e.clientY;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        // a mouse has nothing else it could have meant
+        if (e.pointerType === 'mouse') begin(e);
+        else pending = e.pointerId;
       });
 
       holder.addEventListener('pointermove', (e) => {
+        if (pending === e.pointerId) {
+          const dx = Math.abs(e.clientX - startX);
+          const dy = Math.abs(e.clientY - startY);
+          if (dx < 4 && dy < 4) return;
+          if (dy > dx) {
+            // the page's gesture, not ours
+            pending = null;
+            return;
+          }
+          begin(e);
+        }
         if (!dragging) return;
         yaw += (e.clientX - lastX) * 0.006;
         pitch = Math.max(-1.05, Math.min(1.05, pitch + (e.clientY - lastY) * 0.006));
@@ -1090,6 +1136,7 @@ const ariaLabel = c.graphic.label;
       // an arrow, not a declaration: a hoisted function would lose the narrowing
       // that proves figure and holder are here
       const release = (e: PointerEvent) => {
+        if (pending === e.pointerId) pending = null;
         if (!dragging) return;
         dragging = false;
         figure.classList.remove('is-turning');
