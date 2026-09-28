@@ -2753,14 +2753,14 @@
     /* The object lies behind, exactly as wide as the window that will cover
        it, and the padding is how much of it you see before the folder starts
        climbing. */
-    /* The render carries its own air: the object starts about a fifth of the
-       way down its square. So the box is pulled up against the chapter's own
-       rhythm, and what you see between the last line and the object is the
-       photograph's margin rather than that plus ours. */
+    /* Pulling this up against the chapter's rhythm closed the gap, but it also
+       moved the whole block into the scroll earlier, and the parallax is
+       driven by where the block sits — so the folder had already climbed over
+       the object by the time you got to it. The air stays. */
     .flow-key {
       display: block;
       position: relative;
-      margin-top: -2.25rem;
+      margin-top: 2rem;
       padding-top: 11.5rem;
     }
 
@@ -4953,12 +4953,17 @@
     --sk-blue: #0a84ff;
   }
 
+  /* In the dark these were the greys an iOS app uses, which are cool — and
+     the page's dark is warm. The card ground came out a hair off the page
+     ground and blue with it, so the cards all but vanished. They take the
+     page's own raised surface now, one step above the ground the EKHO cards
+     sit on, so the two families still read apart. */
   @media (prefers-color-scheme: dark) {
     .strip-card {
-      --sk-surface: #1c1c1e;
-      --sk-chrome: #2f2f31;
-      --sk-quiet: #55555a;
-      --sk-ink: #e6e6ea;
+      --sk-surface: #333230;
+      --sk-chrome: #45423c;
+      --sk-quiet: #6b6762;
+      --sk-ink: #edebe6;
     }
   }
 
