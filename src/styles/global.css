@@ -1519,28 +1519,10 @@
     line-height: 1.5;
   }
 
+  /* No avatar beside the answer: the client is unbranded, and the app it is
+     modelled on sets the answer flush with the thread anyway. */
   .chat-answer {
-    display: flex;
-    gap: 0.7rem;
-  }
-
-  /* The mark sits on the window's own ground, like the plates in the model
-     row: a bright plate made the assistant the loudest thing in a window whose
-     subject is what EKHO writes. */
-  .chat-mark {
-    width: 22px;
-    height: 22px;
-    flex: none;
-    display: grid;
-    place-items: center;
-    border: 1px solid var(--panel-line);
-    border-radius: 5px;
-  }
-
-  .chat-mark svg {
-    width: 13px;
-    height: 13px;
-    fill: var(--muted);
+    display: block;
   }
 
   .chat-said {
@@ -1572,10 +1554,37 @@
     color: var(--muted-deep);
   }
 
+  .tool-ico {
+    width: 0.75rem;
+    height: 0.75rem;
+    flex: none;
+    fill: none;
+    stroke: var(--muted-deep);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
   .tool-chev {
+    display: flex;
     margin-left: auto;
     color: var(--muted-deep);
-    font-size: 0.7rem;
+  }
+
+  .tool-chev svg {
+    width: 0.625rem;
+    height: 0.625rem;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 1.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* what a terminal draws in front of what a command returned */
+  .tool-branch {
+    margin-right: 0.3rem;
+    color: var(--muted-deep);
   }
 
   .tool-mono {
@@ -4507,17 +4516,7 @@
        they take the whole width of the thread rather than the column left of
        the mark, and they lift off the page on a wide, soft shadow instead of
        sitting flat in it. */
-    /* The answer is a flex row of the mark and everything it said; without
-       this the column takes the width of its widest line instead of the room
-       it has, so the cards ended ten pixels short on the right while reaching
-       the edge on the left. */
-    .flow-window .chat-answer > div {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-
     .flow-window .tool {
-      margin-left: calc(-22px - 0.7rem);
       padding: 0.75rem 0.9rem 0.85rem;
       border-radius: 10px;
       box-shadow: 0 3px 20px rgb(26 26 24 / 0.1);
