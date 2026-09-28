@@ -51,8 +51,8 @@ export const en = {
     edge: 'It stays yours, and swapping one for another costs you nothing.',
   },
   compound: {
-    title: 'Your knowledge compounds.',
-    a: 'Every source you bring in links to everything already there. An insight knows where it came from, what supports it and what contradicts it.',
+    title: 'Your knowledge is compounding.',
+    a: 'Every source you ingest links to everything already there. An insight knows where it came from, what supports it and what contradicts it.',
     b: 'That is what compounding means here: every note you add multiplies the connections, so the quality of what comes back grows exponentially rather than one step at a time. The bookkeeping is the part people give up on, and it is the part EKHO does.',
   },
   viewer: {
