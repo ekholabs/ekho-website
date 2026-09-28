@@ -4504,11 +4504,29 @@
        they take the whole width of the thread rather than the column left of
        the mark, and they lift off the page on a wide, soft shadow instead of
        sitting flat in it. */
+    /* The answer is a flex row of the mark and everything it said; without
+       this the column takes the width of its widest line instead of the room
+       it has, so the cards ended ten pixels short on the right while reaching
+       the edge on the left. */
+    .flow-window .chat-answer > div {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
     .flow-window .tool {
       margin-left: calc(-22px - 0.7rem);
       padding: 0.75rem 0.9rem 0.85rem;
       border-radius: 10px;
       box-shadow: 0 3px 20px rgb(26 26 24 / 0.1);
+    }
+
+    /* the way a tool call is set in a terminal client: the name in the same
+       monospace as the line it ran */
+    .flow-window .tool-kind {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.02em;
+      text-transform: none;
     }
   }
 }
