@@ -37,10 +37,8 @@ const rect = (x: number, y: number, w: number, h: number, cls: string, r = 2) =>
 
 /** the tile in the head of each widget: the app's mark, or EKHO's type mark */
 export const TILES: Record<string, string> = {
-  meeting:
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><rect width="24" height="24" rx="6" fill="#5b5fc7"/><rect x="5" y="8" width="9" height="8.6" rx="1.6" fill="#fff"/><path d="M15.6 9.4 19.6 7.6v8.8l-4-1.8z" fill="#fff"/></svg>`,
-  voice:
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><rect width="24" height="24" rx="6" fill="#ff3b30"/><rect x="6.6" y="9" width="2.1" height="6" rx="1.05" fill="#fff"/><rect x="10.9" y="5.8" width="2.1" height="12.4" rx="1.05" fill="#fff"/><rect x="15.2" y="9.6" width="2.1" height="4.8" rx="1.05" fill="#fff"/></svg>`,
+  meeting: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><rect width="24" height="24" rx="6" fill="#5b5fc7"/><rect x="5" y="8" width="9" height="8.6" rx="1.6" fill="#fff"/><path d="M15.6 9.4 19.6 7.6v8.8l-4-1.8z" fill="#fff"/></svg>`,
+  voice: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><rect width="24" height="24" rx="6" fill="#ff3b30"/><rect x="6.6" y="9" width="2.1" height="6" rx="1.05" fill="#fff"/><rect x="10.9" y="5.8" width="2.1" height="12.4" rx="1.05" fill="#fff"/><rect x="15.2" y="9.6" width="2.1" height="4.8" rx="1.05" fill="#fff"/></svg>`,
   article: mark(si.siX.path, '#000000'),
 
   video: mark(si.siYoutube.path, `#${si.siYoutube.hex}`),
@@ -50,12 +48,9 @@ export const TILES: Record<string, string> = {
 
   // A mail client's envelope and an assistant's ribbon: neither mark is in the
   // package, so both are drawn rather than lifted from somewhere uncertain.
-  mail:
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><defs><linearGradient id="ekho-mail" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1D62F0"/><stop offset="1" stop-color="#23CFFD"/></linearGradient></defs><rect width="24" height="24" rx="6" fill="url(#ekho-mail)"/><rect x="4.3" y="7.4" width="15.4" height="9.2" rx="0.9" fill="#fff"/><g fill="none" stroke="#2c9ef0" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><rect x="4.3" y="7.4" width="15.4" height="9.2" rx="0.9"/><path d="M4.6 7.7 11.1 12.9a1.4 1.4 0 0 0 1.8 0L19.4 7.7"/><path d="M4.6 16.3 9.6 12"/><path d="M19.4 16.3 14.4 12"/></g></svg>`,
-  recap:
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><defs><linearGradient id="ekho-recap" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f6cbd"/><stop offset="0.5" stop-color="#b83ec8"/><stop offset="1" stop-color="#ff8c42"/></linearGradient></defs><rect width="24" height="24" rx="6" fill="url(#ekho-recap)"/><path d="M6 16.5c0-4.5 1.4-8 4.2-8 2.4 0 3 2.2 3.6 4.4.6 2.2 1.2 4.4 3.6 4.4 1.4 0 2.2-.9 2.6-2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  mail: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><defs><linearGradient id="ekho-mail" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1D62F0"/><stop offset="1" stop-color="#23CFFD"/></linearGradient></defs><rect width="24" height="24" rx="6" fill="url(#ekho-mail)"/><rect x="4.3" y="7.4" width="15.4" height="9.2" rx="0.9" fill="#fff"/><g fill="none" stroke="#2c9ef0" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><rect x="4.3" y="7.4" width="15.4" height="9.2" rx="0.9"/><path d="M4.6 7.7 11.1 12.9a1.4 1.4 0 0 0 1.8 0L19.4 7.7"/><path d="M4.6 16.3 9.6 12"/><path d="M19.4 16.3 14.4 12"/></g></svg>`,
+  recap: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><defs><linearGradient id="ekho-recap" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f6cbd"/><stop offset="0.5" stop-color="#b83ec8"/><stop offset="1" stop-color="#ff8c42"/></linearGradient></defs><rect width="24" height="24" rx="6" fill="url(#ekho-recap)"/><path d="M6 16.5c0-4.5 1.4-8 4.2-8 2.4 0 3 2.2 3.6 4.4.6 2.2 1.2 4.4 3.6 4.4 1.4 0 2.2-.9 2.6-2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>`,
 
   // a passage out of a book, which has no app and no mark of its own
-  passage:
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><rect width="24" height="24" rx="6" fill="#1a1a18"/><path d="M5.2 13.4c0-3 1.3-5 3.6-5.6l.5 1.4c-1.2.4-1.9 1.2-2 2.3h1.7v3.6H5.2zm6.8 0c0-3 1.3-5 3.6-5.6l.5 1.4c-1.2.4-1.9 1.2-2 2.3h1.7v3.6H12z" fill="#fff"/></svg>`,
+  passage: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><rect width="24" height="24" rx="6" fill="#1a1a18"/><path d="M5.2 13.4c0-3 1.3-5 3.6-5.6l.5 1.4c-1.2.4-1.9 1.2-2 2.3h1.7v3.6H5.2zm6.8 0c0-3 1.3-5 3.6-5.6l.5 1.4c-1.2.4-1.9 1.2-2 2.3h1.7v3.6H12z" fill="#fff"/></svg>`,
 };

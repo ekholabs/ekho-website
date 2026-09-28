@@ -574,15 +574,17 @@ const ariaLabel = c.graphic.label;
 
 <figure
   class={figureClass}
-  data-graphic={animated ? '' : undefined}
-  {/* Which point the yellow spreads from. The chapter before this one folds
+  data-graphic={
+    animated ? '' : undefined
+  } /* Which point the yellow spreads from. The chapter before this one folds
       its whole exchange into a dot, and the dot has to land on this node and
       not in the middle of the box, or the net appears to spread from
-      somewhere the decision never was. */}
-  data-decision={decisionAt}
-  {/* and where that node sits in the drawing. The circles carry their field
+      somewhere the decision never was. */
+  data-decision={
+    decisionAt
+  } /* and where that node sits in the drawing. The circles carry their field
       positions and are moved to the sphere at runtime, so their attributes
-      are the wrong place to read this from; the mesh is drawn here. */}
+      are the wrong place to read this from; the mesh is drawn here. */
   data-decision-at={`${cloudPts[decisionAt][0]},${cloudPts[decisionAt][1]},${SIZE}`}
   role="group"
   aria-label={ariaLabel}
@@ -714,14 +716,7 @@ const ariaLabel = c.graphic.label;
                 height={52}
                 rx="10"
               />
-              <rect
-                class="cg-tile"
-                x={tileX}
-                y={p[1] - 20}
-                width={TILE}
-                height={TILE}
-                rx="5"
-              />
+              <rect class="cg-tile" x={tileX} y={p[1] - 20} width={TILE} height={TILE} rx="5" />
               <path
                 class="cg-ico"
                 d={ICONS[label.key] ?? ICONS.article}

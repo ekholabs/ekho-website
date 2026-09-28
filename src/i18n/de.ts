@@ -173,7 +173,8 @@ export const de: Copy = {
     ],
     label:
       'Dasselbe Wissen in vier Zuständen: zuerst weit verteilt und formlos, dann gestreut, dann zu einer Form gesammelt mit den ersten Verbindungen, und schließlich ein dichtes Netz aus mehreren hundert Punkten, ohne einen einzigen neuen.',
-    strip: 'Drei Wochen an einem Vorgang, in der Reihenfolge, in der er hereinkam. Nichts davon weiß etwas vom Rest.',
+    strip:
+      'Drei Wochen an einem Vorgang, in der Reihenfolge, in der er hereinkam. Nichts davon weiß etwas vom Rest.',
     types: {
       person: 'Person',
       meeting: 'Meeting',
@@ -217,27 +218,74 @@ export const de: Copy = {
       voice: 'Wenn wir pro Platz abrechnen, fallen die kleinen Teams raus.',
       article: 'Ein Wiki sind nicht die Notizen. Es sind die Verbindungen dazwischen.',
       mail: 'Wir haben drei Anbieter gesehen. Was wir nicht gesehen haben, ist jemand, der das schon gemacht hat.',
-      recap: 'Das Datenhosting ist der Blocker, nicht der Preis. Der Einkauf unterschreibt, nicht das Team.',
+      recap:
+        'Das Datenhosting ist der Blocker, nicht der Preis. Der Einkauf unterschreibt, nicht das Team.',
       encyclopedia: 'Luhmann war bekannt für seinen ausgiebigen Gebrauch des Zettelkastens.',
       claude: 'Über die Fälle hinweg lag die Freigabe weit öfter beim Einkauf als beim Team.',
-      gemini: 'Die, die überleben, haben einen Ablageschritt, der so stumpf ist, dass er keine Entscheidung braucht.',
+      gemini:
+        'Die, die überleben, haben einen Ablageschritt, der so stumpf ist, dass er keine Entscheidung braucht.',
     },
     details: {
-      person: [['Rolle', 'Product Lead'], ['getroffen', '25. Sep, im Gespräch']],
-      meeting: [['Dauer', '42 Min'], ['mit', 'Anna Berger']],
-      voice: [['Dauer', '3 Min'], ['wo', 'auf dem Heimweg']],
-      decision: [['getroffen', '25. Sep'], ['von', 'Lorenz']],
-      insight: [['notiert', '25. Sep'], ['aus', 'dem Gespräch mit Anna']],
-      assumption: [['gestellt', '12. Sep'], ['offen seit', '13 Tagen']],
-      principle: [['seit', 'Mai'], ['genutzt', '9-mal']],
-      article: [['von', 'Andrej Karpathy'], ['gelesen', '24. Sep']],
-      mail: [['von', 'einem Interessenten'], ['will', 'ein Angebot bis Montag']],
-      video: [['Kanal', 'The Ezra Klein Show'], ['gesehen', '22. Sep']],
-      recap: [['geschrieben von', 'dem Meeting-Assistenten'], ['aus', 'dem Gespräch mit Anna']],
-      passage: [['Buch', 'Nexus'], ['Autor', 'Yuval Noah Harari']],
-      encyclopedia: [['wer', 'deutscher Soziologe'], ['gelesen', '19. Sep, auf Wikipedia']],
-      claude: [['Assistent', 'Claude'], ['liegt in', 'deren App, nicht deiner']],
-      gemini: [['Assistent', 'Gemini'], ['liegt in', 'deren App, nicht deiner']],
+      person: [
+        ['Rolle', 'Product Lead'],
+        ['getroffen', '25. Sep, im Gespräch'],
+      ],
+      meeting: [
+        ['Dauer', '42 Min'],
+        ['mit', 'Anna Berger'],
+      ],
+      voice: [
+        ['Dauer', '3 Min'],
+        ['wo', 'auf dem Heimweg'],
+      ],
+      decision: [
+        ['getroffen', '25. Sep'],
+        ['von', 'Lorenz'],
+      ],
+      insight: [
+        ['notiert', '25. Sep'],
+        ['aus', 'dem Gespräch mit Anna'],
+      ],
+      assumption: [
+        ['gestellt', '12. Sep'],
+        ['offen seit', '13 Tagen'],
+      ],
+      principle: [
+        ['seit', 'Mai'],
+        ['genutzt', '9-mal'],
+      ],
+      article: [
+        ['von', 'Andrej Karpathy'],
+        ['gelesen', '24. Sep'],
+      ],
+      mail: [
+        ['von', 'einem Interessenten'],
+        ['will', 'ein Angebot bis Montag'],
+      ],
+      video: [
+        ['Kanal', 'The Ezra Klein Show'],
+        ['gesehen', '22. Sep'],
+      ],
+      recap: [
+        ['geschrieben von', 'dem Meeting-Assistenten'],
+        ['aus', 'dem Gespräch mit Anna'],
+      ],
+      passage: [
+        ['Buch', 'Nexus'],
+        ['Autor', 'Yuval Noah Harari'],
+      ],
+      encyclopedia: [
+        ['wer', 'deutscher Soziologe'],
+        ['gelesen', '19. Sep, auf Wikipedia'],
+      ],
+      claude: [
+        ['Assistent', 'Claude'],
+        ['liegt in', 'deren App, nicht deiner'],
+      ],
+      gemini: [
+        ['Assistent', 'Gemini'],
+        ['liegt in', 'deren App, nicht deiner'],
+      ],
     },
     meta: {
       person: ['25. Sep', '2 Gespräche · 1 Entscheidung'],

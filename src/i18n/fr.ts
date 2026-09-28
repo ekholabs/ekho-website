@@ -169,7 +169,8 @@ export const fr: Copy = {
     ],
     label:
       "Le même savoir en quatre états : d'abord dispersé et sans forme, puis éparpillé, puis rassemblé en une forme avec les premiers liens, et enfin un réseau dense de plusieurs centaines de points sans un seul nouveau.",
-    strip: 'Trois semaines d’un même travail, dans l’ordre où il est arrivé. Rien de tout cela ne sait quoi que ce soit du reste.',
+    strip:
+      'Trois semaines d’un même travail, dans l’ordre où il est arrivé. Rien de tout cela ne sait quoi que ce soit du reste.',
     types: {
       person: 'Personne',
       meeting: 'Réunion',
@@ -213,27 +214,76 @@ export const fr: Copy = {
       voice: 'Si on facture par siège, les petites équipes décrochent.',
       article: 'Un wiki, ce ne sont pas les notes. Ce sont les liens entre elles.',
       mail: 'Nous avons vu trois prestataires. Ce que nous n’avons pas vu, c’est quelqu’un qui l’a déjà fait.',
-      recap: 'L’hébergement des données bloque, pas le prix. Ce sont les achats qui signent, pas l’équipe.',
-      encyclopedia: 'Luhmann était connu pour son usage intensif du fichier de notes, le Zettelkasten.',
-      claude: 'Sur les cas examinés, la signature relevait des achats bien plus souvent que de l’équipe.',
-      gemini: 'Ceux qui durent ont une étape de classement si ennuyeuse qu’elle ne demande aucune décision.',
+      recap:
+        'L’hébergement des données bloque, pas le prix. Ce sont les achats qui signent, pas l’équipe.',
+      encyclopedia:
+        'Luhmann était connu pour son usage intensif du fichier de notes, le Zettelkasten.',
+      claude:
+        'Sur les cas examinés, la signature relevait des achats bien plus souvent que de l’équipe.',
+      gemini:
+        'Ceux qui durent ont une étape de classement si ennuyeuse qu’elle ne demande aucune décision.',
     },
     details: {
-      person: [['rôle', 'Product lead'], ['vue', "25 sep, lors d'un appel"]],
-      meeting: [['durée', '42 min'], ['avec', 'Anna Berger']],
-      voice: [['durée', '3 min'], ['où', 'sur le chemin du retour']],
-      decision: [['prise', '25 sep'], ['par', 'Lorenz']],
-      insight: [['noté', '25 sep'], ['de', "l'appel avec Anna"]],
-      assumption: [['posée', '12 sep'], ['ouverte', '13 jours']],
-      principle: [['depuis', 'mai'], ['utilisé', '9 fois']],
-      article: [['de', 'Andrej Karpathy'], ['lu', '24 sep']],
-      mail: [['de', 'un prospect'], ['veut', 'une proposition lundi']],
-      video: [['chaîne', 'The Ezra Klein Show'], ['vu', '22 sep']],
-      recap: [['écrit par', 'l’assistant de réunion'], ['de', 'l’appel avec Anna']],
-      passage: [['livre', 'Nexus'], ['auteur', 'Yuval Noah Harari']],
-      encyclopedia: [['qui', 'sociologue allemand'], ['lu', '19 sep, sur Wikipédia']],
-      claude: [['assistant', 'Claude'], ['vit dans', 'leur app, pas la vôtre']],
-      gemini: [['assistant', 'Gemini'], ['vit dans', 'leur app, pas la vôtre']],
+      person: [
+        ['rôle', 'Product lead'],
+        ['vue', "25 sep, lors d'un appel"],
+      ],
+      meeting: [
+        ['durée', '42 min'],
+        ['avec', 'Anna Berger'],
+      ],
+      voice: [
+        ['durée', '3 min'],
+        ['où', 'sur le chemin du retour'],
+      ],
+      decision: [
+        ['prise', '25 sep'],
+        ['par', 'Lorenz'],
+      ],
+      insight: [
+        ['noté', '25 sep'],
+        ['de', "l'appel avec Anna"],
+      ],
+      assumption: [
+        ['posée', '12 sep'],
+        ['ouverte', '13 jours'],
+      ],
+      principle: [
+        ['depuis', 'mai'],
+        ['utilisé', '9 fois'],
+      ],
+      article: [
+        ['de', 'Andrej Karpathy'],
+        ['lu', '24 sep'],
+      ],
+      mail: [
+        ['de', 'un prospect'],
+        ['veut', 'une proposition lundi'],
+      ],
+      video: [
+        ['chaîne', 'The Ezra Klein Show'],
+        ['vu', '22 sep'],
+      ],
+      recap: [
+        ['écrit par', 'l’assistant de réunion'],
+        ['de', 'l’appel avec Anna'],
+      ],
+      passage: [
+        ['livre', 'Nexus'],
+        ['auteur', 'Yuval Noah Harari'],
+      ],
+      encyclopedia: [
+        ['qui', 'sociologue allemand'],
+        ['lu', '19 sep, sur Wikipédia'],
+      ],
+      claude: [
+        ['assistant', 'Claude'],
+        ['vit dans', 'leur app, pas la vôtre'],
+      ],
+      gemini: [
+        ['assistant', 'Gemini'],
+        ['vit dans', 'leur app, pas la vôtre'],
+      ],
     },
     meta: {
       person: ['25 sep', '2 appels · 1 décision'],

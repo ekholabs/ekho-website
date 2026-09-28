@@ -140,7 +140,7 @@ export const en = {
     ],
     vault: 'vault connected',
     connected: 'connected',
-    ask: '/ekho Please ingest the recording from yesterday\'s call with Anna',
+    ask: "/ekho Please ingest the recording from yesterday's call with Anna",
     said: 'I will transcribe the recording and put it in your inbox.',
     terminal: 'Terminal',
     skill: 'Skill · ekho-inbox-digest',
@@ -167,7 +167,8 @@ export const en = {
     ],
     label:
       'The same knowledge in four states: spread wide and formless at first, then scattered, then gathered into one form with the first connections, and finally a dense network of several hundred points without a single new one.',
-    strip: 'Three weeks of one piece of work, in the order it arrived. None of it knows about any of the rest.',
+    strip:
+      'Three weeks of one piece of work, in the order it arrived. None of it knows about any of the rest.',
     types: {
       person: 'Person',
       meeting: 'Meeting',
@@ -212,26 +213,73 @@ export const en = {
       article: 'A wiki is not the notes. It is the links between them.',
       mail: 'We have seen three vendors. What we have not seen is somebody who has done this before.',
       recap: 'Data hosting is the blocker, not the price. Procurement signs it off, not the team.',
-      encyclopedia: 'Luhmann was famous for his extensive use of the “slip box” or Zettelkasten note-taking method.',
-      claude: 'Across the cases we went through, sign-off sat with procurement far more often than with the team.',
+      encyclopedia:
+        'Luhmann was famous for his extensive use of the “slip box” or Zettelkasten note-taking method.',
+      claude:
+        'Across the cases we went through, sign-off sat with procurement far more often than with the team.',
       gemini: 'The ones that survive have a filing step so dull it needs no decision.',
     },
     details: {
-      person: [['role', 'Product lead'], ['met', '25 Sep, on a call']],
-      meeting: [['length', '42 min'], ['with', 'Anna Berger']],
-      voice: [['length', '3 min'], ['where', 'walking home']],
-      decision: [['taken', '25 Sep'], ['by', 'Lorenz']],
-      insight: [['noted', '25 Sep'], ['from', 'the call with Anna']],
-      assumption: [['raised', '12 Sep'], ['open for', '13 days']],
-      principle: [['since', 'May'], ['used', '9 times']],
-      article: [['by', 'Andrej Karpathy'], ['read', '24 Sep']],
-      mail: [['from', 'a logistics prospect'], ['wants', 'a proposal by Monday']],
-      video: [['channel', 'The Ezra Klein Show'], ['watched', '22 Sep']],
-      recap: [['written by', 'the meeting assistant'], ['from', 'Thursday call with Anna']],
-      passage: [['book', 'Nexus'], ['author', 'Yuval Noah Harari']],
-      encyclopedia: [['who', 'German sociologist'], ['read', '19 Sep, on Wikipedia']],
-      claude: [['assistant', 'Claude'], ['lives in', 'their app, not yours']],
-      gemini: [['assistant', 'Gemini'], ['lives in', 'their app, not yours']],
+      person: [
+        ['role', 'Product lead'],
+        ['met', '25 Sep, on a call'],
+      ],
+      meeting: [
+        ['length', '42 min'],
+        ['with', 'Anna Berger'],
+      ],
+      voice: [
+        ['length', '3 min'],
+        ['where', 'walking home'],
+      ],
+      decision: [
+        ['taken', '25 Sep'],
+        ['by', 'Lorenz'],
+      ],
+      insight: [
+        ['noted', '25 Sep'],
+        ['from', 'the call with Anna'],
+      ],
+      assumption: [
+        ['raised', '12 Sep'],
+        ['open for', '13 days'],
+      ],
+      principle: [
+        ['since', 'May'],
+        ['used', '9 times'],
+      ],
+      article: [
+        ['by', 'Andrej Karpathy'],
+        ['read', '24 Sep'],
+      ],
+      mail: [
+        ['from', 'a logistics prospect'],
+        ['wants', 'a proposal by Monday'],
+      ],
+      video: [
+        ['channel', 'The Ezra Klein Show'],
+        ['watched', '22 Sep'],
+      ],
+      recap: [
+        ['written by', 'the meeting assistant'],
+        ['from', 'Thursday call with Anna'],
+      ],
+      passage: [
+        ['book', 'Nexus'],
+        ['author', 'Yuval Noah Harari'],
+      ],
+      encyclopedia: [
+        ['who', 'German sociologist'],
+        ['read', '19 Sep, on Wikipedia'],
+      ],
+      claude: [
+        ['assistant', 'Claude'],
+        ['lives in', 'their app, not yours'],
+      ],
+      gemini: [
+        ['assistant', 'Gemini'],
+        ['lives in', 'their app, not yours'],
+      ],
     },
     meta: {
       person: ['25 Sep', '2 calls · 1 decision'],

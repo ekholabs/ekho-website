@@ -169,7 +169,8 @@ export const es: Copy = {
     ],
     label:
       'El mismo conocimiento en cuatro estados: primero disperso y sin forma, luego esparcido, después reunido en una forma con las primeras conexiones, y por último una red densa de varios cientos de puntos sin uno solo nuevo.',
-    strip: 'Tres semanas de un mismo trabajo, en el orden en que llegó. Nada de esto sabe nada del resto.',
+    strip:
+      'Tres semanas de un mismo trabajo, en el orden en que llegó. Nada de esto sabe nada del resto.',
     types: {
       person: 'Persona',
       meeting: 'Reunión',
@@ -219,21 +220,66 @@ export const es: Copy = {
       gemini: 'Los que sobreviven tienen un paso de archivo tan aburrido que no exige decisión.',
     },
     details: {
-      person: [['rol', 'Product lead'], ['visto', '25 sep, en una llamada']],
-      meeting: [['duración', '42 min'], ['con', 'Anna Berger']],
-      voice: [['duración', '3 min'], ['dónde', 'de camino a casa']],
-      decision: [['tomada', '25 sep'], ['por', 'Lorenz']],
-      insight: [['anotado', '25 sep'], ['de', 'la llamada con Anna']],
-      assumption: [['planteada', '12 sep'], ['abierta', '13 días']],
-      principle: [['desde', 'mayo'], ['usado', '9 veces']],
-      article: [['de', 'Andrej Karpathy'], ['leído', '24 sep']],
-      mail: [['de', 'un cliente potencial'], ['quiere', 'una propuesta el lunes']],
-      video: [['canal', 'The Ezra Klein Show'], ['visto', '22 sep']],
-      recap: [['escrito por', 'el asistente de reunión'], ['de', 'la llamada con Anna']],
-      passage: [['libro', 'Nexus'], ['autor', 'Yuval Noah Harari']],
-      encyclopedia: [['quién', 'sociólogo alemán'], ['leído', '19 sep, en Wikipedia']],
-      claude: [['asistente', 'Claude'], ['vive en', 'su app, no la tuya']],
-      gemini: [['asistente', 'Gemini'], ['vive en', 'su app, no la tuya']],
+      person: [
+        ['rol', 'Product lead'],
+        ['visto', '25 sep, en una llamada'],
+      ],
+      meeting: [
+        ['duración', '42 min'],
+        ['con', 'Anna Berger'],
+      ],
+      voice: [
+        ['duración', '3 min'],
+        ['dónde', 'de camino a casa'],
+      ],
+      decision: [
+        ['tomada', '25 sep'],
+        ['por', 'Lorenz'],
+      ],
+      insight: [
+        ['anotado', '25 sep'],
+        ['de', 'la llamada con Anna'],
+      ],
+      assumption: [
+        ['planteada', '12 sep'],
+        ['abierta', '13 días'],
+      ],
+      principle: [
+        ['desde', 'mayo'],
+        ['usado', '9 veces'],
+      ],
+      article: [
+        ['de', 'Andrej Karpathy'],
+        ['leído', '24 sep'],
+      ],
+      mail: [
+        ['de', 'un cliente potencial'],
+        ['quiere', 'una propuesta el lunes'],
+      ],
+      video: [
+        ['canal', 'The Ezra Klein Show'],
+        ['visto', '22 sep'],
+      ],
+      recap: [
+        ['escrito por', 'el asistente de reunión'],
+        ['de', 'la llamada con Anna'],
+      ],
+      passage: [
+        ['libro', 'Nexus'],
+        ['autor', 'Yuval Noah Harari'],
+      ],
+      encyclopedia: [
+        ['quién', 'sociólogo alemán'],
+        ['leído', '19 sep, en Wikipedia'],
+      ],
+      claude: [
+        ['asistente', 'Claude'],
+        ['vive en', 'su app, no la tuya'],
+      ],
+      gemini: [
+        ['asistente', 'Gemini'],
+        ['vive en', 'su app, no la tuya'],
+      ],
     },
     meta: {
       person: ['25 sep', '2 llamadas · 1 decisión'],

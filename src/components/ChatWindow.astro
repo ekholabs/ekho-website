@@ -55,46 +55,148 @@ const rows = c.chat.rows;
     class="win win--chat"
     aria-label="EKHO running inside an ordinary chat client: a command it runs and a skill it applies"
   >
-  <div class="win-bar">
-    <span class="win-lights" aria-hidden="true">
-      <i></i>
-      <i></i>
-      <i></i>
-    </span>
-    <span class="win-title">{c.chat.windowTitle}</span>
-  </div>
-  <div class="win-body">
-    <nav class="chat-side" aria-hidden="true">
-      <p class="chat-new">
-        <span class="chat-plus">+</span> {c.chat.newChat}
-      </p>
-      {recents.map((g) => (
-        <>
-          <p class="chat-day">{g.day}</p>
-          <ul>
-            {g.items.map((i, n) => (
-              <li class:list={[{ 'is-sel': g.day === 'Today' && n === 0 }]}>{i}</li>
-            ))}
-          </ul>
-        </>
-      ))}
-      <p class="chat-vault">
-        <span class="chat-sq" aria-hidden="true"></span>
-        <span>
-          myEKHO<small>{c.chat.vault}</small>
-        </span>
-      </p>
-    </nav>
+    <div class="win-bar">
+      <span class="win-lights" aria-hidden="true">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+      <span class="win-title">{c.chat.windowTitle}</span>
+    </div>
+    <div class="win-body">
+      <nav class="chat-side" aria-hidden="true">
+        <p class="chat-new">
+          <span class="chat-plus">+</span> {c.chat.newChat}
+        </p>
+        {recents.map((g) => (
+          <>
+            <p class="chat-day">{g.day}</p>
+            <ul>
+              {g.items.map((i, n) => (
+                <li class:list={[{ 'is-sel': g.day === 'Today' && n === 0 }]}>{i}</li>
+              ))}
+            </ul>
+          </>
+        ))}
+        <p class="chat-vault">
+          <span class="chat-sq" aria-hidden="true"></span>
+          <span>
+            myEKHO<small>{c.chat.vault}</small>
+          </span>
+        </p>
+      </nav>
 
-    <div class="chat-thread">
-      <div class="chat-scroll">
-        {/* What was actually sent: the recording, and a line asking for it to
+      <div class="chat-thread">
+        <div class="chat-scroll">
+          {/* What was actually sent: the recording, and a line asking for it to
             be put away. The file is the point of the exchange — the terminal
             card below transcribes this exact name — and a message that asks
             EKHO to take a call without carrying the call was a step short of
             the truth. Not translated: it is a filename. */}
-        <div class="chat-ask" data-beat="1">
-          <p class="chat-clip">
+          <div class="chat-ask" data-beat="1">
+            <p class="chat-clip">
+              <span class="chat-clip-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 11v2M8 7.5v9M12 5v14M16 8.5v7M20 11v2" />
+                </svg>
+              </span>
+              <span class="chat-clip-name">260925_anna.m4a</span>
+              <span class="chat-clip-len">3:12</span>
+            </p>
+            <p class="chat-ask-text">
+              {askCmd && <span class="chat-cmd">{askCmd}</span>}
+              {askCmd ? ' ' : ''}
+              {askRest}
+            </p>
+          </div>
+
+          {/* The wait, drawn the way every client draws it. It is the only
+            honest thing to show between a message going and an answer
+            arriving, and without it the answer appears to have been sitting
+            there all along. */}
+          <p class="chat-typing" data-typing aria-hidden="true" hidden>
+            <span></span>
+            <span></span>
+            <span></span>
+          </p>
+
+          <div class="chat-answer" data-beat="2">
+            <span class="chat-mark" data-chat-mark aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d={si.siClaude.path} />
+              </svg>
+            </span>
+            <div>
+              <p class="chat-said">{c.chat.said}</p>
+
+              <div class="tool" data-beat="3">
+                <p class="tool-head">
+                  <svg class="tool-ico" viewBox="0 0 12 12" aria-hidden="true">
+                    <path d="M2.4 3.4 5 6l-2.6 2.6M6.4 8.8h3.4" />
+                  </svg>
+                  <span class="tool-kind">{c.chat.terminal}</span>
+                  <span class="tool-chev" aria-hidden="true">
+                    <svg viewBox="0 0 10 10" aria-hidden="true">
+                      <path d="M2 3.6 5 6.6l3-3" />
+                    </svg>
+                  </span>
+                </p>
+                <p class="tool-mono">$ ekho tools transcribe 260925_anna.m4a</p>
+                {/* the way a client prints what a call returned: indented under
+                  it, on the branch glyph a terminal draws */}
+                <p class="tool-mono tool-mono--dim">
+                  <span class="tool-branch" aria-hidden="true">
+                    ⎿
+                  </span>{' '}
+                  00 - Now/Inbox/2026-09-25 — Call with Anna.md
+                </p>
+              </div>
+
+              <div class="tool tool--skill" data-beat="4">
+                <p class="tool-head">
+                  <span class="tool-sq" aria-hidden="true"></span>
+                  <span class="tool-kind">{c.chat.skill}</span>
+                  <span class="tool-chev" aria-hidden="true">
+                    <svg viewBox="0 0 10 10" aria-hidden="true">
+                      <path d="M2 3.6 5 6.6l3-3" />
+                    </svg>
+                  </span>
+                </p>
+                <p class="tool-said">{c.chat.wouldWrite}</p>
+                <table class="tool-table">
+                  <tbody>
+                    {rows.map(([op, type, what]) => (
+                      <tr data-beat="5">
+                        <td class="tool-op">{op}</td>
+                        <td class="tool-type">{type}</td>
+                        <td>{what}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <p class="chat-acts" data-beat="6">
+                <button type="button" class="chat-btn chat-btn--solid" data-decide>
+                  {c.chat.confirm}
+                </button>
+                {/* Present, because a client that only offers "yes" is not a
+                  client. Inactive, because this one is a mockup and the only
+                  thing it lets you do is confirm. */}
+                <button type="button" class="chat-btn" disabled>
+                  {c.chat.adjust}
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-foot">
+          {/* The composer plays its part in the scene: the recording is put in
+            it, the line is written into it, and then it is sent. Empty and
+            idle otherwise, which is how the page reads before anything is
+            picked. */}
+          <p class="chat-clip chat-clip--draft" data-draft-clip hidden>
             <span class="chat-clip-ico" aria-hidden="true">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M4 11v2M8 7.5v9M12 5v14M16 8.5v7M20 11v2" />
@@ -103,118 +205,18 @@ const rows = c.chat.rows;
             <span class="chat-clip-name">260925_anna.m4a</span>
             <span class="chat-clip-len">3:12</span>
           </p>
-          <p class="chat-ask-text">
-            {askCmd && <span class="chat-cmd">{askCmd}</span>}
-            {askCmd ? ' ' : ''}
-            {askRest}
+          <p class="chat-composer">
+            <span class="chat-plus" aria-hidden="true">
+              +
+            </span>
+            <span class="chat-ph" data-ph>
+              {c.chat.reply}
+            </span>
+            <span class="chat-typed" data-typed aria-hidden="true" hidden></span>
           </p>
         </div>
-
-        {/* The wait, drawn the way every client draws it. It is the only
-            honest thing to show between a message going and an answer
-            arriving, and without it the answer appears to have been sitting
-            there all along. */}
-        <p class="chat-typing" data-typing aria-hidden="true" hidden>
-          <span></span>
-          <span></span>
-          <span></span>
-        </p>
-
-        <div class="chat-answer" data-beat="2">
-          <span class="chat-mark" data-chat-mark aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d={si.siClaude.path} />
-            </svg>
-          </span>
-          <div>
-            <p class="chat-said">{c.chat.said}</p>
-
-            <div class="tool" data-beat="3">
-              <p class="tool-head">
-                <svg class="tool-ico" viewBox="0 0 12 12" aria-hidden="true">
-                  <path d="M2.4 3.4 5 6l-2.6 2.6M6.4 8.8h3.4" />
-                </svg>
-                <span class="tool-kind">{c.chat.terminal}</span>
-                <span class="tool-chev" aria-hidden="true">
-                  <svg viewBox="0 0 10 10" aria-hidden="true">
-                    <path d="M2 3.6 5 6.6l3-3" />
-                  </svg>
-                </span>
-              </p>
-              <p class="tool-mono">$ ekho tools transcribe 260925_anna.m4a</p>
-              {/* the way a client prints what a call returned: indented under
-                  it, on the branch glyph a terminal draws */}
-              <p class="tool-mono tool-mono--dim">
-                <span class="tool-branch" aria-hidden="true">
-                  ⎿
-                </span>{' '}
-                00 - Now/Inbox/2026-09-25 — Call with Anna.md
-              </p>
-            </div>
-
-            <div class="tool tool--skill" data-beat="4">
-              <p class="tool-head">
-                <span class="tool-sq" aria-hidden="true"></span>
-                <span class="tool-kind">{c.chat.skill}</span>
-                <span class="tool-chev" aria-hidden="true">
-                  <svg viewBox="0 0 10 10" aria-hidden="true">
-                    <path d="M2 3.6 5 6.6l3-3" />
-                  </svg>
-                </span>
-              </p>
-              <p class="tool-said">{c.chat.wouldWrite}</p>
-              <table class="tool-table">
-                <tbody>
-                  {rows.map(([op, type, what]) => (
-                    <tr data-beat="5">
-                      <td class="tool-op">{op}</td>
-                      <td class="tool-type">{type}</td>
-                      <td>{what}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <p class="chat-acts" data-beat="6">
-              <button type="button" class="chat-btn chat-btn--solid" data-decide>
-                {c.chat.confirm}
-              </button>
-              {/* Present, because a client that only offers "yes" is not a
-                  client. Inactive, because this one is a mockup and the only
-                  thing it lets you do is confirm. */}
-              <button type="button" class="chat-btn" disabled>
-                {c.chat.adjust}
-              </button>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="chat-foot">
-        {/* The composer plays its part in the scene: the recording is put in
-            it, the line is written into it, and then it is sent. Empty and
-            idle otherwise, which is how the page reads before anything is
-            picked. */}
-        <p class="chat-clip chat-clip--draft" data-draft-clip hidden>
-          <span class="chat-clip-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 11v2M8 7.5v9M12 5v14M16 8.5v7M20 11v2" />
-            </svg>
-          </span>
-          <span class="chat-clip-name">260925_anna.m4a</span>
-          <span class="chat-clip-len">3:12</span>
-        </p>
-        <p class="chat-composer">
-          <span class="chat-plus" aria-hidden="true">
-            +
-          </span>
-          <span class="chat-ph" data-ph>{c.chat.reply}</span>
-          <span class="chat-typed" data-typed aria-hidden="true" hidden></span>
-        </p>
       </div>
     </div>
-  </div>
   </figure>
 </div>
 
