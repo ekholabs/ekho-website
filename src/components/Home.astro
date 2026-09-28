@@ -315,8 +315,13 @@ const people = [
             <span class="models-sq" aria-hidden="true"></span>
             {c.how.sovereignty}
           </p>
-          <ModelRow lang={lang} />
           <p class="models-note">{c.how.note}</p>
+          {/* The row sits between the argument and the line it lands on, so the
+              marks are the last thing read before "it stays yours": you see who
+              it is you are free of, and then what that buys you. Under the
+              label it was decoration arriving before there was a claim to
+              decorate. */}
+          <ModelRow lang={lang} />
           {/* The sovereignty claim, in one line. Not an appeal to privacy: the
               providers are moving into the memory layer, and a vault that lives
               there is not portable however portable the model is. Grounded in
