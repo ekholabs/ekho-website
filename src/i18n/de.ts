@@ -190,5 +190,18 @@ export const de: Copy = {
       assumption: 'Der Einkauf entscheidet, nicht das Team',
       article: 'Karpathy über das LLM-Wiki',
     },
+    /* what each note carries besides its title: a field or two, and what it
+       is joined to — which is the part that makes it context rather than a
+       label */
+    meta: {
+      person: ['Bettermile · Produkt', '2 Gespräche · 1 Entscheidung'],
+      meeting: ['25. Sep · 42 Min', 'Anna Berger · 3 Notizen'],
+      voice: ['25. Sep · 3 Min', 'wurde zur Preis-Erkenntnis'],
+      decision: ['ADR-0027 · angenommen', 'bestätigt H-24'],
+      insight: ['I-296 · aus dem Gespräch', 'stützt H-24 · 4 Quellen'],
+      assumption: ['H-40 · offen', 'der Pilot entscheidet sie'],
+      principle: ['P-01 · seit Mai', '9 Verweise'],
+      article: ['Quellen-Stufe 1 · Karpathy', 'speist I-296'],
+    },
   },
 };

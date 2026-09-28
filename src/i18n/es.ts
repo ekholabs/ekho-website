@@ -186,5 +186,18 @@ export const es: Copy = {
       assumption: 'Decide compras, no el equipo',
       article: 'Karpathy sobre el LLM wiki',
     },
+    /* what each note carries besides its title: a field or two, and what it
+       is joined to — which is the part that makes it context rather than a
+       label */
+    meta: {
+      person: ['Bettermile · producto', '2 llamadas · 1 decisión'],
+      meeting: ['25 sep · 42 min', 'Anna Berger · 3 notas'],
+      voice: ['25 sep · 3 min', 'se volvió la idea de precios'],
+      decision: ['ADR-0027 · aceptada', 'valida H-24'],
+      insight: ['I-296 · de la llamada', 'apoya H-24 · 4 fuentes'],
+      assumption: ['H-40 · abierta', 'el piloto la resuelve'],
+      principle: ['P-01 · desde mayo', '9 referencias'],
+      article: ['fuente nivel 1 · Karpathy', 'alimenta I-296'],
+    },
   },
 };

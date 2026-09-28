@@ -184,6 +184,19 @@ export const en = {
       assumption: 'Procurement decides, not the team',
       article: 'Karpathy on the LLM wiki',
     },
+    /* what each note carries besides its title: a field or two, and what it
+       is joined to — which is the part that makes it context rather than a
+       label */
+    meta: {
+      person: ['Bettermile · product', '2 calls · 1 decision'],
+      meeting: ['25 Sep · 42 min', 'Anna Berger · 3 notes written'],
+      voice: ['25 Sep · 3 min', 'became the pricing insight'],
+      decision: ['ADR-0027 · accepted', 'validates H-24'],
+      insight: ['I-296 · from the call', 'supports H-24 · 4 sources'],
+      assumption: ['H-40 · open', 'the pilot settles it'],
+      principle: ['P-01 · since May', 'referenced 9 times'],
+      article: ['source tier 1 · Karpathy', 'feeds I-296'],
+    },
   },
 };
 

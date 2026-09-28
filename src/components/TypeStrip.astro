@@ -36,6 +36,13 @@ const keys = [
           {c.graphic.types[k]}
         </p>
         <p class="strip-title">{c.graphic.titles[k]}</p>
+        <p class="strip-meta">{c.graphic.meta[k][0]}</p>
+        <p class="strip-link">
+          <svg class="strip-arrow" viewBox="0 0 12 12" aria-hidden="true">
+            <path d="M1.5 2.5v4a2 2 0 0 0 2 2h7M8 5.5l2.8 3-2.8 3" />
+          </svg>
+          {c.graphic.meta[k][1]}
+        </p>
       </li>
     ))}
   </ul>

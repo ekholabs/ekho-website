@@ -4182,7 +4182,7 @@
   }
 
   .strip-card {
-    flex: 0 0 14.5rem;
+    flex: 0 0 15.5rem;
     scroll-snap-align: start;
     padding: 0.9rem 1rem 1rem;
     border-radius: var(--radius);
@@ -4213,10 +4213,45 @@
   }
 
   .strip-title {
-    margin: 0;
+    margin: 0 0 0.6rem;
     font-size: 1rem;
     line-height: 1.35;
     color: var(--text);
+  }
+
+  /* What the card is actually for: a title is a label, and a label is not
+     context. The field says what this note is, the line under it says what it
+     is joined to, which is where the value is. */
+  .strip-meta {
+    margin: 0;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+
+  .strip-link {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    margin: 0.3rem 0 0;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    color: var(--muted);
+  }
+
+  .strip-arrow {
+    width: 0.75rem;
+    height: 0.75rem;
+    flex: none;
+    align-self: center;
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 }
 

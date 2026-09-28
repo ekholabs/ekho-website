@@ -186,5 +186,18 @@ export const fr: Copy = {
       assumption: "Les achats décident, pas l'équipe",
       article: 'Karpathy sur le LLM wiki',
     },
+    /* what each note carries besides its title: a field or two, and what it
+       is joined to — which is the part that makes it context rather than a
+       label */
+    meta: {
+      person: ['Bettermile · produit', '2 appels · 1 décision'],
+      meeting: ['25 sept · 42 min', 'Anna Berger · 3 notes'],
+      voice: ['25 sept · 3 min', "devenue l'idée de prix"],
+      decision: ['ADR-0027 · acceptée', 'valide H-24'],
+      insight: ["I-296 · issu de l'appel", 'appuie H-24 · 4 sources'],
+      assumption: ['H-40 · ouverte', 'le pilote tranchera'],
+      principle: ['P-01 · depuis mai', '9 renvois'],
+      article: ['source niveau 1 · Karpathy', 'alimente I-296'],
+    },
   },
 };
