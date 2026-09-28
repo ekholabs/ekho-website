@@ -4266,8 +4266,7 @@
 @layer components {
   @media (max-width: 47.999rem) {
     .viewer .win--app,
-    .flow-window .win--chat,
-    .flow-window .win--finder {
+    .flow-window .win--chat {
       border: 0;
       background: none;
       box-shadow: none;
@@ -4276,16 +4275,22 @@
     }
 
     .viewer .win--app .win-bar,
-    .flow-window .win--chat .win-bar,
-    .flow-window .win--finder .win-bar {
+    .flow-window .win--chat .win-bar {
       display: none;
     }
 
     .viewer .win--app .win-body,
-    .flow-window .win--chat .win-body,
-    .flow-window .win--finder .win-body {
+    .flow-window .win--chat .win-body {
       height: auto;
       background: none;
+    }
+
+    /* The vault keeps its window. A folder is a thing with edges — that is
+       most of what the chapter is saying about it — and a list of file names
+       lying loose on the page says the opposite. */
+    .flow-window .win--finder {
+      width: 100%;
+      max-width: none;
     }
 
     /* the roadmap is a list on a phone, so it loses the panel it sat on as
