@@ -1523,6 +1523,18 @@
     margin: 0;
   }
 
+  /* A slash command is not prose: it is set in the mono the rest of the
+     machine's own lines are set in, and in the signal colour, because this is
+     the one word in the message that is addressed to EKHO. */
+  .chat-cmd {
+    font-family: var(--font-mono);
+    font-size: 0.95em;
+    color: var(--signal-ink);
+    background: color-mix(in srgb, var(--signal) 42%, transparent);
+    border-radius: 4px;
+    padding: 0.05em 0.3em;
+  }
+
   /* The recording, attached the way a client shows one: a strip above the
      line that was sent with it, with the level meter, the name and how long
      it runs. */
@@ -5316,6 +5328,9 @@
       padding-block: 0.7rem;
       background: var(--bg);
       box-shadow: 0 1px 0 var(--line);
+      transition:
+        padding 340ms ease,
+        box-shadow 340ms ease;
     }
 
     /* the composer, at the bottom edge for as long as the scene runs */
@@ -5325,7 +5340,7 @@
       z-index: 5;
       padding-block: 0.6rem calc(0.6rem + env(safe-area-inset-bottom, 0px));
       background: var(--bg);
-      animation: foot-up 380ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+      animation: foot-up 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     @keyframes foot-up {
@@ -5335,18 +5350,20 @@
       }
     }
 
-    /* what has not arrived yet */
+    /* What has not arrived yet. The arrival is longer than the gap between
+       arrivals, so each one is still settling while the next starts: that
+       overlap is the difference between a movement and a list. */
     .chat-unit.is-playing [data-beat] {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(6px);
     }
 
     .chat-unit.is-playing [data-beat].is-in {
       opacity: 1;
       transform: none;
       transition:
-        opacity 340ms ease,
-        transform 340ms cubic-bezier(0.22, 0.61, 0.36, 1);
+        opacity 460ms ease-out,
+        transform 460ms cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     /* a row of the table cannot be moved, only faded */
@@ -5380,7 +5397,7 @@
 
     .chat-clip--draft {
       margin-bottom: 0.5rem;
-      animation: clip-in 260ms ease both;
+      animation: clip-in 340ms cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     @keyframes clip-in {

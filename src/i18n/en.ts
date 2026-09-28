@@ -146,7 +146,7 @@ export const en = {
     ],
     vault: 'vault connected',
     connected: 'connected',
-    ask: "Throw yesterday's call with Anna into EKHO.",
+    ask: '/ekho Please ingest the recording from yesterday\'s call with Anna',
     said: 'I will transcribe the recording and put it in your inbox.',
     terminal: 'Terminal',
     skill: 'Skill · ekho-inbox-digest',

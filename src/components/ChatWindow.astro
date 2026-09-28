@@ -21,6 +21,12 @@ interface Props {
 const { lang } = Astro.props;
 const c = t(lang);
 
+// The message is a slash command, so its first token is set as one rather than
+// running on as prose. Split here rather than in the copy, so a translation
+// only has to write the line.
+const askCmd = c.chat.ask.startsWith('/') ? c.chat.ask.split(' ')[0] : '';
+const askRest = askCmd ? c.chat.ask.slice(askCmd.length).trimStart() : c.chat.ask;
+
 const recents = [
   { day: c.chat.today, items: c.chat.recents.slice(0, 2) },
   { day: c.chat.yesterday, items: c.chat.recents.slice(2) },
@@ -98,7 +104,11 @@ const rows = c.chat.rows;
             <span class="chat-clip-name">260925_anna.m4a</span>
             <span class="chat-clip-len">3:12</span>
           </p>
-          <p class="chat-ask-text">{c.chat.ask}</p>
+          <p class="chat-ask-text">
+            {askCmd && <span class="chat-cmd">{askCmd}</span>}
+            {askCmd ? ' ' : ''}
+            {askRest}
+          </p>
         </div>
 
         <div class="chat-answer" data-beat="2">
@@ -220,6 +230,22 @@ const rows = c.chat.rows;
     // the line the scene writes is the one the thread already carries
     const line = ask?.querySelector<HTMLElement>('.chat-ask-text')?.textContent?.trim() ?? '';
 
+    // What is written into the composer, with the command token set apart as
+    // soon as it is complete — a client marks a slash command while you type
+    // it, not once you have sent it.
+    const cmd = line.startsWith('/') ? line.split(' ')[0] : '';
+    const write = (into: HTMLElement, text: string) => {
+      if (cmd && text.length > cmd.length) {
+        into.textContent = text.slice(cmd.length);
+        const tag = document.createElement('span');
+        tag.className = 'chat-cmd';
+        tag.textContent = cmd;
+        into.prepend(tag);
+      } else {
+        into.textContent = text;
+      }
+    };
+
     let run = 0;
     const wait = (ms: number) =>
       new Promise<void>((go) => {
@@ -244,9 +270,11 @@ const rows = c.chat.rows;
       reset();
       if (still.matches) return;
 
+      // Everything that can overlap does. The scroll, the strip settling and
+      // the composer coming up are one movement rather than three steps with
+      // waits between them; the gaps that are left are only the ones the eye
+      // needs to read what just arrived.
       unit.classList.add('is-playing');
-
-      // the strip comes to rest under the header and stays there
       const head = Number.parseInt(
         getComputedStyle(document.documentElement).getPropertyValue('--head'),
         10,
@@ -256,27 +284,28 @@ const rows = c.chat.rows;
         const to = window.scrollY + wire.getBoundingClientRect().top - (head || 72);
         window.scrollTo({ top: to, behavior: 'smooth' });
       }
-      await wait(620);
+      await wait(260);
       unit.classList.add('is-stuck');
 
-      // the recording is attached, then the line is written into the composer
-      await wait(320);
+      // the recording goes in while the strip is still settling
+      await wait(180);
       if (draft) draft.hidden = false;
-      await wait(420);
+      await wait(220);
       if (ph) ph.hidden = true;
       if (typed) {
         typed.hidden = false;
-        for (let n = 1; n <= line.length; n += 2) {
-          typed.textContent = line.slice(0, n);
-          await wait(18);
+        for (let n = 3; n <= line.length; n += 3) {
+          write(typed, line.slice(0, n));
+          await wait(15);
         }
-        typed.textContent = line;
+        write(typed, line);
       }
 
-      // sent: the composer empties and the message is in the thread
-      await wait(360);
+      // sent: the composer empties as the message lands in the thread
+      await wait(260);
       unit.classList.add('is-sending');
-      await wait(220);
+      beats[0]?.classList.add('is-in');
+      await wait(180);
       unit.classList.remove('is-sending');
       if (draft) draft.hidden = true;
       if (typed) {
@@ -285,17 +314,17 @@ const rows = c.chat.rows;
       }
       if (ph) ph.hidden = false;
 
-      // and then it arrives, a beat at a time
+      // and then the rest, overlapping: each beat starts while the one before
+      // it is still arriving, which is what keeps it a movement and not a list
       const pace: Record<string, number> = {
-        '1': 0,
-        '2': 620,
-        '3': 520,
-        '4': 620,
-        '5': 160,
-        '6': 420,
+        '2': 420,
+        '3': 300,
+        '4': 320,
+        '5': 110,
+        '6': 260,
       };
-      for (const b of beats) {
-        await wait(pace[b.dataset.beat ?? '1'] ?? 400);
+      for (const b of beats.slice(1)) {
+        await wait(pace[b.dataset.beat ?? '2'] ?? 280);
         b.classList.add('is-in');
       }
 
@@ -304,7 +333,7 @@ const rows = c.chat.rows;
       // leftover, not a client — and the thread stays as it arrived. The
       // strip keeps its sticky, which is bounded by the window it belongs to
       // and releases on its own at the end of it.
-      await wait(700);
+      await wait(640);
       unit.classList.remove('is-playing');
     };
 

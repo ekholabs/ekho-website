@@ -152,7 +152,7 @@ export const de: Copy = {
     ],
     vault: 'Vault verbunden',
     connected: 'verbunden',
-    ask: 'Wirf das Gespräch mit Anna von gestern in EKHO.',
+    ask: '/ekho Bitte lies die Aufnahme vom gestrigen Gespräch mit Anna ein',
     said: 'Ich transkribiere die Aufnahme und lege sie in deine Inbox.',
     terminal: 'Terminal',
     skill: 'Skill · ekho-inbox-digest',

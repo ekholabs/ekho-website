@@ -89,10 +89,14 @@ const plates: Plate[] = [
       void w.offsetWidth;
       w.classList.add('is-lit');
     }
+    // The line reaches the other end at about a third of the run, and that is
+    // where the scene picks it up: waiting for the ends to cool first left a
+    // second of nothing between the connection being made and it being used.
+    window.setTimeout(() => {
+      document.dispatchEvent(new CustomEvent('ekho:picked'));
+    }, 520);
     unlit = window.setTimeout(() => {
       for (const w of wires) w.classList.remove('is-lit');
-      // the wire is drawn; what it makes possible plays out under it
-      document.dispatchEvent(new CustomEvent('ekho:picked'));
     }, 1500);
   };
 
