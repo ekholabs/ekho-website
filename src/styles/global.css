@@ -1817,16 +1817,12 @@
      in the window that is EKHO's rather than the chat client's, so it carries
      the signal colour rather than a grey caption line — a chip, the way a
      connected account is shown in any client. */
-  /* The vault end: black type and a yellow dot, on a plate that does not flip
-     with the scheme. The type is the fixed thing here — it stays black in
-     both, which means its ground has to stay light in both, and a white plate
-     is the only ground black type reads on once the page itself has gone
-     dark. Black on white is about 18 to 1, and the yellow it sits beside
-     never has to be read at all, because it is a dot.
-
-     What this is not: the page's ink carrying yellow type. That was the first
-     go, and in the dark it became a white chip with yellow on it, about 1.7
-     to 1, a smear. */
+  /* Both ends of the wire are the same plate: the page's ink with the page's
+     paper on it, flipping together with the scheme, so the model's round and
+     the vault's pill read as two of one thing. The yellow is the dot, and
+     only the dot — that is what kept this out of the trap it started in,
+     which was a plate carrying yellow type and turning white in the dark, at
+     about 1.7 to 1. */
   .wire-pill {
     display: inline-flex;
     align-items: center;
@@ -1834,19 +1830,11 @@
     flex: none;
     padding: 0.3rem 0.75rem;
     border-radius: 999px;
-    background: #fff;
-    color: #1a1a18;
+    background: var(--text);
+    color: var(--bg);
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    /* on paper, white on off-white is not an edge, so it is given one */
-    box-shadow: inset 0 0 0 1px var(--line);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .wire-pill {
-      box-shadow: none;
-    }
   }
 
   /* The live dot. Dark on the yellow, because the yellow is the ground here:
@@ -1936,25 +1924,10 @@
     animation: wire-ping 900ms ease 420ms both;
   }
 
-  /* and the plate takes the signal for a moment as the line lands. The type
-     on it is black either way, so nothing becomes unreadable mid-flash. */
+  /* and the plate lights as the line lands, on the same keyframes its other
+     end uses, so both ends of the wire answer in the same colour */
   .wire.is-lit .wire-pill {
-    animation: wire-plate 1500ms ease 400ms both;
-  }
-
-  @keyframes wire-plate {
-    0% {
-      background: #fff;
-    }
-
-    12%,
-    68% {
-      background: var(--signal);
-    }
-
-    100% {
-      background: #fff;
-    }
+    animation: wire-end 1500ms ease 400ms both;
   }
 
   .wire-run::after {
@@ -1974,15 +1947,18 @@
   @keyframes wire-end {
     0% {
       background: var(--text);
+      color: var(--bg);
     }
 
     10%,
     68% {
       background: var(--signal);
+      color: var(--signal-ink);
     }
 
     100% {
       background: var(--text);
+      color: var(--bg);
     }
   }
 
