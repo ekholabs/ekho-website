@@ -6,6 +6,7 @@ import Arrow from './Arrow.astro';
 import FinderWindow from './FinderWindow.astro';
 import ChatWindow from './ChatWindow.astro';
 import RoadmapMockup from './RoadmapMockup.astro';
+import TypeStrip from './TypeStrip.astro';
 import Waitlist from './Waitlist.astro';
 import ModelRow from './ModelRow.astro';
 import { Image } from 'astro:assets';
@@ -178,6 +179,9 @@ const people = [
           <p class="statement">{c.why.b}</p>
           <p class="statement">{c.why.c}</p>
         </div>
+        {/* the eight labelled points, for a screen that has no room beside the
+            text to put them in */}
+        <TypeStrip lang={lang} />
       </section>
 
       <section

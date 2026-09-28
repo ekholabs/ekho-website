@@ -1,0 +1,42 @@
+---
+// Chapter 01 on a phone. The wide layout says what context is by labelling
+// eight points in the field beside the text; there is no field here, so the
+// eight say it themselves: one card each, in a row you push sideways with a
+// thumb. Same marks, same words, same examples as the graphic — it is the
+// same eight notes, read as a list rather than seen as a cloud.
+import { t, type Lang } from '../i18n';
+import { ICONS } from '../lib/typeIcons';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = t(lang);
+
+const keys = [
+  'person',
+  'meeting',
+  'voice',
+  'decision',
+  'insight',
+  'assumption',
+  'principle',
+  'article',
+] as const;
+---
+
+<div class="flow-strip">
+  <ul class="strip" aria-label={c.graphic.label}>
+    {keys.map((k) => (
+      <li class="strip-card">
+        <p class="strip-type">
+          <svg class="strip-ico" viewBox="0 0 12 12" aria-hidden="true">
+            <path d={ICONS[k]} />
+          </svg>
+          {c.graphic.types[k]}
+        </p>
+        <p class="strip-title">{c.graphic.titles[k]}</p>
+      </li>
+    ))}
+  </ul>
+</div>

@@ -2041,6 +2041,49 @@
   }
 }
 
+/* The type on a phone -------------------------------------------------------
+   The page is read at arm's length on a wide screen and at a third of that on
+   a phone, and the scale did not know the difference: sixteen pixels of body
+   with a heading barely half again its size. Held close, that reads as a
+   document rather than as a page. The body goes up a point, the leading with
+   it, and the headings take the room a single column gives them. */
+@layer components {
+  @media (max-width: 47.999rem) {
+    :root {
+      --body-size: 1.0625rem;
+      --body-leading: 1.65;
+    }
+
+    .chapter h2 {
+      font-size: clamp(1.875rem, 8.2vw, 2.25rem);
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+    }
+
+    .chapter-lede {
+      font-size: 1.1875rem;
+      line-height: 1.5;
+    }
+
+    .statement {
+      font-size: 1.125rem;
+      line-height: 1.55;
+    }
+
+    .chapter-label {
+      font-size: 0.8125rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.25rem, 10vw, 3rem);
+    }
+
+    .hero-lede {
+      font-size: 1.1875rem;
+    }
+  }
+}
+
 @layer components {
   /* Narrow screens: the windows drop their sidebars rather than being scaled
      down into illegibility, which is what the real clients do at this width. */
@@ -2309,14 +2352,16 @@
      window is rendered a second time inside the chapter and simply flows with
      the text. Exactly one of the two is ever displayed. */
   .flow-window,
-  .flow-graphic {
+  .flow-graphic,
+  .flow-strip {
     display: none;
     margin-top: 2rem;
   }
 
   @media (max-width: 63.999rem) {
     .flow-window,
-    .flow-graphic {
+    .flow-graphic,
+    .flow-strip {
       display: block;
     }
 
@@ -4064,5 +4109,72 @@
     .waitlist--mail .waitlist-note {
       max-width: none;
     }
+  }
+}
+
+/* The eight types on a phone -------------------------------------------------
+   A row pushed sideways with a thumb, not a grid: eight cards is more than a
+   screen holds, and a strip says that there are more of them without having to
+   shrink any. It runs edge to edge, because a card that stops at the text
+   margin looks like it has nothing behind it, and the first card lines up with
+   the text above it. */
+@layer components {
+  .strip {
+    list-style: none;
+    display: flex;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0.5rem var(--gutter, 1.25rem) 1.25rem;
+    /* out of the column and across the screen */
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scroll-padding-left: var(--gutter, 1.25rem);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .strip-card {
+    flex: 0 0 14.5rem;
+    scroll-snap-align: start;
+    padding: 0.9rem 1rem 1rem;
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: 0 3px 18px rgb(26 26 24 / 0.08);
+  }
+
+  .strip-type {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.45rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .strip-ico {
+    width: 0.875rem;
+    height: 0.875rem;
+    flex: none;
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .strip-title {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.35;
+    color: var(--text);
   }
 }
