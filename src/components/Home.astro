@@ -5,7 +5,7 @@ import Architecture from './Architecture.astro';
 import Arrow from './Arrow.astro';
 import FinderWindow from './FinderWindow.astro';
 import ChatWindow from './ChatWindow.astro';
-import ViewerMockup from './ViewerMockup.astro';
+import RoadmapMockup from './RoadmapMockup.astro';
 import Waitlist from './Waitlist.astro';
 import ModelRow from './ModelRow.astro';
 import { Image } from 'astro:assets';
@@ -307,19 +307,23 @@ const people = [
 
   {/* ---------- 05 · what EKHO is ---------- */}
   <section
-    class="wrap wrap-wide chapter chapter--wide"
+    class="wrap wrap-wide chapter chapter--wide chapter--split"
     id="viewer"
     data-view
     data-chapter
     data-nav="how"
     data-stage="3"
   >
-    <div class="measure">
+    {/* Two columns, like the chapters before it: what the viewer is on the
+        left, one window of it on the right. */}
+    <div class="split-text">
       <h2>{c.viewer.title}</h2>
       <p class="chapter-lede">{c.viewer.lede}</p>
+      <p class="statement">{c.viewer.a}</p>
+      <p class="statement">{c.viewer.b}</p>
+      <p class="fig-note">{c.viewer.note}</p>
     </div>
-    <ViewerMockup lang={lang} />
-    <p class="fig-note measure">{c.viewer.note}</p>
+    <RoadmapMockup lang={lang} />
   </section>
 
   {/* ---------- 06 · architecture ---------- */}

@@ -1654,20 +1654,35 @@
 
   /* ---------- 05 · the viewer ---------- */
 
-  .viewer {
+  /* The same build as the chapters before it: the text in a column on the
+     left, one window of the thing on the right. Stacked below the breakpoint,
+     where there is no second column to put anything in. */
+  .chapter--split {
     display: grid;
-    gap: 2rem;
-    align-items: end;
-    margin-top: 2.5rem;
-    padding: clamp(1.5rem, 4vw, 3.5rem);
-    background: var(--core);
-    border-radius: var(--radius);
+    gap: 1.5rem;
+    align-items: center;
   }
 
   @media (min-width: 64rem) {
-    .viewer {
-      grid-template-columns: minmax(0, 1fr) 14rem;
+    .chapter--split {
+      grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+      gap: clamp(2rem, 5vw, 4.5rem);
     }
+  }
+
+  .split-text > h2 {
+    margin-top: 0;
+  }
+
+  .chapter--split .viewer {
+    margin-top: 0;
+  }
+
+  .viewer {
+    margin-top: 2.5rem;
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    background: var(--core);
+    border-radius: var(--radius);
   }
 
   .viewer .win {
@@ -1813,53 +1828,16 @@
     white-space: nowrap;
   }
 
-  .phone {
-    margin: 0;
-    justify-self: center;
-    width: 13rem;
-    padding: 0.5rem;
-    background: #1a1a18;
-    border: 1px solid #3a3835;
-    border-radius: 26px;
-    box-shadow: 0 26px 60px -20px rgb(0 0 0 / 0.6);
-  }
-
-  .phone-screen {
-    height: 25rem;
-    padding: 0.75rem 0.8rem;
-    background: #fbfaf7;
-    border-radius: 20px;
-    color: #1a1a18;
-    overflow: hidden;
-  }
-
-  .phone-status {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 0 0.9rem;
-    font-size: 0.625rem;
-    font-weight: 500;
-  }
-
-  .app-h--phone {
-    font-size: 1rem;
-  }
-
-  .app-stats--phone {
-    gap: 1.25rem;
-    margin-bottom: 1rem;
-    border-bottom-color: #e6e2da;
-  }
-
-  .app-list--phone li {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.1rem;
-    border-bottom-color: #e6e2da;
-  }
-
-  .app-list--phone .app-title {
-    white-space: normal;
-    line-height: 1.4;
+  /* the state of an element, set the way the roadmap page sets it */
+  .app-pill {
+    padding: 0.1rem 0.4rem;
+    border: 1px solid var(--panel-line);
+    border-radius: 3px;
+    font-size: 0.5625rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #6b6762;
+    white-space: nowrap;
   }
 
   /* the diagram carries no shadow, only on hover (ADR-0027) */
@@ -2018,15 +1996,7 @@
     }
 
     .viewer {
-      gap: 1.5rem;
-    }
-
-    .phone {
-      width: 11.5rem;
-    }
-
-    .phone-screen {
-      height: 20rem;
+      padding: 1rem;
     }
   }
 
@@ -2833,11 +2803,8 @@
   }
 
   .win--app .win-body {
-    height: clamp(12.5rem, 29vh, 20rem);
-  }
-
-  .phone-screen {
-    height: clamp(15rem, 36vh, 25rem);
+    /* tall enough that the last row of the zone is a row and not a cut */
+    height: clamp(15rem, 41vh, 23.5rem);
   }
 
   .fig-note {
