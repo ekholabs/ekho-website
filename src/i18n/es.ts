@@ -27,7 +27,7 @@ export const es: Copy = {
   hero: {
     titleBefore: 'La IA vale lo que vale tu contexto.',
     titleSignal: 'Hazlo tuyo.',
-    lede: 'EKHO convierte lo que sabes en un contexto conectado con el que tu IA puede trabajar. Cada vez que lo usas, sacas más de él. Y sigue siendo tuyo.',
+    lede: 'EKHO convierte lo que sabes en una única fuente de contexto conectada con la que tu IA puede trabajar. Crea tu memoria sintética y consérvala. Cada vez que la usas, sacas más de ella - sin perder el control.',
     cta: 'Únete a la lista',
     seeHow: 'Cómo funciona',
   },

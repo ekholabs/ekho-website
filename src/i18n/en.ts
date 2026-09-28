@@ -25,7 +25,7 @@ export const en = {
   hero: {
     titleBefore: 'AI is only as good as your context.',
     titleSignal: 'Own it.',
-    lede: 'EKHO turns what you know into one connected context your AI can work with. Every time you use it, you get more out of it. And it stays yours.',
+    lede: 'EKHO turns what you know into one connected context source your AI can work with. Create and hold your synthetic Memory. Every time you use it, you get more out of it - without losing control.',
     cta: 'Join the waitlist',
     seeHow: 'See how it works',
   },

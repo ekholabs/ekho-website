@@ -31,7 +31,7 @@ export const de: Copy = {
   hero: {
     titleBefore: 'KI ist nur so gut wie dein Kontext.',
     titleSignal: 'Er gehört dir.',
-    lede: 'EKHO macht aus deinem Wissen einen verbundenen Kontext, mit dem deine KI arbeiten kann. Jede Nutzung bringt mehr als die vorige. Und er bleibt deiner.',
+    lede: 'EKHO macht aus dem, was du weißt, eine zusammenhängende Kontextquelle, mit der deine KI arbeiten kann. Bau dir dein synthetisches Gedächtnis und behalte es. Jede Nutzung bringt mehr als die vorige - ohne die Kontrolle abzugeben.',
     cta: 'Auf die Warteliste',
     seeHow: 'So funktioniert es',
   },

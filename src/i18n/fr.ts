@@ -27,7 +27,7 @@ export const fr: Copy = {
   hero: {
     titleBefore: "L'IA ne vaut que votre contexte.",
     titleSignal: 'Gardez-le.',
-    lede: 'EKHO transforme ce que vous savez en un contexte relié avec lequel votre IA peut travailler. À chaque usage, vous en tirez davantage. Et il reste le vôtre.',
+    lede: 'EKHO transforme ce que vous savez en une source de contexte unique et reliée, avec laquelle votre IA peut travailler. Créez votre mémoire synthétique et gardez-la. À chaque usage, vous en tirez davantage - sans perdre le contrôle.',
     cta: 'Rejoindre la liste',
     seeHow: 'Voir comment',
   },
