@@ -336,6 +336,17 @@ const rows = c.chat.rows;
       await wait(260);
       unit.classList.add('is-stuck');
 
+      // The confirm that named the model sits at the same bottom edge this is
+      // about to use, so it is shown out first rather than written over.
+      const toast = document.querySelector<HTMLElement>('[data-picked]');
+      if (toast && !toast.hidden) {
+        toast.classList.add('is-out');
+        window.setTimeout(() => {
+          toast.hidden = true;
+          toast.classList.remove('is-out');
+        }, 210);
+      }
+
       // the recording goes in while the strip is still settling
       await wait(180);
       if (draft) draft.hidden = false;
@@ -405,6 +416,20 @@ const rows = c.chat.rows;
 
       const next = document.querySelector<HTMLElement>('#compound');
       const landing = next?.querySelector<HTMLElement>('[data-landing]');
+
+      // Put it on the node the net spreads from, not in the middle of the box.
+      // The graphic says which node that is; the middle of the box is a
+      // different place, and a point that lands there makes the yellow appear
+      // to start from somewhere the decision never was.
+      const fig = next?.querySelector<HTMLElement>('[data-graphic]');
+      const at = fig?.dataset.decision;
+      const node = at ? fig?.querySelector<SVGElement>(`.cg-dots [data-i="${at}"]`) : null;
+      if (landing && node && landing.parentElement) {
+        const nr = node.getBoundingClientRect();
+        const gr = landing.parentElement.getBoundingClientRect();
+        landing.style.left = `${Math.round(nr.x + nr.width / 2 - gr.x)}px`;
+        landing.style.top = `${Math.round(nr.y + nr.height / 2 - gr.y)}px`;
+      }
       const head = Number.parseInt(
         getComputedStyle(document.documentElement).getPropertyValue('--head'),
         10,

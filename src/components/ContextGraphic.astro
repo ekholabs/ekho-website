@@ -549,6 +549,11 @@ const ariaLabel = c.graphic.label;
 <figure
   class={figureClass}
   data-graphic={animated ? '' : undefined}
+  {/* Which point the yellow spreads from. The chapter before this one folds
+      its whole exchange into a dot, and the dot has to land on this node and
+      not in the middle of the box, or the net appears to spread from
+      somewhere the decision never was. */}
+  data-decision={decisionAt}
   role="group"
   aria-label={ariaLabel}
 >
@@ -757,6 +762,14 @@ const ariaLabel = c.graphic.label;
         cells.forEach((c, i) => (c.textContent = shapes[i]));
         return;
       }
+      const settle = () => cells.forEach((c, i) => (c.textContent = shapes[i]));
+      // A frame callback does not fire on a page nobody is looking at, and a
+      // counter that was started and then left behind a switched tab would sit
+      // at zero for good. If we cannot animate, we arrive.
+      if (document.hidden) {
+        settle();
+        return;
+      }
       const t0 = performance.now();
       const dur = 1100;
       const tick = (now: number) => {
@@ -765,12 +778,28 @@ const ariaLabel = c.graphic.label;
         const e = 1 - Math.pow(1 - p, 3);
         cells.forEach((c, i) => (c.textContent = format(Math.round(targets[i] * e), shapes[i])));
         if (p < 1) requestAnimationFrame(tick);
+        else settle();
       };
       requestAnimationFrame(tick);
+      document.addEventListener(
+        'visibilitychange',
+        () => {
+          if (document.hidden && cells[0]?.textContent !== shapes[0]) settle();
+        },
+        { once: true },
+      );
     };
 
+    // Formed enough to be counted. On a wide screen that is a stage class, set
+    // by the scroll as the net comes together. On a phone there is no stage:
+    // the net is drawn in place, already whole, so being on screen is the
+    // whole condition.
+    const inPlace = window.matchMedia('(max-width: 63.999rem)');
     const formed = () =>
-      !!figure && (figure.classList.contains('is-3') || figure.classList.contains('is-final'));
+      !!figure &&
+      (figure.classList.contains('is-3') ||
+        figure.classList.contains('is-final') ||
+        (inPlace.matches && !!box.closest('.flow-graphic')));
 
     const io = new IntersectionObserver(
       (entries) => {

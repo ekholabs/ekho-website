@@ -116,6 +116,7 @@ const plates: Plate[] = [
       }
       light();
       if (picked) {
+        picked.classList.remove('is-out');
         picked.textContent = (picked.dataset.tpl ?? '{name}').replace('{name}', name);
         picked.hidden = false;
         window.clearTimeout(clear);

@@ -1484,7 +1484,9 @@
   .tool-sq {
     width: 9px;
     height: 9px;
-    border-radius: 2px;
+    /* round, everywhere the signal is set as a mark: the page has one shape
+       for "this is EKHO's" and it is the same shape as the point on the net */
+    border-radius: 50%;
     background: var(--signal);
     flex: none;
   }
@@ -2110,7 +2112,7 @@
   .app-sq {
     width: 9px;
     height: 9px;
-    border-radius: 2px;
+    border-radius: 50%;
     background: var(--signal);
   }
 
@@ -2756,6 +2758,8 @@
 
     .graphic-landing {
       position: absolute;
+      /* set on the node the yellow spreads from, measured; the middle of the
+         box is not that node */
       left: 50%;
       top: 50%;
       width: 0.6rem;
@@ -3029,7 +3033,7 @@
     width: 11px;
     height: 11px;
     align-self: center;
-    border-radius: 2px;
+    border-radius: 50%;
     background: var(--signal);
   }
 
@@ -3384,7 +3388,7 @@
     width: 9px;
     height: 9px;
     flex: none;
-    border-radius: 2px;
+    border-radius: 50%;
     background: var(--signal);
   }
 
@@ -5310,6 +5314,9 @@
    indicator, and is announced rather than shouted. */
 @layer components {
   .picked {
+    transition:
+      opacity 200ms ease,
+      transform 200ms ease;
     position: fixed;
     left: 50%;
     bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
@@ -5327,6 +5334,13 @@
     white-space: nowrap;
     pointer-events: none;
     animation: picked-in 220ms ease;
+  }
+
+  /* Out of the way before the scene reaches the composer: both sit at the
+     bottom edge of a phone, and for a moment they were the same pixels. */
+  .picked.is-out {
+    opacity: 0;
+    transform: translate(-50%, 0.4rem);
   }
 
   @keyframes picked-in {
@@ -5596,6 +5610,16 @@
   [data-graphic].is-3 .cg-stats,
   [data-graphic].is-final .cg-stats {
     opacity: 1;
+  }
+
+  /* On a phone the net is drawn where the chapter is rather than stepped
+     through four states on a stage, so it never carries a stage class — and
+     the counts, which are gated on one, never showed. Below the breakpoint
+     the drawing in place is the formed net, so they show with it. */
+  @media (max-width: 63.999rem) {
+    .flow-graphic [data-graphic] .cg-stats {
+      opacity: 1;
+    }
   }
 
   .cg-stat b {
