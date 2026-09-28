@@ -20,8 +20,6 @@
   --signal: #f5c400;
   --signal-ink: #1a1a18;
   --shadow: rgb(26 26 24 / 0.045);
-  /* the small card a label sits on, over the field of points */
-  --card: #fbfaf7;
   /* One size for running text, set by the opening and used by every chapter
      after it, so the page reads at one pitch rather than a different one per
      section. */
@@ -60,8 +58,11 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #1c1b19;
-    --surface: #232220;
-    --surface-raised: #2c2b28;
+    /* A step lighter than they were: at #232220 a panel was seven values off
+       the page ground, which on a dark screen is not a surface, it is a guess.
+       Everything raised rides on these two. */
+    --surface: #2a2926;
+    --surface-raised: #333230;
     /* A hairline on a dark ground has to be lighter than the same line on a
        light one to read as a line at all: at #302e2b it was four steps off the
        background and the rules between the blocks disappeared. */
@@ -71,7 +72,6 @@
     --muted: #a09b93;
     --text: #edebe6;
     --shadow: rgb(0 0 0 / 0.3);
-    --card: #2c2b28;
     --lift: 0 0 48px var(--shadow);
     --lift-hover: 0 0 56px rgb(0 0 0 / 0.42);
     --core: #121210;
@@ -520,7 +520,10 @@
 
   .cg-ico {
     fill: none;
-    stroke: var(--muted-deep);
+    /* the mark and the word it stands in front of carry the same tone, and on
+       a card that is nearly the page's own ground the deeper grey was a guess
+       rather than a label */
+    stroke: var(--muted);
     stroke-width: 1.1;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -530,7 +533,7 @@
     font-size: 9px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    fill: var(--muted-deep);
+    fill: var(--muted);
   }
 
   .cg-tip-title {
