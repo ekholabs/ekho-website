@@ -204,6 +204,16 @@ export const fr: Copy = {
       voice: 'Si on facture par siège, les petites équipes décrochent.',
       article: 'Un wiki, ce ne sont pas les notes. Ce sont les liens entre elles.',
     },
+    details: {
+      person: [['rôle', 'Product lead'], ['vue', "25 sep, lors d'un appel"]],
+      meeting: [['durée', '42 min'], ['avec', 'Anna Berger']],
+      voice: [['durée', '3 min'], ['où', 'sur le chemin du retour']],
+      decision: [['prise', '25 sep'], ['par', 'Lorenz']],
+      insight: [['noté', '25 sep'], ['de', "l'appel avec Anna"]],
+      assumption: [['posée', '12 sep'], ['ouverte', '13 jours']],
+      principle: [['depuis', 'mai'], ['utilisé', '9 fois']],
+      article: [['de', 'Andrej Karpathy'], ['lu', '24 sep']],
+    },
     meta: {
       person: ['client pilote · produit', '2 appels · 1 décision'],
       meeting: ['25 sept · 42 min', 'Anna Berger · 3 notes'],

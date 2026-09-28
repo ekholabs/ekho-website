@@ -53,12 +53,18 @@ const keys = [
             material — decision, insight, assumption, principle — has no
             quote: its statement is its title. */}
         {APP_STILLS.has(k) && <p class="strip-quote">{c.graphic.quotes[k as keyof typeof c.graphic.quotes]}</p>}
-        <p class="strip-link">
-          <svg class="strip-arrow" viewBox="0 0 12 12" aria-hidden="true">
-            <path d="M1.5 2.5v4a2 2 0 0 0 2 2h7M8 5.5l2.8 3-2.8 3" />
-          </svg>
-          {c.graphic.meta[k][1]}
-        </p>
+        {/* What the thing knows about itself, and nothing else. Nothing here
+            points at another note: at this point in the story these have not
+            been filed, so there is nothing for them to point at. That is the
+            whole difference the chapter is about. */}
+        <dl class="strip-details">
+          {c.graphic.details[k as keyof typeof c.graphic.details].map(([label, value]) => (
+            <>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </>
+          ))}
+        </dl>
       </li>
     ))}
   </ul>

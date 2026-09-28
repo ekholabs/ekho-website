@@ -208,6 +208,16 @@ export const de: Copy = {
       voice: 'Wenn wir pro Platz abrechnen, fallen die kleinen Teams raus.',
       article: 'Ein Wiki sind nicht die Notizen. Es sind die Verbindungen dazwischen.',
     },
+    details: {
+      person: [['Rolle', 'Product Lead'], ['getroffen', '25. Sep, im Gespräch']],
+      meeting: [['Dauer', '42 Min'], ['mit', 'Anna Berger']],
+      voice: [['Dauer', '3 Min'], ['wo', 'auf dem Heimweg']],
+      decision: [['getroffen', '25. Sep'], ['von', 'Lorenz']],
+      insight: [['notiert', '25. Sep'], ['aus', 'dem Gespräch mit Anna']],
+      assumption: [['gestellt', '12. Sep'], ['offen seit', '13 Tagen']],
+      principle: [['seit', 'Mai'], ['genutzt', '9-mal']],
+      article: [['von', 'Andrej Karpathy'], ['gelesen', '24. Sep']],
+    },
     meta: {
       person: ['Pilotkunde · Produkt', '2 Gespräche · 1 Entscheidung'],
       meeting: ['25. Sep · 42 Min', 'Anna Berger · 3 Notizen'],

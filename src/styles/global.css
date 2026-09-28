@@ -4667,7 +4667,7 @@
      fit is clamped, not allowed to push the row taller. */
   .strip-card {
     flex: 0 0 15.5rem;
-    height: 9.75rem;
+    height: 11.5rem;
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
@@ -4767,14 +4767,42 @@
   /* What the card is actually for: a title is a label, and a label is not
      context. The head says what this note is, this line says what it is
      joined to, which is where the value is. */
+  /* Two rows of what it is, set as a list: the label in the mono the machine
+     uses for its own lines, the value in the page's face. Held at the foot so
+     every card in the row reads along the same two lines. */
+  .strip-details {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    align-items: baseline;
+    gap: 0.3rem 0.7rem;
+    margin: auto 0 0;
+  }
+
+  .strip-details dt {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    color: var(--muted);
+  }
+
+  .strip-details dd {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .strip-card--app .strip-details dd {
+    color: var(--sk-ink);
+  }
+
   .strip-link {
-    margin-top: auto;
     display: flex;
     align-items: baseline;
     gap: 0.35rem;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
+    margin: 0;
     font-size: 0.75rem;
     line-height: 1.35;
     color: var(--muted);

@@ -202,6 +202,16 @@ export const en = {
       voice: 'If we price per seat, the small teams fall out.',
       article: 'A wiki is not the notes. It is the links between them.',
     },
+    details: {
+      person: [['role', 'Product lead'], ['met', '25 Sep, on a call']],
+      meeting: [['length', '42 min'], ['with', 'Anna Berger']],
+      voice: [['length', '3 min'], ['where', 'walking home']],
+      decision: [['taken', '25 Sep'], ['by', 'Lorenz']],
+      insight: [['noted', '25 Sep'], ['from', 'the call with Anna']],
+      assumption: [['raised', '12 Sep'], ['open for', '13 days']],
+      principle: [['since', 'May'], ['used', '9 times']],
+      article: [['by', 'Andrej Karpathy'], ['read', '24 Sep']],
+    },
     meta: {
       person: ['pilot customer · product', '2 calls · 1 decision'],
       meeting: ['25 Sep · 42 min', 'Anna Berger · 3 notes written'],

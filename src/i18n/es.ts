@@ -204,6 +204,16 @@ export const es: Copy = {
       voice: 'Si cobramos por puesto, los equipos pequeños se caen.',
       article: 'Un wiki no son las notas. Son los enlaces entre ellas.',
     },
+    details: {
+      person: [['rol', 'Product lead'], ['visto', '25 sep, en una llamada']],
+      meeting: [['duración', '42 min'], ['con', 'Anna Berger']],
+      voice: [['duración', '3 min'], ['dónde', 'de camino a casa']],
+      decision: [['tomada', '25 sep'], ['por', 'Lorenz']],
+      insight: [['anotado', '25 sep'], ['de', 'la llamada con Anna']],
+      assumption: [['planteada', '12 sep'], ['abierta', '13 días']],
+      principle: [['desde', 'mayo'], ['usado', '9 veces']],
+      article: [['de', 'Andrej Karpathy'], ['leído', '24 sep']],
+    },
     meta: {
       person: ['cliente piloto · producto', '2 llamadas · 1 decisión'],
       meeting: ['25 sep · 42 min', 'Anna Berger · 3 notas'],
