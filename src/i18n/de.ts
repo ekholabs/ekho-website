@@ -47,7 +47,7 @@ export const de: Copy = {
   },
   how: {
     title: 'EKHO arbeitet dort, wo du arbeitest.',
-    a: 'EKHO dockt an den Chat an, den du ohnehin benutzt: als Befehle, die es ausführt, und Skills, die es anwendet.',
+    a: 'EKHO dockt an den Chat an, den du ohnehin benutzt: Befehle, die du aufrufst, und Skills, die es von sich aus anwendet.',
     b: 'Und es ändert nie etwas, ohne es dir vorher zu zeigen.',
     sovereignty: 'Kontextsouveränität',
     note: 'Gib deinen Kontext einem Modellanbieter, und er gehört ihm: sein Speicher, sein Format, seine Bedingungen. EKHO lässt ihn auf deiner eigenen Festplatte liegen, in Markdown, wo jedes dieser Modelle ihn lesen kann.',

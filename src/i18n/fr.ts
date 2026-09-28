@@ -46,7 +46,7 @@ export const fr: Copy = {
   },
   how: {
     title: 'EKHO travaille là où vous travaillez.',
-    a: "EKHO se greffe sur la conversation que vous avez déjà : des commandes qu'il exécute et des skills qu'il applique.",
+    a: "EKHO se greffe sur la conversation que vous avez déjà : des commandes que vous lancez et des skills qu'il applique de lui-même.",
     b: "Et il ne change jamais rien sans vous le montrer d'abord.",
     sovereignty: 'Souveraineté du contexte',
     note: 'Confiez votre contexte à un fournisseur de modèle et il devient le sien : sa mémoire, son format, ses conditions. EKHO le garde sur votre propre disque, en Markdown, là où chacun de ceux-ci peut le lire.',

@@ -44,7 +44,7 @@ export const en = {
   },
   how: {
     title: 'EKHO works where you work.',
-    a: 'EKHO docks into the chat you already use: as commands it runs and skills it applies.',
+    a: 'EKHO docks into the chat you already use: commands you call, and skills it applies on its own.',
     b: 'And it never changes anything without showing you first.',
     sovereignty: 'Context sovereignty',
     note: 'Hand your context to a model provider and it becomes theirs to keep: their memory, their format, their terms. EKHO keeps it on your own disk, in Markdown, where any of these can read it.',
