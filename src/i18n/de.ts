@@ -31,7 +31,7 @@ export const de: Copy = {
   hero: {
     titleBefore: 'KI ist nur so gut wie dein Kontext.',
     titleSignal: 'Er gehört dir.',
-    lede: 'EKHO macht aus deinem Wissen einen verbundenen Kontext, mit dem deine KI arbeiten kann. Jede Nutzung bringt mehr als die vorige. Und er bleibt deiner.',
+    lede: 'EKHO macht aus dem, was du weißt, eine zusammenhängende Kontextquelle, mit der deine KI arbeiten kann. Bau dir dein synthetisches Gedächtnis und behalte es. Jede Nutzung bringt mehr als die vorige - ohne die Kontrolle abzugeben.',
     cta: 'Auf die Warteliste',
     seeHow: 'So funktioniert es',
   },
@@ -52,29 +52,23 @@ export const de: Copy = {
     title: 'EKHO arbeitet dort, wo du arbeitest.',
     a: 'EKHO sitzt in dem Chat, den du ohnehin benutzt: Befehle, die du aufrufst, und Skills, die es von sich aus anwendet.',
     b: 'Und es ändert nie etwas, ohne es dir vorher zu zeigen.',
-    sovereignty: 'Kontextsouveränität',
+    sovereignty: 'Werde modellunabhängig',
     note: 'Die Modelle bauen inzwischen selbst ein Gedächtnis über Chats hinweg auf, und das ist nützlich. Es gehört aber ihnen: ihr Format, ihre Bedingungen, und je länger es wächst, desto teurer wird der Wechsel. EKHO baut denselben Kontext auf deiner eigenen Platte auf, in Markdown, wo jedes dieser Modelle ihn lesen kann und keines ihn besitzt.',
     edge: 'Er bleibt deiner, und ein Modell gegen ein anderes zu tauschen kostet dich nichts.',
   },
   compound: {
     title: 'Dein Wissen verzinst sich.',
     a: 'Jede Quelle, die du in dein EKHO einspeist, verbindet sich mit allem, was schon da ist. Eine Erkenntnis weiß, woher sie kommt, was sie stützt und was ihr widerspricht.',
-    b: 'Genau so verzinst es sich: Jede neue Notiz vervielfacht die Verbindungen, also wächst die Qualität dessen, was zurückkommt, exponenziell und nicht Schritt für Schritt. Die Buchführung ist der Teil, den Menschen aufgeben, und genau den übernimmt EKHO.',
+    b: 'Genau so verzinst es sich: Jede neue Notiz vervielfacht die Verbindungen, also wächst die Qualität dessen, was zurückkommt, exponenziell. Die Buchführung ist der Teil, den Menschen aufgeben, und genau den übernimmt EKHO.',
   },
   viewer: {
     title: 'Dein Kontext, in der Form, die du brauchst.',
     lede: 'Der EKHO Viewer baut Sichten auf deinen Vault. Du sagst, welche Notizen, welche Felder, welche Abschnitte und für wen, er baut die Seite daraus.',
     a: 'Eine Sicht ist keine Kopie. Sie liest dieselben Dateien, die dein Agent schreibt, die Seite bewegt sich also mit deinem Wissen, statt ihm hinterherzulaufen.',
-    b: 'Ein Vault trägt so viele Sichten, wie du brauchst: eine Roadmap für die Woche, den Verlauf der Entscheidungen, eine Seite für jemanden, mit dem du arbeitest. Zu sehen ist EKHOs eigene Roadmap, erzeugt aus dem Vault, in dem diese Seite geschrieben wurde.',
     note: 'Der Viewer ist im Bau. Die Roadmap nicht: die wird heute erzeugt, aus denselben Dateien.',
     appTitle: 'EKHO Roadmap',
     nav: ['Überblick', 'Was jetzt', 'Was danach', 'Entscheidungen', 'Verlauf'],
     readOnly: 'nur lesend',
-    stats: [
-      ['4', 'Ergebnisse'],
-      ['38', 'Elemente'],
-      ['6', 'offene Entscheidungen'],
-    ],
     recent: 'Läuft gerade',
     items: [
       ['e26', 'Tragen Ontologie und Daten Aktionsketten?', 'läuft'],
@@ -151,7 +145,8 @@ export const de: Copy = {
       'Pitch-Story schärfen',
     ],
     vault: 'Vault verbunden',
-    ask: 'Wirf das Gespräch mit Anna von gestern in EKHO.',
+    connected: 'verbunden',
+    ask: '/ekho Bitte lies die Aufnahme vom gestrigen Gespräch mit Anna ein',
     said: 'Ich transkribiere die Aufnahme und lege sie in deine Inbox.',
     terminal: 'Terminal',
     skill: 'Skill · ekho-inbox-digest',
@@ -165,11 +160,21 @@ export const de: Copy = {
     confirm: 'Bestätigen',
     adjust: 'Anpassen',
     reply: 'Antworten…',
+    /* the line at the foot of the screen when a model is picked */
+    picked: '{name} ausgewählt',
   },
   graphic: {
     frameTitle: 'Dein EKHO',
+    /* what the vault behind this site actually holds; the graphic counts
+       them up when it comes into view */
+    stats: [
+      ['710', 'Notizen'],
+      ['1.240', 'Verbindungen'],
+    ],
     label:
       'Dasselbe Wissen in vier Zuständen: zuerst weit verteilt und formlos, dann gestreut, dann zu einer Form gesammelt mit den ersten Verbindungen, und schließlich ein dichtes Netz aus mehreren hundert Punkten, ohne einen einzigen neuen.',
+    strip:
+      'Drei Wochen an einem Vorgang, in der Reihenfolge, in der er hereinkam. Nichts davon weiß etwas vom Rest.',
     types: {
       person: 'Person',
       meeting: 'Meeting',
@@ -179,6 +184,13 @@ export const de: Copy = {
       insight: 'Erkenntnis',
       assumption: 'Annahme',
       article: 'Artikel',
+      mail: 'E-Mail',
+      video: 'Video',
+      recap: 'Protokoll',
+      passage: 'Passage',
+      encyclopedia: 'Enzyklopädie',
+      claude: 'Recherche',
+      gemini: 'Recherche',
     },
     titles: {
       person: 'Anna Berger, Produktleitung',
@@ -189,6 +201,108 @@ export const de: Copy = {
       insight: 'Aufgegeben wird die Buchführung',
       assumption: 'Der Einkauf entscheidet, nicht das Team',
       article: 'Karpathy über das LLM-Wiki',
+      mail: 'Können Sie uns bis Montag ein Angebot schicken?',
+      video: 'Warum rennen wir auf die KI-Klippe zu?',
+      recap: 'Protokoll: das Gespräch mit Anna',
+      passage: '„Information ist nicht Wahrheit. Information ist Verbindung."',
+      encyclopedia: 'Niklas Luhmann',
+      claude: 'Wer unterschreibt eine Einführung wirklich?',
+      gemini: 'Warum werden Notizsysteme aufgegeben?',
+    },
+    /* what each note carries besides its title: a field or two, and what it
+       is joined to — which is the part that makes it context rather than a
+       label */
+    quotes: {
+      person: 'Sie verantwortet den Rollout, nicht das Budget.',
+      meeting: 'Ohne Security-Review unterschreiben sie nicht.',
+      voice: 'Wenn wir pro Platz abrechnen, fallen die kleinen Teams raus.',
+      article: 'Ein Wiki sind nicht die Notizen. Es sind die Verbindungen dazwischen.',
+      mail: 'Wir haben drei Anbieter gesehen. Was wir nicht gesehen haben, ist jemand, der das schon gemacht hat.',
+      recap:
+        'Das Datenhosting ist der Blocker, nicht der Preis. Der Einkauf unterschreibt, nicht das Team.',
+      encyclopedia: 'Luhmann war bekannt für seinen ausgiebigen Gebrauch des Zettelkastens.',
+      claude: 'Über die Fälle hinweg lag die Freigabe weit öfter beim Einkauf als beim Team.',
+      gemini:
+        'Die, die überleben, haben einen Ablageschritt, der so stumpf ist, dass er keine Entscheidung braucht.',
+    },
+    details: {
+      person: [
+        ['Rolle', 'Product Lead'],
+        ['getroffen', '25. Sep, im Gespräch'],
+      ],
+      meeting: [
+        ['Dauer', '42 Min'],
+        ['mit', 'Anna Berger'],
+      ],
+      voice: [
+        ['Dauer', '3 Min'],
+        ['wo', 'auf dem Heimweg'],
+      ],
+      decision: [
+        ['getroffen', '25. Sep'],
+        ['von', 'Lorenz'],
+      ],
+      insight: [
+        ['notiert', '25. Sep'],
+        ['aus', 'dem Gespräch mit Anna'],
+      ],
+      assumption: [
+        ['gestellt', '12. Sep'],
+        ['offen seit', '13 Tagen'],
+      ],
+      principle: [
+        ['seit', 'Mai'],
+        ['genutzt', '9-mal'],
+      ],
+      article: [
+        ['von', 'Andrej Karpathy'],
+        ['gelesen', '24. Sep'],
+      ],
+      mail: [
+        ['von', 'einem Interessenten'],
+        ['will', 'ein Angebot bis Montag'],
+      ],
+      video: [
+        ['Kanal', 'The Ezra Klein Show'],
+        ['gesehen', '22. Sep'],
+      ],
+      recap: [
+        ['geschrieben von', 'dem Meeting-Assistenten'],
+        ['aus', 'dem Gespräch mit Anna'],
+      ],
+      passage: [
+        ['Buch', 'Nexus'],
+        ['Autor', 'Yuval Noah Harari'],
+      ],
+      encyclopedia: [
+        ['wer', 'deutscher Soziologe'],
+        ['gelesen', '19. Sep, auf Wikipedia'],
+      ],
+      claude: [
+        ['Assistent', 'Claude'],
+        ['liegt in', 'deren App, nicht deiner'],
+      ],
+      gemini: [
+        ['Assistent', 'Gemini'],
+        ['liegt in', 'deren App, nicht deiner'],
+      ],
+    },
+    meta: {
+      person: ['25. Sep', '2 Gespräche · 1 Entscheidung'],
+      meeting: ['25. Sep · 42 Min', 'Anna Berger · 3 Notizen'],
+      voice: ['25. Sep · 3 Min', 'wurde zur Preis-Erkenntnis'],
+      decision: ['25. Sep', 'bestätigt H-24'],
+      insight: ['25. Sep', 'stützt H-24 · 4 Quellen'],
+      assumption: ['12. Sep', 'der Pilot entscheidet sie'],
+      principle: ['seit Mai', '9 Verweise'],
+      article: ['24. Sep', 'speist I-296'],
+      mail: ['25. Sep · 09:12', 'beantwortet aus drei Notizen'],
+      video: ['20. Sep · 29:37', 'speist das Prinzip'],
+      recap: ['25. Sep · 42 Min', 'ergab zwei Notizen'],
+      passage: ['18. Sep', 'speist die Erkenntnis'],
+      encyclopedia: ['19. Sep', 'speist die Erkenntnis'],
+      claude: ['4. Sep · 28 Nachrichten', 'ergab die Annahme'],
+      gemini: ['11. Sep · 16 Nachrichten', 'führte zu Luhmann'],
     },
   },
 };

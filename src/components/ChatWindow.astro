@@ -5,13 +5,13 @@
 // the answer as plain text with no bubble, tool use as bordered cards, and a
 // composer pill with the model underneath.
 //
-// The client stays unbranded except for the mark on the answer, which is
-// Claude's (Lorenz, 2026-09-27). The mark comes from simple-icons like the ones
-// in the model row, and like that row it says compatibility, not endorsement.
-// Whether a third-party mark belongs on our landing page at all is a brand
-// decision, not a design one (docs/landing-v2.md).
+// The maker's mark sits beside the answer, and it is whichever model the
+// reader picked in the row above: Claude to begin with, and pressing another
+// plate swaps it here (see ModelRow). That is the chapter's claim in one
+// gesture — the same conversation, a different engine, the vault unchanged.
+// The marks come from simple-icons, as in that row, and say compatibility
+// rather than endorsement.
 import * as si from 'simple-icons';
-import Arrow from './Arrow.astro';
 import { t, type Lang } from '../i18n';
 
 interface Props {
@@ -20,6 +20,12 @@ interface Props {
 const { lang } = Astro.props;
 const c = t(lang);
 
+// The message is a slash command, so its first token is set as one rather than
+// running on as prose. Split here rather than in the copy, so a translation
+// only has to write the line.
+const askCmd = c.chat.ask.startsWith('/') ? c.chat.ask.split(' ')[0] : '';
+const askRest = askCmd ? c.chat.ask.slice(askCmd.length).trimStart() : c.chat.ask;
+
 const recents = [
   { day: c.chat.today, items: c.chat.recents.slice(0, 2) },
   { day: c.chat.yesterday, items: c.chat.recents.slice(2) },
@@ -27,111 +33,458 @@ const recents = [
 const rows = c.chat.rows;
 ---
 
-<figure
-  class="win win--chat"
-  aria-label="EKHO running inside an ordinary chat client: a command it runs and a skill it applies"
->
-  <div class="win-bar">
-    <span class="win-lights" aria-hidden="true">
-      <i></i>
-      <i></i>
-      <i></i>
+<div class="chat-unit" data-scene>
+  {/* What is wired to what, said once above the window: the model on the left
+      is whichever one is picked in the row, the vault on the right never
+      changes, and the line between them is the point of the chapter. */}
+  <p class="wire">
+    <span class="wire-mark" data-chat-mark aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d={si.siClaude.path} />
+      </svg>
     </span>
-    <span class="win-title">{c.chat.windowTitle}</span>
-  </div>
-  <div class="win-body">
-    <nav class="chat-side" aria-hidden="true">
-      <p class="chat-new">
-        <span class="chat-plus">+</span> {c.chat.newChat}
-      </p>
-      {recents.map((g) => (
-        <>
-          <p class="chat-day">{g.day}</p>
-          <ul>
-            {g.items.map((i, n) => (
-              <li class:list={[{ 'is-sel': g.day === 'Today' && n === 0 }]}>{i}</li>
-            ))}
-          </ul>
-        </>
-      ))}
-      <p class="chat-vault">
-        <span class="chat-sq" aria-hidden="true"></span>
-        <span>
-          myEKHO<small>{c.chat.vault}</small>
-        </span>
-      </p>
-    </nav>
+    <span class="wire-run">
+      <span class="wire-word">{c.chat.connected}</span>
+    </span>
+    <span class="wire-pill">
+      <span class="chat-dot" aria-hidden="true"></span> EKHO
+    </span>
+  </p>
 
-    <div class="chat-thread">
-      <div class="chat-scroll">
-        <p class="chat-ask">{c.chat.ask}</p>
-
-        <div class="chat-answer">
-          <span class="chat-mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" role="img" aria-label="Claude">
-              <path d={si.siClaude.path} />
-            </svg>
+  <figure
+    class="win win--chat"
+    aria-label="EKHO running inside an ordinary chat client: a command it runs and a skill it applies"
+  >
+    <div class="win-bar">
+      <span class="win-lights" aria-hidden="true">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+      <span class="win-title">{c.chat.windowTitle}</span>
+    </div>
+    <div class="win-body">
+      <nav class="chat-side" aria-hidden="true">
+        <p class="chat-new">
+          <span class="chat-plus">+</span> {c.chat.newChat}
+        </p>
+        {recents.map((g) => (
+          <>
+            <p class="chat-day">{g.day}</p>
+            <ul>
+              {g.items.map((i, n) => (
+                <li class:list={[{ 'is-sel': g.day === 'Today' && n === 0 }]}>{i}</li>
+              ))}
+            </ul>
+          </>
+        ))}
+        <p class="chat-vault">
+          <span class="chat-sq" aria-hidden="true"></span>
+          <span>
+            myEKHO<small>{c.chat.vault}</small>
           </span>
-          <div>
-            <p class="chat-said">{c.chat.said}</p>
+        </p>
+      </nav>
 
-            <div class="tool">
-              <p class="tool-head">
-                <span class="tool-kind">{c.chat.terminal}</span>
-                <span class="tool-chev" aria-hidden="true">
-                  ⌄
-                </span>
-              </p>
-              <p class="tool-mono">$ ekho tools transcribe 260925_anna.m4a</p>
-              <p class="tool-mono tool-mono--dim">
-                → 00 - Now/Inbox/2026-09-25 — Call with Anna.md
-              </p>
-            </div>
-
-            <div class="tool tool--skill">
-              <p class="tool-head">
-                <span class="tool-sq" aria-hidden="true"></span>
-                <span class="tool-kind">{c.chat.skill}</span>
-                <span class="tool-chev" aria-hidden="true">
-                  ⌄
-                </span>
-              </p>
-              <p class="tool-said">{c.chat.wouldWrite}</p>
-              <table class="tool-table">
-                <tbody>
-                  {rows.map(([op, type, what]) => (
-                    <tr>
-                      <td class="tool-op">{op}</td>
-                      <td class="tool-type">{type}</td>
-                      <td>{what}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <p class="chat-acts">
-              <span class="chat-btn chat-btn--solid">{c.chat.confirm}</span>
-              <span class="chat-btn">{c.chat.adjust}</span>
+      <div class="chat-thread">
+        <div class="chat-scroll">
+          {/* What was actually sent: the recording, and a line asking for it to
+            be put away. The file is the point of the exchange — the terminal
+            card below transcribes this exact name — and a message that asks
+            EKHO to take a call without carrying the call was a step short of
+            the truth. Not translated: it is a filename. */}
+          <div class="chat-ask" data-beat="1">
+            <p class="chat-clip">
+              <span class="chat-clip-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 11v2M8 7.5v9M12 5v14M16 8.5v7M20 11v2" />
+                </svg>
+              </span>
+              <span class="chat-clip-name">260925_anna.m4a</span>
+              <span class="chat-clip-len">3:12</span>
+            </p>
+            <p class="chat-ask-text">
+              {askCmd && <span class="chat-cmd">{askCmd}</span>}
+              {askCmd ? ' ' : ''}
+              {askRest}
             </p>
           </div>
+
+          {/* The wait, drawn the way every client draws it. It is the only
+            honest thing to show between a message going and an answer
+            arriving, and without it the answer appears to have been sitting
+            there all along. */}
+          <p class="chat-typing" data-typing aria-hidden="true" hidden>
+            <span></span>
+            <span></span>
+            <span></span>
+          </p>
+
+          <div class="chat-answer" data-beat="2">
+            <span class="chat-mark" data-chat-mark aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d={si.siClaude.path} />
+              </svg>
+            </span>
+            <div>
+              <p class="chat-said">{c.chat.said}</p>
+
+              <div class="tool" data-beat="3">
+                <p class="tool-head">
+                  <svg class="tool-ico" viewBox="0 0 12 12" aria-hidden="true">
+                    <path d="M2.4 3.4 5 6l-2.6 2.6M6.4 8.8h3.4" />
+                  </svg>
+                  <span class="tool-kind">{c.chat.terminal}</span>
+                  <span class="tool-chev" aria-hidden="true">
+                    <svg viewBox="0 0 10 10" aria-hidden="true">
+                      <path d="M2 3.6 5 6.6l3-3" />
+                    </svg>
+                  </span>
+                </p>
+                <p class="tool-mono">$ ekho tools transcribe 260925_anna.m4a</p>
+                {/* the way a client prints what a call returned: indented under
+                  it, on the branch glyph a terminal draws */}
+                <p class="tool-mono tool-mono--dim">
+                  <span class="tool-branch" aria-hidden="true">
+                    ⎿
+                  </span>{' '}
+                  00 - Now/Inbox/2026-09-25 — Call with Anna.md
+                </p>
+              </div>
+
+              <div class="tool tool--skill" data-beat="4">
+                <p class="tool-head">
+                  <span class="tool-sq" aria-hidden="true"></span>
+                  <span class="tool-kind">{c.chat.skill}</span>
+                  <span class="tool-chev" aria-hidden="true">
+                    <svg viewBox="0 0 10 10" aria-hidden="true">
+                      <path d="M2 3.6 5 6.6l3-3" />
+                    </svg>
+                  </span>
+                </p>
+                <p class="tool-said">{c.chat.wouldWrite}</p>
+                <table class="tool-table">
+                  <tbody>
+                    {rows.map(([op, type, what]) => (
+                      <tr data-beat="5">
+                        <td class="tool-op">{op}</td>
+                        <td class="tool-type">{type}</td>
+                        <td>{what}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <p class="chat-acts" data-beat="6">
+                <button type="button" class="chat-btn chat-btn--solid" data-decide>
+                  {c.chat.confirm}
+                </button>
+                {/* Present, because a client that only offers "yes" is not a
+                  client. Inactive, because this one is a mockup and the only
+                  thing it lets you do is confirm. */}
+                <button type="button" class="chat-btn" disabled>
+                  {c.chat.adjust}
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-foot">
+          {/* The composer plays its part in the scene: the recording is put in
+            it, the line is written into it, and then it is sent. Empty and
+            idle otherwise, which is how the page reads before anything is
+            picked. */}
+          <p class="chat-clip chat-clip--draft" data-draft-clip hidden>
+            <span class="chat-clip-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 11v2M8 7.5v9M12 5v14M16 8.5v7M20 11v2" />
+              </svg>
+            </span>
+            <span class="chat-clip-name">260925_anna.m4a</span>
+            <span class="chat-clip-len">3:12</span>
+          </p>
+          <p class="chat-composer">
+            <span class="chat-plus" aria-hidden="true">
+              +
+            </span>
+            <span class="chat-ph" data-ph>
+              {c.chat.reply}
+            </span>
+            <span class="chat-typed" data-typed aria-hidden="true" hidden></span>
+          </p>
         </div>
       </div>
-
-      <div class="chat-foot">
-        <p class="chat-composer">
-          <span class="chat-plus" aria-hidden="true">
-            +
-          </span>
-          <span class="chat-ph">{c.chat.reply}</span>
-          <span class="chat-send" aria-hidden="true">
-            <Arrow kind="send" />
-          </span>
-        </p>
-        <p class="chat-model">
-          <span class="chat-sq" aria-hidden="true"></span> myEKHO · {c.chat.vault}
-        </p>
-      </div>
     </div>
-  </div>
-</figure>
+  </figure>
+</div>
+
+<script>
+  // The scene. Picking a model draws the wire; once it is drawn the exchange
+  // it enables plays out underneath it, so the claim is demonstrated and not
+  // just stated: the strip holding the two ends rises to the top of the
+  // screen and stays there, the composer comes up from the bottom edge, the
+  // recording is put in it, the line is written, it is sent, the model
+  // answers, and EKHO works through it a card at a time.
+  //
+  // Phone only. On a wide screen the window lives on the sticky stage beside
+  // the text and is already driven by the scroll; a second choreography
+  // fighting that one for the scroll position helps nobody.
+  const phone = window.matchMedia('(max-width: 63.999rem)');
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  for (const unit of document.querySelectorAll<HTMLElement>('.flow-window [data-scene]')) {
+    const beats = [...unit.querySelectorAll<HTMLElement>('[data-beat]')].sort(
+      (a, b) => Number(a.dataset.beat) - Number(b.dataset.beat),
+    );
+    const draft = unit.querySelector<HTMLElement>('[data-draft-clip]');
+    const ph = unit.querySelector<HTMLElement>('[data-ph]');
+    const typed = unit.querySelector<HTMLElement>('[data-typed]');
+    const ask = unit.querySelector<HTMLElement>('.chat-ask');
+    const typing = unit.querySelector<HTMLElement>('[data-typing]');
+    const foot = unit.querySelector<HTMLElement>('.chat-foot');
+    // Where the two buttons live when they are not floating. A fixed element
+    // is positioned against the nearest transformed ancestor, not the screen,
+    // and every beat in this thread is transformed as it arrives — so while
+    // they float they are moved out of the thread entirely and put back
+    // afterwards, rather than left inside something that is moving.
+    const acts = unit.querySelector<HTMLElement>('.chat-acts');
+    const actsHome = acts?.parentElement ?? null;
+    const actsAfter = acts?.nextElementSibling ?? null;
+    // the line the scene writes is the one the thread already carries
+    const line = ask?.querySelector<HTMLElement>('.chat-ask-text')?.textContent?.trim() ?? '';
+
+    // What is written into the composer, with the command token set apart as
+    // soon as it is complete — a client marks a slash command while you type
+    // it, not once you have sent it.
+    const cmd = line.startsWith('/') ? line.split(' ')[0] : '';
+    const write = (into: HTMLElement, text: string) => {
+      if (cmd && text.length > cmd.length) {
+        into.textContent = text.slice(cmd.length);
+        const tag = document.createElement('span');
+        tag.className = 'chat-cmd';
+        tag.textContent = cmd;
+        into.prepend(tag);
+      } else {
+        into.textContent = text;
+      }
+    };
+
+    let run = 0;
+    const wait = (ms: number) =>
+      new Promise<void>((go) => {
+        run = window.setTimeout(go, ms);
+      });
+
+    const reset = () => {
+      window.clearTimeout(run);
+      unit.classList.remove('is-playing', 'is-stuck');
+      for (const b of beats) b.classList.remove('is-in');
+      if (draft) draft.hidden = true;
+      if (typed) {
+        typed.hidden = true;
+        typed.textContent = '';
+      }
+      if (ph) ph.hidden = false;
+      unit.classList.remove('is-deciding', 'is-folding');
+      if (typing) typing.hidden = true;
+      if (acts && actsHome && acts.parentElement !== actsHome) {
+        actsHome.insertBefore(acts, actsAfter);
+      }
+    };
+
+    // The two buttons float over the composer, so the composer's height is
+    // where they sit. Measured rather than guessed: it changes with the type
+    // scale, with the phone's own safe area, and again when the composer
+    // leaves the flow for the screen's bottom edge.
+    const measureFoot = () => {
+      if (!foot) return;
+      unit.style.setProperty('--foot-h', `${Math.round(foot.getBoundingClientRect().height)}px`);
+    };
+    measureFoot();
+    window.addEventListener('resize', measureFoot, { passive: true });
+
+    // What a client does when something arrives: it keeps the newest thing in
+    // view, just above where you write. Without this the thread grew off the
+    // bottom of the screen and EKHO appeared to be working somewhere else.
+    const follow = (el: HTMLElement) => {
+      const gap = Number.parseInt(unit.style.getPropertyValue('--foot-h'), 10) || 76;
+      const want = window.innerHeight - gap - 18;
+      const over = el.getBoundingClientRect().bottom - want;
+      if (over > 2) window.scrollBy({ top: over, behavior: 'smooth' });
+    };
+
+    const play = async () => {
+      if (!phone.matches) return;
+      reset();
+      if (still.matches) return;
+
+      // Everything that can overlap does. The scroll, the strip settling and
+      // the composer coming up are one movement rather than three steps with
+      // waits between them; the gaps that are left are only the ones the eye
+      // needs to read what just arrived.
+      unit.classList.add('is-playing');
+      // its height changes when it leaves the flow, and the buttons sit on it
+      requestAnimationFrame(measureFoot);
+      const head = Number.parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue('--head'),
+        10,
+      );
+      const wire = unit.querySelector<HTMLElement>('.wire');
+      if (wire) {
+        const to = window.scrollY + wire.getBoundingClientRect().top - (head || 72);
+        window.scrollTo({ top: to, behavior: 'smooth' });
+      }
+      await wait(260);
+      unit.classList.add('is-stuck');
+
+      // The confirm that named the model sits at the same bottom edge this is
+      // about to use, so it is shown out first rather than written over.
+      const toast = document.querySelector<HTMLElement>('[data-picked]');
+      if (toast && !toast.hidden) {
+        toast.classList.add('is-out');
+        window.setTimeout(() => {
+          toast.hidden = true;
+          toast.classList.remove('is-out');
+        }, 210);
+      }
+
+      // the recording goes in while the strip is still settling
+      await wait(180);
+      if (draft) draft.hidden = false;
+      await wait(220);
+      if (ph) ph.hidden = true;
+      if (typed) {
+        typed.hidden = false;
+        // A character at a time, at about twice the pace of a quick typist —
+        // fast enough not to hold the page up, slow enough that it reads as
+        // somebody writing rather than as text being pasted in. The jitter is
+        // what keeps it off a metronome, and the beat after the command is
+        // the pause anyone takes between naming the tool and saying what for.
+        for (let n = 1; n <= line.length; n += 1) {
+          write(typed, line.slice(0, n));
+          const at = n === cmd.length ? 230 : 0;
+          await wait(30 + Math.random() * 16 + at);
+        }
+        write(typed, line);
+      }
+
+      // sent: the composer empties as the message lands in the thread
+      await wait(260);
+      beats[0]?.classList.add('is-in');
+      if (beats[0]) follow(beats[0]);
+      await wait(180);
+      if (draft) draft.hidden = true;
+      if (typed) {
+        typed.hidden = true;
+        typed.textContent = '';
+      }
+      if (ph) ph.hidden = false;
+
+      // the wait, and then the answer in its place
+      if (typing) typing.hidden = false;
+      await wait(820);
+      if (typing) typing.hidden = true;
+
+      // Everything EKHO does arrives close together. The pause belongs before
+      // the answer, not between the two things the answer does: a client that
+      // dawdles between its own tool calls looks broken, not thoughtful.
+      const pace: Record<string, number> = {
+        '2': 0,
+        '3': 200,
+        '4': 220,
+        '5': 90,
+        '6': 260,
+      };
+      for (const b of beats.slice(1)) {
+        await wait(pace[b.dataset.beat ?? '2'] ?? 200);
+        b.classList.add('is-in');
+        follow(b);
+      }
+
+      // And then it waits for the reader. The strip is held at the top, the
+      // composer at the bottom, and the two buttons float over it — which is
+      // what a client looks like when it has asked you something. It stays
+      // that way until one of them is pressed.
+      if (acts) unit.appendChild(acts);
+      unit.classList.add('is-deciding');
+      requestAnimationFrame(measureFoot);
+    };
+
+    // Answering ends the scene. The whole exchange folds into a single point
+    // and the reader is taken to the net, where that point lights: the
+    // decision they just took is now something the graph holds. Then the
+    // chapter is quietly put back the way it was, because a reader who
+    // scrolls up should find the conversation, not a hole.
+    const decide = async () => {
+      if (!unit.classList.contains('is-deciding')) return;
+      window.clearTimeout(run);
+
+      const next = document.querySelector<HTMLElement>('#compound');
+      const landing = next?.querySelector<HTMLElement>('[data-landing]');
+
+      // Put it on the node the net spreads from, not in the middle of the box.
+      // The graphic says which node that is; the middle of the box is a
+      // different place, and a point that lands there makes the yellow appear
+      // to start from somewhere the decision never was.
+      const fig = next?.querySelector<HTMLElement>('[data-graphic]');
+      const svg = fig?.querySelector('svg');
+      const at = (fig?.dataset.decisionAt ?? '').split(',').map(Number);
+      if (landing && svg && landing.parentElement && at.length === 3) {
+        const [x, y, size] = at;
+        const sr = svg.getBoundingClientRect();
+        const gr = landing.parentElement.getBoundingClientRect();
+        landing.style.left = `${Math.round(sr.x + (x / size) * sr.width - gr.x)}px`;
+        landing.style.top = `${Math.round(sr.y + (y / size) * sr.height - gr.y)}px`;
+      }
+      const head = Number.parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue('--head'),
+        10,
+      );
+
+      unit.classList.remove('is-deciding');
+      unit.classList.add('is-folding');
+      if (next) {
+        window.scrollTo({
+          top: window.scrollY + next.getBoundingClientRect().top - (head || 72),
+          behavior: 'smooth',
+        });
+      }
+
+      await wait(560);
+      landing?.classList.add('is-in');
+      await wait(900);
+
+      // Putting the chapter back shortens the page: the room the fixed
+      // composer needed under the thread goes with it, and everything below
+      // moves up by that much — after the scroll had already finished. So the
+      // landing is asserted again once the layout has settled, which is what
+      // makes it come to rest with the rule under the header, the counts over
+      // the net, and the heading below it.
+      reset();
+      const land = () => {
+        if (!next) return;
+        window.scrollTo({
+          top: Math.round(window.scrollY + next.getBoundingClientRect().top - (head || 72)),
+          behavior: 'auto',
+        });
+      };
+      requestAnimationFrame(() => requestAnimationFrame(land));
+
+      await wait(1600);
+      landing?.classList.remove('is-in');
+    };
+
+    for (const b of unit.querySelectorAll<HTMLButtonElement>('[data-decide]')) {
+      b.addEventListener('click', () => {
+        void decide();
+      });
+    }
+
+    document.addEventListener('ekho:picked', () => {
+      void play();
+    });
+    phone.addEventListener('change', reset);
+  }
+</script>

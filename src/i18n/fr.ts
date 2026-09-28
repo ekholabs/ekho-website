@@ -27,7 +27,7 @@ export const fr: Copy = {
   hero: {
     titleBefore: "L'IA ne vaut que votre contexte.",
     titleSignal: 'Gardez-le.',
-    lede: 'EKHO transforme ce que vous savez en un contexte relié avec lequel votre IA peut travailler. À chaque usage, vous en tirez davantage. Et il reste le vôtre.',
+    lede: 'EKHO transforme ce que vous savez en une source de contexte unique et reliée, avec laquelle votre IA peut travailler. Créez votre mémoire synthétique et gardez-la. À chaque usage, vous en tirez davantage - sans perdre le contrôle.',
     cta: 'Rejoindre la liste',
     seeHow: 'Voir comment',
   },
@@ -48,29 +48,23 @@ export const fr: Copy = {
     title: 'EKHO travaille là où vous travaillez.',
     a: "EKHO se greffe sur la conversation que vous avez déjà : des commandes que vous lancez et des skills qu'il applique de lui-même.",
     b: "Et il ne change jamais rien sans vous le montrer d'abord.",
-    sovereignty: 'Souveraineté du contexte',
+    sovereignty: 'Devenez indépendant du modèle',
     note: "Les modèles se constituent désormais une mémoire de vous d'une conversation à l'autre, et elle est utile. Elle est aussi la leur : leur format, leurs conditions, et plus elle grandit, plus partir coûte cher. EKHO constitue ce même contexte sur votre propre disque, en Markdown, là où chacun d'eux peut le lire et où aucun ne le détient.",
     edge: "Il reste le vôtre, et passer de l'un à l'autre ne vous coûte rien.",
   },
   compound: {
     title: 'Votre savoir fructifie.',
     a: "Chaque source que vous versez se relie à tout ce qui est déjà là. Une idée sait d'où elle vient, ce qui l'appuie et ce qui la contredit.",
-    b: "C'est en cela qu'elle fructifie : chaque note ajoutée multiplie les liens, si bien que la qualité de ce qui revient croît de façon exponentielle plutôt que pas à pas. La tenue des comptes est la partie que l'on abandonne, et c'est justement celle qu'EKHO prend en charge.",
+    b: "C'est en cela qu'elle fructifie : chaque note ajoutée multiplie les liens, si bien que la qualité de ce qui revient croît de façon exponentielle. La tenue des comptes est la partie que l'on abandonne, et c'est justement celle qu'EKHO prend en charge.",
   },
   viewer: {
     title: "Votre contexte, dans la forme qu'il vous faut.",
     lede: "L'EKHO Viewer construit des vues de votre vault : vous dites quelles notes, quels champs, quelles sections et pour qui, il en rend la page.",
     a: "Une vue n'est pas une copie. Elle lit les fichiers mêmes que votre agent écrit : la page suit votre savoir au lieu de prendre du retard sur lui.",
-    b: "Un vault porte autant de vues qu'il vous en faut : une feuille de route pour la semaine, un historique des décisions, une page pour quelqu'un avec qui vous travaillez. Ici, c'est la feuille de route d'EKHO elle-même, issue du vault dans lequel ce site a été écrit.",
     note: "Le viewer est en construction. La feuille de route, non : elle est produite aujourd'hui, depuis les mêmes fichiers.",
     appTitle: 'EKHO Roadmap',
     nav: ['Vue générale', 'En cours', 'Ensuite', 'Décisions', 'Historique'],
     readOnly: 'lecture seule',
-    stats: [
-      ['4', 'résultats'],
-      ['38', 'éléments'],
-      ['6', 'décisions ouvertes'],
-    ],
     recent: 'En cours',
     items: [
       ['e26', "L'ontologie porte-t-elle les chaînes d'actions ?", 'en cours'],
@@ -147,7 +141,8 @@ export const fr: Copy = {
       'Affiner le récit du pitch',
     ],
     vault: 'vault connecté',
-    ask: "Verse dans EKHO l'appel d'hier avec Anna.",
+    connected: 'connecté',
+    ask: "/ekho Intègre l'enregistrement de l'appel d'hier avec Anna",
     said: 'Je transcris l’enregistrement et je le dépose dans ta boîte.',
     terminal: 'Terminal',
     skill: 'Skill · ekho-inbox-digest',
@@ -161,11 +156,21 @@ export const fr: Copy = {
     confirm: 'Confirmer',
     adjust: 'Ajuster',
     reply: 'Répondre…',
+    /* the line at the foot of the screen when a model is picked */
+    picked: '{name} sélectionné',
   },
   graphic: {
     frameTitle: 'Votre EKHO',
+    /* what the vault behind this site actually holds; the graphic counts
+       them up when it comes into view */
+    stats: [
+      ['710', 'notes'],
+      ['1 240', 'liens'],
+    ],
     label:
       "Le même savoir en quatre états : d'abord dispersé et sans forme, puis éparpillé, puis rassemblé en une forme avec les premiers liens, et enfin un réseau dense de plusieurs centaines de points sans un seul nouveau.",
+    strip:
+      'Trois semaines d’un même travail, dans l’ordre où il est arrivé. Rien de tout cela ne sait quoi que ce soit du reste.',
     types: {
       person: 'Personne',
       meeting: 'Réunion',
@@ -175,6 +180,13 @@ export const fr: Copy = {
       insight: 'Idée',
       assumption: 'Hypothèse',
       article: 'Article',
+      mail: 'E-mail',
+      video: 'Vidéo',
+      recap: 'Compte rendu',
+      passage: 'Passage',
+      encyclopedia: 'Encyclopédie',
+      claude: 'Recherche',
+      gemini: 'Recherche',
     },
     titles: {
       person: 'Anna Berger, cheffe de produit',
@@ -185,6 +197,110 @@ export const fr: Copy = {
       insight: "Ce qu'on abandonne, c'est la tenue des comptes",
       assumption: "Les achats décident, pas l'équipe",
       article: 'Karpathy sur le LLM wiki',
+      mail: 'Pouvez-vous nous envoyer une proposition pour lundi ?',
+      video: 'Pourquoi courons-nous vers la falaise de l’IA ?',
+      recap: 'Compte rendu : l’appel avec Anna',
+      passage: '« L’information n’est pas la vérité. L’information est connexion. »',
+      encyclopedia: 'Niklas Luhmann',
+      claude: 'Qui signe vraiment un déploiement ?',
+      gemini: 'Pourquoi abandonne-t-on les systèmes de notes ?',
+    },
+    /* what each note carries besides its title: a field or two, and what it
+       is joined to — which is the part that makes it context rather than a
+       label */
+    quotes: {
+      person: 'Elle porte le déploiement, pas le budget.',
+      meeting: 'Ils ne signeront pas sans une revue de sécurité.',
+      voice: 'Si on facture par siège, les petites équipes décrochent.',
+      article: 'Un wiki, ce ne sont pas les notes. Ce sont les liens entre elles.',
+      mail: 'Nous avons vu trois prestataires. Ce que nous n’avons pas vu, c’est quelqu’un qui l’a déjà fait.',
+      recap:
+        'L’hébergement des données bloque, pas le prix. Ce sont les achats qui signent, pas l’équipe.',
+      encyclopedia:
+        'Luhmann était connu pour son usage intensif du fichier de notes, le Zettelkasten.',
+      claude:
+        'Sur les cas examinés, la signature relevait des achats bien plus souvent que de l’équipe.',
+      gemini:
+        'Ceux qui durent ont une étape de classement si ennuyeuse qu’elle ne demande aucune décision.',
+    },
+    details: {
+      person: [
+        ['rôle', 'Product lead'],
+        ['vue', "25 sep, lors d'un appel"],
+      ],
+      meeting: [
+        ['durée', '42 min'],
+        ['avec', 'Anna Berger'],
+      ],
+      voice: [
+        ['durée', '3 min'],
+        ['où', 'sur le chemin du retour'],
+      ],
+      decision: [
+        ['prise', '25 sep'],
+        ['par', 'Lorenz'],
+      ],
+      insight: [
+        ['noté', '25 sep'],
+        ['de', "l'appel avec Anna"],
+      ],
+      assumption: [
+        ['posée', '12 sep'],
+        ['ouverte', '13 jours'],
+      ],
+      principle: [
+        ['depuis', 'mai'],
+        ['utilisé', '9 fois'],
+      ],
+      article: [
+        ['de', 'Andrej Karpathy'],
+        ['lu', '24 sep'],
+      ],
+      mail: [
+        ['de', 'un prospect'],
+        ['veut', 'une proposition lundi'],
+      ],
+      video: [
+        ['chaîne', 'The Ezra Klein Show'],
+        ['vu', '22 sep'],
+      ],
+      recap: [
+        ['écrit par', 'l’assistant de réunion'],
+        ['de', 'l’appel avec Anna'],
+      ],
+      passage: [
+        ['livre', 'Nexus'],
+        ['auteur', 'Yuval Noah Harari'],
+      ],
+      encyclopedia: [
+        ['qui', 'sociologue allemand'],
+        ['lu', '19 sep, sur Wikipédia'],
+      ],
+      claude: [
+        ['assistant', 'Claude'],
+        ['vit dans', 'leur app, pas la vôtre'],
+      ],
+      gemini: [
+        ['assistant', 'Gemini'],
+        ['vit dans', 'leur app, pas la vôtre'],
+      ],
+    },
+    meta: {
+      person: ['25 sep', '2 appels · 1 décision'],
+      meeting: ['25 sept · 42 min', 'Anna Berger · 3 notes'],
+      voice: ['25 sept · 3 min', "devenue l'idée de prix"],
+      decision: ['25 sep', 'valide H-24'],
+      insight: ['25 sep', 'appuie H-24 · 4 sources'],
+      assumption: ['12 sep', 'le pilote tranchera'],
+      principle: ['depuis mai', '9 renvois'],
+      article: ['24 sep', 'alimente I-296'],
+      mail: ['25 sep · 09:12', 'répondu à partir de trois notes'],
+      video: ['20 sep · 29:37', 'nourrit le principe'],
+      recap: ['25 sep · 42 min', 'a produit deux notes'],
+      passage: ['18 sep', 'nourrit le constat'],
+      encyclopedia: ['19 sep', 'nourrit le constat'],
+      claude: ['4 sep · 28 messages', 'a produit l’hypothèse'],
+      gemini: ['11 sep · 16 messages', 'a mené à Luhmann'],
     },
   },
 };

@@ -1,11 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
+import key from '../assets/product/ekho-key.webp';
 import ContextGraphic from './ContextGraphic.astro';
 import Architecture from './Architecture.astro';
 import Arrow from './Arrow.astro';
 import FinderWindow from './FinderWindow.astro';
 import ChatWindow from './ChatWindow.astro';
 import RoadmapMockup from './RoadmapMockup.astro';
+import TypeStrip from './TypeStrip.astro';
+import Statement from './Statement.astro';
 import Waitlist from './Waitlist.astro';
 import ModelRow from './ModelRow.astro';
 import { Image } from 'astro:assets';
@@ -107,8 +110,20 @@ const people = [
     <div class="story-figure" data-story-figure>
       <div class="figure-stage">
         <ContextGraphic caption={false} lang={lang} />
+        {/* Two sides of one thing. The folder is the front, the object is the
+            back, and pressing it turns the card over — which is the chapter's
+            sentence as a gesture: what you hold is not the thing, it is what
+            is in it. A button rather than a div, so it is reachable by
+            keyboard and announces itself. */}
         <div class="overlay" data-for="finder">
-          <FinderWindow lang={lang} />
+          <button class="flip" type="button" data-flip aria-pressed="false">
+            <span class="flip-face flip-face--front">
+              <FinderWindow lang={lang} />
+            </span>
+            <span class="flip-face flip-face--back">
+              <Image class="flip-shot" src={key} alt="" widths={[420, 640]} sizes="17.5rem" />
+            </span>
+          </button>
         </div>
         <div class="overlay" data-for="chat">
           <ChatWindow lang={lang} />
@@ -136,6 +151,20 @@ const people = [
         data-view
       >
         <div class="chapter-body">
+          {/* The opening on a phone has no column beside it to put the field
+              in, and without it the statement stood on an empty screen. Here
+              it is a band above the words: the same points, where they start.
+              */}
+          <div class="flow-field" data-intro-fade>
+            <ContextGraphic
+              lang={lang}
+              animated={false}
+              state="field"
+              caption={false}
+              points={260}
+              labelled={false}
+            />
+          </div>
           <h1 class="hero-title" data-intro-title>
             {c.hero.titleBefore} <span class="signal-text">{c.hero.titleSignal}</span>
           </h1>
@@ -174,10 +203,13 @@ const people = [
             <span>01</span> {c.nav.why}
           </p>
           <h2>{c.why.title}</h2>
-          <p class="statement">{c.why.a}</p>
-          <p class="statement">{c.why.b}</p>
-          <p class="statement">{c.why.c}</p>
+          <Statement text={c.why.a} />
+          <Statement text={c.why.b} />
+          <Statement text={c.why.c} />
         </div>
+        {/* the eight labelled points, for a screen that has no room beside the
+            text to put them in */}
+        <TypeStrip lang={lang} />
       </section>
 
       <section
@@ -196,9 +228,31 @@ const people = [
             <span>02</span> {c.nav.what}
           </p>
           <h2>{c.what.title}</h2>
-          <p class="statement">{c.what.a}</p>
-          <p class="statement">{c.what.b}</p>
-
+          <Statement text={c.what.a} />
+          <Statement text={c.what.b} />
+        </div>
+        {/* On a phone the vault comes before the line that installs it: the
+            chapter is about the folder, and the command is what you do once
+            you want one. On a wide screen the window is over on the stage and
+            this wrapper simply closes and opens again. */}
+        {/* The object, and then the folder that covers it. It drifts slower
+            than the page as you scroll and the window climbs over it until
+            almost nothing of it is left, which is the chapter's argument
+            made as a movement: what you own is not the thing, it is what is
+            inside it. */}
+        <div class="flow-key" data-object>
+          <Image
+            class="flow-key-shot"
+            src={key}
+            alt=""
+            widths={[420, 640, 840]}
+            sizes="(max-width: 47.999rem) 88vw, 20rem"
+          />
+          <div class="flow-window">
+            <FinderWindow lang={lang} />
+          </div>
+        </div>
+        <div class="chapter-body measure">
           {/* The one line you paste. Marked as unshipped, which N4 requires and
               which the dashed edge says before the note does. Recovered from
               the page this one replaced, so the address and the key placeholder
@@ -227,9 +281,6 @@ const people = [
           </figure>
           <p class="command-note">{c.what.commandNote}</p>
         </div>
-        <div class="flow-window">
-          <FinderWindow lang={lang} />
-        </div>
       </section>
 
       <section
@@ -248,8 +299,8 @@ const people = [
             <span>03</span> {c.nav.how}
           </p>
           <h2>{c.how.title}</h2>
-          <p class="statement">{c.how.a}</p>
-          <p class="statement">{c.how.b}</p>
+          <Statement text={c.how.a} />
+          <Statement text={c.how.b} />
         </div>
         <div class="flow-window">
           <ChatWindow lang={lang} />
@@ -264,8 +315,13 @@ const people = [
             <span class="models-sq" aria-hidden="true"></span>
             {c.how.sovereignty}
           </p>
-          <ModelRow lang={lang} />
           <p class="models-note">{c.how.note}</p>
+          {/* The row sits between the argument and the line it lands on, so the
+              marks are the last thing read before "it stays yours": you see who
+              it is you are free of, and then what that buys you. Under the
+              label it was decoration arriving before there was a claim to
+              decorate. */}
+          <ModelRow lang={lang} />
           {/* The sovereignty claim, in one line. Not an appeal to privacy: the
               providers are moving into the memory layer, and a vault that lives
               there is not portable however portable the model is. Grounded in
@@ -288,24 +344,33 @@ const people = [
           <p class="chapter-label">
             <span>03</span> How
           </p>
+          {/* The net, for a phone. The companion on the right is a wide-screen
+              thing: it lives in a column beside the text and moves through
+              four states as the reader steps. Here the chapters simply scroll,
+              so the one state this chapter is about is drawn in place, smaller
+              and without the labels, and everything else in the graphic's
+              story is carried by the words. Exactly one of the two is ever
+              displayed.
+
+              It sits between the chapter's number and its heading rather than
+              under the text: the heading is about the net, and on a phone a
+              heading you have to scroll past the net to reach arrives too
+              late to name it.
+
+              Animated, not a still: the phone gets the same net the wide
+              layout has, which means it can be taken hold of and turned. */}
+          <div class="flow-graphic">
+            <ContextGraphic lang={lang} caption={false} points={200} labelled={false} />
+            {/* Where the decision lands. Confirming in the chapter above folds
+                that whole exchange into one point, and this is the point: it
+                lights on the net as the reader arrives here, so the thing
+                they just did is visibly now part of the graph. Idle and
+                invisible until then. */}
+            <span class="graphic-landing" data-landing aria-hidden="true"></span>
+          </div>
           <h2>{c.compound.title}</h2>
-          <p class="statement">{c.compound.a}</p>
-          <p class="statement">{c.compound.b}</p>
-        </div>
-        {/* The net, for a phone. The companion on the right is a wide-screen
-            thing: it lives in a column beside the text and moves through four
-            states as the reader steps. Here the chapters simply scroll, so the
-            one state this chapter is about is drawn in place, smaller and
-            without the labels, and everything else in the graphic's story is
-            carried by the words. Exactly one of the two is ever displayed. */}
-        <div class="flow-graphic">
-          <ContextGraphic
-            lang={lang}
-            animated={false}
-            caption={false}
-            points={200}
-            labelled={false}
-          />
+          <Statement text={c.compound.a} />
+          <Statement text={c.compound.b} />
         </div>
       </section>
     </div>
@@ -325,8 +390,7 @@ const people = [
     <div class="split-text">
       <h2>{c.viewer.title}</h2>
       <p class="chapter-lede">{c.viewer.lede}</p>
-      <p class="statement">{c.viewer.a}</p>
-      <p class="statement">{c.viewer.b}</p>
+      <Statement text={c.viewer.a} />
       <p class="fig-note">{c.viewer.note}</p>
     </div>
     <RoadmapMockup lang={lang} />
@@ -367,7 +431,7 @@ const people = [
     <ul class="people">
       {people.map((p) => (
         <li>
-          <Image class="people-face" src={p.portrait} alt={p.name} width={256} height={256} />
+          <Image class="people-face" src={p.portrait} alt={p.name} width={448} height={448} />
           <div>
             <b>
               {/* The mark says where the link goes, which the arrow only
@@ -425,6 +489,10 @@ const people = [
       <span>{c.nav.next}</span>
     </button>
   </div>
+  {/* Which model the mocked client is on. Hidden until a plate in the model
+      row is pressed, then at the foot of the screen for a moment, the way a
+      client confirms a switch. */}
+  <p class="picked" data-picked data-tpl={c.chat.picked} role="status" hidden></p>
 </Base>
 
 <script>
@@ -454,6 +522,79 @@ const people = [
   const intro = document.querySelector<HTMLElement>('[data-intro]');
   const introTitle = document.querySelector<HTMLElement>('[data-intro-title]');
   const introFades = [...document.querySelectorAll<HTMLElement>('[data-intro-fade]')];
+  // Turning the folder over. The state lives on the element rather than in a
+  // variable, so the stylesheet decides what turning looks like.
+  for (const flip of document.querySelectorAll<HTMLElement>('[data-flip]')) {
+    flip.addEventListener('click', () => {
+      const over = flip.classList.toggle('is-flipped');
+      flip.setAttribute('aria-pressed', String(over));
+    });
+  }
+
+  // The object in chapter 02 drifts against the page. A transform on one
+  // element per frame, read once and written once, so the folder climbing over
+  // it reads as two things moving at different speeds rather than as a picture
+  // being scrolled past.
+  {
+    const keys = [...document.querySelectorAll<HTMLElement>('[data-object]')];
+    const gentle = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (keys.length && !gentle.matches) {
+      let ticking = false;
+      const drift = () => {
+        ticking = false;
+        for (const k of keys) {
+          const r = k.getBoundingClientRect();
+          if (r.bottom < -200 || r.top > window.innerHeight + 200) continue;
+          // −1 as it comes up from the bottom, +1 as it leaves the top
+          // 0 as the block arrives from the bottom, 1 as it leaves the top
+          const p = Math.max(0, Math.min(1, 1 - (r.top + r.height * 0.35) / window.innerHeight));
+          // The object opens out slowly, on a curve that is even at both ends.
+          // The folder climbs on a different one, fast at the start, because it
+          // is the thing this chapter is actually about: it should be over the
+          // object well before you have finished reading.
+          const slow = p * p * (3 - 2 * p);
+          // The folder holds still for the first part of the run, so the
+          // object is there to be looked at, and then sweeps up quickly. Fast
+          // and late is not the same thing as fast: starting at once meant it
+          // had covered the object before anyone had seen it.
+          const q = Math.max(0, (p - 0.55) / 0.45);
+          const sweep = 1 - (1 - q) * (1 - q) * (1 - q);
+          k.style.setProperty('--key-scale', String(0.88 + slow * 0.2));
+          k.style.setProperty('--key-rise', `${96 - sweep * 176}px`);
+          // and it steps back while the folder comes over it: down to 75% by
+          // the time the window is in place, so the two planes read as two
+          // planes rather than one flat collage
+          k.style.setProperty('--key-dim', String(1 - sweep * 0.25));
+        }
+      };
+      addEventListener(
+        'scroll',
+        () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(drift);
+        },
+        { passive: true },
+      );
+      drift();
+    }
+  }
+
+  // The header's height, on the root, so a chapter can be scrolled to a place
+  // where its rule meets the header's rather than passing under it. The step
+  // bar measures this too, but only on a wide screen, and the nav is used on
+  // both.
+  const headEl = document.querySelector<HTMLElement>('.site-header');
+  const measureHead = () => {
+    if (!headEl) return;
+    document.documentElement.style.setProperty(
+      '--head',
+      `${Math.round(headEl.getBoundingClientRect().height)}px`,
+    );
+  };
+  measureHead();
+  addEventListener('resize', measureHead, { passive: true });
+
   const stage = document.querySelector<HTMLElement>('.figure-stage');
   const compound = document.getElementById('compound');
   const chatOverlay = document.querySelector<HTMLElement>('.overlay[data-for="chat"]');
@@ -1076,6 +1217,12 @@ const people = [
     if (span) {
       root.style.setProperty('--step-left', `${Math.round(span.left)}px`);
       root.style.setProperty('--step-right', `${Math.round(span.right)}px`);
+    }
+    // the middle of the drawing itself, so the stage's name can sit between the
+    // two counts over its corners rather than guess at the column's centre
+    const drawing = document.querySelector<HTMLElement>('.figure-stage')?.getBoundingClientRect();
+    if (drawing && drawing.width) {
+      root.style.setProperty('--stage-mid', `${Math.round(drawing.left + drawing.width / 2)}px`);
     }
     if (header) root.style.setProperty('--step-top', `${Math.round(header.bottom)}px`);
     stepBar.dataset.rule = wide ? 'off' : 'on';
