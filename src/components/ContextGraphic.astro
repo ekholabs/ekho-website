@@ -243,8 +243,30 @@ const named: { at: P; key: string; type: string; title: string }[] = (
 ).map(([at, key]) => ({ at, key, type: c.graphic.types[key], title: c.graphic.titles[key] }));
 const PAD = 8;
 const GAP = 11;
+// How wide a line of the label actually sets. Character count times an average
+// was close enough while this only had to keep two labels apart; now a card is
+// drawn at this width, and a word of narrow letters left it sitting 40 units
+// too wide. Four classes of advance is within a few percent of the real thing
+// and costs nothing at build time.
+const NARROW = " .,;:'!|()[]-ijlrtf";
+const WIDE = 'mwMW@%';
+const advance = (s: string, size: number) => {
+  let w = 0;
+  for (const ch of s) {
+    if (NARROW.includes(ch)) w += 0.31;
+    else if (WIDE.includes(ch)) w += 0.87;
+    else if (ch !== ch.toLowerCase()) w += 0.67;
+    else w += 0.54;
+  }
+  return w * size;
+};
+
 const textWidth = (n: { type: string; title: string }) =>
-  Math.max(n.title.length * 6.15, n.type.length * 6.3 + 4);
+  Math.max(
+    advance(n.title, 12),
+    // the type is set in caps with a tenth of an em between the letters
+    advance(n.type.toUpperCase(), 9) + n.type.length * 0.9,
+  );
 type Box = { x: number; y: number; r: number; b: number };
 const box = (x: number, y: number, w: number, side: 'l' | 'r'): Box => ({
   x: side === 'r' ? x + GAP : x - GAP - w,
@@ -523,6 +545,10 @@ const ariaLabel = c.graphic.label;
           );
         const right = label.side === 'r';
         const lx = right ? p[0] + 11 : p[0] - 11;
+        // The card the two lines sit on. Same width the placement used to
+        // reserve room for them, so a card can no more overlap its neighbour
+        // than the text could.
+        const lw = textWidth(label);
         return (
           <g
             class="cg-pt"
@@ -537,6 +563,14 @@ const ariaLabel = c.graphic.label;
             <circle class="cg-halo" cx={p[0]} cy={p[1]} r="9" />
             <circle class={`${cls} is-named`} cx={p[0]} cy={p[1]} r="3.2" />
             <g class="cg-tip">
+              <rect
+                class="cg-card"
+                x={right ? lx - 6 : lx - lw - 6}
+                y={p[1] - 19}
+                width={lw + 12}
+                height={32}
+                rx="3"
+              />
               <text class="cg-tip-type" x={lx} y={p[1] - 5} text-anchor={right ? 'start' : 'end'}>
                 {label.type}
               </text>

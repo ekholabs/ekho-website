@@ -20,6 +20,8 @@
   --signal: #f5c400;
   --signal-ink: #1a1a18;
   --shadow: rgb(26 26 24 / 0.045);
+  /* the small card a label sits on, over the field of points */
+  --card: #fbfaf7;
   /* One size for running text, set by the opening and used by every chapter
      after it, so the page reads at one pitch rather than a different one per
      section. */
@@ -66,6 +68,7 @@
     --muted: #a09b93;
     --text: #edebe6;
     --shadow: rgb(0 0 0 / 0.3);
+    --card: #2c2b28;
     --lift: 0 0 48px var(--shadow);
     --lift-hover: 0 0 56px rgb(0 0 0 / 0.42);
     --core: #121210;
@@ -489,6 +492,21 @@
   .cg-tip {
     opacity: 0;
     transition: opacity 180ms ease;
+  }
+
+  /* The named points are the only text on the drawing, and over a field of
+     several hundred dots it was read against the noise. Each pair of lines sits
+     on a card of its own: the page's raised ground, no border, and a shadow
+     wide enough to be a lift rather than an edge. The same treatment the
+     windows in the chapters after it have. */
+  .cg-card {
+    fill: var(--card);
+    filter: drop-shadow(0 3px 18px rgb(26 26 24 / 0.14));
+  }
+
+  /* a filter re-rasters on every frame, and turning moves all eight of them */
+  [data-graphic].is-turning .cg-card {
+    filter: none;
   }
 
   .cg-tip-type {
@@ -2823,8 +2841,8 @@
        two it was three separations doing one job; the gap is taken back out and
        set deliberately. The height that gives back is what leaves the step
        button room under the chapter. */
-    margin-top: calc(0.7rem - 2.5rem);
-    padding-top: 0.7rem;
+    margin-top: calc(1.75rem - 2.5rem);
+    padding-top: 1.6rem;
     border-top: 1px solid var(--line);
   }
 
