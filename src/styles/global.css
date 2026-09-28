@@ -62,8 +62,11 @@
     --bg: #1c1b19;
     --surface: #232220;
     --surface-raised: #2c2b28;
-    --line: #302e2b;
-    --line-strong: #45423e;
+    /* A hairline on a dark ground has to be lighter than the same line on a
+       light one to read as a line at all: at #302e2b it was four steps off the
+       background and the rules between the blocks disappeared. */
+    --line: #3f3c38;
+    --line-strong: #565249;
     --muted-deep: #6e6a64;
     --muted: #a09b93;
     --text: #edebe6;
