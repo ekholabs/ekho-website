@@ -3924,10 +3924,13 @@
     place-items: center;
   }
 
+  /* the back sits on the stage the same way the window does: same corner,
+     same shadow, so turning the card does not change how it is lit */
   .flip-shot {
     width: 100%;
     height: auto;
-    border-radius: 1.25rem;
+    border-radius: var(--win-radius);
+    box-shadow: 0 10px 26px -14px rgb(26 26 24 / 0.1);
   }
 
   .flip:focus-visible {
