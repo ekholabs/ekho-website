@@ -28,10 +28,28 @@ const recents = [
 const rows = c.chat.rows;
 ---
 
-<figure
-  class="win win--chat"
-  aria-label="EKHO running inside an ordinary chat client: a command it runs and a skill it applies"
->
+<div class="chat-unit">
+  {/* What is wired to what, said once above the window: the model on the left
+      is whichever one is picked in the row, the vault on the right never
+      changes, and the line between them is the point of the chapter. */}
+  <p class="wire">
+    <span class="wire-mark" data-chat-mark aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d={si.siClaude.path} />
+      </svg>
+    </span>
+    <span class="wire-run">
+      <span class="wire-word">{c.chat.connected}</span>
+    </span>
+    <span class="wire-pill">
+      <span class="chat-dot" aria-hidden="true"></span> myEKHO
+    </span>
+  </p>
+
+  <figure
+    class="win win--chat"
+    aria-label="EKHO running inside an ordinary chat client: a command it runs and a skill it applies"
+  >
   <div class="win-bar">
     <span class="win-lights" aria-hidden="true">
       <i></i>
@@ -141,14 +159,8 @@ const rows = c.chat.rows;
             <Arrow kind="send" />
           </span>
         </p>
-        {/* A client shows a live connection as a dot and a name, not as a
-            sentence. The dot carries "connected", so the word is only in the
-            accessible name, and the chip stays about half the width it was. */}
-        <p class="chat-model">
-          <span class="chat-dot" aria-hidden="true"></span> myEKHO
-          <span class="visually-hidden">· {c.chat.vault}</span>
-        </p>
       </div>
     </div>
   </div>
-</figure>
+  </figure>
+</div>

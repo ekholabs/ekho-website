@@ -151,6 +151,7 @@ export const de: Copy = {
       'Pitch-Story schärfen',
     ],
     vault: 'Vault verbunden',
+    connected: 'verbunden',
     ask: 'Wirf das Gespräch mit Anna von gestern in EKHO.',
     said: 'Ich transkribiere die Aufnahme und lege sie in deine Inbox.',
     terminal: 'Terminal',

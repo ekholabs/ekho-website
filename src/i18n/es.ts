@@ -147,6 +147,7 @@ export const es: Copy = {
       'Afinar el relato del pitch',
     ],
     vault: 'vault conectado',
+    connected: 'conectado',
     ask: 'Mete en EKHO la llamada de ayer con Anna.',
     said: 'Transcribo la grabación y la dejo en tu bandeja.',
     terminal: 'Terminal',

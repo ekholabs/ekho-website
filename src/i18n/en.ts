@@ -145,6 +145,7 @@ export const en = {
       'Sharpening the pitch story',
     ],
     vault: 'vault connected',
+    connected: 'connected',
     ask: "Throw yesterday's call with Anna into EKHO.",
     said: 'I will transcribe the recording and put it in your inbox.',
     terminal: 'Terminal',

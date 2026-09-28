@@ -147,6 +147,7 @@ export const fr: Copy = {
       'Affiner le récit du pitch',
     ],
     vault: 'vault connecté',
+    connected: 'connecté',
     ask: "Verse dans EKHO l'appel d'hier avec Anna.",
     said: 'Je transcris l’enregistrement et je le dépose dans ta boîte.',
     terminal: 'Terminal',
