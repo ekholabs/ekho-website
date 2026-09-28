@@ -9,6 +9,8 @@
 // joined it to. The dress is what differs. Four of them came out of somebody
 // else's app and keep that app's colours and controls; four are what EKHO
 // makes of that material and keep the page's own hairline and its yellow.
+import { Image } from 'astro:assets';
+import anna from '../assets/people/anna-berger.png';
 import { t, type Lang } from '../i18n';
 import { ICONS } from '../lib/typeIcons';
 import { TILES, APP_STILLS } from '../lib/typeSketches';
@@ -19,15 +21,25 @@ interface Props {
 const { lang } = Astro.props;
 const c = t(lang);
 
+// The order they arrive in, which is the order the story tells them: the mail
+// that starts it, the people and the calls, what was made of them, and the
+// reading underneath.
 const keys = [
+  'mail',
   'person',
   'meeting',
   'voice',
+  'recap',
   'decision',
   'insight',
   'assumption',
   'principle',
+  'claude',
+  'gemini',
   'article',
+  'video',
+  'passage',
+  'encyclopedia',
 ] as const;
 ---
 
@@ -36,7 +48,12 @@ const keys = [
     {keys.map((k) => (
       <li class:list={['strip-card', APP_STILLS.has(k) && 'strip-card--app']}>
         <p class="strip-head">
-          {APP_STILLS.has(k) ? (
+          {k === 'person' ? (
+            /* a photograph, not four drawn shapes: a contact is the one of
+               these that has a face, and the card is the only place on the
+               page where you see one before the team chapter */
+            <Image class="strip-tile strip-tile--photo" src={anna} alt="" width={96} height={96} />
+          ) : APP_STILLS.has(k) ? (
             <svg class="strip-tile" viewBox="0 0 22 22" aria-hidden="true" set:html={TILES[k]} />
           ) : (
             <svg class="strip-ico" viewBox="0 0 12 12" aria-hidden="true">
@@ -52,7 +69,9 @@ const keys = [
             label above them had not already said. What EKHO makes of the
             material — decision, insight, assumption, principle — has no
             quote: its statement is its title. */}
-        {APP_STILLS.has(k) && <p class="strip-quote">{c.graphic.quotes[k as keyof typeof c.graphic.quotes]}</p>}
+        {c.graphic.quotes[k as keyof typeof c.graphic.quotes] && (
+          <p class="strip-quote">{c.graphic.quotes[k as keyof typeof c.graphic.quotes]}</p>
+        )}
         {/* What the thing knows about itself, and nothing else. Nothing here
             points at another note: at this point in the story these have not
             been filed, so there is nothing for them to point at. That is the
@@ -68,4 +87,46 @@ const keys = [
       </li>
     ))}
   </ul>
+
+  {/* Stepping the row by hand. A thumb can already push it, but a row that
+      runs off the edge of the screen has to say so, and on a trackpad there is
+      nothing to push. */}
+  <p class="strip-nav">
+    <button type="button" class="strip-key" data-strip-step="-1" aria-label={c.nav.prev}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6" /></svg>
+    </button>
+    <button type="button" class="strip-key" data-strip-step="1" aria-label={c.nav.next}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 6l6 6-6 6" /></svg>
+    </button>
+  </p>
 </div>
+
+<script>
+  // One card per press, measured off the row rather than assumed, so the step
+  // stays right when the card width changes.
+  for (const strip of document.querySelectorAll<HTMLElement>('.strip')) {
+    const nav = strip.parentElement?.querySelector<HTMLElement>('.strip-nav');
+    if (!nav) continue;
+    const kids = strip.children;
+    const step = () => {
+      const a = kids[0] as HTMLElement | undefined;
+      const b = kids[1] as HTMLElement | undefined;
+      return a && b ? b.offsetLeft - a.offsetLeft : strip.clientWidth;
+    };
+    const ends = () => {
+      const max = strip.scrollWidth - strip.clientWidth - 2;
+      for (const key of nav.querySelectorAll<HTMLButtonElement>('[data-strip-step]')) {
+        const back = key.dataset.stripStep === '-1';
+        key.disabled = back ? strip.scrollLeft <= 2 : strip.scrollLeft >= max;
+      }
+    };
+    for (const key of nav.querySelectorAll<HTMLButtonElement>('[data-strip-step]')) {
+      key.addEventListener('click', () => {
+        strip.scrollBy({ left: step() * Number(key.dataset.stripStep), behavior: 'smooth' });
+      });
+    }
+    strip.addEventListener('scroll', ends, { passive: true });
+    window.addEventListener('resize', ends);
+    ends();
+  }
+</script>

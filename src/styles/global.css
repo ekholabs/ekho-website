@@ -2727,6 +2727,12 @@
     margin-top: 2rem;
   }
 
+  /* the row sits closer to the text above it, so a taller card still ends
+     above the bottom of the screen */
+  .flow-strip {
+    margin-top: 1.1rem;
+  }
+
   @media (max-width: 63.999rem) {
     .flow-window,
     .flow-graphic,
@@ -4667,7 +4673,7 @@
      fit is clamped, not allowed to push the row taller. */
   .strip-card {
     flex: 0 0 15.5rem;
-    height: 11.5rem;
+    height: 14rem;
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
@@ -4718,6 +4724,11 @@
     flex: none;
   }
 
+  .strip-tile--photo {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
   .strip-ico {
     width: 0.875rem;
     height: 0.875rem;
@@ -4737,6 +4748,10 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
+  }
+
+  .strip-quote {
+    -webkit-line-clamp: 3;
   }
 
   .strip-title {
@@ -4770,6 +4785,55 @@
   /* Two rows of what it is, set as a list: the label in the mono the machine
      uses for its own lines, the value in the page's face. Held at the foot so
      every card in the row reads along the same two lines. */
+  /* The two keys sit under the row, at the end of it, because that is the
+     corner a row that runs off the screen is pushed from. */
+  .strip-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin: 1.1rem var(--gutter, 1.25rem) 0 0;
+  }
+
+  .strip-key {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--surface-raised);
+    color: var(--text);
+    cursor: pointer;
+    transition:
+      background-color 200ms ease,
+      opacity 200ms ease;
+  }
+
+  .strip-key svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .strip-key:hover {
+    background: var(--line);
+  }
+
+  .strip-key[disabled] {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .strip-key:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
   .strip-details {
     display: grid;
     grid-template-columns: 4.5rem 1fr;
