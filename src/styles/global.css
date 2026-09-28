@@ -66,8 +66,8 @@
     /* A hairline on a dark ground has to be lighter than the same line on a
        light one to read as a line at all: at #302e2b it was four steps off the
        background and the rules between the blocks disappeared. */
-    --line: #3f3c38;
-    --line-strong: #565249;
+    --line: #4c4943;
+    --line-strong: #666159;
     --muted-deep: #6e6a64;
     --muted: #a09b93;
     --text: #edebe6;
@@ -1062,9 +1062,12 @@
     border-color: var(--text);
   }
 
+  /* The outline stays the ink it is made of. Going to the muted tone turned
+     the one filled control on the page grey under the pointer, which on a dark
+     ground read as a disabled button. */
   .pill--solid:hover {
-    background: var(--muted);
-    border-color: var(--muted);
+    background: color-mix(in srgb, var(--text) 86%, var(--bg));
+    border-color: var(--text);
   }
 
   .pill:hover {
