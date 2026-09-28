@@ -7,6 +7,7 @@ import FinderWindow from './FinderWindow.astro';
 import ChatWindow from './ChatWindow.astro';
 import RoadmapMockup from './RoadmapMockup.astro';
 import TypeStrip from './TypeStrip.astro';
+import Statement from './Statement.astro';
 import Waitlist from './Waitlist.astro';
 import ModelRow from './ModelRow.astro';
 import { Image } from 'astro:assets';
@@ -189,9 +190,9 @@ const people = [
             <span>01</span> {c.nav.why}
           </p>
           <h2>{c.why.title}</h2>
-          <p class="statement">{c.why.a}</p>
-          <p class="statement">{c.why.b}</p>
-          <p class="statement">{c.why.c}</p>
+          <Statement text={c.why.a} />
+          <Statement text={c.why.b} />
+          <Statement text={c.why.c} />
         </div>
         {/* the eight labelled points, for a screen that has no room beside the
             text to put them in */}
@@ -214,8 +215,8 @@ const people = [
             <span>02</span> {c.nav.what}
           </p>
           <h2>{c.what.title}</h2>
-          <p class="statement">{c.what.a}</p>
-          <p class="statement">{c.what.b}</p>
+          <Statement text={c.what.a} />
+          <Statement text={c.what.b} />
 
           {/* The one line you paste. Marked as unshipped, which N4 requires and
               which the dashed edge says before the note does. Recovered from
@@ -266,8 +267,8 @@ const people = [
             <span>03</span> {c.nav.how}
           </p>
           <h2>{c.how.title}</h2>
-          <p class="statement">{c.how.a}</p>
-          <p class="statement">{c.how.b}</p>
+          <Statement text={c.how.a} />
+          <Statement text={c.how.b} />
         </div>
         <div class="flow-window">
           <ChatWindow lang={lang} />
@@ -307,8 +308,8 @@ const people = [
             <span>03</span> How
           </p>
           <h2>{c.compound.title}</h2>
-          <p class="statement">{c.compound.a}</p>
-          <p class="statement">{c.compound.b}</p>
+          <Statement text={c.compound.a} />
+          <Statement text={c.compound.b} />
         </div>
         {/* The net, for a phone. The companion on the right is a wide-screen
             thing: it lives in a column beside the text and moves through four
@@ -343,8 +344,8 @@ const people = [
     <div class="split-text">
       <h2>{c.viewer.title}</h2>
       <p class="chapter-lede">{c.viewer.lede}</p>
-      <p class="statement">{c.viewer.a}</p>
-      <p class="statement">{c.viewer.b}</p>
+      <Statement text={c.viewer.a} />
+      <Statement text={c.viewer.b} />
       <p class="fig-note">{c.viewer.note}</p>
     </div>
     <RoadmapMockup lang={lang} />

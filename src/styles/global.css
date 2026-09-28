@@ -4301,3 +4301,23 @@
     }
   }
 }
+
+/* The lead sentence -----------------------------------------------------------
+   A statement is a block of three or four lines, and on a phone that is most of
+   a screen. Its first sentence carries the point, so it is set in full ink and
+   the rest a tone back: a reader who takes only the first line still takes the
+   point, and the block has a way in. On a wide screen the blocks are short
+   enough to be read whole, so both halves are the same tone there. */
+@layer components {
+  @media (max-width: 63.999rem) {
+    /* Seven tenths of the ink, not the muted tone: muted is the colour of an
+       aside, and this is the same sentence carrying on. */
+    .statement {
+      color: color-mix(in srgb, var(--text) 72%, transparent);
+    }
+
+    .statement-lead {
+      color: var(--text);
+    }
+  }
+}
