@@ -217,7 +217,15 @@ const people = [
           <h2>{c.what.title}</h2>
           <Statement text={c.what.a} />
           <Statement text={c.what.b} />
-
+        </div>
+        {/* On a phone the vault comes before the line that installs it: the
+            chapter is about the folder, and the command is what you do once
+            you want one. On a wide screen the window is over on the stage and
+            this wrapper simply closes and opens again. */}
+        <div class="flow-window">
+          <FinderWindow lang={lang} />
+        </div>
+        <div class="chapter-body measure">
           {/* The one line you paste. Marked as unshipped, which N4 requires and
               which the dashed edge says before the note does. Recovered from
               the page this one replaced, so the address and the key placeholder
@@ -245,9 +253,6 @@ const people = [
             </code>
           </figure>
           <p class="command-note">{c.what.commandNote}</p>
-        </div>
-        <div class="flow-window">
-          <FinderWindow lang={lang} />
         </div>
       </section>
 
