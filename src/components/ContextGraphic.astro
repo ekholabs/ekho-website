@@ -1,0 +1,996 @@
+---
+// The companion graphic. One set of points for the whole page, moved between
+// four states rather than cross-faded between four pictures:
+//
+//   stage 0 (no class)  field        the hero. Every point there is, spread
+//                                    over the frame, all one grey, no edges
+//   stage 1 (.is-1)     scattered    the extra points go, the rest draw in
+//   stage 2 (.is-2)     connected    the points find a form, first links
+//   stage 3 (.is-3)     compounding  no new point, the whole net
+//
+// The net is grown, not drawn: a handful of hubs, every other point attached
+// inward towards its nearest hub, which is what gives the radiating clusters
+// of a real knowledge graph instead of an even mesh. Edges are quadratic
+// curves; straight lines at this density read as a grid.
+//
+// Every dot is drawn once, at its scattered position, and the other two states
+// are a CSS translate away, so the browser animates the movement on the
+// compositor. Sizes come from degree and never animate: animating `r` on
+// several hundred circles would cost a relayout per frame.
+//
+// Colour is the page's: greys and the near-white ink, with the one yellow
+// reserved for the points that are named, which are the ones that are yours.
+
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  animated?: boolean;
+  caption?: boolean;
+  /**
+   * How many points to draw. The full set is what the companion on a wide
+   * screen is made of; a phone gets a smaller one, because several hundred
+   * circles at that size are a grey smudge and the markup for them is most of
+   * the page's weight. Everything below derives from this, so the smaller net
+   * is the same net, not a different drawing.
+   */
+  points?: number;
+  /** the labelled points, which need room for their text beside them */
+  labelled?: boolean;
+  lang: Lang;
+}
+const { animated = true, caption = true, points = 560, labelled = true, lang } = Astro.props;
+const c = t(lang);
+
+const SIZE = 560;
+const C = SIZE / 2;
+const R = 222; // the formed body is smaller than the field it gathers from
+// One set of points for the whole page. The hero looks denser because the same
+// circles are spread over the whole screen rather than into a column, not
+// because there are more of them: nothing appears and nothing is taken away,
+// which is what lets the opening run into the first chapter without a seam.
+const N = points;
+
+function mulberry32(a: number) {
+  return function () {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function shuffled<T>(arr: T[], seed: number) {
+  const r = mulberry32(seed);
+  const out = arr.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(r() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+type P = [number, number];
+
+// dart throwing with a shrinking minimum distance: fills evenly, reads organic
+function sample(seed: number, count: number, minDist: number, place: (r: () => number) => P) {
+  const rnd = mulberry32(seed);
+  const pts: P[] = [];
+  let d = minDist;
+  let guard = 0;
+  while (pts.length < count && guard++ < 400000) {
+    const p = place(rnd);
+    if (pts.every((q) => Math.hypot(q[0] - p[0], q[1] - p[1]) >= d)) pts.push(p);
+    if (guard % 6000 === 0) d *= 0.94;
+  }
+  return pts.map((p) => [+p[0].toFixed(1), +p[1].toFixed(1)] as P);
+}
+
+// Dart throwing gives up on its own minimum as the frame fills: every few
+// thousand misses the bar drops six percent, so the last points land wherever
+// they still fit and a pair of them ends up touching. This puts a floor back
+// under it afterwards — pairs that are too close push each other apart, a few
+// passes, inside the frame — which is cheap here because it runs once, at
+// build time.
+function relax(pts: P[], min: number, pad: number, passes = 80) {
+  const lo = pad;
+  const hi = SIZE - pad;
+  for (let pass = 0; pass < passes; pass++) {
+    let moved = 0;
+    for (let i = 0; i < pts.length; i++) {
+      for (let j = i + 1; j < pts.length; j++) {
+        const dx = pts[j][0] - pts[i][0];
+        const dy = pts[j][1] - pts[i][1];
+        const d = Math.hypot(dx, dy) || 0.0001;
+        if (d >= min) continue;
+        const push = (min - d) / 2;
+        const ux = (dx / d) * push;
+        const uy = (dy / d) * push;
+        pts[i][0] = Math.min(hi, Math.max(lo, pts[i][0] - ux));
+        pts[i][1] = Math.min(hi, Math.max(lo, pts[i][1] - uy));
+        pts[j][0] = Math.min(hi, Math.max(lo, pts[j][0] + ux));
+        pts[j][1] = Math.min(hi, Math.max(lo, pts[j][1] + uy));
+        moved++;
+      }
+    }
+    if (!moved) break;
+  }
+  return pts.map((p) => [+p[0].toFixed(1), +p[1].toFixed(1)] as P);
+}
+
+// The hero spreads these across the whole window, which stretches them further
+// apart than they are here, so a floor that holds in the frame holds there too.
+const field = relax(
+  sample(19, N, 15, (r) => [12 + r() * (SIZE - 24), 12 + r() * (SIZE - 24)]),
+  10,
+  10,
+);
+const scatter = relax(
+  sample(41, N, 16, (r) => [10 + r() * (SIZE - 20), 14 + r() * (SIZE - 28)]),
+  10,
+  10,
+);
+// The formed state is a sphere seen from outside, not a flat disc: points sit
+// evenly on the surface, and an orthographic projection crowds them towards the
+// rim exactly as a real one does. Depth then gives the near side its weight and
+// lets the far side fall back, so the form reads as round without any shading.
+const TILT = (-21 * Math.PI) / 180;
+const sphere: [number, number, number][] = [];
+for (let i = 0; i < N; i++) {
+  const y0 = 1 - (i / (N - 1)) * 2;
+  const rad = Math.sqrt(Math.max(0, 1 - y0 * y0));
+  const th = i * Math.PI * (3 - Math.sqrt(5));
+  const x = Math.cos(th) * rad;
+  const y = y0;
+  const z = Math.sin(th) * rad;
+  // tilt about x so the poles are not on the outline
+  sphere.push([
+    x,
+    y * Math.cos(TILT) - z * Math.sin(TILT),
+    y * Math.sin(TILT) + z * Math.cos(TILT),
+  ]);
+}
+const cloudPts: P[] = sphere.map(([x, y]) => [+(C + x * R).toFixed(1), +(C + y * R).toFixed(1)]);
+const depth = sphere.map(([, , z]) => z); // -1 far, +1 near
+
+const d2 = (a: P, b: P) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+
+// which field point becomes which scattered point: nearest first, so the hero
+// settles by contracting rather than by shuffling everything past everything
+const taken = new Set<number>();
+const origin: P[] = scatter.map((s) => {
+  let best = 0;
+  let bd = Infinity;
+  field.forEach((f, i) => {
+    if (taken.has(i)) return;
+    const d = d2(f, s);
+    if (d < bd) {
+      bd = d;
+      best = i;
+    }
+  });
+  taken.add(best);
+  return field[best];
+});
+
+// ---- the net -------------------------------------------------------------
+
+// Each point links to its nearest neighbours on the surface, which triangulates
+// the hull: that is where the density comes from, not from drawing more. A few
+// chords cut straight across the sphere, and those are the only curved ones,
+// because a chord that bows reads as reaching across rather than as one more
+// line in the mesh.
+const d3 = (a: number, b: number) => {
+  const p1 = sphere[a];
+  const p2 = sphere[b];
+  return Math.hypot(p1[0] - p2[0], p1[1] - p2[1], p1[2] - p2[2]);
+};
+
+const seen = new Set<string>();
+const edges: [number, number][] = [];
+const key = (a: number, b: number) => (a < b ? `${a}-${b}` : `${b}-${a}`);
+const add = (a: number, b: number) => {
+  if (a === b) return;
+  const k = key(a, b);
+  if (seen.has(k)) return;
+  seen.add(k);
+  edges.push([a, b]);
+};
+
+const K = 5;
+for (let i = 0; i < N; i++) {
+  const near = sphere
+    .map((_, j) => j)
+    .filter((j) => j !== i)
+    .sort((a, b) => d3(i, a) - d3(i, b))
+    .slice(0, K);
+  for (const j of near) add(i, j);
+}
+
+// the chords: long links that cross the body rather than follow the surface
+const rn = mulberry32(61);
+const chords: [number, number][] = [];
+for (let n = 0; n < 34; n++) {
+  let a = Math.floor(rn() * N);
+  let b = Math.floor(rn() * N);
+  let guard = 0;
+  while ((a === b || d3(a, b) < 1.45) && guard++ < 400) {
+    a = Math.floor(rn() * N);
+    b = Math.floor(rn() * N);
+  }
+  const k = key(a, b);
+  if (seen.has(k)) continue;
+  seen.add(k);
+  chords.push([a, b]);
+}
+
+const deg = cloudPts.map(() => 0);
+edges.forEach(([a, b]) => {
+  deg[a]++;
+  deg[b]++;
+});
+// size follows depth: the near side is nearer, and reads that way
+const radius = (i: number) => +(1.15 + (depth[i] + 1) * 0.62).toFixed(2);
+
+// stage 2: the first links. Not one per point any more — a net of lone pairs
+// sat so far from the finished one that the last chapter read as a different
+// drawing rather than as the same one filled in. Up to two per point, and
+// twice as many of them, so what stage 2 shows are short chains: connected,
+// visibly not yet a net.
+// Every named point gets one of them, so the yellow in this chapter is not a
+// handful of lone dots but the first few things of yours that found each other.
+const deg2 = cloudPts.map(() => 0);
+const first: [number, number][] = [];
+const keyOf = (a: number, b: number) => (a < b ? `${a}-${b}` : `${b}-${a}`);
+for (const [a, b] of shuffled(edges, 211)) {
+  if (first.length >= 280) break;
+  if (deg2[a] >= 2 || deg2[b] >= 2) continue;
+  first.push([a, b]);
+  deg2[a]++;
+  deg2[b]++;
+}
+const linked = new Set<number>();
+first.forEach(([a, b]) => {
+  linked.add(a);
+  linked.add(b);
+});
+
+const line = ([a, b]: [number, number]) =>
+  `M${cloudPts[a][0]} ${cloudPts[a][1]}L${cloudPts[b][0]} ${cloudPts[b][1]}`;
+const bow = ([a, b]: [number, number]) => {
+  const [x1, y1] = cloudPts[a];
+  const [x2, y2] = cloudPts[b];
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const k = 0.08 * ((a + b) % 2 ? 1 : -1);
+  return `M${x1} ${y1}Q${((x1 + x2) / 2 - dy * k).toFixed(1)} ${((y1 + y2) / 2 + dx * k).toFixed(1)} ${x2} ${y2}`;
+};
+const path = (segs: [number, number][]) => segs.map(line).join('');
+
+// ---- the points that say what they are -----------------------------------
+
+// The key travels with the label. It is what the page outside this component
+// holds on to — the collapse of the chat window aims at the decision point —
+// and unlike the label text it is the same in every language. Matching on the
+// English words worked until the page had four of them.
+const named: { at: P; key: string; type: string; title: string }[] = (
+  [
+    [[206, 198], 'person'],
+    [[212, 252], 'meeting'],
+    [[196, 306], 'voice'],
+    [[208, 20], 'decision'],
+    [[200, 88], 'principle'],
+    [[150, 146], 'insight'],
+    [[124, 6], 'assumption'],
+    [[164, 340], 'article'],
+  ] as [P, keyof typeof c.graphic.types][]
+).map(([at, key]) => ({ at, key, type: c.graphic.types[key], title: c.graphic.titles[key] }));
+const PAD = 8;
+const GAP = 11;
+// How wide a line of the label actually sets. Character count times an average
+// was close enough while this only had to keep two labels apart; now a card is
+// drawn at this width, and a word of narrow letters left it sitting 40 units
+// too wide. Four classes of advance is within a few percent of the real thing
+// and costs nothing at build time.
+const NARROW = " .,;:'!|()[]-ijlrtf";
+const WIDE = 'mwMW@%';
+const advance = (s: string, size: number) => {
+  let w = 0;
+  for (const ch of s) {
+    if (NARROW.includes(ch)) w += 0.31;
+    else if (WIDE.includes(ch)) w += 0.87;
+    else if (ch !== ch.toLowerCase()) w += 0.67;
+    else w += 0.54;
+  }
+  return w * size;
+};
+
+// One mark per type, drawn on a 12-unit grid in the same hairline weight as
+// the rest of the drawing. A word in small caps says what a note is; the mark
+// says it before the word is read.
+const ICONS: Record<string, string> = {
+  person:
+    'M6 5.4a2.1 2.1 0 1 0 0-4.2 2.1 2.1 0 0 0 0 4.2M1.7 11c0-2.3 1.9-3.7 4.3-3.7S10.3 8.7 10.3 11',
+  meeting: 'M2 1.6h8v8.8H2zM2 4h8M4.2 1v1.6M7.8 1v1.6M4.3 6.6h3.4M4.3 8.5h2',
+  voice: 'M2 5v2M4.3 2.6v6.8M6.6 4.2v3.6M8.9 5.4v1.2',
+  decision: 'M1.3 6h3.4M4.7 6 10.7 2.4M4.7 6l6 3.6',
+  principle: 'M6 1.1 10.9 6 6 10.9 1.1 6Z',
+  insight: 'M6 1v10M1 6h10M2.5 2.5l7 7M9.5 2.5l-7 7',
+  assumption:
+    'M6 1.1a4.9 4.9 0 0 1 4.2 2.4M10.9 6.8a4.9 4.9 0 0 1-3.3 3.8M4.3 10.5A4.9 4.9 0 0 1 1.2 7.3M1.3 4.4a4.9 4.9 0 0 1 3.2-3',
+  article: 'M2.4 1.1h4.9L9.6 3.5v7.4H2.4ZM7.2 1.1v2.5h2.4M4.1 6.2h3.8M4.1 8.4h3.8',
+};
+const ICON = 12;
+const ICON_GAP = 5;
+// Room around the two lines. The card used to sit six units off the text on
+// every side, which read as a box drawn around a label rather than as a thing
+// the label sits on.
+const PAD_X = 11;
+
+const textWidth = (n: { type: string; title: string }) =>
+  Math.max(
+    advance(n.title, 12),
+    // the type is set in caps with a tenth of an em between the letters, and
+    // the mark sits in front of it
+    ICON + ICON_GAP + advance(n.type.toUpperCase(), 9) + n.type.length * 0.9,
+  );
+type Box = { x: number; y: number; r: number; b: number };
+const box = (x: number, y: number, w: number, side: 'l' | 'r'): Box => ({
+  x: side === 'r' ? x + GAP : x - GAP - w - PAD_X * 2,
+  r: side === 'r' ? x + GAP + w + PAD_X * 2 : x - GAP,
+  y: y - 24,
+  b: y + 22,
+});
+const hits = (a: Box, b: Box) => a.x < b.r + 6 && b.x < a.r + 6 && a.y < b.b + 4 && b.y < a.b + 4;
+
+const placedBoxes: Box[] = [];
+const labels = new Map<number, { key: string; type: string; title: string; side: 'l' | 'r' }>();
+// On a phone the labels have nowhere to go: eight captions beside a 350px
+// drawing are unreadable at any size that fits. The points stay, the names do
+// not, and the yellow cap then centres on the first point rather than on the
+// decision, which is the right trade for a net shown as a pattern.
+for (const n of labelled ? named : []) {
+  const target: P = [
+    C + Math.cos((n.at[1] * Math.PI) / 180) * n.at[0],
+    C + Math.sin((n.at[1] * Math.PI) / 180) * n.at[0],
+  ];
+  const w = textWidth(n);
+  // Nearest the place this label wants to be — except for the decision, which
+  // also has to work on the sphere: it is the point the chat window collapses
+  // into and the one the yellow cap is centred on, and a point on the far rim
+  // would show both almost edge on. Scattered position and sphere position have
+  // nothing to do with each other, so this is a preference laid over the
+  // ordering rather than a different anchor.
+  const facing = n.key === 'decision' ? (i: number) => (1 - depth[i]) * 26000 : () => 0;
+  const order = scatter
+    .map((p, i) => ({ i, p, d: d2(p, target) + facing(i) }))
+    .sort((a, b) => a.d - b.d);
+  for (const cand of order) {
+    if (labels.has(cand.i)) continue;
+    const [x, y] = cand.p;
+    if (y < PAD + 14 || y > SIZE - PAD - 16) continue;
+    const sides: ('l' | 'r')[] = x >= C ? ['r', 'l'] : ['l', 'r'];
+    const side = sides.find((sd) => {
+      const fits =
+        sd === 'r' ? x + GAP + w + PAD_X * 2 <= SIZE - PAD : x - GAP - w - PAD_X * 2 >= PAD;
+      return fits && !placedBoxes.some((q) => hits(box(x, y, w, sd), q));
+    });
+    if (!side) continue;
+    labels.set(cand.i, { key: n.key, type: n.type, title: n.title, side });
+    placedBoxes.push(box(x, y, w, side));
+    break;
+  }
+}
+// Every named point gets one of the first links, so the yellow in this chapter
+// is not a handful of lone dots but the first few things of yours that found
+// each other. Those links are drawn in the signal colour.
+const yours = new Set<string>();
+for (const i of labels.keys()) {
+  const j = edges.find(([a, b]) => a === i || b === i);
+  if (!j) continue;
+  const k = keyOf(j[0], j[1]);
+  if (!first.some(([a, b]) => keyOf(a, b) === k)) first.push(j);
+  yours.add(k);
+}
+
+// One region is yours, and it is the one the chat window collapsed into: the
+// cap is centred on the decision point, so the yellow is what that point is
+// joined to rather than an arbitrary patch of the sphere. It is a cap and not
+// a layer, so it reads as part of the same body.
+const decisionAt = [...labels.entries()].find(([, l]) => l.key === 'decision')?.[0] ?? 0;
+const AXIS = (() => {
+  const v = sphere[decisionAt];
+  const l = Math.hypot(v[0], v[1], v[2]) || 1;
+  return [v[0] / l, v[1] / l, v[2] / l];
+})();
+const mine = new Set<number>();
+sphere.forEach(([x, y, z], i) => {
+  if (x * AXIS[0] + y * AXIS[1] + z * AXIS[2] > 0.66) mine.add(i);
+});
+
+// How far each end of an edge is from that point, over the sphere. The paths
+// are drawn in this order, and since a path is drawn from its start, the net
+// grows outwards from the point the window became instead of filling in from
+// wherever the indices happened to fall.
+const fromDecision = (i: number) =>
+  Math.hypot(
+    sphere[i][0] - sphere[decisionAt][0],
+    sphere[i][1] - sphere[decisionAt][1],
+    sphere[i][2] - sphere[decisionAt][2],
+  );
+const outward = (e: [number, number]) => Math.min(fromDecision(e[0]), fromDecision(e[1]));
+// Each line is turned so its nearer end comes first. A path is drawn from its
+// start, so this is what makes a line grow away from the node rather than
+// towards it: without it half of them crept inwards and the spread had no
+// direction.
+const awayFromNode = (e: [number, number]): [number, number] =>
+  fromDecision(e[0]) <= fromDecision(e[1]) ? e : [e[1], e[0]];
+
+// the far side falls back, the near side carries, and yours is drawn apart
+const near: [number, number][] = [];
+const far: [number, number][] = [];
+const own: [number, number][] = [];
+for (const raw of [...edges].sort((a, b) => outward(a) - outward(b))) {
+  const e = awayFromNode(raw);
+  if (mine.has(e[0]) && mine.has(e[1])) own.push(e);
+  else if ((depth[e[0]] + depth[e[1]]) / 2 < 0) far.push(e);
+  else near.push(e);
+}
+chords.sort((a, b) => outward(a) - outward(b));
+
+// Where each of your points sits along that spread, as a fraction of the whole
+// drawing. A dash offset runs over path length, not over distance, so this is
+// measured the same way: the running length of the yellow path up to the first
+// line that reaches the point. The page uses it to colour each point at the
+// moment the wave arrives at it, instead of turning them all yellow at once
+// and making a single movement look like two.
+const segLen = ([a, b]: [number, number]) =>
+  Math.hypot(cloudPts[a][0] - cloudPts[b][0], cloudPts[a][1] - cloudPts[b][1]);
+const ownTotal = own.reduce((t, e) => t + segLen(e), 0) || 1;
+const reach = new Map<number, number>();
+{
+  let run = 0;
+  for (const e of own) {
+    run += segLen(e);
+    const at = run / ownTotal;
+    if (!reach.has(e[0])) reach.set(e[0], at);
+    if (!reach.has(e[1])) reach.set(e[1], at);
+  }
+}
+
+// The yellow used to be one path pulled across a dash offset over five
+// seconds. A dash offset is a paint property: every one of those frames
+// re-records and re-rasters a path that covers half the drawing, and the run
+// lands exactly where the chat window is being scaled by the clock. The first
+// pass through the chapter paid for that raster and stuttered; every later one
+// found it cached, which is why it only ever happened once.
+//
+// So the spread is bucketed instead: equal lengths of the drawing, in the same
+// outward order, each its own path, each fading in as the wave reaches it. The
+// geometry is rastered once while it is still invisible, and what moves after
+// that is opacity, which the compositor can do on its own.
+const OWN_WAVES = 22;
+const ownWaves: { at: number; edges: [number, number][] }[] = [];
+{
+  let run = 0;
+  let at = 0;
+  let bucket: [number, number][] = [];
+  for (const e of own) {
+    if (!bucket.length) at = run / ownTotal;
+    bucket.push(e);
+    run += segLen(e);
+    if (run / ownTotal >= (ownWaves.length + 1) / OWN_WAVES) {
+      ownWaves.push({ at: +at.toFixed(3), edges: bucket });
+      bucket = [];
+    }
+  }
+  if (bucket.length) ownWaves.push({ at: +at.toFixed(3), edges: bucket });
+}
+
+const labelOrder = new Map(
+  [...labels.keys()].sort((a, b) => scatter[a][1] - scatter[b][1]).map((i, n) => [i, n]),
+);
+
+const tierOrder = shuffled(
+  scatter.map((_, i) => i),
+  3,
+);
+const tier = (i: number) => {
+  const p = tierOrder.indexOf(i);
+  return p < N * 0.22 ? 'a' : p < N * 0.6 ? 'b' : 'c';
+};
+
+const shift = (i: number) =>
+  [
+    ...(reach.has(i) ? [`--w:${reach.get(i)!.toFixed(3)}`] : []),
+    `--dx0:${(origin[i][0] - scatter[i][0]).toFixed(1)}px`,
+    `--dy0:${(origin[i][1] - scatter[i][1]).toFixed(1)}px`,
+    `--dx2:${(cloudPts[i][0] - scatter[i][0]).toFixed(1)}px`,
+    `--dy2:${(cloudPts[i][1] - scatter[i][1]).toFixed(1)}px`,
+  ].join(';');
+
+// The sphere is served already projected, so it costs nothing until somebody
+// takes hold of it. These are the numbers the page needs to turn it: the unit
+// coordinates, where each point sits when scattered, and the edges by index.
+const flat3 = (a: [number, number, number][]) =>
+  a.flatMap(([x, y, z]) => [+x.toFixed(4), +y.toFixed(4), +z.toFixed(4)]);
+const flat2 = (a: [number, number][]) => a.flatMap(([x, y]) => [x, y]);
+const pairs = (a: [number, number][]) => a.flatMap(([x, y]) => [x, y]);
+const geometry = JSON.stringify({
+  c: C,
+  r: R,
+  size: SIZE,
+  p: flat3(sphere),
+  s: flat2(scatter),
+  d0: flat2(origin), // where each point waits before the first chapter
+  e: pairs([...near, ...far]),
+  o: pairs(own),
+  k: pairs(chords),
+});
+
+// The eight that touch a point of yours stay individual lines; the others are
+// bucketed, in the same order, into nine paths that fade one after another.
+const mineFirst = first.filter(([a, b]) => yours.has(keyOf(a, b)));
+const restFirst = first.filter(([a, b]) => !yours.has(keyOf(a, b)));
+const WAVES = 9;
+const perWave = Math.ceil(restFirst.length / WAVES);
+const waves: [number, number][][] = Array.from({ length: WAVES }, (_, w) =>
+  restFirst.slice(w * perWave, (w + 1) * perWave),
+).filter((w) => w.length > 0);
+
+const figureClass = ['context-graphic', animated ? '' : 'is-final'].filter(Boolean).join(' ');
+const ariaLabel = c.graphic.label;
+---
+
+<figure
+  class={figureClass}
+  data-graphic={animated ? '' : undefined}
+  role="group"
+  aria-label={ariaLabel}
+>
+  <svg viewBox={`0 0 ${SIZE} ${SIZE}`} aria-hidden="true">
+    {/* The first links used to be 135 separate lines, each drawing its own
+        stroke. That is 135 paths re-rastered on every frame, on the main
+        thread, in exactly the frames where the window is being scaled by the
+        scroll position — so the collapse stuttered and the net seemed to jump
+        in. Now only the eight links that touch a point of yours are drawn line
+        by line, which is the part worth watching. The rest arrive as nine
+        waves, one path each, fading. Nine elements instead of 135. */}
+    <g class="cg-firsts">
+      {waves.map((edges, w) => (
+        <path
+          class="cg-wave"
+          pathLength="1"
+          d={path(edges)}
+          style={`--w:${w}`}
+          data-wave={edges.map(([a, b]) => `${a},${b}`).join(' ')}
+        />
+      ))}
+      {mineFirst.map(([a, b], i) => (
+        <line
+          class="cg-first is-yours"
+          x1={cloudPts[a][0]}
+          y1={cloudPts[a][1]}
+          x2={cloudPts[b][0]}
+          y2={cloudPts[b][1]}
+          pathLength="1"
+          style={`--e:${i}`}
+          data-fa={a}
+          data-fb={b}
+        />
+      ))}
+    </g>
+    <g class="cg-mesh">
+      <path class="cg-link cg-far" pathLength="1" d={path(far)} />
+      <path class="cg-link cg-chord" pathLength="1" d={chords.map(bow).join('')} />
+      <path class="cg-link cg-near" pathLength="1" d={path(near)} />
+      {ownWaves.map((w) => (
+        <path
+          class="cg-link cg-own"
+          style={`--w:${w.at}`}
+          data-own={w.edges.map(([a, b]) => `${a},${b}`).join(' ')}
+          d={path(w.edges)}
+        />
+      ))}
+      <path class="cg-link cg-hot" d="" />
+    </g>
+
+    <g class="cg-dots">
+      {scatter.map((p, i) => {
+        const label = labels.get(i);
+        const cls = [
+          'cg-dot',
+          `s-${tier(i)}`,
+          linked.has(i) ? 't0' : '',
+          mine.has(i) ? 'is-mine' : '',
+          depth[i] < 0 ? 'is-far' : '',
+        ]
+          .filter(Boolean)
+          .join(' ');
+        if (label) return null;
+        return <circle class={cls} cx={p[0]} cy={p[1]} r={radius(i)} style={shift(i)} data-i={i} />;
+      })}
+    </g>
+
+    {/* The named ones come last, and so do their cards: a card drawn among the
+        points had a few hundred of them painted over it afterwards. */}
+    <g class="cg-labels">
+      {[...labels.entries()].map(([i, label]) => {
+        const p = scatter[i];
+        const cls = [
+          'cg-dot',
+          `s-${tier(i)}`,
+          linked.has(i) ? 't0' : '',
+          mine.has(i) ? 'is-mine' : '',
+          depth[i] < 0 ? 'is-far' : '',
+        ]
+          .filter(Boolean)
+          .join(' ');
+        const right = label.side === 'r';
+        // The text sits a card's padding further out than the gap, so the edge
+        // of the card clears the point it belongs to instead of covering it.
+        const lx = right ? p[0] + 11 + PAD_X : p[0] - 11 - PAD_X;
+        // The card the two lines sit on, at the width the placement reserved
+        // for them, so a card can no more overlap its neighbour than the text
+        // could.
+        const lw = textWidth(label);
+        // The mark sits on the side the point is on, not always on the left:
+        // a card to the left of its point had the mark at the far end of it,
+        // pointing away from the thing it names.
+        const typeX = right ? lx + ICON + ICON_GAP : lx - ICON - ICON_GAP;
+        const iconX = right ? lx : lx - ICON;
+        return (
+          <g
+            class="cg-pt"
+            data-i={i}
+            style={`${shift(i)};--n:${labelOrder.get(i)}`}
+            tabindex="0"
+            role="img"
+            data-key={label.key}
+            aria-label={`${label.type}: ${label.title}`}
+          >
+            <title>{`${label.type}: ${label.title}`}</title>
+            <circle class="cg-halo" cx={p[0]} cy={p[1]} r="9" />
+            <circle class={`${cls} is-named`} cx={p[0]} cy={p[1]} r="3.2" />
+            <g class="cg-tip">
+              <rect
+                class="cg-card"
+                x={right ? lx - PAD_X : lx - lw - PAD_X}
+                y={p[1] - 24}
+                width={lw + PAD_X * 2}
+                height={46}
+                rx="4"
+              />
+              <path
+                class="cg-ico"
+                d={ICONS[label.key] ?? ICONS.article}
+                transform={`translate(${iconX.toFixed(1)} ${(p[1] - 15).toFixed(1)})`}
+              />
+              <text
+                class="cg-tip-type"
+                x={typeX}
+                y={p[1] - 5}
+                text-anchor={right ? 'start' : 'end'}
+              >
+                {label.type}
+              </text>
+              <text class="cg-tip-title" x={lx} y={p[1] + 13} text-anchor={right ? 'start' : 'end'}>
+                {label.title}
+              </text>
+            </g>
+            <circle class="cg-hit" cx={p[0]} cy={p[1]} r="14" />
+          </g>
+        );
+      })}
+    </g>
+  </svg>
+
+  {animated && <script type="application/json" data-cg-geometry set:html={geometry}></script>}
+
+  {caption && (
+    <figcaption class="cg-caption">
+      <span class="cg-caption-1">Before EKHO: it is all there, but not fully connected.</span>
+      <span class="cg-caption-2">
+        With EKHO: the same knowledge, in one form. The first links form.
+      </span>
+      <span class="cg-caption-3">It compounds: not one new point, the whole net.</span>
+    </figcaption>
+  )}
+</figure>
+
+<script>
+  // Take hold of the sphere and turn it, and see what a point is joined to.
+  //
+  // Nothing here runs until the sphere has formed and somebody reaches for it:
+  // the served SVG is already the resting view, so the cost of the interaction
+  // is a JSON parse and two listeners. While a drag is running the positions go
+  // through the same custom properties the scroll choreography uses, so the two
+  // never fight; the transitions are switched off for the duration, or every
+  // frame would try to ease into the last one.
+  const figure = document.querySelector<HTMLElement>('[data-graphic]');
+  const holder = figure?.querySelector<SVGSVGElement>('svg');
+  const raw = figure?.querySelector<HTMLElement>('[data-cg-geometry]');
+
+  if (figure && holder && raw) {
+    const g = JSON.parse(raw.textContent ?? '{}') as {
+      c: number;
+      r: number;
+      size: number;
+      p: number[];
+      s: number[];
+      d0: number[];
+      e: number[];
+      o: number[];
+      k: number[];
+    };
+    const N = g.p.length / 3;
+    const SIZE = g.c * 2;
+
+    const targets: (SVGElement | null)[] = Array.from({ length: N }, (_, i) =>
+      figure.querySelector<SVGElement>(`[data-i="${i}"]`),
+    );
+    // the first links are individual elements so each can be drawn on its own,
+    // which means they have to be moved individually when the sphere turns
+    const firstEls = Array.from(figure.querySelectorAll<SVGLineElement>('.cg-first'));
+    const waveEls = Array.from(figure.querySelectorAll<SVGPathElement>('.cg-wave'));
+    const waveEdges = waveEls.map((el) =>
+      (el.dataset.wave ?? '')
+        .split(' ')
+        .filter(Boolean)
+        .map((pair) => pair.split(',').map(Number) as [number, number]),
+    );
+    const near = figure.querySelector<SVGPathElement>('.cg-near');
+    const far = figure.querySelector<SVGPathElement>('.cg-far');
+    const chord = figure.querySelector<SVGPathElement>('.cg-chord');
+    // the yellow is a stack of waves now, each with its own share of the edges
+    const ownEls = Array.from(figure.querySelectorAll<SVGPathElement>('.cg-own'));
+    const ownEdges = ownEls.map((el) =>
+      (el.dataset.own ?? '')
+        .split(' ')
+        .filter(Boolean)
+        .map((pair) => pair.split(',').map(Number) as [number, number]),
+    );
+    const hotPath = figure.querySelector<SVGPathElement>('.cg-hot');
+
+    // what each point is joined to, for the highlight
+    const links: number[][] = Array.from({ length: N }, () => []);
+    for (const list of [g.e, g.o, g.k])
+      for (let i = 0; i < list.length; i += 2) {
+        links[list[i]].push(list[i + 1]);
+        links[list[i + 1]].push(list[i]);
+      }
+
+    const px = new Float32Array(N);
+    const py = new Float32Array(N);
+    const pz = new Float32Array(N);
+    let yaw = 0;
+    let pitch = 0;
+
+    function project() {
+      const cy = Math.cos(yaw);
+      const sy = Math.sin(yaw);
+      const cp = Math.cos(pitch);
+      const sp = Math.sin(pitch);
+      for (let i = 0; i < N; i++) {
+        const x = g.p[i * 3];
+        const y = g.p[i * 3 + 1];
+        const z = g.p[i * 3 + 2];
+        const X = x * cy + z * sy;
+        const Z0 = z * cy - x * sy;
+        const Y = y * cp - Z0 * sp;
+        pz[i] = y * sp + Z0 * cp;
+        px[i] = g.c + X * g.r;
+        py[i] = g.c + Y * g.r;
+      }
+    }
+
+    const seg = (a: number, b: number) =>
+      `M${px[a].toFixed(1)} ${py[a].toFixed(1)}L${px[b].toFixed(1)} ${py[b].toFixed(1)}`;
+    const bow = (a: number, b: number) => {
+      const dx = px[b] - px[a];
+      const dy = py[b] - py[a];
+      const k = 0.08 * ((a + b) % 2 ? 1 : -1);
+      const cx = (px[a] + px[b]) / 2 - dy * k;
+      const cy2 = (py[a] + py[b]) / 2 + dx * k;
+      return `M${px[a].toFixed(1)} ${py[a].toFixed(1)}Q${cx.toFixed(1)} ${cy2.toFixed(1)} ${px[b].toFixed(1)} ${py[b].toFixed(1)}`;
+    };
+
+    function redraw() {
+      let dNear = '';
+      let dFar = '';
+      for (let i = 0; i < g.e.length; i += 2) {
+        const a = g.e[i];
+        const b = g.e[i + 1];
+        if (pz[a] + pz[b] < 0) dFar += seg(a, b);
+        else dNear += seg(a, b);
+      }
+      near?.setAttribute('d', dNear);
+      far?.setAttribute('d', dFar);
+
+      for (let w = 0; w < ownEls.length; w++) {
+        let dw = '';
+        for (const [a, b] of ownEdges[w]) dw += seg(a, b);
+        ownEls[w].setAttribute('d', dw);
+      }
+
+      let dChord = '';
+      for (let i = 0; i < g.k.length; i += 2) dChord += bow(g.k[i], g.k[i + 1]);
+      chord?.setAttribute('d', dChord);
+
+      for (const el of firstEls) {
+        const a = Number(el.dataset.fa);
+        const b = Number(el.dataset.fb);
+        el.setAttribute('x1', px[a].toFixed(1));
+        el.setAttribute('y1', py[a].toFixed(1));
+        el.setAttribute('x2', px[b].toFixed(1));
+        el.setAttribute('y2', py[b].toFixed(1));
+      }
+
+      for (let w = 0; w < waveEls.length; w++) {
+        let dw = '';
+        for (const [a, b] of waveEdges[w]) dw += seg(a, b);
+        waveEls[w].setAttribute('d', dw);
+      }
+
+      for (let i = 0; i < N; i++) {
+        const t = targets[i];
+        if (!t) continue;
+        t.style.setProperty('--dx2', `${(px[i] - g.s[i * 2]).toFixed(1)}px`);
+        t.style.setProperty('--dy2', `${(py[i] - g.s[i * 2 + 1]).toFixed(1)}px`);
+      }
+    }
+
+    // the near side carries, the far side falls back: only worth redoing when
+    // the sphere comes to rest, since it is 400-odd class changes
+    function settleDepth() {
+      for (let i = 0; i < N; i++) targets[i]?.classList.toggle('is-far', pz[i] < 0);
+    }
+
+    // ---- the opening ------------------------------------------------------
+
+    // The field is not a picture being scaled: the drawing keeps its scale, so
+    // every circle keeps the size it has later, and each one travels its own
+    // way in from where it was spread across the screen. Points outside the
+    // viewBox still draw, which is what lets the field reach past the column.
+    //
+    // Each point is given its own phase, so the field arrives loosely rather
+    // than in step. The phases come off the golden ratio, which spreads them
+    // without any two landing together.
+    const size = g.size ?? 560;
+    const coreOpen = new Float32Array(N * 2);
+    const PHASE = 0.42;
+    const ease = (t: number) => (t <= 0 ? 0 : t >= 1 ? 1 : 1 - Math.pow(1 - t, 3));
+
+    // an arrow, not a declaration: a hoisted function would lose the narrowing
+    // that proves holder is here
+    const measureField = () => {
+      const rect = holder.getBoundingClientRect();
+      const k = Math.min(rect.width, rect.height) / size;
+      if (!k) return false;
+      const ox = rect.left + (rect.width - size * k) / 2;
+      const oy = rect.top + (rect.height - size * k) / 2;
+      for (let i = 0; i < N; i++) {
+        coreOpen[i * 2] = ((g.d0[i * 2] / size) * window.innerWidth - ox) / k;
+        coreOpen[i * 2 + 1] = ((g.d0[i * 2 + 1] / size) * window.innerHeight - oy) / k;
+      }
+      return true;
+    };
+
+    const phaseOf = (i: number) => ((i * 0.6180339887) % 1) * PHASE;
+
+    (figure as HTMLElement & { cgOpenField?: (p: number) => void }).cgOpenField = (p: number) => {
+      if (!measureField()) return;
+      // a hair short of 1 still counts as arrived: leaving the class on would
+      // keep the transitions switched off for every later stage change
+      figure.classList.toggle('is-opening', p < 0.995);
+      for (let i = 0; i < N; i++) {
+        const el = targets[i];
+        if (!el) continue;
+        const t = ease((p - phaseOf(i)) / (1 - PHASE));
+        const sx = g.s[i * 2];
+        const sy = g.s[i * 2 + 1];
+        el.style.setProperty('--dx0', `${((coreOpen[i * 2] - sx) * (1 - t)).toFixed(1)}px`);
+        el.style.setProperty('--dy0', `${((coreOpen[i * 2 + 1] - sy) * (1 - t)).toFixed(1)}px`);
+      }
+    };
+
+    // ---- turning ----------------------------------------------------------
+
+    const wide = window.matchMedia('(min-width: 64rem)');
+    const formed = () => figure.classList.contains('is-2') || figure.classList.contains('is-final');
+    const grabbable = () => formed() && wide.matches;
+
+    let dragging = false;
+    let lastX = 0;
+    let lastY = 0;
+    let queued = false;
+
+    function frame() {
+      queued = false;
+      project();
+      redraw();
+    }
+    function schedule() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(frame);
+    }
+
+    holder.addEventListener('pointerdown', (e) => {
+      if (!grabbable() || e.button !== 0) return;
+      dragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      figure.classList.add('is-turning');
+      holder.setPointerCapture(e.pointerId);
+    });
+
+    holder.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      yaw += (e.clientX - lastX) * 0.006;
+      pitch = Math.max(-1.05, Math.min(1.05, pitch + (e.clientY - lastY) * 0.006));
+      lastX = e.clientX;
+      lastY = e.clientY;
+      schedule();
+    });
+
+    // an arrow, not a declaration: a hoisted function would lose the narrowing
+    // that proves figure and holder are here
+    const release = (e: PointerEvent) => {
+      if (!dragging) return;
+      dragging = false;
+      figure.classList.remove('is-turning');
+      holder.releasePointerCapture?.(e.pointerId);
+      project();
+      settleDepth();
+    };
+    holder.addEventListener('pointerup', release);
+    holder.addEventListener('pointercancel', release);
+
+    figure.classList.toggle('is-grabbable', grabbable());
+    wide.addEventListener('change', () => figure.classList.toggle('is-grabbable', grabbable()));
+    new MutationObserver(() => figure.classList.toggle('is-grabbable', grabbable())).observe(
+      figure,
+      { attributes: true, attributeFilter: ['class'] },
+    );
+
+    // ---- what a point is joined to ---------------------------------------
+
+    let hot = -1;
+    function setHot(i: number) {
+      if (i === hot) return;
+      if (hot >= 0) targets[hot]?.classList.remove('is-hot');
+      hot = i;
+      if (i < 0) {
+        hotPath?.setAttribute('d', '');
+        return;
+      }
+      targets[i]?.classList.add('is-hot');
+      let d = '';
+      for (const j of links[i]) d += seg(i, j);
+      hotPath?.setAttribute('d', d);
+    }
+
+    holder.addEventListener('pointermove', (e) => {
+      if (dragging || !formed()) return;
+      const box = holder.getBoundingClientRect();
+      const scale = Math.min(box.width, box.height) / SIZE;
+      const vx = (e.clientX - box.left - (box.width - SIZE * scale) / 2) / scale;
+      const vy = (e.clientY - box.top - (box.height - SIZE * scale) / 2) / scale;
+      let best = -1;
+      let bd = 11 * 11;
+      for (let i = 0; i < N; i++) {
+        const dx = px[i] - vx;
+        const dy = py[i] - vy;
+        const d = dx * dx + dy * dy;
+        if (d < bd) {
+          bd = d;
+          best = i;
+        }
+      }
+      setHot(best);
+    });
+    holder.addEventListener('pointerleave', () => setHot(-1));
+
+    // the served positions are the resting view, so start from them
+    project();
+  }
+</script>

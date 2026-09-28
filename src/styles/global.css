@@ -5,25 +5,82 @@
 @import 'tailwindcss/utilities.css' layer(utilities);
 
 :root {
-  /* EKHO Design System v0.4: black, white and greys, one signal (yellow).
-     The site is dark only: there is no light theme. */
-  color-scheme: dark;
-  --bg: #151515;
-  --surface: #1e1e1e;
-  --border: #404040;
-  --text: #f4f4f4;
-  --muted: #929292;
-  --signal: #fff056;
-  --signal-ink: #151515;
-  /* links: yellow text, a faint yellow line underneath */
-  --link: var(--signal);
-  --link-line: color-mix(in srgb, var(--signal) 40%, transparent);
-  --link-thickness: 1px;
+  /* EKHO Design System v0.5 - the Braun formal language (ADR-0027).
+     Light is the main mode, dark is the second. One warm yellow that carries on
+     both grounds, used for exactly one meaning: what is yours. */
+  color-scheme: light dark;
+  --bg: #edebe6;
+  --surface: #f5f4f1;
+  --surface-raised: #e2dfd9;
+  --line: #d8d4cd;
+  --line-strong: #bfbab2;
+  --muted-deep: #9b968e;
+  --muted: #6b6762;
+  --text: #1a1a18;
+  --signal: #f5c400;
+  --signal-ink: #1a1a18;
+  --shadow: rgb(26 26 24 / 0.045);
+  /* One size for running text, set by the opening and used by every chapter
+     after it, so the page reads at one pitch rather than a different one per
+     section. */
+  --body-size: clamp(1rem, 1.3vw, 1.0625rem);
+  --body-leading: 1.6;
+  /* the dark panel: EKHO core in the architecture, and the ground behind a screen */
+  --core: #1a1a18;
+  --core-ink: #edebe6;
+  /* the highlighted layer: anthracite on a light ground, light on a dark one */
+  --block: #1a1a18;
+  --block-ink: #edebe6;
+  --core-line: #34332f;
+  --core-muted: #8d8880;
+
+  /* older names, kept so the existing component styles keep resolving */
+  --border: var(--line);
+  --stripe: var(--surface-raised);
+  --surface-hover: var(--surface-raised);
+
+  /* centred, wide, barely there. Only on dark and white panels, never in the
+     architecture diagram except on hover. Never clipped: whatever holds a
+     lifted box needs the padding to let the blur finish. */
+  --lift: 0 0 48px var(--shadow);
+  --lift-hover: 0 0 56px rgb(26 26 24 / 0.09);
+
+  /* links: the text stays ink, the yellow sits underneath */
+  --link: var(--text);
+  --link-line: var(--signal);
+  --link-thickness: 2px;
   --link-offset: 3px;
-  /* dot matrix motif above the headline */
-  --dots: var(--border);
-  --radius: 10px;
+  --dots: var(--line-strong);
+  --radius: 4px;
   --maxw: 44rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1b19;
+    /* A step lighter than they were: at #232220 a panel was seven values off
+       the page ground, which on a dark screen is not a surface, it is a guess.
+       Everything raised rides on these two. */
+    --surface: #2a2926;
+    --surface-raised: #333230;
+    /* A hairline on a dark ground has to be lighter than the same line on a
+       light one to read as a line at all: at #302e2b it was four steps off the
+       background and the rules between the blocks disappeared. */
+    --line: #4c4943;
+    --line-strong: #666159;
+    --muted-deep: #6e6a64;
+    --muted: #a09b93;
+    --text: #edebe6;
+    --shadow: rgb(0 0 0 / 0.3);
+    --lift: 0 0 48px var(--shadow);
+    --lift-hover: 0 0 56px rgb(0 0 0 / 0.42);
+    --core: #121210;
+    --core-ink: #edebe6;
+    --block: #edebe6;
+    --block-ink: #1a1a18;
+    --core-line: #2b2a27;
+    --core-muted: #86817a;
+  }
 }
 
 /* The tokens above as Tailwind utilities: bg-background, text-muted-foreground,
@@ -36,6 +93,11 @@
   --color-card: var(--surface);
   --color-muted-foreground: var(--muted);
   --color-border: var(--border);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-surface-raised: var(--surface-raised);
+  --color-muted-deep: var(--muted-deep);
+  --color-core: var(--core);
   --color-signal: var(--signal);
   --color-signal-foreground: var(--signal-ink);
   --font-*: initial;
@@ -142,9 +204,16 @@
     border-inline: 0;
   }
 
+  /* the header stays at the top on every page, over a blurred backdrop */
   .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
     border-top: 0;
     padding-block: 1rem;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
   .site-header .wrap {
@@ -155,6 +224,7 @@
   }
 
   .brand {
+    flex: none;
     font-weight: 500;
     letter-spacing: 0.02em;
     color: var(--text);
@@ -176,16 +246,6 @@
     color: var(--text);
   }
 
-  .hero::before {
-    content: '';
-    display: block;
-    height: 6rem;
-    margin-bottom: 2.5rem;
-    border-radius: var(--radius);
-    background-image: radial-gradient(var(--dots) 1.2px, transparent 1.7px);
-    background-size: 12px 12px;
-  }
-
   .lede {
     font-size: 1.125rem;
     color: var(--muted);
@@ -198,73 +258,753 @@
     font-size: 0.9375rem;
   }
 
-  .cards {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.125rem 1.25rem;
-  }
-
-  ol.cards {
-    counter-reset: step;
-  }
-
-  ol.cards > .card::before {
-    counter-increment: step;
-    content: counter(step, decimal-leading-zero);
-    display: block;
-    margin-bottom: 0.75rem;
-    font-size: 2.5rem;
-    line-height: 1;
-    letter-spacing: -0.03em;
-    color: var(--muted);
-  }
-
-  .card h3 {
-    margin: 0 0 0.375rem;
-    font-size: 1rem;
-    letter-spacing: -0.01em;
-  }
-
-  .card p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 0.9375rem;
-  }
-
-  /* bare layout: the page fills the screen below the header itself */
-  .main-bare {
+  /* wide layout: no content column, the page lays out its sections on the wide grid */
+  .main-wide {
     padding: 0;
   }
 
-  /* teaser: one statement, as large as the screen allows */
+  /* on the wide grid, running text keeps a readable measure */
+  .measure {
+    max-width: var(--maxw);
+  }
+
   .wrap-wide {
     max-width: 80rem;
   }
 
-  .teaser {
-    display: flex;
-    align-items: center;
-    min-height: calc(100svh - 4rem);
-    padding-block: 3rem;
+  /* homepage header on wide screens: chapters left, logo centred, GitHub right */
+  .header-aside {
+    display: none;
+    color: var(--muted);
+    font-size: 0.875rem;
+    text-decoration: none;
+    white-space: nowrap;
   }
 
-  .teaser h1 {
+  .header-aside:hover {
+    color: var(--text);
+  }
+
+  @media (min-width: 64rem) {
+    .site-header .header-centred {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+    }
+
+    .header-centred .brand {
+      grid-column: 2;
+      grid-row: 1;
+      letter-spacing: 0.04em;
+    }
+
+    .header-centred .chapter-nav {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .header-centred .chapter-nav ol {
+      margin-left: 0;
+    }
+
+    .header-centred .header-aside {
+      display: block;
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: end;
+    }
+  }
+
+  .signal-text {
+    color: var(--signal);
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .pill:hover {
+    border-color: var(--muted);
+  }
+
+  .pill--solid {
+    border-color: var(--text);
+    background: var(--text);
+    color: var(--signal-ink);
+  }
+
+  .pill--solid:hover {
+    border-color: var(--signal);
+    background: var(--signal);
+  }
+
+  .tile:focus-visible,
+  .pill:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+  }
+
+  /* story: chapters on the left, the graphic that builds up beside them */
+  .story {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .story-figure {
+    position: sticky;
+    top: 3.6rem;
+    z-index: 5;
+    height: 38svh;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  @media (min-width: 64rem) {
+    .story {
+      grid-template-columns: minmax(0, 29rem) minmax(0, 1fr);
+      column-gap: 0;
+    }
+
+    .story-text {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .story-figure {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: start;
+      top: 4rem;
+      /* the rail must not sit flush against the bottom edge */
+      height: calc(100svh - 6.5rem);
+      border-bottom: 0;
+    }
+  }
+
+  .context-graphic {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
     margin: 0;
-    font-size: clamp(2.75rem, 9vw, 7.5rem);
-    font-weight: 700;
-    line-height: 0.98;
-    letter-spacing: -0.04em;
-    text-wrap: balance;
+    padding-block: 1rem;
+  }
+
+  .context-graphic svg {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+  }
+
+  /* The companion graphic. Several hundred points, one set for the whole page,
+     moved between four states instead of cross-faded between four pictures.
+     Every dot is drawn once at its scattered position and the other states are
+     a translate, so the movement runs on the compositor. Sizes come from the
+     markup and never animate: animating `r` on this many circles would cost a
+     relayout every frame.
+
+     The resting state, with no script, is the finished net. */
+  /* A named point is a circle inside a group, and the group carries every move
+     the point makes. Without this the circle reads the same custom properties
+     its group does and travels the distance a second time, which in the hero
+     put the eight of them somewhere between the field and the sphere — two of
+     them close enough to touch. */
+  .cg-pt .cg-dot {
+    transform: none;
+  }
+
+  .cg-dot,
+  .cg-pt {
+    transform: translate(var(--dx2), var(--dy2));
+    transition:
+      transform 950ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      fill 700ms ease,
+      opacity 700ms ease;
+  }
+
+  .cg-dot {
+    fill: var(--text);
+    opacity: 0.9;
+  }
+
+  .cg-dot.is-named {
+    fill: var(--signal);
+    opacity: 1;
+  }
+
+  .cg-link {
+    fill: none;
+    stroke: var(--muted-deep);
+    stroke-width: 0.62;
+    stroke-linecap: round;
+    transition: opacity 800ms ease;
+  }
+
+  .cg-mesh {
+    opacity: 1;
+    transition: opacity 800ms ease;
+  }
+
+  /* the far side of the hull falls back, the near side carries */
+  .cg-far {
+    stroke: var(--muted-deep);
+    opacity: 0.2;
+  }
+
+  .cg-near {
+    stroke: var(--muted);
+    opacity: 0.7;
+  }
+
+  .cg-chord {
+    stroke: var(--muted);
+    opacity: 0.32;
+  }
+
+  /* the one region that is yours */
+  .cg-own {
+    stroke: var(--signal);
+    opacity: 0.55;
+  }
+
+  .cg-dot.is-mine {
+    fill: var(--signal);
+  }
+
+  .cg-dot.is-far {
+    opacity: 0.32;
+  }
+
+  .cg-halo {
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 1;
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+
+  .cg-hit {
+    fill: transparent;
+  }
+
+  .cg-tip {
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+
+  /* The named points are the only text on the drawing, and over a field of
+     several hundred dots it was read against the noise. Each pair of lines sits
+     on a card of its own: the page's raised ground, no border, and a shadow
+     wide enough to be a lift rather than an edge. The same treatment the
+     windows in the chapters after it have. */
+  /* The ground of the step bars, carried onto the drawing: the page's own
+     tone rather than a white plate, so a card reads as part of the surface
+     the points are on. Denser than the bars are, because a bar has a blur
+     behind it and a shape in an SVG cannot: what shows through here shows
+     through sharp, and at the bars' own 70% the points were legible straight
+     across the text. */
+  .cg-card {
+    fill: color-mix(in srgb, var(--bg) 90%, transparent);
+    filter: drop-shadow(0 3px 18px rgb(26 26 24 / 0.14));
+  }
+
+  /* a filter re-rasters on every frame, and turning moves all eight of them */
+  [data-graphic].is-turning .cg-card {
+    filter: none;
+  }
+
+  .cg-ico {
+    fill: none;
+    /* the mark and the word it stands in front of carry the same tone, and on
+       a card that is nearly the page's own ground the deeper grey was a guess
+       rather than a label */
+    stroke: var(--muted);
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .cg-tip-type {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    fill: var(--muted);
+  }
+
+  .cg-tip-title {
+    font-size: 12px;
+    fill: var(--text);
+  }
+
+  .cg-pt:hover .cg-tip,
+  .cg-pt:focus-visible .cg-tip,
+  .cg-pt:hover .cg-halo,
+  .cg-pt:focus-visible .cg-halo {
+    opacity: 1;
+  }
+
+  .cg-pt:focus {
+    outline: none;
+  }
+
+  .cg-caption {
+    margin-top: 0.75rem;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  /* stage 0, the hero: every point there is, spread wide, all one grey.
+     A named point is a circle inside a group that already carries the move, so
+     it is left out here or it travels the distance twice and ends up off the
+     form the others make. */
+  .reveal-on [data-graphic] .cg-dot:not(.is-named),
+  .reveal-on [data-graphic] .cg-pt {
+    transform: translate(var(--dx0), var(--dy0));
+  }
+
+  /* The field carried the two grey tones a shade too far back: on a dark
+     ground it read as dust rather than as a set of points. One step up in
+     both tone and alpha, in stage 0 and in stage 1. */
+  .reveal-on [data-graphic] .cg-dot,
+  .reveal-on [data-graphic] .cg-dot.is-named {
+    fill: var(--muted);
+    opacity: 0.58;
+  }
+
+  /* Not zero. At zero the browser paints none of the net, so the first raster
+     of several hundred segments landed in the frames where the chat window was
+     already collapsing over it — the one second on this page that can least
+     afford it, and the reason the first pass through the chapter stuttered
+     while every later one was smooth. A hair of alpha keeps it painted and
+     invisible, so by the time the chapter turns there is nothing left to
+     prepare. */
+  .reveal-on [data-graphic] .cg-mesh {
+    opacity: 0.001;
+  }
+
+  /* and it is on its own layer for the chapter before the one it comes up in,
+     so the fade itself is a compositor job */
+  .reveal-on [data-graphic].is-2:not(.is-net) .cg-mesh {
+    will-change: opacity;
+  }
+
+  .reveal-on [data-graphic] .cg-pt {
+    pointer-events: none;
+  }
+
+  /* stage 1: the extra points go, and the named ones step forward so their
+     labels have something to be read against */
+  .reveal-on [data-graphic].is-1 .cg-dot,
+  .reveal-on [data-graphic].is-1 .cg-pt {
+    transform: none;
+  }
+
+  .reveal-on [data-graphic].is-1 .cg-pt {
+    pointer-events: auto;
+  }
+
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-a:not(.is-named) {
+    fill: var(--text);
+    opacity: 0.78;
+  }
+
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-b:not(.is-named) {
+    fill: var(--muted);
+    opacity: 0.55;
+  }
+
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-c:not(.is-named) {
+    fill: var(--muted-deep);
+    opacity: 0.42;
+  }
+
+  /* A point that carries a name is one of yours, so it is yellow from the moment
+     it settles into place, not only when a pointer finds it. In the hero
+     nothing is named yet and it stays grey with the rest. */
+  .reveal-on [data-graphic].is-1 .cg-dot.is-named,
+  .reveal-on [data-graphic].is-2 .cg-dot.is-named,
+  .reveal-on [data-graphic].is-3 .cg-dot.is-named {
+    fill: var(--signal);
+    opacity: 1;
+  }
+
+  /* stage 2: the points find their form and the first links appear. Named
+     points are moved by their group only, for the same reason as in stage 0. */
+  .reveal-on [data-graphic].is-2 .cg-dot:not(.is-named),
+  .reveal-on [data-graphic].is-2 .cg-pt {
+    transform: translate(var(--dx2), var(--dy2));
+  }
+
+  .reveal-on [data-graphic].is-2:not(.is-net) .cg-dot:not(.is-named) {
+    fill: var(--muted-deep);
+    opacity: 0.42;
+  }
+
+  .reveal-on [data-graphic].is-2:not(.is-net) .cg-dot.t0 {
+    fill: var(--text);
+    opacity: 0.85;
+  }
+
+  /* stage 3: not one new point, the whole net.
+     The group comes on at once and the lines draw themselves in. Fading the
+     group in over the same moment meant the net was already all there, just
+     faint, by the time the first edge finished — it read as appearing rather
+     than as being built. Leaving is still a fade, which is why the transition
+     is only dropped in this state. */
+  /* is-net, not is-3: the full net is switched in a moment before the window
+     begins to collapse, not as the chapter arrives. What should uncover it is
+     the window shrinking away, so the swap happens while the window still
+     stands at full size and the reader never watches the loose net of the
+     chapter before being taken down. The yellow still waits for is-3, which
+     is the chapter itself. */
+  .reveal-on [data-graphic].is-net .cg-mesh {
+    opacity: 1;
+    /* It comes up while the window is still shrinking over it, so the fade is
+       hidden and what the reader sees when the window has gone is a net that
+       was already there. Switching it on in one frame put a blink in the
+       middle of the movement — but it has to be over before the window is,
+       or the sparse net of the chapter before shows through the new one. */
+    transition: opacity 380ms ease;
+  }
+
+  .reveal-on [data-graphic].is-net .cg-dot:not(.is-named) {
+    fill: var(--text);
+    opacity: 0.9;
+  }
+
+  /* Each of your points turns as the wave reaches it, not all of them at the
+     moment the chapter turns: --w is where that point sits along the drawing,
+     so the colour and the lines are one movement rather than two. */
+  .reveal-on [data-graphic].is-3 .cg-dot.is-mine {
+    fill: var(--signal);
+    opacity: 1;
+    /* The strike runs out from where the window landed, point after point
+       after point, and each line is spun a fifth of a second behind its
+       point: one wave, with the colour just ahead of the connection. It starts
+       while the window is still becoming that point, not after it has
+       landed. No new points appear —
+       these are the same white ones, changing colour. Each turns in a fifth of
+       a second, because a colour that eases over most of a second is a fade
+       and not a strike. */
+    transition:
+      fill 220ms ease-out,
+      opacity 220ms ease-out;
+    transition-delay: calc(120ms + var(--w, 0) * 2600ms);
+  }
+
+  /* going back is not a wave, so it does not wait */
+  .reveal-on [data-graphic]:not(.is-3) .cg-dot.is-mine {
+    transition-delay: 0s;
+  }
+
+  .reveal-on [data-graphic].is-net .cg-dot.is-far {
+    opacity: 0.32;
+  }
+
+  /* the caption only names the state the graphic is in */
+  .reveal-on [data-graphic] .cg-caption-1,
+  .reveal-on [data-graphic] .cg-caption-2,
+  .reveal-on [data-graphic] .cg-caption-3 {
+    display: none;
+  }
+
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-caption-1,
+  .reveal-on [data-graphic].is-2:not(.is-3) .cg-caption-2,
+  .reveal-on [data-graphic].is-3 .cg-caption-3 {
+    display: inline;
+  }
+
+  /* architecture chapter: full width, after the story */
+  .chapter--wide {
+    align-items: stretch;
+  }
+
+  /* Chapter 06: the same five layers the rail assembles while you scroll, at
+     full size and openable. One model on the page, not two. */
+  .arch {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+  }
+
+  .arch-row {
+    border-radius: var(--radius);
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .arch-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    padding: 1.35rem 1.6rem;
+  }
+
+  summary.arch-head {
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary.arch-head::-webkit-details-marker {
+    display: none;
+  }
+
+  summary.arch-head::after {
+    content: '+';
+    font-size: 1.25rem;
+    line-height: 1;
+    opacity: 0.6;
+  }
+
+  details[open] > summary.arch-head::after {
+    content: '−';
+  }
+
+  summary.arch-head:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: -2px;
+    border-radius: var(--radius);
+  }
+
+  details.arch-row:hover,
+  details.arch-row[open] {
+    box-shadow: var(--lift);
+    transform: translateY(-1px);
+  }
+
+  .arch-title {
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .arch-code {
+    font-weight: 400;
+    opacity: 0.55;
+  }
+
+  .arch-note {
+    margin-left: auto;
+    font-size: 0.9375rem;
+  }
+
+  .arch-desc {
+    max-width: 62ch;
+    margin: 0;
+    padding: 0 1.6rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  /* the rows come in top to bottom when the chapter reaches the screen */
+  .reveal-on .arch > * {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 500ms ease,
+      transform 500ms ease;
+  }
+
+  .reveal-on .arch.is-in > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal-on .arch.is-in > :nth-child(2) {
+    transition-delay: 120ms;
+  }
+
+  .reveal-on .arch.is-in > :nth-child(3) {
+    transition-delay: 240ms;
+  }
+
+  .reveal-on .arch.is-in > :nth-child(4) {
+    transition-delay: 360ms;
+  }
+
+  .reveal-on .arch.is-in > :nth-child(n + 5) {
+    transition-delay: 480ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arch-row,
+    details.arch-row:hover,
+    details.arch-row[open] {
+      transition: none;
+      transform: none;
+    }
+  }
+
+  /* chapter content: a short lede, then numbered steps or stacked layers */
+  .chapter-lede {
+    margin: 0 0 2rem;
+    color: var(--muted);
+    font-size: 1.125rem;
+  }
+
+  .steps,
+  .layers {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps p,
+  .layers p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .layers li {
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--radius);
+    background-color: var(--surface);
+    box-shadow: var(--lift);
+  }
+
+  .layers h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.25rem;
+    font-size: 1.125rem;
+  }
+
+  .layers .layer-owned {
+    background-color: var(--signal);
+    color: var(--signal-ink);
+  }
+
+  .layers .layer-owned p {
+    color: var(--signal-ink);
+  }
+
+  .tag {
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+
+  /* chapter navigation, inside the sticky header on the homepage. On narrow
+     screens the list scrolls sideways; the active chapter is kept in view. */
+  .chapter-nav {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .chapter-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chapter-nav ol {
+    display: flex;
+    gap: 1.25rem;
+    width: max-content;
+    margin: 0 0 0 auto;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+  }
+
+  .chapter-nav a {
+    display: inline-flex;
+    gap: 0.4rem;
+    padding-bottom: 3px;
+    border-bottom: 1.5px solid transparent;
+    color: var(--muted);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .chapter-nav a:hover {
+    color: var(--text);
+  }
+
+  .chapter-nav a[aria-current] {
+    color: var(--text);
+    border-bottom-color: var(--signal);
+  }
+
+  .chapter-nav-n {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* a chapter: small label, then the heading; clears the sticky nav when jumped to */
+  /* every chapter fills the screen, like a slide; longer ones simply grow */
+  .chapter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100svh;
+    padding-block: 6rem 4rem;
+  }
+
+  .chapter-label {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .chapter-label span {
+    color: var(--signal);
+    margin-right: 0.35rem;
+  }
+
+  .chapter h2 {
+    margin-top: 0;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .statement {
+    font-weight: 600;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.5rem;
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .footer-nav a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .footer-nav a:hover {
+    color: var(--text);
   }
 
   .site-footer {
@@ -279,5 +1019,3050 @@
     flex-wrap: wrap;
     gap: 0.5rem 1.25rem;
     justify-content: space-between;
+  }
+}
+
+/* ==========================================================================
+   Landing v2 — the scroll is the lifecycle of a vault.
+   Spec: docs/landing-v2.md · Tokens: ADR-0027 (Braun formal language).
+   ========================================================================== */
+
+@layer components {
+  :root {
+    /* a depicted window is a depiction of somebody else's chrome, not an EKHO
+       surface, so it keeps the radius those windows actually have. Every EKHO
+       surface on the page stays on --radius (4px). */
+    --panel: #fff;
+    --panel-line: #ddd8cf;
+    --panel-sub: #f4f2ec;
+    --win-radius: 10px;
+    /* the windows that float over the graph are glass: a lit rim, a top
+       highlight and a halo that lifts them off whatever is behind */
+    --glass: 97%;
+    --glass-rim: rgb(255 255 255 / 0.9);
+    --glass-top: rgb(255 255 255 / 0.8);
+    --glass-halo: rgb(26 26 24 / 0.05);
+    --glass-cast: rgb(26 26 24 / 0.2);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --panel: #36342e;
+      --panel-line: #4a473f;
+      --panel-sub: #2c2a26;
+      --glass: 95%;
+      --glass-rim: rgb(255 255 255 / 0.14);
+      --glass-top: rgb(255 255 255 / 0.07);
+      --glass-halo: rgb(237 235 230 / 0.05);
+      --glass-cast: rgb(0 0 0 / 0.5);
+    }
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .pill--solid {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+
+  /* The outline stays the ink it is made of. Going to the muted tone turned
+     the one filled control on the page grey under the pointer, which on a dark
+     ground read as a disabled button. */
+  .pill--solid:hover {
+    background: color-mix(in srgb, var(--text) 86%, var(--bg));
+    border-color: var(--text);
+  }
+
+  /* the same ink the label is set in, so the outlined button answers the
+     pointer as plainly as the filled one does */
+  .pill:hover {
+    border-color: var(--text);
+  }
+
+  .signal-text {
+    color: inherit;
+    box-shadow: inset 0 -3px 0 var(--signal);
+  }
+
+  /* ---------- the story column ---------- */
+
+  .story-text .chapter {
+    justify-content: space-between;
+    gap: 2.5rem;
+    padding-block: 5rem 3rem;
+  }
+
+  .chapter-body {
+    flex: 0 0 auto;
+  }
+
+  .chapter h2 {
+    margin-bottom: 1.1rem;
+    font-weight: 600;
+    font-size: clamp(1.625rem, 3.4vw, 2.375rem);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    max-width: 20ch;
+  }
+
+  .statement {
+    font-weight: 400;
+    font-size: var(--body-size);
+    line-height: var(--body-leading);
+    letter-spacing: 0;
+    color: var(--muted);
+    max-width: 52ch;
+  }
+
+  .chapter-label span {
+    color: var(--muted-deep);
+  }
+
+  .chapter-lede {
+    max-width: 58ch;
+    color: var(--muted);
+    font-size: var(--body-size);
+    line-height: var(--body-leading);
+  }
+
+  .fig-note {
+    margin-top: 1.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--muted-deep);
+  }
+
+  /* ---------- the architecture, assembling ---------- */
+
+  .stack {
+    margin: 0;
+  }
+
+  .stack-label {
+    margin: 0 0 0.75rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted-deep);
+  }
+
+  .stack-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .stack-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    border-top: 1px solid var(--line);
+    border-radius: var(--radius);
+    transition:
+      background 320ms ease,
+      color 320ms ease,
+      padding 320ms ease,
+      box-shadow 320ms ease;
+  }
+
+  .stack-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--muted-deep);
+  }
+
+  .stack-note {
+    font-size: 0.75rem;
+    color: var(--muted-deep);
+    text-align: right;
+  }
+
+  .stack-sq {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--line-strong);
+    flex: none;
+    transition: background 320ms ease;
+  }
+
+  .stack-row.is-done .stack-name,
+  .stack-row.is-done .stack-note {
+    color: var(--muted);
+  }
+
+  .stack-row.is-on {
+    background: var(--surface);
+    border-top-color: transparent;
+    padding: 0.68rem 1rem;
+    box-shadow: var(--lift);
+  }
+
+  .stack-row.is-on .stack-name {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 1.0625rem;
+  }
+
+  .stack-row.is-on .stack-note {
+    color: var(--muted);
+  }
+
+  .stack-row.is-on .stack-sq {
+    background: var(--signal);
+  }
+
+  .stack--full .stack-row {
+    background: var(--surface);
+    border-top-color: transparent;
+    padding: 0.8rem 1rem;
+  }
+
+  .stack--full .stack-name {
+    color: var(--text);
+  }
+
+  .stack--full .stack-sq {
+    background: var(--signal);
+  }
+
+  /* ---------- windows: the reader's own environment ---------- */
+
+  .win {
+    margin: 0;
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: var(--win-radius);
+    box-shadow: 0 18px 48px -18px rgb(26 26 24 / 0.22);
+    overflow: hidden;
+  }
+
+  .win-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    background: var(--panel-sub);
+    border-bottom: 1px solid var(--panel-line);
+  }
+
+  .win-lights {
+    display: inline-flex;
+    gap: 0.4rem;
+  }
+
+  .win-lights i {
+    width: 11px;
+    height: 11px;
+    border-radius: 999px;
+    background: #ff5f57;
+  }
+
+  .win-lights i:nth-child(2) {
+    background: #febc2e;
+  }
+
+  .win-lights i:nth-child(3) {
+    background: #28c840;
+  }
+
+  .win-title {
+    flex: 1;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--muted);
+    padding-right: 2.6rem;
+  }
+
+  .win-body {
+    display: flex;
+    min-height: 0;
+  }
+
+  /* --- Finder --- */
+
+  .win--finder .win-body {
+    height: 16.5rem;
+  }
+
+  .fin-side {
+    width: 9.5rem;
+    flex: none;
+    padding: 0.6rem 0.5rem;
+    background: var(--panel-sub);
+    border-right: 1px solid var(--panel-line);
+    font-size: 0.75rem;
+  }
+
+  .fin-group {
+    margin: 0.4rem 0 0.25rem 0.5rem;
+    font-size: 0.6875rem;
+    color: var(--muted-deep);
+  }
+
+  .fin-side ul,
+  .fin-col {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .fin-side li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.28rem 0.5rem;
+    border-radius: var(--radius);
+    color: var(--muted);
+  }
+
+  .fin-side li.is-sel {
+    background: var(--surface-raised);
+    color: var(--text);
+  }
+
+  .fin-ico {
+    width: 11px;
+    height: 9px;
+    border-radius: 1px;
+    background: var(--line-strong);
+    flex: none;
+  }
+
+  .fin-ico--dir {
+    background: var(--muted-deep);
+  }
+
+  .fin-ico--doc {
+    width: 8px;
+    height: 10px;
+    background: none;
+    border: 1px solid var(--line-strong);
+    border-radius: 1px;
+  }
+
+  .fin-cols {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .fin-col {
+    flex: 1;
+    min-width: 0;
+    padding: 0.4rem;
+    border-right: 1px solid var(--panel-line);
+    font-size: 0.75rem;
+  }
+
+  .fin-col--last {
+    border-right: 0;
+  }
+
+  .fin-col li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.4rem;
+    border-radius: var(--radius);
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .fin-col li.is-sel {
+    background: var(--surface-raised);
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .fin-arrow {
+    margin-left: auto;
+    color: var(--muted-deep);
+  }
+
+  .fin-side li.is-sel .fin-ico {
+    background: var(--signal);
+  }
+
+  /* --- chat --- */
+
+  .win--chat .win-body {
+    height: 34rem;
+  }
+
+  .chat-side {
+    width: 10.5rem;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    padding: 0.7rem 0.6rem;
+    background: var(--panel-sub);
+    border-right: 1px solid var(--panel-line);
+    font-size: 0.75rem;
+  }
+
+  .chat-side ul {
+    list-style: none;
+    margin: 0 0 0.5rem;
+    padding: 0;
+  }
+
+  .chat-new {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.9rem;
+    padding: 0.4rem 0.5rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .chat-plus {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .chat-day {
+    margin: 0 0 0.25rem 0.5rem;
+    font-size: 0.6875rem;
+    color: var(--muted-deep);
+  }
+
+  .chat-side li {
+    padding: 0.35rem 0.5rem;
+    border-radius: var(--radius);
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .chat-side li.is-sel {
+    background: var(--surface-raised);
+    color: var(--text);
+  }
+
+  .chat-vault {
+    margin: auto 0 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.5rem;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: var(--radius);
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .chat-vault small {
+    display: block;
+    font-weight: 400;
+    font-size: 0.625rem;
+    color: var(--muted-deep);
+  }
+
+  .chat-sq,
+  .tool-sq {
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+    background: var(--signal);
+    flex: none;
+  }
+
+  /* What belongs to EKHO inside somebody else's client is marked by its label,
+     not by a decoration: the square, and the kind in full text colour. */
+  .tool--skill .tool-kind {
+    color: var(--text);
+  }
+
+  .chat-thread {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    padding: 1rem 1.15rem 0;
+  }
+
+  .chat-ask {
+    max-width: 78%;
+    margin: 0 0 1.1rem auto;
+    padding: 0.55rem 0.9rem;
+    background: var(--surface-raised);
+    border-radius: 14px;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .chat-answer {
+    display: flex;
+    gap: 0.7rem;
+  }
+
+  /* The mark sits on the window's own ground, like the plates in the model
+     row: a bright plate made the assistant the loudest thing in a window whose
+     subject is what EKHO writes. */
+  .chat-mark {
+    width: 22px;
+    height: 22px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--panel-line);
+    border-radius: 5px;
+  }
+
+  .chat-mark svg {
+    width: 13px;
+    height: 13px;
+    fill: var(--muted);
+  }
+
+  .chat-said {
+    margin: 0.2rem 0 0.7rem;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+  }
+
+  .tool {
+    margin-bottom: 0.6rem;
+    padding: 0.55rem 0.7rem 0.65rem;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 8px;
+  }
+
+  .tool-head {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.45rem;
+  }
+
+  .tool-kind {
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-deep);
+  }
+
+  .tool-chev {
+    margin-left: auto;
+    color: var(--muted-deep);
+    font-size: 0.7rem;
+  }
+
+  .tool-mono {
+    margin: 0 0 0.15rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tool-mono--dim {
+    color: var(--muted-deep);
+  }
+
+  .tool-said {
+    margin: 0 0 0.45rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .tool-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+  }
+
+  .tool-table td {
+    padding: 0.16rem 0.5rem 0.16rem 0;
+    vertical-align: top;
+  }
+
+  .tool-op {
+    width: 2.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    color: var(--muted-deep);
+  }
+
+  .tool-type {
+    width: 4.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+  }
+
+  .chat-acts {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0.2rem 0 0;
+  }
+
+  .chat-btn {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 0.75rem;
+  }
+
+  .chat-btn--solid {
+    background: var(--text);
+    border-color: var(--text);
+    color: var(--panel);
+    font-weight: 500;
+  }
+
+  .chat-foot {
+    padding: 0.5rem 1.25rem 0.9rem;
+  }
+
+  .chat-composer {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 0.4rem;
+    padding: 0.45rem 0.45rem 0.45rem 0.8rem;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 14px;
+  }
+
+  .chat-ph {
+    flex: 1;
+    font-size: 0.8125rem;
+    color: var(--muted-deep);
+  }
+
+  /* the arrows: hairlines at the weight of the rest of the line work */
+  .arrow {
+    width: 1em;
+    height: 1em;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vertical-align: -0.12em;
+  }
+
+  .chat-send .arrow {
+    width: 15px;
+    height: 15px;
+    stroke-width: 1.8;
+  }
+
+  .chapter-nav-arrow {
+    width: 0.85em;
+    height: 0.85em;
+  }
+
+  .chat-send {
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--text);
+    color: var(--panel);
+    font-size: 0.8rem;
+  }
+
+  .chat-model {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 0 0 0.3rem;
+    font-size: 0.6875rem;
+    color: var(--muted-deep);
+  }
+
+  /* ---------- 05 · the viewer ---------- */
+
+  /* The same build as the chapters before it: the text in a column on the
+     left, one window of the thing on the right. Stacked below the breakpoint,
+     where there is no second column to put anything in. */
+  .chapter--split {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  @media (min-width: 64rem) {
+    .chapter--split {
+      grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+      gap: clamp(2rem, 5vw, 4.5rem);
+    }
+  }
+
+  .split-text > h2 {
+    margin-top: 0;
+  }
+
+  .chapter--split .viewer {
+    margin-top: 0;
+  }
+
+  .viewer {
+    margin-top: 2.5rem;
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    background: var(--core);
+    border-radius: var(--radius);
+  }
+
+  .viewer .win {
+    --panel: #fbfaf7;
+    --panel-line: #e6e2da;
+    --panel-sub: #f2f0ea;
+    box-shadow: 0 26px 60px -20px rgb(0 0 0 / 0.5);
+  }
+
+  .win--app .win-body {
+    height: 20rem;
+    color: #1a1a18;
+  }
+
+  .app-side {
+    width: 9.5rem;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    padding: 0.8rem 0.6rem;
+    background: var(--panel-sub);
+    border-right: 1px solid var(--panel-line);
+    font-size: 0.75rem;
+  }
+
+  .app-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 1rem 0.4rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .app-sq {
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+    background: var(--signal);
+  }
+
+  .app-side ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .app-side li {
+    padding: 0.35rem 0.5rem;
+    border-radius: var(--radius);
+    color: #6b6762;
+  }
+
+  .app-side li.is-sel {
+    background: #e2dfd9;
+    color: #1a1a18;
+    font-weight: 500;
+  }
+
+  .app-side-foot {
+    margin: auto 0 0 0.5rem;
+    font-size: 0.625rem;
+    color: #9b968e;
+  }
+
+  .app-main {
+    flex: 1;
+    min-width: 0;
+    padding: 1.1rem 1.25rem;
+  }
+
+  .app-h {
+    margin: 0 0 0.9rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .app-stats {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    margin: 0 0 1.4rem;
+    padding: 0 0 1rem;
+    border-bottom: 1px solid var(--panel-line);
+  }
+
+  .app-stats b {
+    display: block;
+    font-size: 1.375rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .app-stats span {
+    font-size: 0.6875rem;
+    color: #9b968e;
+  }
+
+  .app-sub {
+    margin: 0 0 0.5rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9b968e;
+  }
+
+  .app-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .app-list li {
+    display: grid;
+    grid-template-columns: 4.6rem minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: baseline;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--panel-line);
+    font-size: 0.75rem;
+  }
+
+  .app-list li:last-child {
+    border-bottom: 0;
+  }
+
+  .app-type {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    color: #6b6762;
+  }
+
+  .app-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .app-meta {
+    font-size: 0.625rem;
+    color: #9b968e;
+    white-space: nowrap;
+  }
+
+  /* the state of an element, set the way the roadmap page sets it */
+  .app-pill {
+    padding: 0.1rem 0.4rem;
+    border: 1px solid var(--panel-line);
+    border-radius: 3px;
+    font-size: 0.5625rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #6b6762;
+    white-space: nowrap;
+  }
+
+  /* the diagram carries no shadow, only on hover (ADR-0027) */
+  .arch-row {
+    box-shadow: none;
+  }
+
+  details.arch-row:hover {
+    box-shadow: var(--lift-hover);
+  }
+
+  /* ---------- 07 · who ---------- */
+
+  .people {
+    list-style: none;
+    display: grid;
+    gap: 1.5rem;
+    margin: 2.5rem 0 0;
+    padding: 0;
+  }
+
+  @media (min-width: 48rem) {
+    .people {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem 3rem;
+    }
+  }
+
+  /* A rule each, not a panel each. Two filled tiles put a box around people
+     on a page whose other lists — the architecture rows, the waitlist — are
+     held by hairlines, and the box was the loudest thing in the chapter. */
+  .people li {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    padding: 1.25rem 0 0.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  /* The portraits are the only photographs on the page, so they take the page's
+     own palette rather than bringing their own: grey, and a shade quieter than
+     the text beside them until the tile is hovered. */
+  .people-face {
+    flex: none;
+    width: 8rem;
+    height: 8rem;
+    border-radius: var(--radius);
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.02);
+    opacity: 0.86;
+    transition: opacity 260ms ease;
+  }
+
+  .people li:hover .people-face {
+    opacity: 1;
+  }
+
+  .people-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .people-in {
+    width: 0.9375rem;
+    height: 0.9375rem;
+    fill: var(--muted);
+    transition: fill 200ms ease;
+  }
+
+  .people li:hover .people-in,
+  .people-link:focus-visible .people-in {
+    fill: var(--text);
+  }
+
+  .people b {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .people span {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* ---------- 08 · waitlist ---------- */
+
+  .waitlist {
+    margin-top: 2rem;
+  }
+
+  .waitlist--mail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .waitlist-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .waitlist-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-deep);
+  }
+
+  .waitlist-input {
+    flex: 1 1 16rem;
+    padding: 0.7rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.9375rem;
+  }
+
+  .waitlist-note {
+    margin: 0.75rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--muted-deep);
+  }
+
+  .waitlist--mail .waitlist-note {
+    margin: 0;
+    max-width: 26ch;
+  }
+
+  .chapter-nav a[aria-current] {
+    color: var(--text);
+  }
+
+  .chapter-nav a[aria-current] .chapter-nav-n {
+    color: var(--text);
+  }
+}
+
+@layer components {
+  /* Narrow screens: the windows drop their sidebars rather than being scaled
+     down into illegibility, which is what the real clients do at this width. */
+  @media (max-width: 47.999rem) {
+    .people-face {
+      width: 4.25rem;
+      height: 4.25rem;
+    }
+
+    .viewer {
+      padding: 1rem;
+    }
+  }
+
+  /* the window never spills out of its column */
+  .win-body > * {
+    min-width: 0;
+  }
+}
+
+@layer components {
+  /* ------------------------------------------------------------------
+     The story column, after the Figma choreography: the left side carries
+     nothing but the statement, the right side is the stage. The graph fills
+     it, the windows lie over it, and the architecture assembles underneath.
+     ------------------------------------------------------------------ */
+
+  /* the stage must be able to fill the figure on every width, or the graph,
+     which is positioned against it, collapses to nothing */
+  .story-figure {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  @media (min-width: 64rem) {
+    .story-figure {
+      padding-left: 4rem;
+      border-left: 1px solid transparent;
+      transition: border-color 400ms ease;
+      /* the opaque band and its stacking belong to the narrow layout only: here
+         the field has to pass behind the statement, not cover it */
+      background: none;
+      z-index: 0;
+    }
+
+    /* The rule between the columns is drawn by the step bars instead, because
+       it has to run the full height of the window and this border is only as
+       tall as the graphic. The transparent border stays so the figure keeps
+       its position. */
+
+    .story-text .chapter {
+      justify-content: center;
+      padding-block: clamp(3.5rem, 8vh, 6rem);
+    }
+  }
+
+  .figure-stage {
+    position: relative;
+    flex: 1;
+    min-height: 20rem;
+  }
+
+  .figure-stage .context-graphic {
+    position: absolute;
+    inset: 0;
+    padding-block: 0;
+  }
+
+  /* A window arrives from below and leaves upwards, so the handover has a
+     direction: the one whose turn it is rises into place while the one before
+     it lifts away. Both fading in the same spot read as one picture being
+     swapped for another. */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(52px);
+    transition:
+      opacity 560ms ease,
+      transform 720ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      visibility 720ms;
+    pointer-events: none;
+  }
+
+  [data-story-figure][data-show='finder'] .overlay[data-for='finder'],
+  [data-story-figure][data-show='chat'] .overlay[data-for='chat'] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  /* the one that has had its turn goes out of the top */
+  [data-story-figure][data-show='chat'] .overlay[data-for='finder'] {
+    transform: translateY(-44px);
+  }
+
+  /* with the script off, no window covers the graph */
+  html:not(.js) .overlay {
+    display: none;
+  }
+
+  /* --- the Finder window: one list, real folders --- */
+
+  .win--finder {
+    width: 17.5rem;
+  }
+
+  .fin-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0.4rem 0.6rem;
+  }
+
+  .fin-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.32rem 0.6rem;
+    border-radius: var(--radius);
+    font-size: 0.8125rem;
+    color: var(--text);
+  }
+
+  .fin-list li.is-file {
+    color: var(--muted);
+  }
+
+  .ic-folder {
+    width: 18px;
+    height: 14px;
+    flex: none;
+  }
+
+  .ic-doc {
+    width: 12px;
+    height: 15px;
+    flex: none;
+  }
+
+  /* --- the chat window sits on the graph too, so it stays compact --- */
+
+  /* The window may never grow past its stage: below it sits the architecture,
+     and a window that bleeds over those rows makes both unreadable. It is the
+     window that matters here, so it takes the room it can get and the bar and
+     the body share what is left. */
+  .overlay .win {
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+  }
+
+  .overlay .win-body {
+    min-height: 0;
+  }
+
+  .overlay .win--chat {
+    width: min(95%, 45rem);
+  }
+
+  .overlay .win--chat .win-body {
+    height: 34rem;
+    flex: 0 1 auto;
+  }
+
+  .overlay .chat-side {
+    width: 11rem;
+  }
+
+  /* --- the architecture, assembling under the graph --- */
+
+  .stack--rail {
+    flex: none;
+  }
+
+  .stack--rail .stack-row.is-off {
+    display: none;
+  }
+
+  .stack--rail .stack-rows {
+    gap: 0.3rem;
+  }
+
+  .stack--rail .stack-label {
+    margin-bottom: 0.6rem;
+  }
+
+  @media (max-width: 63.999rem) {
+    .stack--rail .stack-row.is-off {
+      display: flex;
+    }
+  }
+}
+
+@layer components {
+  /* the graph sits in the middle of its stage, whatever the rail is doing */
+  .figure-stage .context-graphic {
+    position: absolute;
+    inset: 0;
+    justify-content: center;
+  }
+
+  /* before the first layer lights up there is nothing to label */
+  .stack--rail:not(:has(.stack-row.is-on, .stack-row.is-done)) {
+    visibility: hidden;
+  }
+}
+
+@layer components {
+  /* ------------------------------------------------------------------
+     Narrow screens. The two columns cannot sit side by side, and the answer
+     used to be a band pinned under the header with the text scrolling beneath
+     it. That band showed the same scattered field in every chapter, spent half
+     the screen doing it, and covered whatever the chapter had put at the top —
+     the install command among other things. A phone reads one thing at a time,
+     so the stage goes and each chapter carries its own picture in the flow:
+     the windows through .flow-window, the net through .flow-graphic.
+     ------------------------------------------------------------------ */
+  @media (max-width: 63.999rem) {
+    .story-figure {
+      display: none;
+    }
+
+    .figure-stage {
+      min-height: 0;
+    }
+
+    .stack--rail {
+      display: none;
+    }
+
+    .story-text .chapter {
+      min-height: 0;
+      padding-block: 2.5rem 3rem;
+    }
+
+    .story-text .chapter:first-child {
+      padding-top: 1.5rem;
+    }
+
+    .win--finder {
+      width: 13.5rem;
+    }
+
+    .fin-list li {
+      font-size: 0.75rem;
+      padding: 0.26rem 0.5rem;
+    }
+
+    .overlay .win--chat {
+      width: calc(100% - 1.5rem);
+    }
+
+    .overlay .win--chat .win-body {
+      height: 19rem;
+    }
+  }
+}
+
+@layer components {
+  /* On a phone a window floating over a 52svh band is unreadable, so the same
+     window is rendered a second time inside the chapter and simply flows with
+     the text. Exactly one of the two is ever displayed. */
+  .flow-window,
+  .flow-graphic {
+    display: none;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 63.999rem) {
+    .flow-window,
+    .flow-graphic {
+      display: block;
+    }
+
+    /* The small net is a pattern rather than a diagram here, so it is given a
+       square of its own and left to be read as one. */
+    .flow-graphic .context-graphic {
+      margin: 0 auto;
+      max-width: 22rem;
+      padding: 0;
+    }
+
+    .overlay {
+      display: none;
+    }
+
+    .flow-window .win--finder {
+      width: 100%;
+      max-width: 20rem;
+    }
+
+    .flow-window .win--chat .win-body {
+      height: 24rem;
+    }
+
+    /* The list of other conversations is context for the one being shown, and
+       on a phone it takes half the width away from the thing it is context
+       for: the message, the command and the table of what would be written. */
+    .flow-window .chat-side {
+      display: none;
+    }
+  }
+}
+
+@layer components {
+  /* ------------------------------------------------------------------
+     The menu on narrow screens. The chapters do not fit in a row there, so
+     the same <nav> becomes a full-screen panel behind a button. One list of
+     links, laid out two ways.
+     ------------------------------------------------------------------ */
+
+  .burger {
+    display: none;
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: -0.6rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .burger-lines::before,
+  .burger-lines::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20px;
+    height: 1.5px;
+    margin-left: -10px;
+    background: currentcolor;
+    transition:
+      transform 240ms ease,
+      opacity 240ms ease;
+  }
+
+  .burger-lines::before {
+    transform: translateY(-4px);
+  }
+
+  .burger-lines::after {
+    transform: translateY(4px);
+  }
+
+  .menu-open .burger-lines::before {
+    transform: rotate(45deg);
+  }
+
+  .menu-open .burger-lines::after {
+    transform: rotate(-45deg);
+  }
+
+  .burger:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+    border-radius: var(--radius);
+  }
+
+  /* the two extra rows only exist for the panel */
+  .chapter-nav-extra {
+    display: none;
+  }
+
+  @media (max-width: 63.999rem) {
+    .burger {
+      display: block;
+    }
+
+    .chapter-nav {
+      position: fixed;
+      inset: 0;
+      z-index: 15;
+      flex: none;
+      overflow-y: auto;
+      padding: 5.25rem 1rem 2.5rem;
+      background: var(--bg);
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity 240ms ease,
+        visibility 240ms;
+    }
+
+    .menu-open .chapter-nav {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .menu-open body {
+      overflow: hidden;
+    }
+
+    .chapter-nav ol {
+      display: block;
+      width: auto;
+      margin: 0;
+    }
+
+    .chapter-nav-extra {
+      display: block;
+    }
+
+    .chapter-nav li {
+      border-top: 1px solid var(--line);
+    }
+
+    .chapter-nav li:last-child {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .chapter-nav a {
+      display: flex;
+      align-items: baseline;
+      gap: 0.9rem;
+      padding: 1.05rem 0;
+      border-bottom: 0;
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      white-space: normal;
+    }
+
+    .chapter-nav .chapter-nav-n {
+      flex: none;
+      width: 1.5rem;
+      font-size: 0.8125rem;
+      font-weight: 400;
+      color: var(--muted-deep);
+    }
+
+    /* the chapter you are in is marked, not coloured in */
+    .chapter-nav a[aria-current]::after {
+      content: '';
+      width: 9px;
+      height: 9px;
+      margin-left: auto;
+      align-self: center;
+      border-radius: 2px;
+      background: var(--signal);
+    }
+  }
+}
+
+@layer components {
+  /* The header blurs what scrolls under it. A backdrop-filter makes the header
+     the containing block for any fixed descendant, which pinned the menu panel
+     to the header's own box instead of the viewport. While the menu is open the
+     blur comes off, so the panel measures against the viewport again and the
+     header, at a higher z-index, keeps sitting on top of it. */
+  .menu-open .site-header {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@layer components {
+  /* The panel is a child of the header, so it paints inside the header's own
+     stacking context and would cover the wordmark and the button that closes
+     it. Both are lifted one level above the panel. */
+  @media (max-width: 63.999rem) {
+    .site-header .brand,
+    .burger {
+      position: relative;
+      z-index: 16;
+    }
+  }
+}
+
+@layer components {
+  /* the architecture at full size: the rail's rows, bigger and openable */
+  .arch {
+    gap: 0.4rem;
+    margin-top: 3rem;
+  }
+
+  .arch-row {
+    background: var(--surface);
+  }
+
+  .arch-head {
+    padding: 1.4rem 1.6rem;
+  }
+
+  .arch-title {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+
+  .arch-sq {
+    width: 11px;
+    height: 11px;
+    align-self: center;
+    border-radius: 2px;
+    background: var(--signal);
+  }
+
+  .arch-code {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    opacity: 1;
+    color: var(--muted-deep);
+  }
+
+  .arch-note {
+    color: var(--muted);
+  }
+
+  summary.arch-head::after {
+    color: var(--muted-deep);
+    font-weight: 400;
+  }
+
+  .arch-desc {
+    max-width: 68ch;
+    color: var(--muted);
+  }
+
+  .arch-desc p {
+    margin: 0;
+  }
+
+  .arch-desc strong {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* the vault opens onto its three parts */
+  .arch-parts {
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+  }
+
+  .arch-parts li {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: 0.2rem 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.9375rem;
+  }
+
+  .arch-parts b {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .arch-parts code {
+    grid-column: 1;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted-deep);
+  }
+
+  .arch-parts span {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  @media (max-width: 47.999rem) {
+    .arch-head {
+      padding: 1.1rem 1.1rem;
+    }
+
+    .arch-desc {
+      padding: 0 1.1rem 1.25rem;
+    }
+
+    .arch-parts li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .arch-parts span {
+      grid-column: 1;
+      grid-row: auto;
+    }
+  }
+}
+
+@layer components {
+  /* The hero is the first chapter of the story, not a section of its own: one
+     stage carries the graphic from the top of the page, so the hero settling
+     into chapter 01 is a movement and not a change of picture. */
+  .chapter--hero {
+    justify-content: center;
+  }
+
+  .hero-title {
+    margin: 0 0 1.5rem;
+    font-size: clamp(2.125rem, 4.6vw, 3.25rem);
+    /* the same weight every heading after it has: the opening was the one
+       statement on the page set lighter than the chapters it introduces */
+    font-weight: 600;
+    line-height: 1.06;
+    letter-spacing: -0.035em;
+  }
+
+  .hero-lede {
+    margin: 0 0 2.25rem;
+    max-width: 44ch;
+    font-size: var(--body-size);
+    line-height: var(--body-leading);
+    color: var(--muted);
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  @media (max-width: 63.999rem) {
+    .chapter--hero {
+      padding-block: 2rem 3rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 8.5vw, 2.75rem);
+    }
+  }
+}
+
+@layer components {
+  /* In the scattered chapter the labels come in by themselves, one after
+     another from the top of the field down, so the reader is told what the
+     dots are without having to go looking. Everywhere else they stay on
+     hover and focus. */
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-tip {
+    opacity: 1;
+    transition: opacity 550ms ease;
+    transition-delay: calc(var(--n) * 260ms + 500ms);
+  }
+
+  /* a pointer on a dot overrides the sequence, without waiting for a delay */
+  .cg-pt:hover .cg-tip,
+  .cg-pt:focus-visible .cg-tip {
+    opacity: 1;
+    transition-delay: 0s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-on [data-graphic].is-1:not(.is-2) .cg-tip {
+      transition: none;
+      transition-delay: 0s;
+    }
+  }
+}
+
+@layer components {
+  /* The layer being read has to carry, not whisper: it inverts against the
+     ground rather than sitting a shade off it. Anthracite on the light mode,
+     the light tone on the dark one. */
+  .stack-row.is-on {
+    background: var(--block);
+    box-shadow: none;
+  }
+
+  .stack-row.is-on .stack-name {
+    color: var(--block-ink);
+  }
+
+  .stack-row.is-on .stack-note {
+    color: color-mix(in srgb, var(--block-ink) 62%, transparent);
+  }
+
+  /* in chapter 06 the row you opened is the one that carries */
+  .arch-row[open] {
+    background: var(--block);
+  }
+
+  .arch-row[open] .arch-title {
+    color: var(--block-ink);
+  }
+
+  .arch-row[open] .arch-note,
+  .arch-row[open] .arch-code,
+  .arch-row[open] summary.arch-head::after {
+    color: color-mix(in srgb, var(--block-ink) 62%, transparent);
+  }
+
+  .arch-row[open] .arch-desc {
+    color: color-mix(in srgb, var(--block-ink) 74%, transparent);
+  }
+
+  .arch-row[open] .arch-desc strong,
+  .arch-row[open] .arch-parts b {
+    color: var(--block-ink);
+  }
+
+  .arch-row[open] .arch-parts li {
+    border-top-color: color-mix(in srgb, var(--block-ink) 20%, transparent);
+  }
+
+  .arch-row[open] .arch-parts code {
+    color: color-mix(in srgb, var(--block-ink) 55%, transparent);
+  }
+
+  details.arch-row[open]:hover {
+    box-shadow: none;
+  }
+}
+
+@layer components {
+  /* The statements are the argument, so they are read, not skimmed. They used
+     to dim everything but the line nearest the middle of the screen, which is a
+     deck mannerism: on a page where all three are in view at once it leaves two
+     thirds of the text unreadable while the graph is already carrying the
+     movement. They all stand now, at the size the opening sets for running
+     text: one pitch for the whole page rather than a louder one per chapter. */
+  .statement {
+    font-size: var(--body-size);
+    line-height: var(--body-leading);
+    max-width: 44ch;
+    margin: 0 0 1rem;
+  }
+
+  .statement:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@layer components {
+  /* The Finder and the chat window lie on the graph, so the pane has an edge
+     rather than a printed outline: a hairline rim, a single-pixel highlight
+     along the top where a glass front would catch the light, and a halo so
+     faint it reads as depth and not as an effect. The cloud behind stays just
+     perceptible through it.
+
+     Deliberately not done: a saturation boost, a strong blur, or translucent
+     panels inside the window. That is the look of a particular year, and this
+     has to still be right in five. The viewer in chapter 05 is a product shot
+     on a solid ground and stays opaque. */
+  .win--finder,
+  .win--chat {
+    background: color-mix(in srgb, var(--panel) var(--glass), transparent);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border-color: var(--glass-rim);
+    box-shadow:
+      0 0 64px -12px var(--glass-halo),
+      0 22px 54px -24px var(--glass-cast),
+      inset 0 1px 0 var(--glass-top);
+  }
+
+  .win--finder .win-bar,
+  .win--chat .win-bar {
+    background: color-mix(in srgb, var(--panel-sub) 70%, transparent);
+    border-bottom-color: var(--glass-rim);
+  }
+
+  @supports not (backdrop-filter: blur(1px)) {
+    .win--finder,
+    .win--chat {
+      background: var(--panel);
+    }
+  }
+}
+
+@layer components {
+  /* The architecture has to be graspable in one look, which means it has to fit
+     on the screen. Its measurements follow the viewport height rather than a
+     fixed rem, so the five layers stay inside the frame on a laptop as well as
+     on a large display. Opening a layer may of course push past it. */
+  .chapter--wide {
+    padding-block: clamp(3.5rem, 9vh, 6rem) clamp(2.5rem, 6vh, 4rem);
+  }
+
+  .chapter--wide h2 {
+    font-size: clamp(1.5rem, 3vw, 2.125rem);
+  }
+
+  .chapter--wide .chapter-lede {
+    line-height: 1.55;
+  }
+
+  .arch {
+    margin-top: clamp(1.25rem, 3.5vh, 2.5rem);
+    gap: clamp(0.2rem, 0.55vh, 0.4rem);
+  }
+
+  .arch-head {
+    padding: clamp(0.7rem, 1.9vh, 1.4rem) clamp(1rem, 2vw, 1.6rem);
+  }
+
+  .arch-title {
+    font-size: clamp(1.0625rem, 1.7vw, 1.625rem);
+  }
+
+  .arch-note {
+    font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
+  }
+}
+
+@layer components {
+  /* the viewer is a product shot and follows the same rule: one screen, one look */
+  .viewer {
+    margin-top: clamp(1.25rem, 3vh, 2.5rem);
+    padding: clamp(1.25rem, 3.4vh, 3rem);
+  }
+
+  .win--app .win-body {
+    /* tall enough that the last row of the zone is a row and not a cut */
+    height: clamp(15rem, 41vh, 23.5rem);
+  }
+
+  .fig-note {
+    margin-top: clamp(0.85rem, 2vh, 1.5rem);
+  }
+}
+
+@layer components {
+  /* the models EKHO does not care about, as names */
+  .models {
+    /* Tight to the statement it belongs to. The chapter column puts 2.5rem
+       between its blocks, and on top of the rule that already separates these
+       two it was three separations doing one job; the gap is taken back out and
+       set deliberately. The height that gives back is what leaves the step
+       button room under the chapter. */
+    margin-top: calc(1.75rem - 2.5rem);
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--line);
+  }
+
+  /* The one claim in this chapter that is an argument rather than a
+     description, so it is labelled the way the page labels what is yours: the
+     signal square, and the label in full ink rather than in the tone the other
+     small caps use. */
+  .models-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .models-sq {
+    width: 9px;
+    height: 9px;
+    flex: none;
+    border-radius: 2px;
+    background: var(--signal);
+  }
+
+  .models-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.9rem;
+    margin: 0 0 0.75rem;
+    padding: 0;
+  }
+
+  .models-list li {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .models-list li + li::before {
+    content: '·';
+    margin-right: 0.9rem;
+    color: var(--line-strong);
+    font-weight: 400;
+  }
+
+  .models-note {
+    margin: 0;
+    max-width: 46ch;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--muted-deep);
+  }
+}
+
+@layer components {
+  /* the sphere can be taken hold of once it has formed */
+  [data-graphic].is-grabbable svg {
+    cursor: grab;
+    touch-action: none;
+  }
+
+  [data-graphic].is-turning svg {
+    cursor: grabbing;
+  }
+
+  /* while it turns, nothing eases: every frame would chase the last one */
+  [data-graphic].is-turning .cg-dot,
+  [data-graphic].is-turning .cg-pt {
+    transition: none;
+  }
+
+  /* what the pointer is on, and what it is joined to */
+  .cg-hot {
+    stroke: var(--signal);
+    stroke-width: 1;
+    opacity: 0;
+    transition: opacity 140ms ease;
+  }
+
+  [data-graphic].is-2 .cg-hot {
+    opacity: 0.9;
+  }
+
+  .cg-dot.is-hot,
+  .cg-pt.is-hot .cg-dot {
+    fill: var(--signal);
+    opacity: 1;
+  }
+
+  .cg-pt.is-hot .cg-tip,
+  .cg-pt.is-hot .cg-halo {
+    opacity: 1;
+  }
+}
+
+@layer components {
+  /* The links are drawn, not switched on. pathLength normalises every path to
+     one unit whatever it actually measures, so a single dash the length of the
+     path can be pulled across it: the web is laid down subpath by subpath in
+     the order it was generated, which is shuffled, so it grows all over at once
+     rather than sweeping from one side.
+
+     It starts after the points have begun to gather, because the form has to
+     arrive before the connections have anywhere to be. */
+  /* What this has to read as: the net is already there, the conversation in
+     the window lands in it as one node, and the connections the digest makes
+     are spun outwards from that node.
+
+     So the white net is not drawn at all. It stands complete behind the chat
+     window from the moment the chapter turns, and what uncovers it is the
+     window shrinking away. That is true to what is being shown: those
+     connections were there before this conversation.
+
+     Only the yellow is drawn. It is ordered outwards from the node, it waits
+     for the window to finish becoming that node, and it takes its time,
+     because it is the one thing this chapter is about. The curve is close to
+     even: a thing spreading spreads at its own pace rather than rushing the
+     first half of the way. */
+  .cg-far,
+  .cg-near,
+  .cg-chord {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    transition: opacity 500ms ease;
+  }
+
+  /* The yellow arrives in waves rather than being pulled across a dash. Same
+     outward order, and each wave still lands a fifth of a second after the
+     points it reaches have turned — --w is where it sits along the drawing.
+     What changed is the property: a dash offset is repainted on every frame of
+     the run, an opacity is not. */
+  .cg-own {
+    transition: opacity 260ms ease;
+  }
+
+  .reveal-on [data-graphic].is-3 .cg-own {
+    transition-delay: calc(320ms + var(--w, 0) * 2600ms);
+  }
+
+  /* before the chapter turns the waves are held at a hair of alpha, painted
+     and invisible, for the same reason the net around them is */
+  .reveal-on [data-graphic]:not(.is-3) .cg-own {
+    opacity: 0.001;
+    transition-delay: 0s;
+  }
+
+  /* turning redraws the geometry every frame; a dash animation on top of that
+     would fight it */
+  [data-graphic].is-turning .cg-link {
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cg-far,
+    .cg-near,
+    .cg-chord {
+      transition: opacity 500ms ease;
+      stroke-dashoffset: 0;
+    }
+
+    .reveal-on [data-graphic].is-3 .cg-own {
+      transition-delay: 0s;
+    }
+  }
+}
+
+@layer components {
+  /* The opening. The page script shrinks the statement from as large as the
+     frame allows into its place in the column, with the point field pulling
+     back from the whole screen into its stage at the same time. Both are
+     transforms, so neither reflows anything on the way.
+
+     It used to run off a stretch of scroll under the hero, which cost the
+     reader a stop of their own on a view belonging to no chapter. It runs on
+     its own clock now and the hero is one screen like every other chapter.
+
+     Below the breakpoint, and with reduced motion, there is no opening and the
+     hero is simply the first chapter. */
+  @media (min-width: 64rem) {
+    .reveal-on .chapter--hero {
+      min-height: 100svh;
+      justify-content: flex-start;
+      padding-block: 0;
+    }
+
+    .reveal-on .chapter--hero .chapter-body {
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100svh;
+    }
+
+    /* the statement has to sit over the field, which covers the screen while
+       the opening runs */
+    .story-text {
+      position: relative;
+      z-index: 2;
+    }
+
+    .chapter--hero .hero-title {
+      /* grows to the right from the page's left edge, never towards the middle */
+      transform-origin: left center;
+      /* deliberately no will-change: it pins the text to a layer rasterised at
+         its resting size, and everything above that scale is then a stretched
+         bitmap. Letting the compositor re-raster costs a little and keeps the
+         letters sharp, which is the whole point of showing them that large. */
+    }
+
+    .figure-stage {
+      will-change: transform;
+    }
+
+    /* nothing is grabbable or hoverable until the field has left the text */
+    .chapter--hero.is-opening ~ * .cg-pt,
+    [data-intro].is-opening + * .cg-pt {
+      pointer-events: none;
+    }
+  }
+}
+
+@layer components {
+  /* Points outside the viewBox still draw, which is what lets the field reach
+     past its column and across the screen without the drawing being scaled. */
+  .context-graphic svg {
+    overflow: visible;
+  }
+
+  .figure-stage {
+    will-change: auto;
+  }
+}
+
+@layer components {
+  /* The bulk of the first links arrive as waves rather than as 135 separate
+     strokes: one path per wave, nine paints instead of 135 per frame. Each
+     wave is still drawn rather than faded in — a connection that appears is
+     not a connection being made — and the dash runs over the whole path, so
+     the lines inside a wave lay themselves down one after another.
+
+     Nothing starts before the points are nearly home. The lines are fixed to
+     where the points end up, so a line drawn while its two ends are still
+     travelling stands in empty space, which is what made the build look like
+     two separate events. */
+  .cg-wave {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 0.62;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0.001;
+    transition: opacity 300ms ease;
+  }
+
+  .reveal-on [data-graphic].is-2:not(.is-net) .cg-wave {
+    opacity: 0.8;
+    stroke-dashoffset: 0;
+    transition:
+      stroke-dashoffset 560ms ease-out calc(760ms + var(--w) * 110ms),
+      opacity 90ms linear calc(760ms + var(--w) * 110ms);
+  }
+
+  [data-graphic].is-turning .cg-wave {
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-on [data-graphic].is-2:not(.is-net) .cg-wave {
+      stroke-dashoffset: 0;
+      transition: opacity 400ms ease;
+    }
+  }
+}
+
+@layer components {
+  /* Each first link is drawn from one point to the other, and they start one
+     after another. Half a second per stroke, eleven milliseconds between them,
+     so the web is visibly built rather than switched on. */
+  .cg-first {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 0.62;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    /* Not zero: at zero the browser skips painting these 135 lines entirely,
+       and the whole raster then lands in the one frame where the window is
+       already scaling down. A hair of alpha keeps them painted and invisible,
+       so the handover has nothing left to prepare. */
+    opacity: 0.001;
+    /* Leaving is a fade, but a short one. These are the same links the full
+       net contains, so switching them off in one frame while the net switches
+       on in the next made the handover a blink instead of a dissolve — and
+       over most of a second it was the other fault: the loose net of two
+       chapters back stood in the finished one while the reader was already
+       looking at it. */
+    transition: opacity 300ms ease;
+  }
+
+  .reveal-on [data-graphic].is-2:not(.is-net) .cg-first {
+    opacity: 0.8;
+    stroke-dashoffset: 0;
+    transition:
+      stroke-dashoffset 520ms ease-out calc(760ms + var(--e) * 90ms),
+      opacity 100ms linear calc(760ms + var(--e) * 90ms);
+  }
+
+  [data-graphic].is-turning .cg-first {
+    transition: none;
+  }
+
+  /* Promoted while the chapter before it is on screen and dropped again after,
+     so the group is on its own layer exactly when it has to move. */
+  .reveal-on [data-graphic].is-1:not(.is-2) .cg-firsts {
+    will-change: opacity;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-on [data-graphic].is-2:not(.is-net) .cg-first {
+      transition: opacity 400ms ease;
+      stroke-dashoffset: 0;
+    }
+  }
+}
+
+@layer components {
+  /* Scroll snapping: each chapter comes to rest at the top rather than being
+     left halfway. Proximity, not mandatory, and the hero is not a target: its
+     track is where the opening plays out, and a mandatory snap would have no
+     point to hold inside it and would throw the reader straight past it to the
+     first chapter. Proximity snaps when you come to rest near an edge and
+     leaves long moves alone.
+
+     scroll-margin clears the sticky header, or every chapter would come to rest
+     with its label underneath it. */
+  /* No CSS snapping: the page script moves between fixed views itself, and
+     mandatory snapping would fight its animation for the scroll position. */
+  @media (min-width: 64rem) {
+    .story-text .chapter,
+    .chapter--wide {
+      scroll-snap-align: start;
+      scroll-margin-top: 4rem;
+      scroll-snap-stop: always;
+    }
+
+    /* One resting place, since the opening no longer runs off the scroll: the
+       top of the page, with everything settled by the time the reader gets
+       there. */
+    .story-text .chapter--hero {
+      position: relative;
+      scroll-snap-align: start;
+      scroll-margin-top: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-snap-type: none;
+    }
+  }
+}
+
+@layer components {
+  /* Identical plates, whatever the mark inside them. The outlines differ wildly
+     in proportion, so each sits in a fixed box at a fixed height and is centred
+     in it: the row reads as one set rather than as eight logos of eight sizes.
+     Monochrome, like everything else on the page. */
+  .plates {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    padding: 0;
+  }
+
+  .plate {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--muted);
+    transition:
+      color 200ms ease,
+      border-color 200ms ease;
+  }
+
+  .plate:hover {
+    color: var(--text);
+    border-color: var(--line-strong);
+  }
+
+  .plate-mark {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: currentcolor;
+  }
+
+  .plate-text {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  /* the one line in this chapter that is an argument rather than a description */
+  .models-edge {
+    margin: 0.75rem 0 0;
+    max-width: 44ch;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    font-weight: 500;
+    color: var(--text);
+  }
+}
+
+@layer components {
+  /* The first links that touch a point of yours are drawn in the signal colour,
+     so the yellow in this chapter is the first few things of yours that found
+     each other, not a scatter of lone dots. */
+  .cg-first.is-yours {
+    stroke: var(--signal);
+  }
+
+  .reveal-on [data-graphic].is-2:not(.is-net) .cg-first.is-yours {
+    opacity: 1;
+  }
+
+  /* The window takes on a yellow edge while the links below it are being drawn,
+     so the folder and the graph read as the same thing. The colour moves in the
+     window's own border rather than in a ring laid over it: an overlay sits
+     inside the border it covers, and the two lines a pixel apart looked like a
+     mistake. The edge alone carries it, warming up over a second. The shadow
+     stays the dark one every other panel casts: a yellow glow made the window
+     look lit from within, which is a second thing happening for no reason. */
+  .win--finder {
+    transition: border-color 1100ms ease 350ms;
+  }
+
+  [data-story-figure][data-show='finder'] .win--finder {
+    border-color: color-mix(in srgb, var(--signal) 72%, var(--panel-line));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .win--finder {
+      transition: none;
+    }
+  }
+}
+
+@layer components {
+  /* Nothing blurs while the page is in motion. See Home.astro: a glide and a
+     collapse both walk the page through a position per frame, and every one of
+     those positions would otherwise have seven backdrop layers recomputed
+     against it. */
+  .is-moving .site-header,
+  .is-moving .win,
+  .is-moving .view-step {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@layer components {
+  /* While the chat window is collapsing into its dot it must not also be
+     easing its own opacity or fading with the overlay: the scroll position is
+     driving both, and a transition on top would lag a frame behind. */
+  [data-story-figure].is-collapsing .overlay[data-for='chat'] {
+    transition: none;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: none;
+  }
+
+  [data-story-figure].is-collapsing .win--chat {
+    transform-origin: center center;
+    transition: none;
+    /* The blur behind the window is recomputed for every size it passes
+       through, and the size is driven by the scroll position: the most
+       expensive thing on the page during the one second it can least afford
+       it. The window is over the dark field here, where its own translucent
+       ground reads the same without it. */
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@layer components {
+  /* the two names lead to the two people */
+  .people-link {
+    color: inherit;
+    text-decoration: none;
+    box-shadow: inset 0 -1.5px 0 transparent;
+    transition: box-shadow 180ms ease;
+  }
+
+  .people-link span {
+    font-size: 0.75em;
+    color: var(--muted-deep);
+  }
+
+  .people-link:hover {
+    box-shadow: inset 0 -1.5px 0 var(--signal);
+  }
+}
+
+@layer components {
+  /* The one line you paste. The dashed edge is the site's mark for something
+     that does not exist yet: it says so before the note underneath does, which
+     is what N4 asks for. */
+  .command {
+    /* a terminal is black in either mode, because a terminal is black */
+    --term: #0a0a09;
+    max-width: 27rem;
+    margin: 2.25rem 0 0;
+    padding: 0.85rem 1rem 0.9rem;
+    /* No edge at all: the panel is held off the page by a wide, soft shadow
+       instead, which is what a terminal window on a desk actually looks like.
+       The note underneath is what marks this as unshipped; N4 asks for the
+       marking, not for a border. */
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--term);
+    box-shadow:
+      0 20px 60px -22px rgb(0 0 0 / 0.38),
+      0 4px 14px -8px rgb(0 0 0 / 0.22);
+  }
+
+  .command-label {
+    margin-bottom: 0.5rem;
+    color: #7c776f;
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted-deep);
+  }
+
+  .command code {
+    display: block;
+    font-family: var(--font-mono);
+    /* sized so the line fits the column in one piece: a command broken across
+       two lines looks like two commands */
+    font-size: 0.75rem;
+    line-height: 1.55;
+    color: #e9e7e2;
+    overflow-wrap: anywhere;
+  }
+
+  .command-prompt {
+    margin-right: 0.35rem;
+    color: #7c776f;
+  }
+
+  .command-note {
+    margin: 0.55rem 0 0;
+    font-size: 0.75rem;
+    color: var(--muted-deep);
+  }
+
+  /* A command on a page is there to be taken. The box answers the pointer and
+     the button hands the line over; it is always in the DOM and always
+     reachable by keyboard, and only its opacity waits for the hover, so nothing
+     moves or reflows when the pointer arrives. */
+  .command {
+    position: relative;
+    transition: box-shadow 0.25s ease;
+  }
+
+  .command:hover,
+  .command:focus-within {
+    box-shadow:
+      0 24px 66px -20px rgb(0 0 0 / 0.46),
+      0 5px 16px -8px rgb(0 0 0 / 0.28);
+  }
+
+  .command-copy {
+    align-items: center;
+    background: none;
+    border: 1px solid #2e2c28;
+    border-radius: 4px;
+    color: #9b958b;
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    gap: 0.35rem;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    padding: 0.25rem 0.45rem;
+    position: absolute;
+    right: 0.6rem;
+    top: 0.6rem;
+    transition:
+      opacity 0.25s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .command:hover .command-copy,
+  .command-copy:focus-visible {
+    opacity: 1;
+  }
+
+  .command-copy:hover {
+    border-color: #4a463f;
+    color: #e9e7e2;
+  }
+
+  .command-copy:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
+  .command-copy.is-done {
+    border-color: color-mix(in srgb, var(--signal) 55%, #2e2c28);
+    color: var(--signal);
+    opacity: 1;
+  }
+
+  .command-copy svg {
+    fill: none;
+    height: 0.75rem;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.4;
+    width: 0.75rem;
+  }
+
+  /* Without a pointer there is no hover to reveal it, so it simply stays. */
+  @media (hover: none) {
+    .command-copy {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .command,
+    .command-copy {
+      transition: none;
+    }
+  }
+}
+
+@layer components {
+  /* In the snapped position the content has to sit the same distance from the
+     top of the screen as from the bottom. The section rests with its top at the
+     viewport top, and the header covers the first 4rem of that, so the two gaps
+     are only equal if the top padding carries the header's height on top of the
+     bottom padding. Centring in the box alone puts the block too high by
+     exactly the header. */
+  @media (min-width: 64rem) {
+    /* The header covers the first 4rem, so that much is padded off the top and
+       nothing is padded off the bottom: centring in what is left then puts the
+       block the same distance from the header as from the bottom edge. Fixed
+       padding on both sides cannot do it, because the denser chapters need
+       every pixel and would be pushed out of the top instead. */
+    .story-text .chapter,
+    .chapter--wide {
+      padding-block: 4rem 0;
+      justify-content: center;
+    }
+
+    .story-text .chapter--hero {
+      padding-block: 0;
+    }
+  }
+}
+
+@layer components {
+  /* The language switch. A native select, because it is the one control every
+     platform already knows how to open, reach by keyboard and read aloud, and
+     because each option is a real path: with the script off it is still a list
+     of the four pages, and the pages exist. */
+  .header-aside {
+    display: none;
+  }
+
+  .lang-picker {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .lang-select {
+    appearance: none;
+    padding: 0.2rem 1.25rem 0.2rem 0.4rem;
+    border: 0;
+    border-radius: var(--radius);
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+
+  .lang-select:hover {
+    color: var(--text);
+  }
+
+  .lang-select:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
+  .lang-select option {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  .lang-caret {
+    position: absolute;
+    right: 0.35rem;
+    font-size: 0.7rem;
+    color: var(--muted-deep);
+    pointer-events: none;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 64rem) {
+    .header-aside {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: end;
+    }
+
+    .header-github {
+      color: var(--muted);
+      font-size: 0.875rem;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-github:hover {
+      color: var(--text);
+    }
+  }
+}
+
+/* The step buttons ---------------------------------------------------------
+   The page moves one fixed view at a time and nothing else says so. These two
+   sit in the left column, above and below the statement, pinned by the script
+   to where the text rests. They glide when the chapter changes rather than
+   jumping. Gone on narrow screens, where the page scrolls natively. */
+@layer components {
+  .view-steps[hidden] {
+    display: none;
+  }
+
+  /* The hero's second button carries the same mark as the step bars, since it
+     does the same thing: it moves the reader on one view. */
+  .pill-mark {
+    fill: none;
+    height: 0.875rem;
+    margin-left: 0.15rem;
+    stroke: var(--signal);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+    vertical-align: -0.15em;
+    width: 0.875rem;
+  }
+
+  /* Each one is a bar across the whole left column, not a loose control: it
+     runs from the edge of the window to the rule that divides the text from
+     the figure, over the same blurred ground as the header, and closes the
+     text area with a hairline. One holds the top of the column, under the
+     header, the other the bottom of the window, and they stay there while the
+     chapters change height underneath. */
+  .view-step {
+    align-items: center;
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 0;
+    /* Full ink. The label is a control, and at the muted tone it was the
+       hardest thing on the page to read — over a translucent ground, and
+       worse where the blur is off while the page is moving. */
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    gap: 0.4375rem;
+    left: 0;
+    letter-spacing: 0.02em;
+    padding: 0.625rem 1rem 0.625rem var(--step-left, 1rem);
+    position: fixed;
+    right: calc(100% - var(--step-right, 100%));
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+    z-index: 6;
+  }
+
+  /* Without the blur the bar has to carry the ground on its own, or the text
+     underneath would read straight through it. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .view-step {
+      background: var(--bg);
+    }
+  }
+
+  .view-step[hidden] {
+    display: none;
+  }
+
+  .view-step--prev {
+    border-bottom: 1px solid var(--line);
+    top: var(--step-top, 0px);
+  }
+
+  .view-step--next {
+    border-top: 1px solid var(--line);
+    bottom: 0;
+  }
+
+  .view-step svg {
+    fill: none;
+    height: 0.875rem;
+    /* The one coloured thing in the bar: the label says where it goes, the
+       mark says it can be used. */
+    stroke: var(--signal);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+    transition: transform 0.2s ease;
+    width: 0.875rem;
+  }
+
+  /* The hover settles the glass rather than lighting it: the same ground, a
+     little less see-through. A brighter panel was the loudest thing on the
+     page for a control that only moves the view on. */
+  .view-step:hover {
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    color: var(--text);
+  }
+
+  .view-step--next:hover svg {
+    transform: translateY(2px);
+  }
+
+  .view-step--prev:hover svg {
+    transform: translateY(-2px);
+  }
+
+  .view-step:focus-visible {
+    border-radius: 4px;
+    color: var(--text);
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .view-step,
+    .view-step svg {
+      transition: none;
+    }
+  }
+
+  /* The rule that divides the text from the figure. It hangs off the bars
+     because the three belong together: it starts where the back bar ends,
+     under the header, and runs to the bottom of the window, closing the column
+     on all three sides. The graphic used to carry it on its own left border,
+     which was only ever as tall as the graphic and stopped short. */
+  /* Below the story there is no second column, so there is nothing to divide. */
+  .view-steps[data-rule='off']::before {
+    display: none;
+  }
+
+  .view-steps::before {
+    background: var(--line);
+    /* Edge to edge: it meets the header at the top and the bottom of the
+       window at the other end, with nothing left over at either. */
+    bottom: 0;
+    content: '';
+    left: calc(var(--step-right, 0px) - 1px);
+    pointer-events: none;
+    position: fixed;
+    top: var(--step-top, 0px);
+    width: 1px;
+    /* Over the bars, not under them. Their glass is only partly opaque, so a
+       line behind it still showed through, just dimmer — which read as two
+       breaks in a line that is meant to run the whole way. */
+    z-index: 7;
+  }
+
+  /* Each bar takes a strip of the column with it, so the chapter gives up the
+     same again at each end and nothing ends up underneath them. Narrow screens
+     have neither bars nor a second column. */
+  @media (min-width: 64rem) {
+    /* Room between the text and the rule. The column ends at the rule, so
+       without this the last word of a full line sits against it. */
+    .story-text .chapter {
+      padding-right: 3rem;
+    }
+
+    /* The hero is exempt: its body is sticky and centred on a screen of its
+       own, so padding here only adds empty page between it and the first
+       chapter. */
+    .story-text .chapter:not(.chapter--hero) {
+      /* Not symmetric, because what it has to be level with is not symmetric:
+         the header and the back bar take 103px off the top, the forward bar
+         42px off the bottom. The 61px difference is added to the top so the
+         text rests the same distance from both bars. */
+      padding-block: 9.0625rem 5.25rem;
+    }
+  }
+}
+
+/* The stage behind the graph ------------------------------------------------
+   What the chat window leaves behind. Not a box around the net: the column it
+   stood in lightens as the window shrinks into the decision point, so the
+   graph ends up drawn on a ground of its own with its name in the corner. It
+   sits behind everything the page lays out, which is what lets the net be
+   drawn on it rather than under it. */
+@layer components {
+  .stage-wash {
+    background: var(--surface);
+    bottom: 0;
+    left: var(--step-right, 100%);
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    right: 0;
+    top: var(--step-top, 0);
+    transition: opacity 500ms ease;
+    z-index: -1;
+  }
+
+  .stage-title {
+    color: var(--muted);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    left: var(--step-right, 100%);
+    letter-spacing: 0.14em;
+    margin: 0;
+    opacity: 0;
+    padding: 1.6rem 0 0 2rem;
+    pointer-events: none;
+    position: fixed;
+    text-transform: uppercase;
+    top: var(--step-top, 0);
+    transition: opacity 500ms ease;
+    white-space: nowrap;
+    z-index: 3;
+  }
+
+  @media (max-width: 63.999rem) {
+    .stage-wash,
+    .stage-title {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stage-wash,
+    .stage-title {
+      transition: none;
+    }
+  }
+}
+
+/* Chapter 06, the architecture ---------------------------------------------
+   Opening a layer makes the stack taller. If the chapter is centred, the rows
+   below the one that opened are pushed off the bottom of the screen, and the
+   model stops being a model — you cannot see the layer you are reading in
+   relation to the ones under it. So the stack is anchored to the foot of the
+   screen and grows upwards: all five rows stay in view whatever is open, and
+   what gets pushed out of sight at the top is the chapter's own heading, which
+   has already been read by then. */
+@layer components {
+  @media (min-width: 64rem) {
+    #architecture {
+      /* a column, so the foot of it can be the fixed end: the wide chapters
+         are plain blocks otherwise, and justify-content would do nothing */
+      display: flex;
+      flex-direction: column;
+      height: 100svh;
+      /* Centred, and "unsafe" so it stays centred: the default protects the
+         start edge, which would drop the block to the top of the screen as
+         soon as an open layer made it taller than the free space. Opening a
+         row grows the stack by about ninety pixels, and from the middle that
+         is forty-five each way, which both bars have room for — where an
+         end-anchored stack spent all of it downwards. */
+      justify-content: unsafe center;
+      overflow: visible;
+      /* Room for the bars at either end, and for the half of a row's growth
+         that goes towards each. */
+      padding-block: clamp(3rem, 8vh, 5rem) clamp(3.5rem, 9vh, 6rem);
+    }
+
+    /* the stack is the last thing in the column and keeps its place; the note
+       under it travels with it */
+    #architecture .measure {
+      flex: 0 0 auto;
+    }
+
+    /* The tallest open state has to fit between the two bars — 775px against
+       755px of clear window at this height — so the open text is set a little
+       tighter. Without it the top row slips under the back bar when the last
+       layer is open, and the whole point is that all five stay in view. */
+    #architecture .arch-desc {
+      font-size: clamp(0.875rem, 1.05vw, 1rem);
+      line-height: 1.48;
+      /* On a tall window this is never reached and the text simply stands. On
+         a short one the open layer scrolls rather than pushing a row out of
+         the window, because the five rows standing together are the point and
+         the paragraph is not. */
+      max-height: calc(100svh - 500px);
+      overflow-y: auto;
+      padding-bottom: clamp(0.5rem, 1.1vh, 0.9rem);
+    }
+
+    #architecture .arch-parts {
+      gap: 0.5rem;
+    }
+
+    /* Five rows, so every pixel taken off a row is worth five. Together with
+       the tighter open text this leaves the tallest state about fifty pixels
+       of room inside the window rather than fighting for the last five. */
+    #architecture .arch-head {
+      padding-block: clamp(0.55rem, 1.35vh, 1.05rem);
+    }
+  }
+
+  /* The rows open by unfolding rather than appearing: a layer of a model that
+     simply switches on tells you nothing about where it sits. Progressive
+     enhancement — where ::details-content is not supported the row still
+     opens, it just opens at once. */
+  @supports selector(::details-content) {
+    :root {
+      interpolate-size: allow-keywords;
+    }
+
+    .arch-row::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition:
+        block-size 420ms cubic-bezier(0.2, 0.7, 0.3, 1),
+        content-visibility 420ms allow-discrete;
+    }
+
+    .arch-row[open]::details-content {
+      block-size: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    @supports selector(::details-content) {
+      .arch-row::details-content {
+        transition: none;
+      }
+    }
+  }
+}
+
+/* The model marks on a phone -------------------------------------------------
+   Seven in one row rather than six and a stranded one: the row is a statement
+   about not being tied to any of them, and it only reads as that if they are
+   seen together. Here rather than up with the narrow-screen rules, because the
+   plate's own size is set further down the file and a media query does not
+   make a rule win. */
+@layer components {
+  @media (max-width: 63.999rem) {
+    .plates {
+      gap: 0.35rem;
+    }
+
+    .plate {
+      width: 2.6rem;
+      height: 2.6rem;
+    }
+  }
+}
+
+/* The chat window on a phone -------------------------------------------------
+   On a wide screen the window shows a slice of a conversation and the crop is
+   part of the picture. Here it is the picture: the whole point of the chapter
+   is that nothing is written without being shown first, and the confirm was
+   below the crop. So the window is as tall as what it contains, and the
+   terminal line is set small enough to fit the width rather than run under the
+   edge. */
+@layer components {
+  @media (max-width: 63.999rem) {
+    .flow-window .win--chat .win-body {
+      height: auto;
+    }
+
+    .flow-window .chat-scroll {
+      overflow: visible;
+      padding-bottom: 0.9rem;
+    }
+
+    .flow-window .tool-mono {
+      font-size: 0.625rem;
+      overflow-wrap: anywhere;
+    }
+  }
+}
+
+/* The viewer on a phone ------------------------------------------------------
+   Same trade as the chat window: the navigation down the left is context, and
+   at this width it takes half the frame away from what it is context for. What
+   the shot has to show is that the vault is readable — the counts, the recent
+   entries, the two screens side by side. */
+@layer components {
+  @media (max-width: 63.999rem) {
+    .viewer .app-side {
+      display: none;
+    }
+
+    .viewer .app-meta {
+      overflow-wrap: anywhere;
+    }
+  }
+}
+
+/* The opening on a phone -----------------------------------------------------
+   A screen of its own, the way it has one on a desktop. There is no graphic
+   beside it here, so the statement stands alone and needs the room to be read
+   before the first chapter arrives; at its natural height it slid past before
+   anyone had. Down here because .story-text .chapter sets the height these
+   chapters otherwise take, and a media query does not make a rule win. */
+@layer components {
+  @media (max-width: 63.999rem) {
+    .story-text .chapter--hero {
+      justify-content: center;
+      min-height: calc(100svh - 3.5rem);
+    }
+  }
+}
+
+/* One screen per chapter on a phone -----------------------------------------
+   The same rhythm the wide layout has, where each chapter is a view of its
+   own: here nothing snaps, but every chapter still gets at least a screen and
+   sits in the middle of it, so a chapter is a thing you arrive at rather than
+   a paragraph you scroll past. Chapters that need more than a screen keep
+   whatever they need. */
+@layer components {
+  @media (max-width: 63.999rem) {
+    .story-text .chapter,
+    .chapter--wide {
+      justify-content: center;
+      min-height: calc(100svh - 4.5rem);
+    }
+
+    /* The repository name beside a layer is an aside, and here it is what
+       makes the row wrap onto a second line. */
+    .arch-code {
+      display: none;
+    }
+
+    /* The note is narrow because on a wide screen it stands beside the button.
+       Here it stands under it and can have the column. */
+    .waitlist--mail .waitlist-note {
+      max-width: none;
+    }
   }
 }

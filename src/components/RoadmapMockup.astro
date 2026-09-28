@@ -1,0 +1,69 @@
+---
+// Chapter 05, the right-hand column: one desktop window, showing the page
+// EKHO's own roadmap is published as. It is modelled on the real output
+// template in the harness (`templates/outputs/roadmap.html`): a rail of zones
+// on the left, and one zone open — what is running now — with the counts above
+// it. Element ids, titles and states are the real ones from the roadmap note
+// in EKHO_brain, shortened to what fits.
+//
+// No phone beside it. The viewer is shown here as a thing that renders a page,
+// and one screen says that; two said "app" instead.
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = t(lang);
+
+const nav = c.viewer.nav;
+const stats = c.viewer.stats;
+const items = c.viewer.items;
+---
+
+<div class="viewer">
+  <figure class="win win--app" aria-label={c.viewer.appTitle}>
+    <div class="win-bar win-bar--app">
+      <span class="win-lights" aria-hidden="true">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+      <span class="win-title">{c.viewer.appTitle}</span>
+    </div>
+    <div class="win-body">
+      <nav class="app-side" aria-hidden="true">
+        <p class="app-brand">
+          <span class="app-sq"></span> EKHO
+        </p>
+        <ul>
+          {nav.map((n, i) => (
+            <li class:list={[{ 'is-sel': i === 1 }]}>{n}</li>
+          ))}
+        </ul>
+        <p class="app-side-foot">{c.viewer.readOnly}</p>
+      </nav>
+      <div class="app-main" aria-hidden="true">
+        <p class="app-h">{nav[1]}</p>
+        <ul class="app-stats">
+          {stats.map(([n, l]) => (
+            <li>
+              <b>{n}</b>
+              <span>{l}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="app-sub">{c.viewer.recent}</p>
+        <ul class="app-list">
+          {items.map(([id, title, state]) => (
+            <li>
+              <span class="app-type">{id}</span>
+              <span class="app-title">{title}</span>
+              <span class="app-pill">{state}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </figure>
+</div>

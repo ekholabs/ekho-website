@@ -1,13 +1,6 @@
 ---
-import Base from '../layouts/Base.astro';
+// English lives at the root; the other three are built from [lang]/index.astro.
+import Home from '../components/Home.astro';
 ---
 
-<Base
-  title="EKHO Labs — AI is only as good as your context"
-  description="AI is only as good as your context. Own it."
-  layout="bare"
->
-  <div class="wrap wrap-wide teaser">
-    <h1>AI is only as good as your context. Own it!</h1>
-  </div>
-</Base>
+<Home lang="en" />

@@ -1,0 +1,51 @@
+---
+// The EKHO architecture as a stack that assembles while you scroll. It sits at
+// the bottom of every chapter in the story column, in the same place each time,
+// so moving from chapter to chapter reads as one picture building rather than
+// five separate graphics. Chapter 06 renders the same five layers with `full`.
+//
+// A layer is `on` while its chapter is being read, `done` once it has been,
+// and `off` before. In the story column there is exactly one instance, the
+// `rail`: it is pinned to the bottom of the viewport for the whole story and
+// the page script moves it through the states, so two stacks are never on
+// screen at once. Without JavaScript the rail rests in its markup state and
+// chapter 06 carries the full picture regardless.
+
+interface Props {
+  active?: string[];
+  done?: string[];
+  full?: boolean;
+  label?: boolean;
+  rail?: boolean;
+}
+const { active = [], done = [], full = false, label = true, rail = false } = Astro.props;
+
+const layers = [
+  { key: 'conversation', title: 'Conversation', note: 'between people' },
+  { key: 'llm', title: 'LLM', note: 'interchangeable' },
+  { key: 'harness', title: 'Harness', note: 'CLI and skills' },
+  { key: 'ontology', title: 'Ontology', note: 'types, edges, rules' },
+  { key: 'vault', title: 'EKHO Vault', note: 'Knowledge · Specs · Code' },
+];
+---
+
+<div
+  class:list={['stack', { 'stack--full': full, 'stack--rail': rail }]}
+  data-rail={rail ? '' : undefined}
+>
+  {label && <p class="stack-label">The architecture, assembling</p>}
+  <ol class="stack-rows">
+    {layers.map((l) => {
+      const state = full || active.includes(l.key) ? 'on' : done.includes(l.key) ? 'done' : 'off';
+      return (
+        <li class:list={['stack-row', `is-${state}`]} data-layer={l.key}>
+          <span class="stack-name">
+            {l.key === 'vault' && <span class="stack-sq" aria-hidden="true"></span>}
+            {l.title}
+          </span>
+          <span class="stack-note">{l.note}</span>
+        </li>
+      );
+    })}
+  </ol>
+</div>

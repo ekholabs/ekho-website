@@ -1,0 +1,45 @@
+---
+// The site is static (N5), so the waitlist needs an external endpoint that sets
+// no cookie and does no profiling (N6). Until that provider is decided, the
+// form is not rendered and the section falls back to a plain mail link, so the
+// page never shows a field that goes nowhere.
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = t(lang);
+
+const ENDPOINT = '';
+---
+
+{ENDPOINT ? (
+  <form class="waitlist" action={ENDPOINT} method="post">
+    <label class="waitlist-label" for="wl-email">
+      {c.waitlist.label}
+    </label>
+    <div class="waitlist-row">
+      <input
+        class="waitlist-input"
+        id="wl-email"
+        type="email"
+        name="email"
+        required
+        autocomplete="email"
+        placeholder="you@example.com"
+      />
+      <button class="pill pill--solid" type="submit">
+        {c.waitlist.cta}
+      </button>
+    </div>
+    <p class="waitlist-note">{c.waitlist.formNote}</p>
+  </form>
+) : (
+  <p class="waitlist waitlist--mail">
+    <a class="pill pill--solid" href="mailto:hello@ekholabs.eu?subject=Waitlist">
+      {c.waitlist.cta}
+    </a>
+    <span class="waitlist-note">{c.waitlist.note}</span>
+  </p>
+)}

@@ -1,0 +1,1155 @@
+---
+import Base from '../layouts/Base.astro';
+import ContextGraphic from './ContextGraphic.astro';
+import Architecture from './Architecture.astro';
+import Arrow from './Arrow.astro';
+import FinderWindow from './FinderWindow.astro';
+import ChatWindow from './ChatWindow.astro';
+import RoadmapMockup from './RoadmapMockup.astro';
+import Waitlist from './Waitlist.astro';
+import ModelRow from './ModelRow.astro';
+import { Image } from 'astro:assets';
+import lorenzPortrait from '../assets/people/lorenz-vierecke.jpg';
+import stephanPortrait from '../assets/people/stephan-georg.jpg';
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = t(lang);
+
+// The scroll is the lifecycle of a vault: scattered before EKHO, connected with
+// it, compounding once it runs. The graphic on the right holds that movement,
+// the column on the left carries the statement, the environment the reader
+// already works in, and the architecture assembling layer by layer.
+// Full spec: docs/landing-v2.md
+const chapters = [
+  { id: 'why', n: '01', label: c.nav.why },
+  { id: 'what', n: '02', label: c.nav.what },
+  { id: 'how', n: '03', label: c.nav.how },
+  { id: 'architecture', n: '04', label: c.nav.architecture },
+  { id: 'who', n: '05', label: c.nav.team },
+];
+
+// The two founders. Names, faces and profiles on a public page are the one
+// thing never to guess. The URLs come from their own contact notes in
+// EKHO_brain, and the portraits are named after the people in them, confirmed
+// by Lorenz. The first pass guessed the order and had them the wrong way round.
+// LinkedIn's "in" bug, used to say where the two links go. It is not in the
+// simple-icons package — LinkedIn asked to be taken out of it — so the path
+// sits here, drawn on the same 24-unit grid as the marks that do come from
+// there, and is tinted like every other mark on the page.
+const LINKEDIN =
+  'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z';
+
+const people = [
+  {
+    name: 'Lorenz Vierecke',
+    line: c.who.lorenz,
+    href: 'https://www.linkedin.com/in/lorenz-vierecke-7b896079',
+    portrait: lorenzPortrait,
+  },
+  {
+    name: 'Stephan Georg',
+    line: c.who.stephan,
+    href: 'https://www.linkedin.com/in/stephangeorg',
+    portrait: stephanPortrait,
+  },
+];
+---
+
+<Base title={c.meta.title} description={c.meta.description} layout="wide" lang={lang}>
+  <nav
+    class="chapter-nav"
+    id="chapter-nav"
+    aria-label={c.nav.chapters}
+    slot="header-nav"
+    data-chapter-nav
+  >
+    <ol>
+      {chapters.map((c) => (
+        <li>
+          <a href={`#${c.id}`} data-chapter-link={c.id}>
+            <span class="chapter-nav-n">{c.n}</span>
+            {c.label}
+          </a>
+        </li>
+      ))}
+      <li class="chapter-nav-extra">
+        <a href="#waitlist" data-chapter-link="waitlist">
+          <span class="chapter-nav-n">06</span>
+          {c.nav.waitlist}
+        </a>
+      </li>
+      <li class="chapter-nav-extra">
+        <a href="https://github.com/ekholabs">
+          <Arrow class="chapter-nav-arrow" />
+          GitHub
+        </a>
+      </li>
+    </ol>
+  </nav>
+
+  {/* ---------- the story: graphic right, everything else left ---------- */}
+  {/* What the chat window leaves behind. Not a box around the net: the whole
+      stage lightens as the window shrinks into the decision point, so the
+      right-hand column becomes the ground the graph is drawn on and its name
+      stands in the corner. A frame in the window's shape was tried here first,
+      then that frame as a panel; both competed with the net for attention, and
+      the net is the subject. */}
+  <div class="stage-wash" data-stage-wash aria-hidden="true"></div>
+  <p class="stage-title" data-stage-wash aria-hidden="true">
+    {c.graphic.frameTitle}
+  </p>
+
+  <div class="wrap wrap-wide story">
+    <div class="story-figure" data-story-figure>
+      <div class="figure-stage">
+        <ContextGraphic caption={false} lang={lang} />
+        <div class="overlay" data-for="finder">
+          <FinderWindow lang={lang} />
+        </div>
+        <div class="overlay" data-for="chat">
+          <ChatWindow lang={lang} />
+        </div>
+        {/* What the chat window leaves behind. As it shrinks into the decision
+            point, its outline stays exactly where it was and becomes the case
+            the net is held in: same box, same corners, nothing inside it but
+            the graph. The script gives it the window's measurements, because
+            they are the window's, not numbers of its own. */}
+      </div>
+      {/* The architecture rail used to sit here and assemble as you scroll. It
+          was taking a fifth of the stage from the window above it, so it is out
+          while we settle how the model should be shown. The chapters keep their
+          data-layers, which is the record of which layer each one is about, and
+          the script still drives a rail if one is put back. */}
+    </div>
+
+    <div class="story-text">
+      <section
+        class="chapter chapter--hero"
+        id="hero"
+        data-chapter
+        data-stage="0"
+        data-intro
+        data-view
+      >
+        <div class="chapter-body">
+          <h1 class="hero-title" data-intro-title>
+            {c.hero.titleBefore} <span class="signal-text">{c.hero.titleSignal}</span>
+          </h1>
+          <p class="hero-lede" data-intro-fade>
+            {c.hero.lede}
+          </p>
+          <p class="cta-row" data-intro-fade>
+            {/* Straight to the mail. The chapter at the foot of the page says
+                the same thing at more length, but somebody who presses this
+                has already decided. */}
+            <a class="pill pill--solid" href="mailto:hello@ekholabs.eu?subject=Waitlist">
+              {c.hero.cta}
+            </a>
+            <a class="pill" href="#why">
+              {c.hero.seeHow}
+              <svg class="pill-mark" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M3.5 6 8 10.5 12.5 6" />
+              </svg>
+            </a>
+          </p>
+        </div>
+      </section>
+
+      <section
+        class="chapter"
+        id="why"
+        data-view
+        data-chapter
+        data-nav="why"
+        data-stage="1"
+        data-layers=""
+        data-done=""
+      >
+        <div class="chapter-body measure">
+          <p class="chapter-label">
+            <span>01</span> {c.nav.why}
+          </p>
+          <h2>{c.why.title}</h2>
+          <p class="statement">{c.why.a}</p>
+          <p class="statement">{c.why.b}</p>
+          <p class="statement">{c.why.c}</p>
+        </div>
+      </section>
+
+      <section
+        class="chapter"
+        id="what"
+        data-view
+        data-chapter
+        data-nav="what"
+        data-stage="2"
+        data-layers="vault"
+        data-done=""
+        data-overlay="finder"
+      >
+        <div class="chapter-body measure">
+          <p class="chapter-label">
+            <span>02</span> {c.nav.what}
+          </p>
+          <h2>{c.what.title}</h2>
+          <p class="statement">{c.what.a}</p>
+          <p class="statement">{c.what.b}</p>
+
+          {/* The one line you paste. Marked as unshipped, which N4 requires and
+              which the dashed edge says before the note does. Recovered from
+              the page this one replaced, so the address and the key placeholder
+              are the ones the repo already used. */}
+          <figure class="command" data-command>
+            <figcaption class="command-label">{c.what.commandLabel}</figcaption>
+            <button
+              class="command-copy"
+              type="button"
+              data-command-copy
+              data-idle={c.nav.copy}
+              data-done={c.nav.copied}
+            >
+              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
+                <path d="M10.5 3.5A1.5 1.5 0 0 0 9 2H4a2 2 0 0 0-2 2v5a1.5 1.5 0 0 0 1.5 1.5" />
+              </svg>
+              <span data-command-copy-label>{c.nav.copy}</span>
+            </button>
+            <code data-command-text>
+              <span class="command-prompt" aria-hidden="true">
+                $
+              </span>{' '}
+              curl -fsSL https://get.ekholabs.eu/i/&lt;key&gt; | sh
+            </code>
+          </figure>
+          <p class="command-note">{c.what.commandNote}</p>
+        </div>
+        <div class="flow-window">
+          <FinderWindow lang={lang} />
+        </div>
+      </section>
+
+      <section
+        class="chapter"
+        id="how"
+        data-view
+        data-chapter
+        data-nav="how"
+        data-stage="2"
+        data-layers="conversation llm harness"
+        data-done="vault"
+        data-overlay="chat"
+      >
+        <div class="chapter-body measure">
+          <p class="chapter-label">
+            <span>03</span> {c.nav.how}
+          </p>
+          <h2>{c.how.title}</h2>
+          <p class="statement">{c.how.a}</p>
+          <p class="statement">{c.how.b}</p>
+        </div>
+        <div class="flow-window">
+          <ChatWindow lang={lang} />
+        </div>
+        {/* The second thing this chapter has to land, besides the confirm: EKHO
+            is not tied to one model. Set as names rather than badges, because a
+            row of other companies' marks is a licensing question before it is a
+            design one, and because the claim here is about a file format and
+            not about a partnership. See docs/landing-v2.md. */}
+        <div class="models">
+          <p class="models-label">
+            <span class="models-sq" aria-hidden="true"></span>
+            {c.how.sovereignty}
+          </p>
+          <ModelRow lang={lang} />
+          <p class="models-note">{c.how.note}</p>
+          {/* The sovereignty claim, in one line. Not an appeal to privacy: the
+              providers are moving into the memory layer, and a vault that lives
+              there is not portable however portable the model is. Grounded in
+              I-195 in EKHO_brain. */}
+          <p class="models-edge">{c.how.edge}</p>
+        </div>
+      </section>
+
+      <section
+        class="chapter"
+        id="compound"
+        data-view
+        data-chapter
+        data-nav="how"
+        data-stage="3"
+        data-layers="ontology"
+        data-done="conversation llm harness vault"
+      >
+        <div class="chapter-body measure">
+          <p class="chapter-label">
+            <span>03</span> How
+          </p>
+          <h2>{c.compound.title}</h2>
+          <p class="statement">{c.compound.a}</p>
+          <p class="statement">{c.compound.b}</p>
+        </div>
+        {/* The net, for a phone. The companion on the right is a wide-screen
+            thing: it lives in a column beside the text and moves through four
+            states as the reader steps. Here the chapters simply scroll, so the
+            one state this chapter is about is drawn in place, smaller and
+            without the labels, and everything else in the graphic's story is
+            carried by the words. Exactly one of the two is ever displayed. */}
+        <div class="flow-graphic">
+          <ContextGraphic
+            lang={lang}
+            animated={false}
+            caption={false}
+            points={200}
+            labelled={false}
+          />
+        </div>
+      </section>
+    </div>
+  </div>
+
+  {/* ---------- 05 · what EKHO is ---------- */}
+  <section
+    class="wrap wrap-wide chapter chapter--wide chapter--split"
+    id="viewer"
+    data-view
+    data-chapter
+    data-nav="how"
+    data-stage="3"
+  >
+    {/* Two columns, like the chapters before it: what the viewer is on the
+        left, one window of it on the right. */}
+    <div class="split-text">
+      <h2>{c.viewer.title}</h2>
+      <p class="chapter-lede">{c.viewer.lede}</p>
+      <p class="statement">{c.viewer.a}</p>
+      <p class="statement">{c.viewer.b}</p>
+      <p class="fig-note">{c.viewer.note}</p>
+    </div>
+    <RoadmapMockup lang={lang} />
+  </section>
+
+  {/* ---------- 06 · architecture ---------- */}
+  <section
+    class="wrap wrap-wide chapter chapter--wide"
+    id="architecture"
+    data-view
+    data-chapter
+    data-nav="architecture"
+    data-stage="3"
+  >
+    <div class="measure">
+      <p class="chapter-label">
+        <span>04</span> {c.nav.architecture}
+      </p>
+      <h2>{c.architecture.title}</h2>
+      <p class="chapter-lede">{c.architecture.lede}</p>
+    </div>
+    <Architecture lang={lang} />
+  </section>
+
+  {/* ---------- 07 · who ---------- */}
+  <section
+    class="wrap wrap-wide chapter chapter--wide"
+    id="who"
+    data-view
+    data-chapter
+    data-nav="who"
+    data-stage="3"
+  >
+    <div class="measure">
+      <h2>{c.who.title}</h2>
+      <p class="chapter-lede">{c.who.lede}</p>
+    </div>
+    <ul class="people">
+      {people.map((p) => (
+        <li>
+          <Image class="people-face" src={p.portrait} alt={p.name} width={256} height={256} />
+          <div>
+            <b>
+              {/* The mark says where the link goes, which the arrow only
+                  implied. It is LinkedIn's own, from simple-icons like the
+                  others on the page. */}
+              <a class="people-link" href={p.href} aria-label={`${p.name} on LinkedIn`}>
+                {p.name}
+                <svg class="people-in" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d={LINKEDIN} />
+                </svg>
+              </a>
+            </b>
+            <span>{p.line}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {/* ---------- 08 · where we are, and the waitlist ---------- */}
+  <section
+    class="wrap wrap-wide chapter chapter--wide"
+    id="waitlist"
+    data-view
+    data-chapter
+    data-nav="waitlist"
+    data-stage="3"
+  >
+    <div class="measure">
+      <h2>{c.waitlist.title}</h2>
+      <p class="chapter-lede">{c.waitlist.lede}</p>
+      <Waitlist lang={lang} />
+    </div>
+  </section>
+
+  {/*
+    The page moves one fixed view at a time, and until now a wheel or a swipe
+    was the only thing that said so. These two give that gesture a handle. They
+    sit in the left column, above and below the statement, and the script pins
+    them to the text block itself so they frame whatever chapter is resting.
+    Each one hides at the end it cannot go past, because a button that does
+    nothing is worse than no button.
+  */}
+  <div class="view-steps" data-view-steps hidden>
+    <button class="view-step view-step--prev" type="button" data-view-step="-1">
+      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path d="M3.5 10 8 5.5 12.5 10" />
+      </svg>
+      <span>{c.nav.prev}</span>
+    </button>
+    <button class="view-step view-step--next" type="button" data-view-step="1">
+      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path d="M3.5 6 8 10.5 12.5 6" />
+      </svg>
+      <span>{c.nav.next}</span>
+    </button>
+  </div>
+</Base>
+
+<script>
+  // Progressive enhancement only. Without JavaScript, or with reduced motion,
+  // every statement is fully visible, the graphic rests in its finished state
+  // and the architecture stack renders in the state the markup gives it.
+  const root = document.documentElement;
+  // Both classes are already on: the head sets them inline, before the first
+  // paint. Setting them again here is harmless and keeps this script readable
+  // on its own.
+  root.classList.add('js');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduceMotion) root.classList.add('reveal-on');
+
+  const chapters = [...document.querySelectorAll<HTMLElement>('[data-chapter]')];
+  const links = new Map(
+    [...document.querySelectorAll<HTMLAnchorElement>('[data-chapter-link]')].map((a) => [
+      a.dataset.chapterLink,
+      a,
+    ]),
+  );
+  const chapterNav = document.querySelector<HTMLElement>('[data-chapter-nav]');
+  const graphics = [...document.querySelectorAll<HTMLElement>('[data-graphic]')];
+  const arch = document.querySelector<HTMLElement>('[data-arch]');
+  const railRows = [...document.querySelectorAll<HTMLElement>('[data-rail] [data-layer]')];
+  const figure = document.querySelector<HTMLElement>('[data-story-figure]');
+  const intro = document.querySelector<HTMLElement>('[data-intro]');
+  const introTitle = document.querySelector<HTMLElement>('[data-intro-title]');
+  const introFades = [...document.querySelectorAll<HTMLElement>('[data-intro-fade]')];
+  const stage = document.querySelector<HTMLElement>('.figure-stage');
+  const compound = document.getElementById('compound');
+  const chatOverlay = document.querySelector<HTMLElement>('.overlay[data-for="chat"]');
+  // the dot the window collapses into is the decision its confirm table makes
+  // The dot the chat window collapses into. Held by key, not by the label it
+  // shows: that text is translated, and the English match quietly found
+  // nothing on the other three languages, so the window shrank where it stood
+  // instead of travelling into the graph.
+  // The circle, not the group around it: the group's box takes in the label
+  // beside the dot, and its centre sits some eighty pixels off to one side, so
+  // the window came to rest next to the point instead of on it.
+  const collapseTarget = document.querySelector<SVGElement>('.cg-pt[data-key="decision"] .cg-dot');
+  // The translation applied to the chat window on the previous frame. Kept so
+  // the next one can subtract it back out and read where the window actually
+  // sits, untransformed, rather than where it has already been moved to.
+  let lastTx = 0;
+  let lastTy = 0;
+
+  // The collapse of the chat window into the decision point, as a value from 0
+  // to 1 that the paint below reads. It is driven here rather than by the
+  // scroll position so that it has a length of its own: quick, but a movement
+  // rather than a jump, and the same whatever brought the reader here.
+  let collapseP = 0;
+  let collapseRun = 0;
+  let collapsing = false;
+
+  // Blur is the most expensive thing on this page and there are seven layers of
+  // it: the header, the windows, the step buttons. Recomputing all of them for
+  // every position the page passes through is what a glide and a collapse both
+  // do. They are suspended while anything is moving and come back when it
+  // stops; over a second of movement nobody sees the difference, and on a
+  // browser that rasterises blur on the CPU it is the whole difference.
+  const setMoving = () => {
+    document.documentElement.classList.toggle('is-moving', animating || collapsing);
+  };
+  // Which net the graphic is showing. It is not the chapter: the full net is
+  // switched in a moment before the window starts collapsing, so what uncovers
+  // it is the window going rather than the graph changing while the reader
+  // watches. Outside the stepper — a phone, a jump, reduced motion — it simply
+  // follows the chapter, which is what update() below does.
+  let netOn = false;
+  let netLead = 0;
+  const setNet = (on: boolean) => {
+    netOn = on;
+    for (const g of graphics) g.classList.toggle('is-net', on);
+  };
+
+  const runCollapse = (to: number, atOnce = false) => {
+    // A page that is not on screen is served no animation frames, so a run
+    // begun there would sit half done until the reader came back. Same guard
+    // as the stepper: with nothing to animate for, it simply arrives. A jump
+    // past the chapter is the same case — there is no window to watch shrink.
+    if (atOnce || reduceMotion || document.hidden) {
+      collapseP = to;
+      update();
+      return;
+    }
+    const from = collapseP;
+    if (from === to) return;
+    const DUR = 900 * Math.abs(to - from);
+    const t0 = performance.now();
+    const id = ++collapseRun;
+    collapsing = true;
+    setMoving();
+    const tick = (now: number) => {
+      if (id !== collapseRun) return;
+      const p = Math.min(1, (now - t0) / DUR);
+      collapseP = from + (to - from) * p;
+      if (p >= 1) {
+        collapsing = false;
+        setMoving();
+      }
+      update();
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  // The outline the window leaves behind. It is measured from the window on
+  // the first frame of the collapse, while the window is still untransformed,
+  // so the box is the window's own and not an approximation of it.
+  // The stage behind the graph, and its name. Both come up as the chat window
+  // goes, so the ground has changed by the time there is nothing left of the
+  // window.
+  const washPieces = [...document.querySelectorAll<HTMLElement>('[data-stage-wash]')];
+  const showWash = (v: number) => {
+    for (const el of washPieces) el.style.opacity = String(v);
+  };
+  const figureStage = document.querySelector<HTMLElement>('.figure-stage');
+
+  const wideIntro = window.matchMedia('(min-width: 64rem)');
+  let lastNav: string | undefined;
+
+  // What a frame of the collapse needs, and nothing else. The run drives this
+  // at 60fps for nearly a second; the full update measures every chapter, the
+  // window, the dot and the opening on each call, and interleaves those reads
+  // with the writes of the frame before, so the browser relaid out the whole
+  // tree, SVG included, 60 times. The window is moved by the scroll clock, so
+  // every one of those relayouts was visible as a stutter in the window.
+  let lastWashOn = false;
+  let winCentre: { x: number; y: number } | undefined;
+  let dotAt: { x: number; y: number } | undefined;
+  let dotAge = 0;
+
+  function paintCollapse(collapse: number) {
+    const chatWin = chatOverlay?.querySelector<HTMLElement>('.win');
+    if (!figure || !chatWin) return;
+
+    if (collapse > 0 && collapse < 1) {
+      // Measured once at the start of the run, off the window as it stands
+      // before it is moved, and off the dot every fourth frame: both are
+      // steady enough that reading them every frame only bought a relayout.
+      if (!winCentre) {
+        const w = chatWin.getBoundingClientRect();
+        winCentre = { x: w.left + w.width / 2 - lastTx, y: w.top + w.height / 2 - lastTy };
+      }
+      if (!dotAt || dotAge % 4 === 0) {
+        const t = collapseTarget?.getBoundingClientRect();
+        if (t) dotAt = { x: t.left + t.width / 2, y: t.top + t.height / 2 };
+      }
+      dotAge++;
+
+      showWash(lastWashOn ? Math.min(1, collapse * 1.3) : 0);
+      const e = collapse < 0.5 ? 2 * collapse * collapse : 1 - Math.pow(-2 * collapse + 2, 2) / 2;
+      const tx = dotAt ? (dotAt.x - winCentre.x) * e : 0;
+      const ty = dotAt ? (dotAt.y - winCentre.y) * e : 0;
+      const scale = 1 - e * 0.994;
+      chatWin.style.transform = `translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px) scale(${scale.toFixed(4)})`;
+      lastTx = tx;
+      lastTy = ty;
+      chatWin.style.opacity = String(Math.max(0, 1 - Math.max(0, (collapse - 0.92) / 0.08)));
+    } else {
+      winCentre = undefined;
+      dotAt = undefined;
+      dotAge = 0;
+      if (collapse >= 1) {
+        chatWin.style.opacity = '0';
+        showWash(lastWashOn ? 1 : 0);
+      } else {
+        lastTx = 0;
+        lastTy = 0;
+        chatWin.style.transform = '';
+        chatWin.style.opacity = '';
+        showWash(0);
+      }
+    }
+
+    const moving = collapse > 0 && collapse < 1;
+    if (moving) figure.dataset.show = 'chat';
+    figure.classList.toggle('is-collapsing', moving);
+  }
+
+  function update() {
+    // While a run is in flight the frame is spent on the window alone. The
+    // chapter the reader is in cannot change under a collapse, so nothing the
+    // rest of this function decides can have changed either.
+    if (collapsing) {
+      paintCollapse(collapseP);
+      return;
+    }
+
+    const vh = window.innerHeight;
+
+    // the chapter whose top has passed a third of the viewport is the one
+    // being read; it decides the nav, and which stage the graphic is in
+    let current: HTMLElement | undefined;
+    for (const c of chapters) if (c.getBoundingClientRect().top <= vh / 3) current = c;
+
+    const nav = current?.dataset.nav;
+    links.forEach((a, id) => {
+      if (id === nav) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    });
+
+    // on narrow screens the chapter list scrolls sideways: keep the active one in view
+    if (chapterNav && nav !== lastNav) {
+      lastNav = nav;
+      const active = nav ? links.get(nav) : undefined;
+      if (active) {
+        const navBox = chapterNav.getBoundingClientRect();
+        const box = active.getBoundingClientRect();
+        if (box.left < navBox.left || box.right > navBox.right) {
+          chapterNav.scrollLeft += box.left - navBox.left - 8;
+        }
+      } else {
+        chapterNav.scrollLeft = 0;
+      }
+    }
+
+    paintIntro();
+
+    // the windows lie over the graph, one chapter at a time, and the column
+    // divider only appears once the two columns start doing different jobs
+    if (figure) {
+      figure.dataset.stage = current?.dataset.stage ?? '0';
+
+      // Leaving chapter 03, the chat window collapses into the one point it
+      // just made: the decision in its confirm table is a dot on the sphere,
+      // and the window shrinks into it. The window is held on screen until the
+      // collapse is done, or it would fade out from under the movement.
+      let collapse = 0;
+      const chatWin = chatOverlay?.querySelector<HTMLElement>('.win');
+      // The lit stage belongs to the story chapters only: not to the opening,
+      // where there is nothing yet to be a ground for, and not below the
+      // story, where the chapters take the whole page and a lit strip down one
+      // side would be a leftover. Keyed on the chapter rather than on the
+      // collapse, so no route back to the top can leave it standing.
+      const washOn =
+        !!current && current.id !== 'hero' && !current.classList.contains('chapter--wide');
+
+      // Whatever moved the page — a step, a chapter link, a restored position,
+      // a resize — the collapse belongs to the chapter being read. While a run
+      // is in flight it is left alone; otherwise it is brought into line here,
+      // so no route into the chapter can leave the window half shrunk.
+      if (compound && stepping() && !collapsing) {
+        const at = views.indexOf(compound);
+        const want = at >= 0 && index >= at ? 1 : 0;
+        if (collapseP !== want) collapseP = want;
+      }
+
+      lastWashOn = washOn;
+      if (compound && chatWin) {
+        // On a stepping screen the collapse runs on its own clock, started by
+        // the step that asks for this chapter. Reading it off the scroll meant
+        // it inherited the curve of the jump and then had its own laid on top
+        // of that, and it had only the jump's seven hundred milliseconds to
+        // happen in. One curve, one and a half seconds, and it no longer
+        // matters how the reader got here.
+        const top = compound.getBoundingClientRect().top;
+        collapse = stepping() ? collapseP : Math.min(1, Math.max(0, (vh - top) / (vh * 0.8)));
+        paintCollapse(collapse);
+      }
+
+      if (!(collapse > 0 && collapse < 1)) figure.dataset.show = current?.dataset.overlay ?? '';
+    }
+
+    // the architecture rail: one stack for the whole story, moved through its
+    // states by whichever chapter is being read
+    {
+      const on = (current?.dataset.layers ?? '').split(' ').filter(Boolean);
+      const done = (current?.dataset.done ?? '').split(' ').filter(Boolean);
+      for (const r of railRows) {
+        const k = r.dataset.layer ?? '';
+        const isOn = on.includes(k);
+        r.classList.toggle('is-on', isOn);
+        r.classList.toggle('is-done', !isOn && done.includes(k));
+        r.classList.toggle('is-off', !isOn && !done.includes(k));
+      }
+    }
+
+    // the graphic: 0 field, 1 scattered, 2 connected, 3 compounding
+    {
+      const stage = Number(current?.dataset.stage ?? 0);
+      for (const g of graphics) {
+        for (let n = 1; n <= 3; n++) g.classList.toggle(`is-${n}`, stage >= n);
+        g.classList.toggle('is-net', netOn || stage >= 3);
+      }
+    }
+
+    // architecture: its rows come in once the chapter is in view
+    if (arch && arch.getBoundingClientRect().top < vh * 0.8) arch.classList.add('is-in');
+  }
+
+  // The opening: the statement starts as large as the page can hold it and the
+  // points cover the whole screen, and both settle into place. It used to be
+  // driven by a stretch of scroll under the hero, which cost the reader a stop
+  // of their own on a view that is in no chapter and looks almost like the one
+  // before it. It runs on its own clock now, once, when the page arrives, and
+  // the first scroll goes straight to the first chapter.
+  //
+  // Transforms only, so nothing reflows while it runs, and every measurement is
+  // taken off an untransformed parent: a box being scaled cannot be asked where
+  // it is.
+  let introP = 1;
+
+  // Once it has arrived there is nothing left to paint, and every call after
+  // that was four forced layouts for a transform that is already cleared.
+  let introSettled = false;
+
+  const paintIntro = () => {
+    if (!intro || !introTitle || !stage || reduceMotion || !wideIntro.matches) return;
+    if (introSettled && introP >= 1) return;
+    introSettled = introP >= 1;
+    const vh = window.innerHeight;
+    const raw = introP;
+    const p = raw < 0.5 ? 2 * raw * raw : 1 - Math.pow(-2 * raw + 2, 2) / 2;
+
+    // The statement stays flush with the page's left edge and grows to the
+    // right, which is what the origin on the left does: no centring, so it
+    // never drifts away from the column it will end up in. It sits low,
+    // leaving the field the upper two thirds, and rises into place as it
+    // shrinks. Measurements come off the offset parent, because a box that
+    // is being scaled cannot be asked where it is.
+    const host = introTitle.offsetParent as HTMLElement | null;
+    const hostBox = (host ?? introTitle).getBoundingClientRect();
+    const titleTop = hostBox.top + introTitle.offsetTop;
+    const titleLeft = hostBox.left + introTitle.offsetLeft;
+    const titleH = introTitle.offsetHeight;
+    const avail = window.innerWidth - titleLeft * 2;
+    const s0 = Math.min(Math.max(avail / introTitle.offsetWidth, 1), 1.95);
+    const scale = s0 + (1 - s0) * p;
+    const restY = titleTop + titleH / 2 + (titleH * s0) / 2;
+    const dy = (vh - vh * 0.16 - restY) * (1 - p);
+    introTitle.style.transform =
+      p >= 1 ? '' : `translateY(${dy.toFixed(1)}px) scale(${scale.toFixed(3)})`;
+
+    // The points are not a picture being zoomed: the drawing keeps its scale,
+    // so every circle keeps its size, and each one travels its own way in
+    // from where it was spread across the screen. They are given slightly
+    // different phases, so the field arrives loosely rather than in step.
+    (
+      document.querySelector('[data-graphic]') as
+        (HTMLElement & { cgOpenField?: (v: number) => void }) | null
+    )?.cgOpenField?.(p);
+
+    const fade = Math.min(1, Math.max(0, (raw - 0.55) / 0.45));
+    for (const el of introFades) {
+      el.style.opacity = String(fade);
+      el.style.pointerEvents = fade < 0.5 ? 'none' : '';
+    }
+    intro.classList.toggle('is-opening', p < 1);
+  };
+
+  // One pass, when the page arrives. Anyone landing part way down the page, or
+  // asking for less motion, gets the settled state without the performance.
+  const runIntro = () => {
+    if (reduceMotion || !wideIntro.matches || window.scrollY > 4) {
+      introP = 1;
+      paintIntro();
+      return;
+    }
+    introP = 0;
+    const DUR = 1900;
+    const t0 = performance.now();
+    const tick = (now: number) => {
+      introP = Math.min(1, (now - t0) / DUR);
+      paintIntro();
+      if (introP < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  // A reader who scrolls during the opening wants to be further on, not to
+  // watch the rest of it, so it finishes where it stands.
+  const endIntro = () => {
+    if (introP >= 1) return;
+    introP = 1;
+    paintIntro();
+  };
+
+  // ---- one gesture, one view --------------------------------------------
+  //
+  // The page does not scroll freely on a wide screen: a wheel turn, a swipe or
+  // an arrow key asks for the next fixed view and the page animates there,
+  // ignoring everything else until it arrives. CSS scroll snapping cannot do
+  // this. Snapping still lets the reader drag through the middle of a chapter
+  // and only settles afterwards; here there is no middle to be in.
+  //
+  // It stays out of the way where it would do harm: narrow screens keep their
+  // native scrolling, and with reduced motion the page jumps instead of gliding.
+  const views = [...document.querySelectorAll<HTMLElement>('[data-view]')];
+  const wideViews = window.matchMedia('(min-width: 64rem)');
+  const stepping = () => wideViews.matches && views.length > 1;
+
+  let index = 0;
+  let animating = false;
+  let lockUntil = 0;
+  let release = 0;
+
+  const topOf = (el: HTMLElement) => Math.round(el.getBoundingClientRect().top + window.scrollY);
+
+  // whichever view the page is actually resting on, so a jump from the nav or a
+  // hash does not leave the counter behind
+  function syncIndex() {
+    const y = window.scrollY;
+    let best = 0;
+    let bd = Infinity;
+    views.forEach((v, i) => {
+      const d = Math.abs(topOf(v) - y);
+      if (d < bd) {
+        bd = d;
+        best = i;
+      }
+    });
+    index = best;
+  }
+
+  function goTo(i: number) {
+    const next = Math.max(0, Math.min(views.length - 1, i));
+    const view = views[next];
+    const from = index;
+    index = next;
+    // Somebody who asked for a particular chapter — the waitlist button, a
+    // chapter link — wants to be in it, not to watch everything between here
+    // and there go past. Only a step to the next view is a movement worth
+    // seeing; anything further is a jump.
+    const far = Math.abs(next - from) > 1;
+
+    // The chapter being asked for is what starts the collapse, or reverses it.
+    // It runs alongside the jump rather than being driven by it, so its length
+    // is its own — unless we are jumping, in which case it is already over.
+    if (compound) {
+      const at = views.indexOf(compound);
+      if (at >= 0) {
+        const want = next >= at ? 1 : 0;
+        // The net first, the window a third of a second later: by the time
+        // anything moves, the net behind it is the finished one. Going back is
+        // the same trade in reverse, and there the window is growing over it,
+        // so the swap needs no lead.
+        setNet(want === 1);
+        window.clearTimeout(netLead);
+        if (want === 1 && !far && !reduceMotion && !document.hidden)
+          netLead = window.setTimeout(() => runCollapse(1), 300);
+        else runCollapse(want, far);
+      }
+    }
+    // A page that is not on screen is served no animation frames, so a glide
+    // begun there never starts and never finishes, and because every wheel
+    // event is swallowed while one is running the page goes dead to the touch.
+    // Nothing to animate for, so it simply arrives.
+    if (far || reduceMotion || document.hidden) {
+      animating = false;
+      setMoving();
+      window.scrollTo(0, topOf(view));
+      update();
+      return;
+    }
+    const start = window.scrollY;
+    if (Math.abs(topOf(view) - start) < 2) return;
+    // the further it travels the longer it takes, within reason
+    const span = Math.abs(topOf(view) - start);
+    const duration = Math.min(1100, Math.max(520, 420 + span * 0.35));
+    const t0 = performance.now();
+    animating = true;
+    setMoving();
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - t0) / duration);
+      const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      // The target is an element, not a number. Chapters reveal themselves and
+      // the architecture stack grows while the page is moving, so an offset
+      // measured once at the start lands short and the next gesture is spent
+      // correcting it. Reading it every frame lands on the view itself.
+      const target = topOf(view);
+      window.scrollTo(0, Math.round(start + (target - start) * e));
+      if (p < 1) requestAnimationFrame(tick);
+      else {
+        window.scrollTo(0, topOf(view));
+        animating = false;
+        setMoving();
+        // a trackpad keeps sending events after the fingers lift; this stops
+        // the tail of one flick from being read as the next one
+        lockUntil = performance.now() + 220;
+      }
+    };
+    requestAnimationFrame(tick);
+    // A hidden tab stops serving animation frames, so a move begun just before
+    // the reader switched away would never finish and every gesture after it
+    // would be ignored. A timer is not throttled the same way and lets go.
+    window.clearTimeout(release);
+    release = window.setTimeout(() => {
+      animating = false;
+      setMoving();
+    }, duration + 600);
+  }
+
+  // Same guard from the other side: if the reader leaves mid-glide, the move is
+  // finished at once rather than left hanging until they come back.
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden || !animating) return;
+    window.clearTimeout(release);
+    animating = false;
+    setMoving();
+    lockUntil = 0;
+    window.scrollTo(0, topOf(views[index]));
+  });
+
+  function step(dir: number) {
+    endIntro();
+    if (animating || performance.now() < lockUntil) return;
+    // read where the page actually is before moving, rather than trusting a
+    // counter: anything that scrolls the page by other means, a hash, a focus,
+    // a resize, would otherwise cost the reader one gesture to correct
+    syncIndex();
+    goTo(index + dir);
+  }
+
+  // One gesture moves one section, however long it is — but somebody who keeps
+  // scrolling has to keep moving. A wheel or a trackpad goes on firing while
+  // the flick decays, so a fresh gesture is recognised by the silence in front
+  // of it: events that stop arriving for a moment and then start again step at
+  // once. Inside a continuous stream that test never passes, which left a
+  // reader who simply kept scrolling stuck on one section, so the distance is
+  // added up as well and a step is taken every screenful or so. Both are
+  // needed: the silence makes a flick feel immediate, the distance keeps a
+  // steady scroll moving.
+  let lastWheel = 0;
+  let travelled = 0;
+  const QUIET = 90;
+  const TRAVEL = 140;
+
+  window.addEventListener(
+    'wheel',
+    (e) => {
+      if (!stepping()) return;
+      e.preventDefault();
+      const now = performance.now();
+      const gap = now - lastWheel;
+      lastWheel = now;
+      if (Math.abs(e.deltaY) < 2) return;
+      // a change of direction is a new gesture, not a continuation of this one
+      if (travelled !== 0 && Math.sign(e.deltaY) !== Math.sign(travelled)) travelled = 0;
+      if (gap >= QUIET) {
+        travelled = 0;
+        step(e.deltaY > 0 ? 1 : -1);
+        return;
+      }
+      travelled += e.deltaY;
+      if (Math.abs(travelled) < TRAVEL) return;
+      travelled = 0;
+      step(e.deltaY > 0 ? 1 : -1);
+    },
+    { passive: false },
+  );
+
+  // the same for a finger: one swipe, one section, and nothing more until it
+  // has been lifted
+  let touchY = 0;
+  let touchSpent = false;
+  window.addEventListener('touchstart', (e) => {
+    touchY = e.touches[0]?.clientY ?? 0;
+    touchSpent = false;
+  });
+  window.addEventListener(
+    'touchmove',
+    (e) => {
+      if (!stepping()) return;
+      e.preventDefault();
+      if (touchSpent) return;
+      const dy = touchY - (e.touches[0]?.clientY ?? 0);
+      if (Math.abs(dy) > 24) {
+        touchSpent = true;
+        step(dy > 0 ? 1 : -1);
+      }
+    },
+    { passive: false },
+  );
+
+  window.addEventListener('keydown', (e) => {
+    if (!stepping()) return;
+    const tag = (e.target as HTMLElement)?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+      e.preventDefault();
+      step(1);
+    } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
+      e.preventDefault();
+      step(-1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goTo(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goTo(views.length - 1);
+    }
+  });
+
+  // the chapter links and the two hero buttons hand over to the same mechanism
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')) {
+    a.addEventListener('click', (e) => {
+      if (!stepping()) return;
+      const el = document.querySelector<HTMLElement>(a.getAttribute('href') ?? '');
+      if (!el) return;
+      const i = views.indexOf(el);
+      if (i < 0) return;
+      e.preventDefault();
+      goTo(i);
+    });
+  }
+
+  // ---- the visible handle -----------------------------------------------
+  //
+  // The gesture is invisible; these two are the only thing on the page that
+  // says the view moves on. They run through the same stepper as the wheel, so
+  // nothing can drift apart. They hold the top and the bottom of the left
+  // column and stay there: the chapters change height, and a pair that moved
+  // with each one meant hunting for the button that had just been used.
+  // Everything but the width of that column is fixed in CSS.
+  const stepBar = document.querySelector<HTMLElement>('[data-view-steps]');
+  const stepBtns = [...document.querySelectorAll<HTMLButtonElement>('[data-view-step]')];
+
+  const syncNext = () => {
+    if (!stepBar) return;
+    if (!stepping()) {
+      stepBar.hidden = true;
+      return;
+    }
+    // The opening has its own two buttons and its own choreography; a third
+    // one there would be noise, so the pair joins once the chapters start.
+    stepBar.hidden = index < 1;
+    if (stepBar.hidden) return;
+    for (const b of stepBtns) {
+      const dir = Number(b.dataset.viewStep);
+      const to = index + dir;
+      b.hidden = to < 0 || to > views.length - 1;
+    }
+
+    // The bars span whatever the chapter they belong to spans: the left column
+    // while the story runs beside the graphic, the whole page once the wide
+    // chapters take over. The rule between the columns goes with them — below
+    // the story there are no two columns left to divide, and it cut straight
+    // through the architecture stack.
+    const here = views[index]?.closest('[data-chapter]') ?? views[index];
+    const wide = here?.classList.contains('chapter--wide') ?? true;
+    const span = (
+      wide ? here : document.querySelector<HTMLElement>('.story-text')
+    )?.getBoundingClientRect();
+    const header = document.querySelector<HTMLElement>('.site-header')?.getBoundingClientRect();
+    // on the root, because the bars are not the only thing hung off this box:
+    // the rule between the columns and the stage behind the graph use it too
+    if (span) {
+      root.style.setProperty('--step-left', `${Math.round(span.left)}px`);
+      root.style.setProperty('--step-right', `${Math.round(span.right)}px`);
+    }
+    if (header) root.style.setProperty('--step-top', `${Math.round(header.bottom)}px`);
+    stepBar.dataset.rule = wide ? 'off' : 'on';
+  };
+
+  for (const b of stepBtns) {
+    b.addEventListener('click', () => {
+      step(Number(b.dataset.viewStep));
+      syncNext();
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    syncIndex();
+    syncNext();
+  });
+  syncIndex();
+  syncNext();
+
+  // ---- the one line you paste --------------------------------------------
+  //
+  // A command on a page is there to be taken, so it can be taken: the box
+  // answers the pointer and hands the line over on a click. The prompt is
+  // stripped, because nobody wants a dollar sign in their shell.
+  const copyBtn = document.querySelector<HTMLButtonElement>('[data-command-copy]');
+  const copyText = document.querySelector<HTMLElement>('[data-command-text]');
+  const copyLabel = copyBtn?.querySelector<HTMLElement>('[data-command-copy-label]');
+  let copyBack = 0;
+
+  copyBtn?.addEventListener('click', async () => {
+    const line = (copyText?.textContent ?? '').replace(/^\s*\$\s*/, '').trim();
+    if (!line) return;
+    try {
+      await navigator.clipboard.writeText(line);
+    } catch {
+      // Clipboard access can be refused, and silently doing nothing would look
+      // like a broken button. Selecting the line leaves the reader one
+      // keystroke away instead.
+      const sel = window.getSelection();
+      if (copyText && sel) {
+        const range = document.createRange();
+        range.selectNodeContents(copyText);
+        // start after the prompt, so what gets selected is what would have been
+        // copied rather than a dollar sign the reader then has to delete
+        const prompt = copyText.querySelector('.command-prompt');
+        if (prompt) range.setStartAfter(prompt);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+      return;
+    }
+    if (!copyBtn || !copyLabel) return;
+    copyBtn.classList.add('is-done');
+    copyLabel.textContent = copyBtn.dataset.done ?? '';
+    window.clearTimeout(copyBack);
+    copyBack = window.setTimeout(() => {
+      copyBtn.classList.remove('is-done');
+      copyLabel.textContent = copyBtn.dataset.idle ?? '';
+    }, 1800);
+  });
+
+  let queued = false;
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      update();
+      syncIndex();
+      syncNext();
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+  runIntro();
+</script>
