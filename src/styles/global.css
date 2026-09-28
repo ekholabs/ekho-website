@@ -4056,14 +4056,68 @@
    plate's own size is set further down the file and a media query does not
    make a rule win. */
 @layer components {
+  /* On a phone the row was seven plates shrunk to fit the width, which made
+     the marks too small to recognise — and recognising them is the whole
+     point of the row. They keep their size and run off the edge instead, as
+     a strip pushed sideways like the cards in chapter 01. */
   @media (max-width: 63.999rem) {
     .plates {
-      gap: 0.35rem;
+      flex-wrap: nowrap;
+      gap: 0.6rem;
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      padding: 0.25rem var(--gutter, 1.25rem) 1.25rem;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x proximity;
+      scroll-padding-left: var(--gutter, 1.25rem);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .plates::-webkit-scrollbar {
+      display: none;
     }
 
     .plate {
-      width: 2.6rem;
-      height: 2.6rem;
+      flex: 0 0 auto;
+      width: 4.25rem;
+      height: 4.25rem;
+      scroll-snap-align: start;
+    }
+
+    .plate-mark {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+
+    .plate-text {
+      font-size: 1.0625rem;
+    }
+
+    /* The one claim in this chapter, so it is set as one: the label larger
+       and in full ink, the sentence under it at reading size rather than as
+       a footnote. */
+    .models-label {
+      font-size: 0.9375rem;
+      letter-spacing: 0.08em;
+    }
+
+    .models-sq {
+      width: 11px;
+      height: 11px;
+    }
+
+    .models-note {
+      max-width: none;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: color-mix(in srgb, var(--text) 72%, transparent);
+    }
+
+    .models-edge {
+      font-size: 1.125rem;
+      line-height: 1.4;
     }
   }
 }
