@@ -387,7 +387,7 @@ const people = [
     <ul class="people">
       {people.map((p) => (
         <li>
-          <Image class="people-face" src={p.portrait} alt={p.name} width={256} height={256} />
+          <Image class="people-face" src={p.portrait} alt={p.name} width={448} height={448} />
           <div>
             <b>
               {/* The mark says where the link goes, which the arrow only
@@ -1100,6 +1100,12 @@ const people = [
     if (span) {
       root.style.setProperty('--step-left', `${Math.round(span.left)}px`);
       root.style.setProperty('--step-right', `${Math.round(span.right)}px`);
+    }
+    // the middle of the drawing itself, so the stage's name can sit between the
+    // two counts over its corners rather than guess at the column's centre
+    const drawing = document.querySelector<HTMLElement>('.figure-stage')?.getBoundingClientRect();
+    if (drawing && drawing.width) {
+      root.style.setProperty('--stage-mid', `${Math.round(drawing.left + drawing.width / 2)}px`);
     }
     if (header) root.style.setProperty('--step-top', `${Math.round(header.bottom)}px`);
     stepBar.dataset.rule = wide ? 'off' : 'on';

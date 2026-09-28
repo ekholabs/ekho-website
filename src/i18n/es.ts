@@ -48,7 +48,7 @@ export const es: Copy = {
     title: 'EKHO trabaja donde trabajas tú.',
     a: 'EKHO se acopla al chat que ya usas: comandos que tú invocas y skills que aplica por su cuenta.',
     b: 'Y nunca cambia nada sin enseñártelo antes.',
-    sovereignty: 'Soberanía del contexto',
+    sovereignty: 'Hazte independiente del modelo',
     note: 'Los modelos ya construyen una memoria tuya a lo largo de los chats, y es útil. También es suya: su formato, sus condiciones, y cuanto más crece, más caro sale marcharse. EKHO construye ese mismo contexto en tu propio disco, en Markdown, donde cualquiera de ellos puede leerlo y ninguno lo retiene.',
     edge: 'Sigue siendo tuyo, y cambiar uno por otro no te cuesta nada.',
   },
@@ -166,6 +166,12 @@ export const es: Copy = {
   },
   graphic: {
     frameTitle: 'Tu EKHO',
+    /* what the vault behind this site actually holds; the graphic counts
+       them up when it comes into view */
+    stats: [
+      ['710', 'notas'],
+      ['1.240', 'enlaces'],
+    ],
     label:
       'El mismo conocimiento en cuatro estados: primero disperso y sin forma, luego esparcido, después reunido en una forma con las primeras conexiones, y por último una red densa de varios cientos de puntos sin uno solo nuevo.',
     types: {

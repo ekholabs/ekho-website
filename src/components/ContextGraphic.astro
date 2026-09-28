@@ -702,6 +702,19 @@ const ariaLabel = c.graphic.label;
     </g>
   </svg>
 
+  {/* What the vault behind this site holds, over the top corners of the
+      drawing. They count up when the net comes into view, because a number
+      that lands is read and a number that is simply there is not. */}
+  {animated && (
+    <p class="cg-stats" data-cg-stats>
+      {c.graphic.stats.map(([n, l]) => (
+        <span class="cg-stat">
+          <b data-count={n}>0</b> {l}
+        </span>
+      ))}
+    </p>
+  )}
+
   {animated && <script type="application/json" data-cg-geometry set:html={geometry}></script>}
 
   {caption && (
@@ -716,6 +729,66 @@ const ariaLabel = c.graphic.label;
 </figure>
 
 <script>
+  // The counts over the drawing. They start at zero and run up once, when the
+  // net they belong to is both on screen and formed — before that the drawing
+  // is a field of loose points and there is nothing to count. Anyone who has
+  // asked not to be animated at gets the finished number straight away.
+  for (const box of document.querySelectorAll<HTMLElement>('[data-cg-stats]')) {
+    const figure = box.closest<HTMLElement>('[data-graphic]');
+    const cells = [...box.querySelectorAll<HTMLElement>('[data-count]')];
+    const targets = cells.map((c) => Number((c.dataset.count ?? '0').replace(/\D/g, '')));
+    const shapes = cells.map((c) => c.dataset.count ?? '0');
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let ran = false;
+
+    // 1,240 and 1.240 and 1 240 are the same number set three ways; the
+    // separator is taken from the served string rather than guessed.
+    const format = (n: number, shape: string) => {
+      const sep = shape.replace(/\d/g, '')[0];
+      const digits = String(n);
+      if (!sep || digits.length < 4) return digits;
+      return digits.slice(0, digits.length - 3) + sep + digits.slice(-3);
+    };
+
+    const run = () => {
+      if (ran) return;
+      ran = true;
+      if (still.matches) {
+        cells.forEach((c, i) => (c.textContent = shapes[i]));
+        return;
+      }
+      const t0 = performance.now();
+      const dur = 1100;
+      const tick = (now: number) => {
+        const p = Math.min(1, (now - t0) / dur);
+        // fast at first and settling at the end, the way a counter reads
+        const e = 1 - Math.pow(1 - p, 3);
+        cells.forEach((c, i) => (c.textContent = format(Math.round(targets[i] * e), shapes[i])));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const formed = () =>
+      !!figure && (figure.classList.contains('is-3') || figure.classList.contains('is-final'));
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting && formed()) run();
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(box);
+
+    if (figure) {
+      new MutationObserver(() => {
+        if (!formed()) return;
+        const r = box.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) run();
+      }).observe(figure, { attributes: true, attributeFilter: ['class'] });
+    }
+  }
+
   // Take hold of the sphere and turn it, and see what a point is joined to.
   //
   // Nothing here runs until the sphere has formed and somebody reaches for it:

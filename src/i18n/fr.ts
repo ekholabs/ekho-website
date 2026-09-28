@@ -48,7 +48,7 @@ export const fr: Copy = {
     title: 'EKHO travaille là où vous travaillez.',
     a: "EKHO se greffe sur la conversation que vous avez déjà : des commandes que vous lancez et des skills qu'il applique de lui-même.",
     b: "Et il ne change jamais rien sans vous le montrer d'abord.",
-    sovereignty: 'Souveraineté du contexte',
+    sovereignty: 'Devenez indépendant du modèle',
     note: "Les modèles se constituent désormais une mémoire de vous d'une conversation à l'autre, et elle est utile. Elle est aussi la leur : leur format, leurs conditions, et plus elle grandit, plus partir coûte cher. EKHO constitue ce même contexte sur votre propre disque, en Markdown, là où chacun d'eux peut le lire et où aucun ne le détient.",
     edge: "Il reste le vôtre, et passer de l'un à l'autre ne vous coûte rien.",
   },
@@ -166,6 +166,12 @@ export const fr: Copy = {
   },
   graphic: {
     frameTitle: 'Votre EKHO',
+    /* what the vault behind this site actually holds; the graphic counts
+       them up when it comes into view */
+    stats: [
+      ['710', 'notes'],
+      ['1 240', 'liens'],
+    ],
     label:
       "Le même savoir en quatre états : d'abord dispersé et sans forme, puis éparpillé, puis rassemblé en une forme avec les premiers liens, et enfin un réseau dense de plusieurs centaines de points sans un seul nouveau.",
     types: {

@@ -46,7 +46,7 @@ export const en = {
     title: 'EKHO works where you work.',
     a: 'EKHO docks into the chat you already use: commands you call, and skills it applies on its own.',
     b: 'And it never changes anything without showing you first.',
-    sovereignty: 'Context sovereignty',
+    sovereignty: 'Become model-independent',
     note: 'The models build a memory of you across chats now, and it is useful. It is also theirs: their format, their terms, and the longer it grows the more it costs to leave. EKHO builds that context on your own disk, in Markdown, where any of these can read it and none of them holds it.',
     edge: 'It stays yours, and swapping one for another costs you nothing.',
   },
@@ -164,6 +164,12 @@ export const en = {
   },
   graphic: {
     frameTitle: 'Your EKHO',
+    /* what the vault behind this site actually holds; the graphic counts
+       them up when it comes into view */
+    stats: [
+      ['710', 'notes'],
+      ['1,240', 'links'],
+    ],
     label:
       'The same knowledge in four states: spread wide and formless at first, then scattered, then gathered into one form with the first connections, and finally a dense network of several hundred points without a single new one.',
     types: {
