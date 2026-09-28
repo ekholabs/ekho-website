@@ -3857,23 +3857,17 @@
       display: flex;
       flex-direction: column;
       height: 100svh;
-      /* "unsafe", because the whole point is that it may overflow: with the
-         default the browser protects the start edge, which means an open layer
-         pushes the rows below it off the bottom. What overflows here is the
-         heading, at the top, which has been read by the time a layer is open.
-
-         The deep foot is the other half of it. A row grows by about ninety
-         pixels when it opens, and the browser only holds the end edge while
-         there is room to; the space is reserved so the stack never reaches the
-         forward bar however it grows. It also puts the model higher up the
-         screen, which is where it wants to be. */
-      justify-content: unsafe flex-end;
+      /* Centred, and "unsafe" so it stays centred: the default protects the
+         start edge, which would drop the block to the top of the screen as
+         soon as an open layer made it taller than the free space. Opening a
+         row grows the stack by about ninety pixels, and from the middle that
+         is forty-five each way, which both bars have room for — where an
+         end-anchored stack spent all of it downwards. */
+      justify-content: unsafe center;
       overflow: visible;
-      /* The foot has to grow faster than the window does: a shorter window
-         loses height from the free space between the bars but the stack keeps
-         most of its own, so it has to start higher up. Fitted through the two
-         heights that were measured, and clamped either side of them. */
-      padding-block: 0 clamp(4rem, calc(16vh + 4px), 11rem);
+      /* Room for the bars at either end, and for the half of a row's growth
+         that goes towards each. */
+      padding-block: clamp(3rem, 8vh, 5rem) clamp(3.5rem, 9vh, 6rem);
     }
 
     /* the stack is the last thing in the column and keeps its place; the note
