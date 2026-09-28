@@ -316,7 +316,11 @@ const people = [
             {c.how.sovereignty}
           </p>
           <ModelRow lang={lang} />
-          <p class="models-note">{c.how.note}</p>
+          {/* Set the same way as every other running paragraph on the page:
+              the first sentence in full ink, the rest a tone back. It used to
+              be a flat grey block, which read as an aside sitting directly
+              under a column of paragraphs that were not one. */}
+          <Statement text={c.how.note} class="models-note" />
           {/* The sovereignty claim, in one line. Not an appeal to privacy: the
               providers are moving into the memory layer, and a vault that lives
               there is not portable however portable the model is. Grounded in
