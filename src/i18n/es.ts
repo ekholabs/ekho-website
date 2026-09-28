@@ -33,8 +33,8 @@ export const es: Copy = {
   },
   why: {
     title: '¿Qué se vuelve escaso cuando la inteligencia abunda?',
-    a: 'El modelo es el mismo para todos, tu contexto es único.',
-    b: 'El contexto. Todo lo que sabes: tus decisiones y por qué, las personas con las que trabajas, lo que has leído y lo que concluiste.',
+    a: 'El contexto. Todo lo que sabes: tus decisiones y por qué, las personas con las que trabajas, lo que has leído y lo que concluiste.',
+    b: 'El modelo es el mismo para todos, tu contexto es único.',
     c: 'Pero el conocimiento está disperso por naturaleza, entre tu cabeza, chats, correos y notas. Reunirlo era una causa perdida. Hasta ahora.',
   },
   what: {

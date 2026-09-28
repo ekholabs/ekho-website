@@ -33,8 +33,8 @@ export const fr: Copy = {
   },
   why: {
     title: "Qu'est-ce qui devient rare quand l'intelligence abonde ?",
-    a: 'Le modèle est le même pour tout le monde, votre contexte est unique.',
-    b: 'Le contexte. Tout ce que vous savez : vos décisions et pourquoi, les gens avec qui vous travaillez, ce que vous avez lu et ce que vous en avez conclu.',
+    a: 'Le contexte. Tout ce que vous savez : vos décisions et pourquoi, les gens avec qui vous travaillez, ce que vous avez lu et ce que vous en avez conclu.',
+    b: 'Le modèle est le même pour tout le monde, votre contexte est unique.',
     c: "Mais le savoir est dispersé par nature, entre votre tête, des conversations, des mails et des notes. Le rassembler était peine perdue. Jusqu'à maintenant.",
   },
   what: {
