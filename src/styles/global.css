@@ -2753,10 +2753,14 @@
     /* The object lies behind, exactly as wide as the window that will cover
        it, and the padding is how much of it you see before the folder starts
        climbing. */
+    /* The render carries its own air: the object starts about a fifth of the
+       way down its square. So the box is pulled up against the chapter's own
+       rhythm, and what you see between the last line and the object is the
+       photograph's margin rather than that plus ours. */
     .flow-key {
       display: block;
       position: relative;
-      margin-top: 2rem;
+      margin-top: -2.25rem;
       padding-top: 11.5rem;
     }
 
