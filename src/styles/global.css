@@ -1986,8 +1986,8 @@
      the text beside them until the tile is hovered. */
   .people-face {
     flex: none;
-    width: 14rem;
-    height: 14rem;
+    width: 8rem;
+    height: 8rem;
     border-radius: var(--radius);
     object-fit: cover;
     filter: grayscale(1) contrast(1.02);
