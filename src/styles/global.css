@@ -1817,26 +1817,9 @@
     vertical-align: -0.12em;
   }
 
-  .chat-send .arrow {
-    width: 15px;
-    height: 15px;
-    stroke-width: 1.8;
-  }
-
   .chapter-nav-arrow {
     width: 0.85em;
     height: 0.85em;
-  }
-
-  .chat-send {
-    width: 26px;
-    height: 26px;
-    display: grid;
-    place-items: center;
-    border-radius: 999px;
-    background: var(--text);
-    color: var(--panel);
-    font-size: 0.8rem;
   }
 
   /* Which vault is on the other end of this conversation. It is the one thing
@@ -3430,9 +3413,11 @@
   /* the sphere can be taken hold of once it has formed */
   [data-graphic].is-grabbable svg {
     cursor: grab;
-    /* A phone scrolls with the same finger that would turn this. Vertical
-       swipes go to the page, sideways ones turn the sphere. */
-    touch-action: pan-y;
+    /* The sphere keeps whatever gesture lands on it. Leaving the page the
+       vertical axis meant a pull that was a few degrees off vertical scrolled
+       the page out from under the thing being turned. Scroll past it from the
+       text above or below. */
+    touch-action: none;
   }
 
   [data-graphic].is-turning svg {
@@ -4676,13 +4661,18 @@
   /* A widget on a board, the way a phone lays them out: a filled tile with a
      generous corner and a soft shadow, no frame, and the content set with
      room around it. Nothing here is a panel with a border. */
+  /* One height for all of them, set rather than inherited from whichever card
+     happens to hold the most words. The band they sit in is the last thing on
+     a screen, so it has to be short enough to be seen whole — what does not
+     fit is clamped, not allowed to push the row taller. */
   .strip-card {
     flex: 0 0 15.5rem;
+    height: 9.75rem;
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
-    padding: 1rem 1.1rem 1.05rem;
+    gap: 0.55rem;
+    padding: 0.9rem 1.1rem 0.95rem;
     border-radius: 1.25rem;
     background: var(--surface);
     box-shadow: 0 6px 22px rgb(26 26 24 / 0.09);
@@ -4739,6 +4729,16 @@
     stroke-linejoin: round;
   }
 
+  /* two lines each, and the rest is cut: a card of a fixed height cannot let
+     a long title decide how much room is left for the line under it */
+  .strip-title,
+  .strip-quote {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
   .strip-title {
     margin: 0;
     font-size: 1.0625rem;
@@ -4768,13 +4768,13 @@
      context. The head says what this note is, this line says what it is
      joined to, which is where the value is. */
   .strip-link {
+    margin-top: auto;
     display: flex;
     align-items: baseline;
     gap: 0.35rem;
-    /* packed under the content rather than pushed to the foot: the four EKHO
-       makes have no quote, and a line held at the bottom of those left a hole
-       in the middle of the card */
-    margin: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
     font-size: 0.75rem;
     line-height: 1.35;
     color: var(--muted);
@@ -5574,14 +5574,6 @@
         opacity 620ms ease-in 180ms;
     }
 
-    /* the send key answers when the line goes */
-    .chat-unit.is-sending .chat-send {
-      background: var(--signal);
-      transform: translateY(-2px);
-      transition:
-        background-color 160ms ease,
-        transform 160ms ease;
-    }
   }
 }
 

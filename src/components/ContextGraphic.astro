@@ -1082,49 +1082,21 @@ const ariaLabel = c.graphic.label;
         requestAnimationFrame(frame);
       }
 
-      // A finger that lands here has not said yet what it came to do. Taking
-      // the pointer at that moment answers for it: a captured touch pointer is
-      // no longer the browser's, so the scroll it was about to start never
-      // happens — the sphere ends up holding the page still. So the decision
-      // waits for the first movement. Sideways turns the sphere and the pointer
-      // is taken then; downwards belongs to the page, and the browser cancels
-      // us on its own once the pan begins.
-      let pending: number | null = null;
-      let startX = 0;
-      let startY = 0;
-
-      const begin = (e: PointerEvent) => {
+      // A finger on the sphere is turning the sphere. Both axes belong to it,
+      // and the page does not move underneath: sharing the gesture by
+      // direction meant every turn began by deciding whether it was one, and a
+      // slightly diagonal pull scrolled the page out from under the thing you
+      // were holding.
+      holder.addEventListener('pointerdown', (e) => {
+        if (!grabbable() || e.button !== 0) return;
         dragging = true;
-        pending = null;
         lastX = e.clientX;
         lastY = e.clientY;
         figure.classList.add('is-turning');
         holder.setPointerCapture(e.pointerId);
-      };
-
-      holder.addEventListener('pointerdown', (e) => {
-        if (!grabbable() || e.button !== 0) return;
-        startX = e.clientX;
-        startY = e.clientY;
-        lastX = e.clientX;
-        lastY = e.clientY;
-        // a mouse has nothing else it could have meant
-        if (e.pointerType === 'mouse') begin(e);
-        else pending = e.pointerId;
       });
 
       holder.addEventListener('pointermove', (e) => {
-        if (pending === e.pointerId) {
-          const dx = Math.abs(e.clientX - startX);
-          const dy = Math.abs(e.clientY - startY);
-          if (dx < 4 && dy < 4) return;
-          if (dy > dx) {
-            // the page's gesture, not ours
-            pending = null;
-            return;
-          }
-          begin(e);
-        }
         if (!dragging) return;
         yaw += (e.clientX - lastX) * 0.006;
         pitch = Math.max(-1.05, Math.min(1.05, pitch + (e.clientY - lastY) * 0.006));
@@ -1136,7 +1108,6 @@ const ariaLabel = c.graphic.label;
       // an arrow, not a declaration: a hoisted function would lose the narrowing
       // that proves figure and holder are here
       const release = (e: PointerEvent) => {
-        if (pending === e.pointerId) pending = null;
         if (!dragging) return;
         dragging = false;
         figure.classList.remove('is-turning');

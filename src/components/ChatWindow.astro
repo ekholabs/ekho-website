@@ -12,7 +12,6 @@
 // The marks come from simple-icons, as in that row, and say compatibility
 // rather than endorsement.
 import * as si from 'simple-icons';
-import Arrow from './Arrow.astro';
 import { t, type Lang } from '../i18n';
 
 interface Props {
@@ -212,9 +211,6 @@ const rows = c.chat.rows;
           </span>
           <span class="chat-ph" data-ph>{c.chat.reply}</span>
           <span class="chat-typed" data-typed aria-hidden="true" hidden></span>
-          <span class="chat-send" aria-hidden="true">
-            <Arrow kind="send" />
-          </span>
         </p>
       </div>
     </div>
@@ -289,7 +285,7 @@ const rows = c.chat.rows;
         typed.textContent = '';
       }
       if (ph) ph.hidden = false;
-      unit.classList.remove('is-sending', 'is-deciding', 'is-folding');
+      unit.classList.remove('is-deciding', 'is-folding');
       if (typing) typing.hidden = true;
       if (acts && actsHome && acts.parentElement !== actsHome) {
         actsHome.insertBefore(acts, actsAfter);
@@ -374,11 +370,9 @@ const rows = c.chat.rows;
 
       // sent: the composer empties as the message lands in the thread
       await wait(260);
-      unit.classList.add('is-sending');
       beats[0]?.classList.add('is-in');
       if (beats[0]) follow(beats[0]);
       await wait(180);
-      unit.classList.remove('is-sending');
       if (draft) draft.hidden = true;
       if (typed) {
         typed.hidden = true;
