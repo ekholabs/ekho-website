@@ -1,13 +1,16 @@
 import type { Copy } from './en';
 
-// Deutsch. Übersetzt, nicht Wort für Wort übertragen: „compounds" heißt hier
-// „verzinst sich", weil das der Begriff ist, den EKHO selbst benutzt, und
-// Gedankenstriche kommen in deutschem Fließtext nicht vor.
+// Deutsch, geschrieben und nicht übersetzt: die Sätze folgen dem englischen
+// Aufbau, aber nicht seinem Satzbau. „compounds" heißt hier „verzinst sich",
+// weil das der Begriff ist, den EKHO selbst benutzt; Gedankenstriche kommen in
+// deutschem Fließtext nicht vor; und wo ein englisches Wort im Deutschen nichts
+// trägt, steht das deutsche (Gut statt Asset, Tresor statt Wallet). Was zur
+// Harness gehört, bleibt englisch: Vault, Skill, Harness, Ontology.
 export const de: Copy = {
   meta: {
     title: 'EKHO Labs — KI ist nur so gut wie dein Kontext',
     description:
-      'EKHO macht aus dem, was du weißt, einen zusammenhängenden Kontext, der sich verzinst. So holst du mit jeder Nutzung mehr aus deiner KI heraus, und er bleibt deiner.',
+      'EKHO macht aus deinem Wissen einen verbundenen Kontext, der sich verzinst. Jede Nutzung deiner KI bringt mehr als die vorige, und der Kontext bleibt deiner.',
   },
   nav: {
     chapters: 'Kapitel',
@@ -28,41 +31,41 @@ export const de: Copy = {
   hero: {
     titleBefore: 'KI ist nur so gut wie dein Kontext.',
     titleSignal: 'Er gehört dir.',
-    lede: 'EKHO macht aus dem, was du weißt, einen zusammenhängenden Kontext, mit dem deine KI arbeiten kann. Mit jeder Nutzung holst du mehr heraus. Und er bleibt deiner.',
+    lede: 'EKHO macht aus deinem Wissen einen verbundenen Kontext, mit dem deine KI arbeiten kann. Jede Nutzung bringt mehr als die vorige. Und er bleibt deiner.',
     cta: 'Auf die Warteliste',
     seeHow: 'So funktioniert es',
   },
   why: {
-    title: 'Was wird knapp, wenn Intelligenz im Überfluss da ist?',
-    a: 'Kontext. Alles, was du weißt: deine Entscheidungen und warum, die Menschen, mit denen du arbeitest, was du gelesen und daraus geschlossen hast.',
+    title: 'Was wird knapp, wenn Intelligenz zur Ware wird?',
+    a: 'Kontext. Alles, was du weißt: was du entschieden hast und warum, mit wem du arbeitest, was du gelesen und was du daraus geschlossen hast.',
     b: 'Das Modell ist für alle dasselbe, dein Kontext ist einzigartig.',
-    c: 'Doch Wissen ist von Natur aus verstreut, über deinen Kopf, Chats, Mails und Notizen. Es zusammenzuführen war aussichtslos. Bis jetzt.',
+    c: 'Nur liegt Wissen von Natur aus verstreut: im Kopf, in Chats, in Mails, in Notizen, die nichts voneinander wissen. Es zusammenzuführen war aussichtslos. Bis jetzt.',
   },
   what: {
-    title: 'Ein Wallet für dein wertvollstes Asset.',
-    a: 'Dein Kontext wird zu deinem wertvollsten Asset. EKHO hilft dir, ihn aufzubauen, und verwahrt ihn: ein Ordner auf deiner eigenen Platte, lesbar für dich und jeden Agenten, den du zulässt.',
-    b: 'Nichts ist eingesperrt. Es ist kein Memory im Modell eines anderen.',
+    title: 'Ein Tresor für dein wertvollstes Gut.',
+    a: 'Dein Kontext wird dein wertvollstes Gut. EKHO hilft dir, ihn aufzubauen, und verwahrt ihn: ein Ordner auf deiner eigenen Festplatte, lesbar für dich und für jeden Agenten, den du heranlässt.',
+    b: 'Nichts ist eingeschlossen. Dein Kontext liegt nicht im Gedächtnis eines fremden Modells.',
     commandLabel: 'Installiert die EKHO CLI',
-    commandNote: 'Early Access, auf Einladung. Den Installer gibt es noch nicht.',
+    commandNote: 'Früher Zugang, auf Einladung. Den Installer gibt es noch nicht.',
   },
   how: {
     title: 'EKHO arbeitet dort, wo du arbeitest.',
-    a: 'EKHO dockt an den Chat an, den du ohnehin benutzt: Befehle, die du aufrufst, und Skills, die es von sich aus anwendet.',
+    a: 'EKHO sitzt in dem Chat, den du ohnehin benutzt: Befehle, die du aufrufst, und Skills, die es von sich aus anwendet.',
     b: 'Und es ändert nie etwas, ohne es dir vorher zu zeigen.',
     sovereignty: 'Kontextsouveränität',
     note: 'Die Modelle bauen inzwischen selbst ein Gedächtnis über Chats hinweg auf, und das ist nützlich. Es gehört aber ihnen: ihr Format, ihre Bedingungen, und je länger es wächst, desto teurer wird der Wechsel. EKHO baut denselben Kontext auf deiner eigenen Platte auf, in Markdown, wo jedes dieser Modelle ihn lesen kann und keines ihn besitzt.',
-    edge: 'Er bleibt deiner, und eines gegen ein anderes zu tauschen kostet dich nichts.',
+    edge: 'Er bleibt deiner, und ein Modell gegen ein anderes zu tauschen kostet dich nichts.',
   },
   compound: {
     title: 'Dein Wissen verzinst sich.',
     a: 'Jede Quelle, die du in dein EKHO einspeist, verbindet sich mit allem, was schon da ist. Eine Erkenntnis weiß, woher sie kommt, was sie stützt und was ihr widerspricht.',
-    b: 'Genau darin verzinst es sich: Jede neue Notiz vervielfacht die Verbindungen, also wächst die Qualität dessen, was zurückkommt, exponenziell statt Schritt für Schritt. Die Buchführung ist der Teil, den Menschen aufgeben, und genau den übernimmt EKHO.',
+    b: 'Genau so verzinst es sich: Jede neue Notiz vervielfacht die Verbindungen, also wächst die Qualität dessen, was zurückkommt, exponenziell und nicht Schritt für Schritt. Die Buchführung ist der Teil, den Menschen aufgeben, und genau den übernimmt EKHO.',
   },
   viewer: {
     title: 'Dein Kontext, in der Form, die du brauchst.',
-    lede: 'Der EKHO Viewer baut Sichten auf deinen Vault: Du sagst, welche Notizen, welche Felder, welche Abschnitte und für wen, er rendert die Seite daraus.',
-    a: 'Eine Sicht ist keine Kopie. Sie liest dieselben Dateien, die dein Agent schreibt, also bewegt sich die Seite mit deinem Wissen, statt hinterherzuhinken.',
-    b: 'Ein Vault trägt so viele Sichten, wie du brauchst: eine Roadmap für die Woche, einen Verlauf der Entscheidungen, eine Seite für jemanden, mit dem du arbeitest. Hier ist es EKHOs eigene Roadmap, aus dem Vault, in dem diese Seite geschrieben wurde.',
+    lede: 'Der EKHO Viewer baut Sichten auf deinen Vault. Du sagst, welche Notizen, welche Felder, welche Abschnitte und für wen, er baut die Seite daraus.',
+    a: 'Eine Sicht ist keine Kopie. Sie liest dieselben Dateien, die dein Agent schreibt, die Seite bewegt sich also mit deinem Wissen, statt ihm hinterherzulaufen.',
+    b: 'Ein Vault trägt so viele Sichten, wie du brauchst: eine Roadmap für die Woche, den Verlauf der Entscheidungen, eine Seite für jemanden, mit dem du arbeitest. Zu sehen ist EKHOs eigene Roadmap, erzeugt aus dem Vault, in dem diese Seite geschrieben wurde.',
     note: 'Der Viewer ist im Bau. Die Roadmap nicht: die wird heute erzeugt, aus denselben Dateien.',
     appTitle: 'EKHO Roadmap',
     nav: ['Überblick', 'Was jetzt', 'Was danach', 'Entscheidungen', 'Verlauf'],
@@ -83,7 +86,7 @@ export const de: Copy = {
   },
   architecture: {
     title: 'Die EKHO-Architektur',
-    lede: 'Notizen führen kann jede KI. EKHO ergänzt die Grammatik und die Workflows, die sie wiederholbar machen und mit jedem anderen EKHO-Vault verträglich.',
+    lede: 'Notizen führen kann jede KI. EKHO bringt die Grammatik und die Abläufe dazu, die aus dem Notizenführen etwas Wiederholbares machen, verträglich mit jedem anderen EKHO-Vault.',
     layers: {
       conversation: {
         title: 'Conversation',
@@ -95,25 +98,25 @@ export const de: Copy = {
         title: 'LLM',
         note: 'austauschbar',
         lead: 'Das Mittel, nicht der Ort:',
-        text: 'die Maschine, die liest, schreibt und verknüpft. EKHO arbeitet mit jedem Modell, ob Frontier, offen oder lokal betrieben. Du kannst das Modell wechseln, und dein Wissen bleibt genau dort, wo es war.',
+        text: 'die Maschine, die liest, schreibt und verknüpft. EKHO arbeitet mit jedem Modell, ob Spitzenmodell, offenes Modell oder eines, das bei dir läuft. Du wechselst das Modell, dein Wissen bleibt genau dort, wo es war.',
       },
       harness: {
         title: 'Harness',
         note: 'CLI und Skills',
         lead: 'Die Schicht, die die Grammatik arbeiten lässt:',
-        text: 'Skills, Workflows und ein Linter, die Quellen aufnehmen, Fragen beantworten und alles konsistent halten. Aus etwas, das eine Person einmal geprompted hat, wird ein Verhalten, das jeder wiederholen kann.',
+        text: 'Skills, Abläufe und ein Linter, die Quellen aufnehmen, Fragen beantworten und alles stimmig halten. Aus etwas, das eine Person einmal in einen Prompt geschrieben hat, wird ein Verhalten, das jeder wiederholen kann.',
       },
       ontology: {
         title: 'Ontology',
         note: 'Typen, Kanten, Regeln',
         lead: 'Die gemeinsame Grammatik eines Vaults:',
-        text: 'was eine Notiz ist (Erkenntnis, Hypothese, Entscheidung), wie Notizen zusammenhängen und welchen Regeln sie folgen. Sie wird deklariert statt geprompted, deshalb verhält sich jeder Vault gleich, und jedes Fachgebiet kann sie erweitern, ohne den Kern zu brechen.',
+        text: 'was eine Notiz ist (Erkenntnis, Hypothese, Entscheidung), wie Notizen zusammenhängen und welchen Regeln sie folgen. Das steht fest geschrieben und nicht in einem Prompt, deshalb verhält sich jeder Vault gleich, und jedes Fachgebiet kann die Grammatik erweitern, ohne den Kern zu brechen.',
       },
       vault: {
         title: 'EKHO Vault',
         note: 'offenes Format',
         lead: 'Was dir gehört:',
-        text: 'schlichtes Markdown auf deiner eigenen Festplatte. Es wird mit jeder Sitzung wertvoller, und keine der Schichten darüber darf es als Geisel nehmen.',
+        text: 'schlichtes Markdown auf deiner eigenen Festplatte. Es wird mit jeder Sitzung wertvoller, und keine der Schichten darüber kann es festhalten.',
       },
     },
   },
@@ -125,7 +128,7 @@ export const de: Copy = {
   },
   waitlist: {
     title: 'Wo wir stehen',
-    lede: 'Die CLI läuft, wir benutzen sie täglich. Der Viewer ist im Bau. Es gibt noch kein gehostetes Produkt, keinen Account und keine Preise. Wenn du dabei sein willst, sobald es das gibt, lass uns deine Mailadresse da.',
+    lede: 'Die CLI läuft, wir benutzen sie täglich. Der Viewer ist im Bau. Es gibt noch kein gehostetes Produkt, keine Konten, keine Preise. Wenn du dabei sein willst, sobald es das gibt, schreib uns.',
     cta: 'Auf die Warteliste',
     note: 'Vorerst ist das eine Mail an uns. Eine Antwort, sobald es etwas zu sehen gibt, und kein Tracking.',
     label: 'Deine Mailadresse',
