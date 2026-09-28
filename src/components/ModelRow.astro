@@ -91,6 +91,8 @@ const plates: Plate[] = [
     }
     unlit = window.setTimeout(() => {
       for (const w of wires) w.classList.remove('is-lit');
+      // the wire is drawn; what it makes possible plays out under it
+      document.dispatchEvent(new CustomEvent('ekho:picked'));
     }, 1500);
   };
 

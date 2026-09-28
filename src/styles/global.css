@@ -5296,6 +5296,111 @@
   }
 }
 
+/* The scene ------------------------------------------------------------------
+   On a phone, picking a model does not just redraw a mark: the exchange the
+   wire enables plays out underneath it. The strip with the two ends on it
+   sticks to the top of the screen, the composer comes up from the bottom
+   edge, the recording and the line go into it, it is sent, and the thread
+   arrives a beat at a time. Everything here is scoped to .is-playing, so the
+   page reads as a finished thread until somebody starts it, and to the phone,
+   because on a wide screen the window is already driven by the scroll.
+   -------------------------------------------------------------------------- */
+@layer components {
+  @media (max-width: 63.999rem) {
+    /* the strip holding the model and the vault, held under the header */
+    .chat-unit.is-stuck .wire {
+      position: sticky;
+      top: var(--head, 4.5rem);
+      z-index: 6;
+      margin-bottom: 0;
+      padding-block: 0.7rem;
+      background: var(--bg);
+      box-shadow: 0 1px 0 var(--line);
+    }
+
+    /* the composer, at the bottom edge for as long as the scene runs */
+    .chat-unit.is-playing .chat-foot {
+      position: sticky;
+      bottom: 0;
+      z-index: 5;
+      padding-block: 0.6rem calc(0.6rem + env(safe-area-inset-bottom, 0px));
+      background: var(--bg);
+      animation: foot-up 380ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    }
+
+    @keyframes foot-up {
+      from {
+        opacity: 0;
+        transform: translateY(110%);
+      }
+    }
+
+    /* what has not arrived yet */
+    .chat-unit.is-playing [data-beat] {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .chat-unit.is-playing [data-beat].is-in {
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity 340ms ease,
+        transform 340ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    /* a row of the table cannot be moved, only faded */
+    .chat-unit.is-playing tr[data-beat] {
+      transform: none;
+    }
+
+    /* what is being written, and the caret after it */
+    .chat-typed {
+      flex: 1 1 auto;
+      min-width: 0;
+      color: var(--text);
+    }
+
+    .chat-typed::after {
+      content: '';
+      display: inline-block;
+      width: 1px;
+      height: 1em;
+      margin-left: 1px;
+      background: var(--text);
+      vertical-align: -0.15em;
+      animation: caret 1s steps(1) infinite;
+    }
+
+    @keyframes caret {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .chat-clip--draft {
+      margin-bottom: 0.5rem;
+      animation: clip-in 260ms ease both;
+    }
+
+    @keyframes clip-in {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+    }
+
+    /* the send key answers when the line goes */
+    .chat-unit.is-sending .chat-send {
+      background: var(--signal);
+      transform: translateY(-2px);
+      transition:
+        background-color 160ms ease,
+        transform 160ms ease;
+    }
+  }
+}
+
 /* What the vault holds --------------------------------------------------------
    Two counts over the top corners of the drawing: how many notes are in the
    vault behind this site and how many links hold them together. They are set

@@ -28,7 +28,7 @@ const recents = [
 const rows = c.chat.rows;
 ---
 
-<div class="chat-unit">
+<div class="chat-unit" data-scene>
   {/* What is wired to what, said once above the window: the model on the left
       is whichever one is picked in the row, the vault on the right never
       changes, and the line between them is the point of the chapter. */}
@@ -88,7 +88,7 @@ const rows = c.chat.rows;
             card below transcribes this exact name — and a message that asks
             EKHO to take a call without carrying the call was a step short of
             the truth. Not translated: it is a filename. */}
-        <div class="chat-ask">
+        <div class="chat-ask" data-beat="1">
           <p class="chat-clip">
             <span class="chat-clip-ico" aria-hidden="true">
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -101,7 +101,7 @@ const rows = c.chat.rows;
           <p class="chat-ask-text">{c.chat.ask}</p>
         </div>
 
-        <div class="chat-answer">
+        <div class="chat-answer" data-beat="2">
           <span class="chat-mark" data-chat-mark aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <path d={si.siClaude.path} />
@@ -110,7 +110,7 @@ const rows = c.chat.rows;
           <div>
             <p class="chat-said">{c.chat.said}</p>
 
-            <div class="tool">
+            <div class="tool" data-beat="3">
               <p class="tool-head">
                 <svg class="tool-ico" viewBox="0 0 12 12" aria-hidden="true">
                   <path d="M2.4 3.4 5 6l-2.6 2.6M6.4 8.8h3.4" />
@@ -133,7 +133,7 @@ const rows = c.chat.rows;
               </p>
             </div>
 
-            <div class="tool tool--skill">
+            <div class="tool tool--skill" data-beat="4">
               <p class="tool-head">
                 <span class="tool-sq" aria-hidden="true"></span>
                 <span class="tool-kind">{c.chat.skill}</span>
@@ -147,7 +147,7 @@ const rows = c.chat.rows;
               <table class="tool-table">
                 <tbody>
                   {rows.map(([op, type, what]) => (
-                    <tr>
+                    <tr data-beat="5">
                       <td class="tool-op">{op}</td>
                       <td class="tool-type">{type}</td>
                       <td>{what}</td>
@@ -157,7 +157,7 @@ const rows = c.chat.rows;
               </table>
             </div>
 
-            <p class="chat-acts">
+            <p class="chat-acts" data-beat="6">
               <span class="chat-btn chat-btn--solid">{c.chat.confirm}</span>
               <span class="chat-btn">{c.chat.adjust}</span>
             </p>
@@ -166,11 +166,25 @@ const rows = c.chat.rows;
       </div>
 
       <div class="chat-foot">
+        {/* The composer plays its part in the scene: the recording is put in
+            it, the line is written into it, and then it is sent. Empty and
+            idle otherwise, which is how the page reads before anything is
+            picked. */}
+        <p class="chat-clip chat-clip--draft" data-draft-clip hidden>
+          <span class="chat-clip-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 11v2M8 7.5v9M12 5v14M16 8.5v7M20 11v2" />
+            </svg>
+          </span>
+          <span class="chat-clip-name">260925_anna.m4a</span>
+          <span class="chat-clip-len">3:12</span>
+        </p>
         <p class="chat-composer">
           <span class="chat-plus" aria-hidden="true">
             +
           </span>
-          <span class="chat-ph">{c.chat.reply}</span>
+          <span class="chat-ph" data-ph>{c.chat.reply}</span>
+          <span class="chat-typed" data-typed aria-hidden="true" hidden></span>
           <span class="chat-send" aria-hidden="true">
             <Arrow kind="send" />
           </span>
@@ -180,3 +194,123 @@ const rows = c.chat.rows;
   </div>
   </figure>
 </div>
+
+<script>
+  // The scene. Picking a model draws the wire; once it is drawn the exchange
+  // it enables plays out underneath it, so the claim is demonstrated and not
+  // just stated: the strip holding the two ends rises to the top of the
+  // screen and stays there, the composer comes up from the bottom edge, the
+  // recording is put in it, the line is written, it is sent, the model
+  // answers, and EKHO works through it a card at a time.
+  //
+  // Phone only. On a wide screen the window lives on the sticky stage beside
+  // the text and is already driven by the scroll; a second choreography
+  // fighting that one for the scroll position helps nobody.
+  const phone = window.matchMedia('(max-width: 63.999rem)');
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  for (const unit of document.querySelectorAll<HTMLElement>('.flow-window [data-scene]')) {
+    const beats = [...unit.querySelectorAll<HTMLElement>('[data-beat]')].sort(
+      (a, b) => Number(a.dataset.beat) - Number(b.dataset.beat),
+    );
+    const draft = unit.querySelector<HTMLElement>('[data-draft-clip]');
+    const ph = unit.querySelector<HTMLElement>('[data-ph]');
+    const typed = unit.querySelector<HTMLElement>('[data-typed]');
+    const ask = unit.querySelector<HTMLElement>('.chat-ask');
+    // the line the scene writes is the one the thread already carries
+    const line = ask?.querySelector<HTMLElement>('.chat-ask-text')?.textContent?.trim() ?? '';
+
+    let run = 0;
+    const wait = (ms: number) =>
+      new Promise<void>((go) => {
+        run = window.setTimeout(go, ms);
+      });
+
+    const reset = () => {
+      window.clearTimeout(run);
+      unit.classList.remove('is-playing', 'is-stuck');
+      for (const b of beats) b.classList.remove('is-in');
+      if (draft) draft.hidden = true;
+      if (typed) {
+        typed.hidden = true;
+        typed.textContent = '';
+      }
+      if (ph) ph.hidden = false;
+      unit.classList.remove('is-sending');
+    };
+
+    const play = async () => {
+      if (!phone.matches) return;
+      reset();
+      if (still.matches) return;
+
+      unit.classList.add('is-playing');
+
+      // the strip comes to rest under the header and stays there
+      const head = Number.parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue('--head'),
+        10,
+      );
+      const wire = unit.querySelector<HTMLElement>('.wire');
+      if (wire) {
+        const to = window.scrollY + wire.getBoundingClientRect().top - (head || 72);
+        window.scrollTo({ top: to, behavior: 'smooth' });
+      }
+      await wait(620);
+      unit.classList.add('is-stuck');
+
+      // the recording is attached, then the line is written into the composer
+      await wait(320);
+      if (draft) draft.hidden = false;
+      await wait(420);
+      if (ph) ph.hidden = true;
+      if (typed) {
+        typed.hidden = false;
+        for (let n = 1; n <= line.length; n += 2) {
+          typed.textContent = line.slice(0, n);
+          await wait(18);
+        }
+        typed.textContent = line;
+      }
+
+      // sent: the composer empties and the message is in the thread
+      await wait(360);
+      unit.classList.add('is-sending');
+      await wait(220);
+      unit.classList.remove('is-sending');
+      if (draft) draft.hidden = true;
+      if (typed) {
+        typed.hidden = true;
+        typed.textContent = '';
+      }
+      if (ph) ph.hidden = false;
+
+      // and then it arrives, a beat at a time
+      const pace: Record<string, number> = {
+        '1': 0,
+        '2': 620,
+        '3': 520,
+        '4': 620,
+        '5': 160,
+        '6': 420,
+      };
+      for (const b of beats) {
+        await wait(pace[b.dataset.beat ?? '1'] ?? 400);
+        b.classList.add('is-in');
+      }
+
+      // The scene is over. The composer goes back into the flow — a bar held
+      // at the bottom of the screen for the rest of the page would be a
+      // leftover, not a client — and the thread stays as it arrived. The
+      // strip keeps its sticky, which is bounded by the window it belongs to
+      // and releases on its own at the end of it.
+      await wait(700);
+      unit.classList.remove('is-playing');
+    };
+
+    document.addEventListener('ekho:picked', () => {
+      void play();
+    });
+    phone.addEventListener('change', reset);
+  }
+</script>
