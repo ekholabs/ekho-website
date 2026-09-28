@@ -530,10 +530,13 @@
     transform: translate(var(--dx0), var(--dy0));
   }
 
+  /* The field carried the two grey tones a shade too far back: on a dark
+     ground it read as dust rather than as a set of points. One step up in
+     both tone and alpha, in stage 0 and in stage 1. */
   .reveal-on [data-graphic] .cg-dot,
   .reveal-on [data-graphic] .cg-dot.is-named {
-    fill: var(--muted-deep);
-    opacity: 0.5;
+    fill: var(--muted);
+    opacity: 0.58;
   }
 
   /* Not zero. At zero the browser paints none of the net, so the first raster
@@ -570,17 +573,17 @@
 
   .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-a:not(.is-named) {
     fill: var(--text);
-    opacity: 0.6;
+    opacity: 0.78;
   }
 
   .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-b:not(.is-named) {
     fill: var(--muted);
-    opacity: 0.38;
+    opacity: 0.55;
   }
 
   .reveal-on [data-graphic].is-1:not(.is-2) .cg-dot.s-c:not(.is-named) {
     fill: var(--muted-deep);
-    opacity: 0.26;
+    opacity: 0.42;
   }
 
   /* A point that carries a name is one of yours, so it is yellow from the moment
