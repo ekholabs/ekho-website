@@ -121,7 +121,7 @@ export const de: Copy = {
        rest of the page uses: say the thing, then show the receipt. */
     claim:
       'Wenn KI eine industrielle Revolution des Geistes ist, dann sollten die Menschen, die denken, diejenigen sein, für die sie sich auszahlt. Heute wird das Gedächtnis auf der anderen Seite gebaut.',
-    lede: 'Zwei Gründer in Berlin. Wir glauben, Europa schuldet sich eine Fassung davon, die den Menschen antwortet und nicht dem Modell. Der Vault hinter dieser Seite hält 710 Notizen, und jede Entscheidung auf dieser Seite ist eine davon.',
+    lede: 'Zwei, die in Berlin daran bauen. Wir glauben, Europa schuldet sich eine Fassung davon, die den Menschen antwortet und nicht dem Modell. Der Vault hinter dieser Seite hält 710 Notizen, und jede Entscheidung auf dieser Seite ist eine davon.',
     lorenz: 'Semantik, Ontologie & Design',
     stephan: 'Harness, Daten & Engineering',
   },

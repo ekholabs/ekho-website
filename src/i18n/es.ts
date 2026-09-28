@@ -117,7 +117,7 @@ export const es: Copy = {
        rest of the page uses: say the thing, then show the receipt. */
     claim:
       'Si la IA es una revolución industrial de la mente, quienes piensan deberían ser aquellos para los que se paga. Hoy la memoria se está construyendo del otro lado.',
-    lede: 'Dos fundadores en Berlín. Creemos que Europa se debe a sí misma una versión que responda a las personas y no al modelo. El vault detrás de esta página guarda 710 notas, y cada decisión de esta página es una de ellas.',
+    lede: 'Dos personas que lo construyen, en Berlín. Creemos que Europa se debe a sí misma una versión que responda a las personas y no al modelo. El vault detrás de esta página guarda 710 notas, y cada decisión de esta página es una de ellas.',
     lorenz: 'Semántica, ontología y diseño',
     stephan: 'Harness, datos e ingeniería',
   },

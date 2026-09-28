@@ -115,7 +115,7 @@ export const en = {
        rest of the page uses: say the thing, then show the receipt. */
     claim:
       'If AI is an industrial revolution of the mind, then the people doing the thinking should be the ones it pays off for. Today the memory is being built on the other side.',
-    lede: 'Two founders in Berlin. We think Europe owes itself a version of this that answers to people rather than to the model. The vault behind this site holds 710 notes, and every decision on this page is one of them.',
+    lede: 'Two builders in Berlin. We think Europe owes itself a version of this that answers to people rather than to the model. The vault behind this site holds 710 notes, and every decision on this page is one of them.',
     lorenz: 'Semantics, Ontology & Design',
     stephan: 'Harness, Data & Engineering',
   },
