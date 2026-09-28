@@ -418,6 +418,15 @@
      relayout every frame.
 
      The resting state, with no script, is the finished net. */
+  /* A named point is a circle inside a group, and the group carries every move
+     the point makes. Without this the circle reads the same custom properties
+     its group does and travels the distance a second time, which in the hero
+     put the eight of them somewhere between the field and the sphere — two of
+     them close enough to touch. */
+  .cg-pt .cg-dot {
+    transform: none;
+  }
+
   .cg-dot,
   .cg-pt {
     transform: translate(var(--dx2), var(--dy2));
