@@ -53,7 +53,7 @@ export const fr: Copy = {
     edge: "Il reste le vôtre, et passer de l'un à l'autre ne vous coûte rien.",
   },
   compound: {
-    title: 'Les mêmes notes. Trois fois plus de liens.',
+    title: 'Votre savoir fructifie.',
     a: "Chaque source que vous versez se relie à tout ce qui est déjà là. Une idée sait d'où elle vient, ce qui l'appuie et ce qui la contredit.",
     b: "C'est en cela qu'elle fructifie : chaque note ajoutée multiplie les liens, si bien que la qualité de ce qui revient croît de façon exponentielle plutôt que pas à pas. La tenue des comptes est la partie que l'on abandonne, et c'est justement celle qu'EKHO prend en charge.",
   },
