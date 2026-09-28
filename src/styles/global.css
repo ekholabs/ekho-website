@@ -4480,9 +4480,45 @@
     fill: var(--sk-blue);
   }
 
+  .strip-card .sk-pfp-bg {
+    fill: #d9d3c7;
+  }
+
+  .strip-card .sk-pfp-hair {
+    fill: #54412f;
+  }
+
+  .strip-card .sk-pfp-skin {
+    fill: #e8c3a4;
+  }
+
+  .strip-card .sk-pfp-top {
+    fill: #3a3a40;
+  }
+
   .strip-card .sk-on-brand,
   .strip-card .sk-on-rec {
     fill: #fff;
+  }
+
+  /* the one mark that is set the other way round in the dark: the post client
+     puts its ink on its paper, and both flip together */
+  .strip-card .sk-x {
+    fill: #000;
+  }
+
+  .strip-card .sk-x-on {
+    stroke: #fff;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .strip-card .sk-x {
+      fill: #fff;
+    }
+
+    .strip-card .sk-x-on {
+      stroke: #000;
+    }
   }
 
   /* a key on a light ground: the fill alone is a few values off the surface

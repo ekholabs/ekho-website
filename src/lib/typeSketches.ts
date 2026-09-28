@@ -63,14 +63,16 @@ const voice = (() => {
   );
 })();
 
-// where it lives, and the part you kept
+// a post: who wrote it, that they are who they say, and the part you kept
 const article =
-  rect(0, 0, 200, 13, 'sk-chrome', 6.5) +
-  circle(10, 6.5, 3, 'sk-quiet') +
-  rect(18, 4, 96, 5, 'sk-quiet') +
-  rect(0, 20, 200, 5, 'sk-quiet') +
-  rect(0, 29, 128, 5, 'sk-quiet') +
-  rect(0, 20, 84, 5, 'sk-sig');
+  circle(9, 9, 9, 'sk-chrome') +
+  rect(24, 2, 54, 7, 'sk-ink', 3.5) +
+  circle(86, 5.5, 5, 'sk-blue') +
+  `<path class="sk-on-brand" d="m83.6 5.6 1.8 1.8 3-3.2" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>` +
+  rect(24, 13, 38, 5, 'sk-quiet', 2.5) +
+  rect(0, 24, 200, 5, 'sk-quiet') +
+  rect(0, 24, 88, 5, 'sk-sig') +
+  rect(0, 32, 132, 4, 'sk-quiet');
 
 // ------------------------------------------------------------------- EKHO's
 
@@ -135,10 +137,20 @@ export const SKETCHES: Record<string, string> = {
 
 /** the tile in the head of each widget: the app's mark, or EKHO's type mark */
 export const TILES: Record<string, string> = {
+  // A portrait rather than the grey silhouette a contact falls back to: at
+  // this size it is four shapes, and four shapes is enough to read as a
+  // person instead of as a missing photo. Nobody in particular — Anna Berger
+  // is a persona, and the card is a mockup.
   person:
-    circle(11, 11, 11, 'sk-chrome') +
-    circle(11, 8.5, 3.6, 'sk-quiet') +
-    `<path class="sk-quiet-stroke" d="M4.8 17.5a6.4 6.4 0 0 1 12.4 0"/>`,
+    `<clipPath id="pfp"><circle cx="11" cy="11" r="11"/></clipPath>` +
+    `<g clip-path="url(#pfp)">` +
+    rect(0, 0, 22, 22, 'sk-pfp-bg', 0) +
+    `<path class="sk-pfp-top" d="M11 14c5.4 0 9 3.6 9 8H2c0-4.4 3.6-8 9-8z"/>` +
+    rect(9.2, 11.5, 3.6, 4, 'sk-pfp-skin', 1.2) +
+    `<ellipse class="sk-pfp-hair" cx="11" cy="9.6" rx="6.6" ry="7.2"/>` +
+    `<ellipse class="sk-pfp-skin" cx="11" cy="10.2" rx="4.9" ry="5.6"/>` +
+    `<path class="sk-pfp-hair" d="M6.1 8.9a4.9 4.9 0 0 1 9.8 0c-1.3-2.4-8.5-2.4-9.8 0z"/>` +
+    `</g>`,
   meeting:
     rect(0, 0, 22, 22, 'sk-brand', 6) +
     rect(4.5, 7, 8.5, 8, 'sk-on-brand', 1.5) +
@@ -149,10 +161,6 @@ export const TILES: Record<string, string> = {
     rect(10, 5, 2, 12, 'sk-on-rec', 1) +
     rect(14, 8.5, 2, 5, 'sk-on-rec', 1),
   article:
-    rect(0, 0, 22, 22, 'sk-chrome', 6) +
-    circle(6, 6, 1.7, 'sk-quiet') +
-    circle(11, 6, 1.7, 'sk-quiet') +
-    circle(16, 6, 1.7, 'sk-quiet') +
-    rect(4.5, 11, 13, 2, 'sk-quiet', 1) +
-    rect(4.5, 15.5, 9, 2, 'sk-quiet', 1),
+    rect(0, 0, 22, 22, 'sk-x', 6) +
+    `<path class="sk-x-on" d="M6 6.2 16 15.8M16 6.2 6 15.8" fill="none" stroke-width="2" stroke-linecap="round"/>`,
 };
