@@ -181,7 +181,12 @@ const rows = c.chat.rows;
               <button type="button" class="chat-btn chat-btn--solid" data-decide>
                 {c.chat.confirm}
               </button>
-              <button type="button" class="chat-btn" data-decide>{c.chat.adjust}</button>
+              {/* Present, because a client that only offers "yes" is not a
+                  client. Inactive, because this one is a mockup and the only
+                  thing it lets you do is confirm. */}
+              <button type="button" class="chat-btn" disabled>
+                {c.chat.adjust}
+              </button>
             </p>
           </div>
         </div>

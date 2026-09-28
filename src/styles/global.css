@@ -1744,11 +1744,25 @@
     margin: 0.2rem 0 0;
   }
 
+  /* These are buttons now, because one of them does something — and a button
+     with no colour and no font of its own takes the browser's, which on a
+     phone is the system blue in the system face. Both are said here. */
   .chat-btn {
     padding: 0.4rem 0.85rem;
     border: 1px solid var(--line);
     border-radius: 8px;
+    background: none;
+    color: var(--text);
+    font-family: inherit;
     font-size: 0.75rem;
+    line-height: inherit;
+  }
+
+  /* the one that is only there to show the choice exists */
+  .chat-btn[disabled] {
+    color: var(--muted);
+    border-color: var(--line);
+    cursor: default;
   }
 
   .chat-btn--solid {
