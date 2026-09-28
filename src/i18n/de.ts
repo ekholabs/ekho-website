@@ -36,7 +36,7 @@ export const de: Copy = {
     title: 'Was wird knapp, wenn Intelligenz im Überfluss da ist?',
     a: 'Das Modell ist für alle dasselbe, dein Kontext ist einzigartig.',
     b: 'Kontext. Alles, was du weißt: deine Entscheidungen und warum, die Menschen, mit denen du arbeitest, was du gelesen und daraus geschlossen hast.',
-    c: 'Doch Wissen ist von Natur aus verstreut, über deinen Kopf, Chats, Mails und Notizen. Es zusammenzuführen war aussichtslos. Bis KI kam.',
+    c: 'Doch Wissen ist von Natur aus verstreut, über deinen Kopf, Chats, Mails und Notizen. Es zusammenzuführen war aussichtslos. Bis jetzt.',
   },
   what: {
     title: 'Ein Wallet für dein wertvollstes Asset.',
