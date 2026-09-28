@@ -72,7 +72,27 @@ const plates: Plate[] = [
   const picked = document.querySelector<HTMLElement>('[data-picked]');
   const marks = document.querySelectorAll<HTMLElement>('[data-chat-mark]');
   const buttons = document.querySelectorAll<HTMLButtonElement>('[data-pick]');
+  // The wire above the window says the two are joined; on a pick it shows the
+  // joining happen. Both ends light in the signal colour and a yellow line
+  // runs from the model to the vault between them.
+  const wires = document.querySelectorAll<HTMLElement>('.wire');
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)');
   let clear = 0;
+  let unlit = 0;
+
+  const light = () => {
+    if (still.matches) return;
+    window.clearTimeout(unlit);
+    for (const w of wires) {
+      w.classList.remove('is-lit');
+      // a reflow between the two, or the class never left and nothing restarts
+      void w.offsetWidth;
+      w.classList.add('is-lit');
+    }
+    unlit = window.setTimeout(() => {
+      for (const w of wires) w.classList.remove('is-lit');
+    }, 1500);
+  };
 
   for (const b of buttons) {
     b.addEventListener('click', () => {
@@ -88,6 +108,7 @@ const plates: Plate[] = [
       for (const other of buttons) {
         other.setAttribute('aria-pressed', String(other.dataset.pick === name));
       }
+      light();
       if (picked) {
         picked.textContent = (picked.dataset.tpl ?? '{name}').replace('{name}', name);
         picked.hidden = false;
