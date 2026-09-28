@@ -38,19 +38,65 @@ const plates: Plate[] = [
     not rendered. */}
 <ul class="plates" data-plates>
   {[...plates, ...plates, ...plates].map((p, i) => (
-    <li class:list={['plate', { 'plate--dup': i >= plates.length }]} title={p.label}>
-      {p.icon ? (
-        <svg class="plate-mark" viewBox="0 0 24 24" role="img" aria-label={p.label}>
-          <path d={p.icon.path} />
-        </svg>
-      ) : (
-        <span class="plate-text" aria-label={p.label}>
-          {p.text}
-        </span>
-      )}
+    <li class:list={['plate-slot', { 'plate--dup': i >= plates.length }]}>
+      {/* Pressing one puts its mark on the answer in the window below and says
+          so at the foot of the screen. The mark travels as data on the button,
+          so the page carries each outline exactly once. */}
+      <button
+        class="plate"
+        type="button"
+        title={p.label}
+        data-pick={p.label}
+        data-mark={p.icon?.path ?? ''}
+        data-text={p.text ?? ''}
+        aria-pressed={p.label === 'Claude'}
+      >
+        {p.icon ? (
+          <svg class="plate-mark" viewBox="0 0 24 24" role="img" aria-label={p.label}>
+            <path d={p.icon.path} />
+          </svg>
+        ) : (
+          <span class="plate-text" aria-label={p.label}>
+            {p.text}
+          </span>
+        )}
+      </button>
     </li>
   ))}
 </ul>
+
+<script>
+  // Picking a model. The mark on the answer in the mocked client follows the
+  // plate that was pressed, and a line at the foot of the screen says which
+  // one it is — the same way a client tells you which model a thread is on.
+  const picked = document.querySelector<HTMLElement>('[data-picked]');
+  const marks = document.querySelectorAll<HTMLElement>('[data-chat-mark]');
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-pick]');
+  let clear = 0;
+
+  for (const b of buttons) {
+    b.addEventListener('click', () => {
+      const name = b.dataset.pick ?? '';
+      const path = b.dataset.mark ?? '';
+      const text = b.dataset.text ?? '';
+
+      for (const m of marks) {
+        m.innerHTML = path
+          ? `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${path}"></path></svg>`
+          : `<span class="chat-mark-text">${text}</span>`;
+      }
+      for (const other of buttons) {
+        other.setAttribute('aria-pressed', String(other.dataset.pick === name));
+      }
+      if (picked) {
+        picked.textContent = (picked.dataset.tpl ?? '{name}').replace('{name}', name);
+        picked.hidden = false;
+        window.clearTimeout(clear);
+        clear = window.setTimeout(() => (picked.hidden = true), 2600);
+      }
+    });
+  }
+</script>
 
 <script>
   // Endless in both directions. The list is rendered twice, so one set along

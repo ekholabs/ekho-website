@@ -5,11 +5,13 @@
 // the answer as plain text with no bubble, tool use as bordered cards, and a
 // composer pill with the model underneath.
 //
-// The client is unbranded (Lorenz, 2026-09-28, reversing the mark that stood
-// here for a day): no maker's logo and no maker's name anywhere in it. What
-// makes it recognisable is the shape, not the badge — the answer flush left
-// with no avatar beside it, tool use in collapsible cards, the composer a pill
-// with the connected vault under it.
+// The maker's mark sits beside the answer, and it is whichever model the
+// reader picked in the row above: Claude to begin with, and pressing another
+// plate swaps it here (see ModelRow). That is the chapter's claim in one
+// gesture — the same conversation, a different engine, the vault unchanged.
+// The marks come from simple-icons, as in that row, and say compatibility
+// rather than endorsement.
+import * as si from 'simple-icons';
 import Arrow from './Arrow.astro';
 import { t, type Lang } from '../i18n';
 
@@ -66,6 +68,11 @@ const rows = c.chat.rows;
         <p class="chat-ask">{c.chat.ask}</p>
 
         <div class="chat-answer">
+          <span class="chat-mark" data-chat-mark aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d={si.siClaude.path} />
+            </svg>
+          </span>
           <div>
             <p class="chat-said">{c.chat.said}</p>
 

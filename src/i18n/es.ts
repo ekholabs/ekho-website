@@ -161,6 +161,8 @@ export const es: Copy = {
     confirm: 'Confirmar',
     adjust: 'Ajustar',
     reply: 'Responder…',
+    /* the line at the foot of the screen when a model is picked */
+    picked: '{name} seleccionado',
   },
   graphic: {
     frameTitle: 'Tu EKHO',

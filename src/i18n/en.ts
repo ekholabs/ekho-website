@@ -159,6 +159,8 @@ export const en = {
     confirm: 'Confirm',
     adjust: 'Adjust',
     reply: 'Reply…',
+    /* the line at the foot of the screen when a model is picked */
+    picked: '{name} selected',
   },
   graphic: {
     frameTitle: 'Your EKHO',

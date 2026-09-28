@@ -445,6 +445,10 @@ const people = [
       <span>{c.nav.next}</span>
     </button>
   </div>
+  {/* Which model the mocked client is on. Hidden until a plate in the model
+      row is pressed, then at the foot of the screen for a moment, the way a
+      client confirms a switch. */}
+  <p class="picked" data-picked data-tpl={c.chat.picked} role="status" hidden></p>
 </Base>
 
 <script>
