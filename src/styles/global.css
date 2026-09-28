@@ -509,6 +509,14 @@
     filter: none;
   }
 
+  .cg-ico {
+    fill: none;
+    stroke: var(--muted-deep);
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
   .cg-tip-type {
     font-size: 9px;
     letter-spacing: 0.1em;

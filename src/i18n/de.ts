@@ -55,7 +55,7 @@ export const de: Copy = {
   },
   compound: {
     title: 'Dein Wissen verzinst sich.',
-    a: 'Jede Quelle, die du einspeist, verbindet sich mit allem, was schon da ist. Eine Erkenntnis weiß, woher sie kommt, was sie stützt und was ihr widerspricht.',
+    a: 'Jede Quelle, die du in dein EKHO einspeist, verbindet sich mit allem, was schon da ist. Eine Erkenntnis weiß, woher sie kommt, was sie stützt und was ihr widerspricht.',
     b: 'Genau darin verzinst es sich: Jede neue Notiz vervielfacht die Verbindungen, also wächst die Qualität dessen, was zurückkommt, exponenziell statt Schritt für Schritt. Die Buchführung ist der Teil, den Menschen aufgeben, und genau den übernimmt EKHO.',
   },
   viewer: {

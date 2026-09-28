@@ -52,7 +52,7 @@ export const en = {
   },
   compound: {
     title: 'Your knowledge is compounding.',
-    a: 'Every source you ingest links to everything already there. An insight knows where it came from, what supports it and what contradicts it.',
+    a: 'Every source you ingest into your EKHO links to everything already there. An insight knows where it came from, what supports it and what contradicts it.',
     b: 'That is what compounding means here: every note you add multiplies the connections, so the quality of what comes back grows exponentially rather than one step at a time. The bookkeeping is the part people give up on, and it is the part EKHO does.',
   },
   viewer: {
