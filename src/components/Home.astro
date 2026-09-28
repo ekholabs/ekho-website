@@ -110,8 +110,26 @@ const people = [
     <div class="story-figure" data-story-figure>
       <div class="figure-stage">
         <ContextGraphic caption={false} lang={lang} />
+        {/* Two sides of one thing. The folder is the front, the object is the
+            back, and pressing it turns the card over — which is the chapter's
+            sentence as a gesture: what you hold is not the thing, it is what
+            is in it. A button rather than a div, so it is reachable by
+            keyboard and announces itself. */}
         <div class="overlay" data-for="finder">
-          <FinderWindow lang={lang} />
+          <button class="flip" type="button" data-flip aria-pressed="false">
+            <span class="flip-face flip-face--front">
+              <FinderWindow lang={lang} />
+            </span>
+            <span class="flip-face flip-face--back">
+              <Image
+                class="flip-shot"
+                src={key}
+                alt=""
+                widths={[420, 640]}
+                sizes="17.5rem"
+              />
+            </span>
+          </button>
         </div>
         <div class="overlay" data-for="chat">
           <ChatWindow lang={lang} />
@@ -505,6 +523,15 @@ const people = [
   const intro = document.querySelector<HTMLElement>('[data-intro]');
   const introTitle = document.querySelector<HTMLElement>('[data-intro-title]');
   const introFades = [...document.querySelectorAll<HTMLElement>('[data-intro-fade]')];
+  // Turning the folder over. The state lives on the element rather than in a
+  // variable, so the stylesheet decides what turning looks like.
+  for (const flip of document.querySelectorAll<HTMLElement>('[data-flip]')) {
+    flip.addEventListener('click', () => {
+      const over = flip.classList.toggle('is-flipped');
+      flip.setAttribute('aria-pressed', String(over));
+    });
+  }
+
   // The object in chapter 02 drifts against the page. A transform on one
   // element per frame, read once and written once, so the folder climbing over
   // it reads as two things moving at different speeds rather than as a picture
@@ -531,10 +558,14 @@ const people = [
           // object is there to be looked at, and then sweeps up quickly. Fast
           // and late is not the same thing as fast: starting at once meant it
           // had covered the object before anyone had seen it.
-          const q = Math.max(0, (p - 0.45) / 0.55);
+          const q = Math.max(0, (p - 0.55) / 0.45);
           const sweep = 1 - (1 - q) * (1 - q) * (1 - q);
           k.style.setProperty('--key-scale', String(0.88 + slow * 0.2));
           k.style.setProperty('--key-rise', `${96 - sweep * 176}px`);
+          // and it steps back while the folder comes over it: down to 75% by
+          // the time the window is in place, so the two planes read as two
+          // planes rather than one flat collage
+          k.style.setProperty('--key-dim', String(1 - sweep * 0.25));
         }
       };
       addEventListener(

@@ -2753,15 +2753,17 @@
     /* The object lies behind, exactly as wide as the window that will cover
        it, and the padding is how much of it you see before the folder starts
        climbing. */
-    /* Pulling this up against the chapter's rhythm closed the gap, but it also
-       moved the whole block into the scroll earlier, and the parallax is
+    /* Pulling this hard up against the chapter's rhythm closed the gap, but it
+       also moved the whole block into the scroll earlier, and the parallax is
        driven by where the block sits — so the folder had already climbed over
-       the object by the time you got to it. The air stays. */
+       the object by the time you got to it. A little of the air comes back;
+       the folder now waits until 55% of the block is up before it starts, so
+       there is room for it. */
     .flow-key {
       display: block;
       position: relative;
-      margin-top: 2rem;
-      padding-top: 15rem;
+      margin-top: 1.25rem;
+      padding-top: 19rem;
     }
 
     .flow-key-shot {
@@ -2775,7 +2777,8 @@
          it: two speeds, which is the whole of what makes it read as depth */
       transform: scale(var(--key-scale, 0.9));
       transform-origin: 50% 0;
-      will-change: transform;
+      opacity: var(--key-dim, 1);
+      will-change: transform, opacity;
     }
 
     .flow-key .flow-window {
@@ -3882,26 +3885,68 @@
     opacity: 1;
   }
 
-  /* The window takes on a yellow edge while the links below it are being drawn,
-     so the folder and the graph read as the same thing. The colour moves in the
-     window's own border rather than in a ring laid over it: an overlay sits
-     inside the border it covers, and the two lines a pixel apart looked like a
-     mistake. The edge alone carries it, warming up over a second. The shadow
-     stays the dark one every other panel casts: a yellow glow made the window
-     look lit from within, which is a second thing happening for no reason. */
-  .win--finder {
-    transition: border-color 1100ms ease 350ms;
+  /* Two sides of one card. The folder is what you see; the object is behind
+     it. Only on a wide screen, where the window sits on its own stage and
+     there is room for it to turn. */
+  .flip {
+    display: block;
+    width: 17.5rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 820ms cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
-  [data-story-figure][data-show='finder'] .win--finder {
-    border-color: color-mix(in srgb, var(--signal) 72%, var(--panel-line));
+  .overlay[data-for='finder'] {
+    perspective: 1600px;
+  }
+
+  .flip.is-flipped {
+    transform: rotateY(180deg);
+  }
+
+  .flip-face {
+    display: block;
+    backface-visibility: hidden;
+  }
+
+  /* the back is laid over the front, turned away until the card is */
+  .flip-face--back {
+    position: absolute;
+    inset: 0;
+    transform: rotateY(180deg);
+    display: grid;
+    place-items: center;
+  }
+
+  .flip-shot {
+    width: 100%;
+    height: auto;
+    border-radius: 1.25rem;
+  }
+
+  .flip:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 6px;
+    border-radius: 1.25rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .win--finder {
+    .flip {
       transition: none;
     }
   }
+
+  /* The window used to take on a yellow edge while the links below it were
+     being drawn, to tie the folder to the graph. It is out: the yellow on this
+     page means one thing, what is yours, and a window that turns yellow
+     because something else is happening nearby spends that meaning on
+     decoration. The folder keeps the same rim as every other panel. */
 }
 
 @layer components {
