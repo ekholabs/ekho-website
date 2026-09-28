@@ -141,8 +141,12 @@ const rows = c.chat.rows;
             <Arrow kind="send" />
           </span>
         </p>
+        {/* A client shows a live connection as a dot and a name, not as a
+            sentence. The dot carries "connected", so the word is only in the
+            accessible name, and the chip stays about half the width it was. */}
         <p class="chat-model">
-          <span class="chat-sq" aria-hidden="true"></span> myEKHO · {c.chat.vault}
+          <span class="chat-dot" aria-hidden="true"></span> myEKHO
+          <span class="visually-hidden">· {c.chat.vault}</span>
         </p>
       </div>
     </div>

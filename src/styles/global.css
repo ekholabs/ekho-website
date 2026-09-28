@@ -1750,10 +1750,15 @@
     font-weight: 500;
   }
 
-  /* the square says "yours" against the window's own ground; on the yellow it
-     is the ground */
-  .chat-model .chat-sq {
-    display: none;
+  /* The live dot. Dark on the yellow, because the yellow is the ground here:
+     the square used for "yours" elsewhere would disappear into it. */
+  .chat-dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    flex: none;
+    border-radius: 50%;
+    background: var(--signal-ink);
+    opacity: 0.75;
   }
 
   /* ---------- 05 · the viewer ---------- */
