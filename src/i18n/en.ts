@@ -117,7 +117,7 @@ export const en = {
   who: {
     title: 'Who is building this',
     lede: 'EKHO Labs is two founders. We build EKHO in the open and we use it every day for EKHO itself: the vault behind this site holds 710 notes, and every decision on this page is one of them.',
-    lorenz: 'Semantics, ontology & Design',
+    lorenz: 'Semantics, Ontology & Design',
     stephan: 'Harness, Data & Engineering',
   },
   waitlist: {
