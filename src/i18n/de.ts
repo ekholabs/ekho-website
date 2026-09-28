@@ -54,7 +54,7 @@ export const de: Copy = {
     edge: 'Er bleibt deiner, und eines gegen ein anderes zu tauschen kostet dich nichts.',
   },
   compound: {
-    title: 'Kein einziger neuer Punkt. Dreimal so viele Verbindungen.',
+    title: 'Dieselben Notizen. Dreimal so viele Verbindungen.',
     a: 'Jede Quelle, die du hineingibst, verbindet sich mit allem, was schon da ist. Eine Erkenntnis weiß, woher sie kommt, was sie stützt und was ihr widerspricht.',
     b: 'Genau darin verzinst es sich: Jede neue Notiz vervielfacht die Verbindungen, also wächst die Qualität dessen, was zurückkommt, exponenziell statt Schritt für Schritt. Die Buchführung ist der Teil, den Menschen aufgeben, und genau den übernimmt EKHO.',
   },
