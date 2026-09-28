@@ -590,10 +590,11 @@ const ariaLabel = c.graphic.label;
         // for them, so a card can no more overlap its neighbour than the text
         // could.
         const lw = textWidth(label);
-        const typeX = right ? lx + ICON + ICON_GAP : lx;
-        const iconX = right
-          ? lx
-          : lx - (advance(label.type.toUpperCase(), 9) + label.type.length * 0.9) - ICON_GAP - ICON;
+        // The mark sits on the side the point is on, not always on the left:
+        // a card to the left of its point had the mark at the far end of it,
+        // pointing away from the thing it names.
+        const typeX = right ? lx + ICON + ICON_GAP : lx - ICON - ICON_GAP;
+        const iconX = right ? lx : lx - ICON;
         return (
           <g
             class="cg-pt"
