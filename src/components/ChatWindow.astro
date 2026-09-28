@@ -111,6 +111,16 @@ const rows = c.chat.rows;
           </p>
         </div>
 
+        {/* The wait, drawn the way every client draws it. It is the only
+            honest thing to show between a message going and an answer
+            arriving, and without it the answer appears to have been sitting
+            there all along. */}
+        <p class="chat-typing" data-typing aria-hidden="true" hidden>
+          <span></span>
+          <span></span>
+          <span></span>
+        </p>
+
         <div class="chat-answer" data-beat="2">
           <span class="chat-mark" data-chat-mark aria-hidden="true">
             <svg viewBox="0 0 24 24">
@@ -168,8 +178,10 @@ const rows = c.chat.rows;
             </div>
 
             <p class="chat-acts" data-beat="6">
-              <span class="chat-btn chat-btn--solid">{c.chat.confirm}</span>
-              <span class="chat-btn">{c.chat.adjust}</span>
+              <button type="button" class="chat-btn chat-btn--solid" data-decide>
+                {c.chat.confirm}
+              </button>
+              <button type="button" class="chat-btn" data-decide>{c.chat.adjust}</button>
             </p>
           </div>
         </div>
@@ -227,6 +239,8 @@ const rows = c.chat.rows;
     const ph = unit.querySelector<HTMLElement>('[data-ph]');
     const typed = unit.querySelector<HTMLElement>('[data-typed]');
     const ask = unit.querySelector<HTMLElement>('.chat-ask');
+    const typing = unit.querySelector<HTMLElement>('[data-typing]');
+    const foot = unit.querySelector<HTMLElement>('.chat-foot');
     // the line the scene writes is the one the thread already carries
     const line = ask?.querySelector<HTMLElement>('.chat-ask-text')?.textContent?.trim() ?? '';
 
@@ -262,7 +276,8 @@ const rows = c.chat.rows;
         typed.textContent = '';
       }
       if (ph) ph.hidden = false;
-      unit.classList.remove('is-sending');
+      unit.classList.remove('is-sending', 'is-deciding', 'is-folding');
+      if (typing) typing.hidden = true;
     };
 
     const play = async () => {
@@ -314,28 +329,81 @@ const rows = c.chat.rows;
       }
       if (ph) ph.hidden = false;
 
-      // and then the rest, overlapping: each beat starts while the one before
-      // it is still arriving, which is what keeps it a movement and not a list
+      // the wait, and then the answer in its place
+      if (typing) typing.hidden = false;
+      await wait(820);
+      if (typing) typing.hidden = true;
+
+      // Everything EKHO does arrives close together. The pause belongs before
+      // the answer, not between the two things the answer does: a client that
+      // dawdles between its own tool calls looks broken, not thoughtful.
       const pace: Record<string, number> = {
-        '2': 420,
-        '3': 300,
-        '4': 320,
-        '5': 110,
+        '2': 0,
+        '3': 200,
+        '4': 220,
+        '5': 90,
         '6': 260,
       };
       for (const b of beats.slice(1)) {
-        await wait(pace[b.dataset.beat ?? '2'] ?? 280);
+        await wait(pace[b.dataset.beat ?? '2'] ?? 200);
         b.classList.add('is-in');
       }
 
-      // The scene is over. The composer goes back into the flow — a bar held
-      // at the bottom of the screen for the rest of the page would be a
-      // leftover, not a client — and the thread stays as it arrived. The
-      // strip keeps its sticky, which is bounded by the window it belongs to
-      // and releases on its own at the end of it.
-      await wait(640);
-      unit.classList.remove('is-playing');
+      // And then it waits for the reader. The strip is held at the top, the
+      // composer at the bottom, and the two buttons float over it — which is
+      // what a client looks like when it has asked you something. It stays
+      // that way until one of them is pressed.
+      unit.classList.add('is-deciding');
     };
+
+    // The two buttons float over the composer, so the composer's height is
+    // where they sit. Measured rather than guessed: it changes with the type
+    // scale and with the phone's own safe area.
+    const measureFoot = () => {
+      if (!foot) return;
+      unit.style.setProperty('--foot-h', `${Math.round(foot.getBoundingClientRect().height)}px`);
+    };
+    measureFoot();
+    window.addEventListener('resize', measureFoot, { passive: true });
+
+    // Answering ends the scene. The whole exchange folds into a single point
+    // and the reader is taken to the net, where that point lights: the
+    // decision they just took is now something the graph holds. Then the
+    // chapter is quietly put back the way it was, because a reader who
+    // scrolls up should find the conversation, not a hole.
+    const decide = async () => {
+      if (!unit.classList.contains('is-deciding')) return;
+      window.clearTimeout(run);
+
+      const next = document.querySelector<HTMLElement>('#compound');
+      const landing = next?.querySelector<HTMLElement>('[data-landing]');
+      const head = Number.parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue('--head'),
+        10,
+      );
+
+      unit.classList.remove('is-deciding');
+      unit.classList.add('is-folding');
+      if (next) {
+        window.scrollTo({
+          top: window.scrollY + next.getBoundingClientRect().top - (head || 72),
+          behavior: 'smooth',
+        });
+      }
+
+      await wait(560);
+      landing?.classList.add('is-in');
+      await wait(900);
+      reset();
+      await wait(1600);
+      landing?.classList.remove('is-in');
+    };
+
+    for (const b of unit.querySelectorAll<HTMLButtonElement>('[data-decide]')) {
+      b.addEventListener('click', () => {
+        void decide();
+      });
+    }
 
     document.addEventListener('ekho:picked', () => {
       void play();

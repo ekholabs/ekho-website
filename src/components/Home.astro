@@ -329,6 +329,12 @@ const people = [
               layout has, which means it can be taken hold of and turned. */}
           <div class="flow-graphic">
             <ContextGraphic lang={lang} caption={false} points={200} labelled={false} />
+            {/* Where the decision lands. Confirming in the chapter above folds
+                that whole exchange into one point, and this is the point: it
+                lights on the net as the reader arrives here, so the thing
+                they just did is visibly now part of the graph. Idle and
+                invisible until then. */}
+            <span class="graphic-landing" data-landing aria-hidden="true"></span>
           </div>
           <h2>{c.compound.title}</h2>
           <Statement text={c.compound.a} />
