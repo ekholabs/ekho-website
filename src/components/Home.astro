@@ -527,9 +527,14 @@ const people = [
           // is the thing this chapter is actually about: it should be over the
           // object well before you have finished reading.
           const slow = p * p * (3 - 2 * p);
-          const quick = 1 - (1 - p) * (1 - p) * (1 - p);
+          // The folder holds still for the first part of the run, so the
+          // object is there to be looked at, and then sweeps up quickly. Fast
+          // and late is not the same thing as fast: starting at once meant it
+          // had covered the object before anyone had seen it.
+          const q = Math.max(0, (p - 0.45) / 0.55);
+          const sweep = 1 - (1 - q) * (1 - q) * (1 - q);
           k.style.setProperty('--key-scale', String(0.88 + slow * 0.2));
-          k.style.setProperty('--key-rise', `${96 - quick * 232}px`);
+          k.style.setProperty('--key-rise', `${96 - sweep * 176}px`);
         }
       };
       addEventListener(
