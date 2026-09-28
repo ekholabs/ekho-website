@@ -459,7 +459,23 @@ const rows = c.chat.rows;
       await wait(560);
       landing?.classList.add('is-in');
       await wait(900);
+
+      // Putting the chapter back shortens the page: the room the fixed
+      // composer needed under the thread goes with it, and everything below
+      // moves up by that much — after the scroll had already finished. So the
+      // landing is asserted again once the layout has settled, which is what
+      // makes it come to rest with the rule under the header, the counts over
+      // the net, and the heading below it.
       reset();
+      const land = () => {
+        if (!next) return;
+        window.scrollTo({
+          top: Math.round(window.scrollY + next.getBoundingClientRect().top - (head || 72)),
+          behavior: 'auto',
+        });
+      };
+      requestAnimationFrame(() => requestAnimationFrame(land));
+
       await wait(1600);
       landing?.classList.remove('is-in');
     };
