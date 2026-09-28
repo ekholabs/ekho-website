@@ -3403,8 +3403,8 @@
     border-radius: var(--radius);
     background: var(--term);
     box-shadow:
-      0 26px 72px -16px rgb(0 0 0 / 0.72),
-      0 6px 22px -8px rgb(0 0 0 / 0.5);
+      0 20px 60px -22px rgb(0 0 0 / 0.38),
+      0 4px 14px -8px rgb(0 0 0 / 0.22);
   }
 
   .command-label {
@@ -3450,8 +3450,8 @@
   .command:hover,
   .command:focus-within {
     box-shadow:
-      0 30px 80px -16px rgb(0 0 0 / 0.76),
-      0 6px 22px -8px rgb(0 0 0 / 0.5);
+      0 24px 66px -20px rgb(0 0 0 / 0.46),
+      0 5px 16px -8px rgb(0 0 0 / 0.28);
   }
 
   .command-copy {
