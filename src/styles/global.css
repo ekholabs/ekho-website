@@ -1744,8 +1744,10 @@
     padding: 0.3rem 0.7rem;
     /* fully round: no corner left to see */
     border-radius: 999px;
-    background: var(--signal);
-    color: var(--signal-ink);
+    /* The page's ink, so it flips with the scheme: near-black on the light
+       ground, near-white on the dark one. The yellow is what is on it. */
+    background: var(--text);
+    color: var(--signal);
     font-size: 0.6875rem;
     font-weight: 500;
   }
@@ -1757,8 +1759,7 @@
     height: 0.4rem;
     flex: none;
     border-radius: 50%;
-    background: var(--signal-ink);
-    opacity: 0.75;
+    background: var(--signal);
   }
 
   /* ---------- 05 · the viewer ---------- */
@@ -4376,6 +4377,116 @@
 
   .strip-sketch .sk-dash {
     stroke-dasharray: 4 4;
+  }
+
+  /* The four that came out of somebody else's app fill their frame: the still
+     brings its own ground, so the pane's padding and wash would only put a
+     margin around a screen. The colours below are that app's, not the page's,
+     which is why they are literals here and not tokens. */
+  .strip-sketch--app {
+    padding: 0;
+    background: none;
+    overflow: hidden;
+  }
+
+  .strip-sketch {
+    --sk-surface: #fff;
+    --sk-chrome: #ececed;
+    --sk-quiet: #c6c6ca;
+    --sk-ink: #3c3c43;
+    --sk-stage: #292828;
+    --sk-tile: #3d3c3b;
+    --sk-onstage: #e8e8ea;
+    --sk-brand: #5b5fc7;
+    --sk-hang: #c4314b;
+    --sk-rec: #ff3b30;
+    --sk-blue: #0a84ff;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .strip-sketch {
+      --sk-surface: #1c1c1e;
+      --sk-chrome: #2c2c2e;
+      --sk-quiet: #4c4c50;
+      --sk-ink: #d7d7db;
+      --sk-stage: #1f1f1f;
+      --sk-tile: #323231;
+    }
+  }
+
+  .strip-sketch .sk-surface {
+    fill: var(--sk-surface);
+  }
+
+  .strip-sketch .sk-chrome {
+    fill: var(--sk-chrome);
+  }
+
+  .strip-sketch .sk-quiet {
+    fill: var(--sk-quiet);
+  }
+
+  .strip-sketch .sk-quiet-on {
+    fill: var(--sk-tile);
+    stroke: var(--sk-onstage);
+    stroke-width: 1.2;
+  }
+
+  .strip-sketch .sk-quiet-stroke {
+    fill: none;
+    stroke: var(--sk-quiet);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .strip-sketch .sk-ink {
+    fill: var(--sk-ink);
+  }
+
+  /* a key on a light ground: the fill alone is six values off white and
+     disappears at this size, so it is held by a line as well */
+  .strip-sketch .sk-key {
+    fill: var(--sk-chrome);
+    stroke: var(--sk-quiet);
+    stroke-width: 0.8;
+  }
+
+  .strip-sketch .sk-stage {
+    fill: var(--sk-stage);
+  }
+
+  .strip-sketch .sk-tile {
+    fill: var(--sk-tile);
+  }
+
+  .strip-sketch .sk-onstage {
+    fill: var(--sk-onstage);
+  }
+
+  .strip-sketch .sk-brand {
+    fill: var(--sk-brand);
+  }
+
+  .strip-sketch .sk-brand-stroke {
+    fill: none;
+    stroke: var(--sk-brand);
+    stroke-width: 1.6;
+  }
+
+  .strip-sketch .sk-hang {
+    fill: var(--sk-hang);
+  }
+
+  .strip-sketch .sk-rec {
+    fill: var(--sk-rec);
+  }
+
+  .strip-sketch .sk-blue {
+    fill: var(--sk-blue);
+  }
+
+  .strip-sketch .sk-on-rec {
+    fill: #fff;
   }
 
   .strip-type {

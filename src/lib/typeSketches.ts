@@ -1,40 +1,116 @@
-// A sketch of the raw thing each card is about.
+// A still of each thing the way you last saw it.
 //
-// The cards in chapter 01 carry a mark, a title and two lines of meta, and on a
-// phone that is eight near-identical blocks of type: nothing tells a recording
-// from an article at a glance. These do — one drawing each, in the same
-// hairline the rest of the page is drawn in, so the strip reads as eight
-// different kinds of material rather than eight paragraphs.
+// The eight cards in chapter 01 are the eight kinds of material a context is
+// made of, and they fall into two halves. Four of them you did not make — a
+// call, a recording, a page, a person in an address book — and those look like
+// where they came from: the meeting has a call client's dark stage and its red
+// leave button, the recording has the red playhead of a phone's voice memo,
+// the page has browser chrome. Four of them are what EKHO makes of that
+// material — a decision, an insight, an assumption, a principle — and those
+// have no borrowed chrome at all: the page's own hairline, one yellow accent,
+// nothing else. The split is the chapter's argument in a picture.
 //
-// Deliberately abstract: none of them is a screenshot of anything, because at
-// this point in the story the material has not been through EKHO yet. Drawn on
-// a 200 x 64 grid; `line` is the hairline, `sig` the one accent per card.
+// Evocations, not screenshots: no wordmarks, no logos, no claim that any of
+// these products is involved. Drawn on a 200 x 64 grid.
 
-const bars = (rows: [number, number, number, number, string][]) =>
-  rows
-    .map(
-      ([x, y, w, h, cls]) =>
-        `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="${h / 2}"/>`,
-    )
-    .join('');
+/** the four that wear the look of the app they came out of */
+export const APP_STILLS = new Set(['person', 'meeting', 'voice', 'article']);
 
-// a spoken minute, as the level meter of a recorder draws it
-const wave = (() => {
+const rect = (
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  cls: string,
+  r = 2,
+) => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}"/>`;
+
+const circle = (cx: number, cy: number, r: number, cls: string) =>
+  `<circle class="${cls}" cx="${cx}" cy="${cy}" r="${r}"/>`;
+
+const surface = (cls = 'sk-surface') => rect(0, 0, 200, 64, cls, 0);
+
+// ---------------------------------------------------------------- captured
+
+// A call, two people in it, the bar you leave it by.
+const meeting =
+  surface('sk-stage') +
+  rect(6, 5, 92, 36, 'sk-tile', 3) +
+  rect(102, 5, 92, 36, 'sk-tile', 3) +
+  circle(52, 23, 10, 'sk-quiet-on') +
+  circle(148, 23, 10, 'sk-brand') +
+  // the tile that is speaking
+  `<rect class="sk-brand-stroke" x="102.5" y="5.5" width="91" height="35" rx="3"/>` +
+  rect(56, 46, 88, 14, 'sk-tile', 7) +
+  circle(70, 53, 2.2, 'sk-onstage') +
+  circle(80, 53, 2.2, 'sk-onstage') +
+  circle(90, 53, 2.2, 'sk-onstage') +
+  rect(104, 48, 28, 10, 'sk-hang', 5);
+
+// Three minutes on a phone, half of them played.
+const voice = (() => {
   const h = [
-    6, 11, 18, 27, 38, 30, 22, 34, 44, 52, 41, 30, 21, 33, 46, 38, 26, 17, 25,
-    36, 28, 19, 12, 7,
+    5, 9, 15, 24, 34, 27, 19, 30, 40, 47, 37, 27, 19, 29, 41, 34, 23, 15, 22,
+    32, 25, 17, 11, 6,
   ];
-  return h
+  const head = 96;
+  const bars = h
     .map((v, i) => {
-      const x = 8 + i * 8;
-      const cls = i > 7 && i < 13 ? 'sk-sig' : 'sk-fill';
-      return `<rect class="${cls}" x="${x}" y="${32 - v / 2}" width="3" height="${v}" rx="1.5"/>`;
+      const x = 10 + i * 7.6;
+      return rect(x, 24 - v / 2, 3, v, x < head ? 'sk-rec' : 'sk-quiet', 1.5);
     })
     .join('');
+  return (
+    surface() +
+    bars +
+    rect(head, 4, 1.6, 40, 'sk-rec', 0.8) +
+    rect(12, 52, 18, 4, 'sk-quiet') +
+    rect(170, 52, 18, 4, 'sk-quiet') +
+    circle(100, 54, 8, 'sk-rec') +
+    `<path class="sk-on-rec" d="M97.5 50.5 104 54l-6.5 3.5z"/>`
+  );
 })();
 
+// Somebody else's page, with the part you kept.
+const article =
+  surface() +
+  rect(0, 0, 200, 15, 'sk-chrome', 0) +
+  circle(9, 7.5, 2.2, 'sk-quiet') +
+  circle(17, 7.5, 2.2, 'sk-quiet') +
+  circle(25, 7.5, 2.2, 'sk-quiet') +
+  rect(36, 4, 124, 7, 'sk-surface', 3.5) +
+  rect(12, 24, 96, 8, 'sk-ink') +
+  rect(12, 39, 176, 4, 'sk-quiet') +
+  rect(12, 47, 176, 4, 'sk-quiet') +
+  rect(12, 55, 118, 4, 'sk-quiet') +
+  rect(12, 47, 72, 4, 'sk-sig');
+
+// A card in an address book, with the row of things you can do from it.
+const person =
+  surface() +
+  circle(30, 28, 15, 'sk-chrome') +
+  circle(30, 24, 5.5, 'sk-quiet') +
+  `<path class="sk-quiet-stroke" d="M21 39a9.5 9.5 0 0 1 18 0"/>` +
+  rect(56, 17, 86, 7, 'sk-ink') +
+  rect(56, 30, 58, 5, 'sk-quiet') +
+  [56, 78, 100, 122]
+    .map((x) => rect(x, 44, 17, 15, 'sk-key', 4) + circle(x + 8.5, 51.5, 3.2, 'sk-blue'))
+    .join('');
+
+// ------------------------------------------------------------------- EKHO's
+
+const bars = (rows: [number, number, number, number, string][]) =>
+  rows.map(([x, y, w, h, cls]) => rect(x, y, w, h, cls, h / 2)).join('');
+
+// one path in, two out, and only one of them taken
+const decision =
+  '<path class="sk-line" d="M8 32h56"/>' +
+  '<path class="sk-sig-stroke" d="M64 32c26 0 24-18 50-18h78"/>' +
+  '<path class="sk-line sk-dash" d="M64 32c26 0 24 18 50 18h50"/>' +
+  circle(64, 32, 4.5, 'sk-sig');
+
 // an insight is a node that already has somewhere to sit
-const graph = (() => {
+const insight = (() => {
   const pts = [
     [36, 16],
     [22, 44],
@@ -44,72 +120,40 @@ const graph = (() => {
     [166, 48],
     [124, 46],
   ];
-  const c = [100, 32];
   const links = pts
-    .map(([x, y]) => `<path class="sk-line" d="M${c[0]} ${c[1]} ${x} ${y}"/>`)
+    .map(([x, y]) => `<path class="sk-line" d="M100 32 ${x} ${y}"/>`)
     .join('');
-  const dots = pts
-    .map(([x, y]) => `<circle class="sk-fill" cx="${x}" cy="${y}" r="3"/>`)
-    .join('');
-  return `${links}${dots}<circle class="sk-sig" cx="${c[0]}" cy="${c[1]}" r="5.5"/>`;
+  const dots = pts.map(([x, y]) => circle(x, y, 3, 'sk-fill')).join('');
+  return `${links}${dots}${circle(100, 32, 5.5, 'sk-sig')}`;
 })();
 
-// a week, with the one afternoon that is the meeting
-const week = Array.from({ length: 7 }, (_, i) => {
-  const x = 9 + i * 27;
-  const on = i === 3;
-  return `<rect class="${on ? 'sk-sig' : 'sk-line'}" x="${x}" y="12" width="20" height="40" rx="3"/>`;
-}).join('');
+// still open: the box is not ticked, and the line under it is not settled
+const assumption =
+  '<rect class="sk-line sk-dash" x="10" y="20" width="24" height="24" rx="4"/>' +
+  bars([
+    [46, 20, 104, 6, 'sk-fill'],
+    [46, 33, 72, 6, 'sk-fill'],
+  ]) +
+  '<path class="sk-sig-stroke sk-dash" d="M46 48h84"/>';
+
+// a line that holds, with what rests on it
+const principle =
+  '<path class="sk-sig-stroke" d="M8 46h184"/>' +
+  rect(8, 40, 12, 12, 'sk-sig') +
+  bars([
+    [30, 14, 60, 6, 'sk-fill'],
+    [30, 26, 96, 6, 'sk-fill'],
+    [134, 14, 46, 6, 'sk-fill'],
+    [134, 26, 30, 6, 'sk-fill'],
+  ]);
 
 export const SKETCHES: Record<string, string> = {
-  // a face, and the two lines a card always carries next to one
-  person:
-    '<circle class="sk-line" cx="32" cy="23" r="11"/>' +
-    '<path class="sk-line" d="M13 50a19 19 0 0 1 38 0"/>' +
-    bars([
-      [68, 16, 88, 6, 'sk-fill'],
-      [68, 29, 56, 6, 'sk-fill'],
-      [68, 42, 30, 6, 'sk-sig'],
-    ]),
-
-  meeting: week,
-  voice: wave,
-
-  // one path in, two out, and only one of them taken
-  decision:
-    '<path class="sk-line" d="M8 32h56"/>' +
-    '<path class="sk-sig-stroke" d="M64 32c26 0 24-18 50-18h78"/>' +
-    '<path class="sk-line sk-dash" d="M64 32c26 0 24 18 50 18h50"/>' +
-    '<circle class="sk-sig" cx="64" cy="32" r="4.5"/>',
-
-  insight: graph,
-
-  // still open: the box is not ticked, and the line under it is not settled
-  assumption:
-    '<rect class="sk-line sk-dash" x="10" y="20" width="24" height="24" rx="4"/>' +
-    bars([
-      [46, 20, 104, 6, 'sk-fill'],
-      [46, 33, 72, 6, 'sk-fill'],
-    ]) +
-    '<path class="sk-sig-stroke sk-dash" d="M46 48h84"/>',
-
-  // a line that holds, with what rests on it
-  principle:
-    '<path class="sk-sig-stroke" d="M8 46h184"/>' +
-    '<rect class="sk-sig" x="8" y="40" width="12" height="12" rx="2"/>' +
-    bars([
-      [30, 14, 60, 6, 'sk-fill'],
-      [30, 26, 96, 6, 'sk-fill'],
-      [134, 14, 46, 6, 'sk-fill'],
-      [134, 26, 30, 6, 'sk-fill'],
-    ]),
-
-  // somebody else's text, with the part you kept
-  article:
-    bars([
-      [10, 10, 96, 8, 'sk-fill'],
-      [10, 26, 180, 5, 'sk-fill'],
-      [10, 37, 180, 5, 'sk-fill'],
-      [10, 48, 120, 5, 'sk-fill'],
-    ]) + '<rect class="sk-sig" x="10" y="37" width="74" height="5" rx="2.5"/>',
+  person,
+  meeting,
+  voice,
+  article,
+  decision,
+  insight,
+  assumption,
+  principle,
 };

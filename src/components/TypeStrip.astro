@@ -6,7 +6,7 @@
 // same eight notes, read as a list rather than seen as a cloud.
 import { t, type Lang } from '../i18n';
 import { ICONS } from '../lib/typeIcons';
-import { SKETCHES } from '../lib/typeSketches';
+import { SKETCHES, APP_STILLS } from '../lib/typeSketches';
 
 interface Props {
   lang: Lang;
@@ -31,7 +31,12 @@ const keys = [
     {keys.map((k) => (
       <li class="strip-card">
         {/* what the thing looks like before it is a note */}
-        <svg class="strip-sketch" viewBox="0 0 200 64" aria-hidden="true" set:html={SKETCHES[k]} />
+        <svg
+          class:list={['strip-sketch', APP_STILLS.has(k) && 'strip-sketch--app']}
+          viewBox="0 0 200 64"
+          aria-hidden="true"
+          set:html={SKETCHES[k]}
+        />
         <p class="strip-type">
           <svg class="strip-ico" viewBox="0 0 12 12" aria-hidden="true">
             <path d={ICONS[k]} />
