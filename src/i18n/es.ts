@@ -119,8 +119,8 @@ export const es: Copy = {
   who: {
     title: 'Quién lo está construyendo',
     lede: 'EKHO Labs son dos fundadores. Construimos EKHO en abierto y lo usamos cada día para EKHO mismo: el vault detrás de esta página guarda 710 notas, y cada decisión de esta página es una de ellas.',
-    lorenz: 'Diseño de semántica y ontología, y el front end.',
-    stephan: 'Harness e ingeniería de datos, y el back end.',
+    lorenz: 'Semántica, ontología y diseño',
+    stephan: 'Harness, datos e ingeniería',
   },
   waitlist: {
     title: 'Dónde estamos',
