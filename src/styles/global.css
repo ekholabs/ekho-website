@@ -2321,12 +2321,56 @@
      the windows through .flow-window, the net through .flow-graphic.
      ------------------------------------------------------------------ */
   @media (max-width: 63.999rem) {
+    /* The band is back, and this time it is the story. What made it fail
+       before was that it showed the same scattered field in every chapter;
+       now it carries the four states the wide layout steps through — the
+       field, the points found, the first links, the whole net — pinned under
+       the header while the chapter that describes each one scrolls past it.
+       The windows stay in the flow, which is what the band was never good at.
+       It is a third of the screen rather than half, and it fades out at the
+       bottom instead of ruling a line, so the text arrives rather than
+       collides. */
     .story-figure {
-      display: none;
+      display: block;
+      top: calc(3.2rem + env(safe-area-inset-top, 0px));
+      height: 32svh;
+      border-bottom: 0;
+    }
+
+    /* The band has to be opaque, or the paragraph passing under it is read
+       through the points. The softness goes below it instead: a strip of the
+       page's own ground fading out, so the text arrives rather than collides. */
+    .story-figure::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      height: 1.75rem;
+      background: linear-gradient(to bottom, var(--bg), transparent);
+      pointer-events: none;
+    }
+
+    .story-figure .context-graphic {
+      -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
     }
 
     .figure-stage {
       min-height: 0;
+      height: 100%;
+    }
+
+    /* the eight names are set beside the points at a size that assumes a
+       column: here the strip in chapter 01 carries them instead */
+    .story-figure .cg-tip {
+      display: none;
+    }
+
+    /* one picture, not three: the band is the field and the net now */
+    .flow-field,
+    .flow-graphic {
+      display: none;
     }
 
     .stack--rail {
@@ -4203,6 +4247,7 @@
    -------------------------------------------------------------------------- */
 @layer components {
   @media (max-width: 47.999rem) {
+    .viewer .win--app,
     .flow-window .win--chat,
     .flow-window .win--finder {
       border: 0;
@@ -4212,15 +4257,65 @@
       backdrop-filter: none;
     }
 
+    .viewer .win--app .win-bar,
     .flow-window .win--chat .win-bar,
     .flow-window .win--finder .win-bar {
       display: none;
     }
 
+    .viewer .win--app .win-body,
     .flow-window .win--chat .win-body,
     .flow-window .win--finder .win-body {
       height: auto;
       background: none;
+    }
+
+    /* the roadmap is a list on a phone, so it loses the panel it sat on as
+       well as the window: the page is the panel */
+    .viewer {
+      padding: 0;
+      background: none;
+    }
+
+    .viewer .app-main {
+      padding: 0;
+      color: var(--text);
+    }
+
+    .viewer .app-h {
+      font-size: 1.25rem;
+    }
+
+    .viewer .app-list li {
+      grid-template-columns: 3rem minmax(0, 1fr);
+      row-gap: 0.15rem;
+      padding-block: 0.7rem;
+      border-bottom-color: var(--line);
+      font-size: 0.9375rem;
+    }
+
+    .viewer .app-pill {
+      grid-column: 1;
+      grid-row: 2;
+      justify-self: start;
+      border-color: var(--line);
+      color: var(--muted);
+    }
+
+    .viewer .app-title {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      white-space: normal;
+    }
+
+    .viewer .app-stats {
+      border-bottom-color: var(--line);
+    }
+
+    .viewer .app-sub,
+    .viewer .app-type,
+    .viewer .app-stats span {
+      color: var(--muted);
     }
 
     .flow-window .win--finder {
@@ -4270,12 +4365,15 @@
    so it reads as the field carrying on past the screen rather than as an image
    somebody placed there. */
 @layer components {
+  /* The opening had a band of its own while the stage was out of the phone
+     layout. The stage is back and pinned, so this one would be the same
+     picture twice. */
   .flow-field {
     display: none;
   }
 
   @media (max-width: 63.999rem) {
-    .flow-field {
+    .flow-field--unused {
       display: block;
       width: 100vw;
       margin-left: calc(50% - 50vw);
@@ -4318,6 +4416,76 @@
 
     .statement-lead {
       color: var(--text);
+    }
+  }
+}
+
+/* Rhythm on a phone -----------------------------------------------------------
+   Eight screens of the same width, the same ground and the same size read as
+   one long column however good the type is. Four things vary instead: the
+   chapter opens with its number set as a figure rather than as a caption, a
+   one-sentence statement rises above the paragraphs around it, every other
+   chapter stands on its own ground edge to edge, and the chapters stop being
+   forced to a screen each so their heights follow their contents.
+   -------------------------------------------------------------------------- */
+@layer components {
+  @media (max-width: 63.999rem) {
+    /* 1 · the number is the opener */
+    .chapter-label {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .chapter-label span {
+      font-size: 1.75rem;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin: 0;
+    }
+
+    /* 2 · a claim stands taller than the paragraphs around it */
+    .statement--pull {
+      font-size: 1.4375rem;
+      line-height: 1.25;
+      letter-spacing: -0.025em;
+      color: var(--text);
+    }
+
+    .statement--pull .statement-lead {
+      color: inherit;
+    }
+
+    /* 3 · every other chapter on its own ground, edge to edge */
+    .story-text #what,
+    .story-text #compound,
+    #viewer {
+      background: var(--surface);
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      padding-inline: var(--gutter, 1.25rem);
+    }
+
+    /* 4 · height follows content: a screen each was the wide layout's rhythm,
+       and here it left half a screen of air above every heading */
+    .story-text .chapter,
+    .chapter--wide {
+      min-height: 0;
+      padding-block: 3.5rem;
+    }
+
+    /* The band takes the top third of the first screen, so the opening gets
+       what is left of it rather than a screen of its own: the statement sits
+       directly under the field it is about. */
+    .story-text .chapter--hero {
+      min-height: calc(68svh - 3.5rem);
+      justify-content: flex-start;
+      padding-block: 1.75rem 2.5rem;
     }
   }
 }

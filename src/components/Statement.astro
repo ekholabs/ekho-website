@@ -14,9 +14,16 @@ const { text, class: cls } = Astro.props;
 const m = /^(.+?[.?!])\s+(.+)$/s.exec(text);
 const lead = m ? m[1] : text;
 const rest = m ? m[2] : '';
+// A statement of one sentence is a claim rather than an explanation — the
+// model is the same for everyone, nothing is locked in, it never changes
+// anything without showing you first. On a phone those are set larger, which
+// gives a column of paragraphs something to rise to.
+// Short enough to be a claim and not a description: at 150 characters two of
+// them in a row read as a second heading.
+const pull = !m && text.length < 80;
 ---
 
-<p class:list={['statement', cls]}>
+<p class:list={['statement', { 'statement--pull': pull }, cls]}>
   <span class="statement-lead">{lead}</span>
   {rest && ' '}
   {rest}
