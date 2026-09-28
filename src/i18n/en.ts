@@ -197,7 +197,7 @@ export const en = {
        is joined to — which is the part that makes it context rather than a
        label */
     meta: {
-      person: ['Bettermile · product', '2 calls · 1 decision'],
+      person: ['pilot customer · product', '2 calls · 1 decision'],
       meeting: ['25 Sep · 42 min', 'Anna Berger · 3 notes written'],
       voice: ['25 Sep · 3 min', 'became the pricing insight'],
       decision: ['ADR-0027 · accepted', 'validates H-24'],

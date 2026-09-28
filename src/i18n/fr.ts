@@ -199,7 +199,7 @@ export const fr: Copy = {
        is joined to — which is the part that makes it context rather than a
        label */
     meta: {
-      person: ['Bettermile · produit', '2 appels · 1 décision'],
+      person: ['client pilote · produit', '2 appels · 1 décision'],
       meeting: ['25 sept · 42 min', 'Anna Berger · 3 notes'],
       voice: ['25 sept · 3 min', "devenue l'idée de prix"],
       decision: ['ADR-0027 · acceptée', 'valide H-24'],
