@@ -55,7 +55,7 @@ export const es: Copy = {
   compound: {
     title: 'Tu conocimiento se capitaliza.',
     a: 'Cada fuente que incorporas se enlaza con todo lo que ya está ahí. Una idea sabe de dónde viene, qué la sostiene y qué la contradice.',
-    b: 'En eso consiste capitalizarse: cada nota que añades multiplica las conexiones, así que la calidad de lo que recibes crece de forma exponencial en lugar de paso a paso. La contabilidad es la parte que la gente abandona, y es justo la parte que hace EKHO.',
+    b: 'En eso consiste capitalizarse: cada nota que añades multiplica las conexiones, así que la calidad de lo que recibes crece de forma exponencial. La contabilidad es la parte que la gente abandona, y es justo la parte que hace EKHO.',
   },
   viewer: {
     title: 'Tu contexto, con la forma que necesitas.',
@@ -175,6 +175,7 @@ export const es: Copy = {
     ],
     label:
       'El mismo conocimiento en cuatro estados: primero disperso y sin forma, luego esparcido, después reunido en una forma con las primeras conexiones, y por último una red densa de varios cientos de puntos sin uno solo nuevo.',
+    strip: 'Tres semanas de un mismo trabajo, en el orden en que llegó. Nada de esto sabe nada del resto.',
     types: {
       person: 'Persona',
       meeting: 'Reunión',
@@ -241,14 +242,14 @@ export const es: Copy = {
       gemini: [['asistente', 'Gemini'], ['vive en', 'su app, no la tuya']],
     },
     meta: {
-      person: ['cliente piloto · producto', '2 llamadas · 1 decisión'],
+      person: ['25 sep', '2 llamadas · 1 decisión'],
       meeting: ['25 sep · 42 min', 'Anna Berger · 3 notas'],
       voice: ['25 sep · 3 min', 'se volvió la idea de precios'],
-      decision: ['ADR-0027 · aceptada', 'valida H-24'],
-      insight: ['I-296 · de la llamada', 'apoya H-24 · 4 fuentes'],
-      assumption: ['H-40 · abierta', 'el piloto la resuelve'],
-      principle: ['P-01 · desde mayo', '9 referencias'],
-      article: ['fuente nivel 1 · Karpathy', 'alimenta I-296'],
+      decision: ['25 sep', 'valida H-24'],
+      insight: ['25 sep', 'apoya H-24 · 4 fuentes'],
+      assumption: ['12 sep', 'el piloto la resuelve'],
+      principle: ['desde mayo', '9 referencias'],
+      article: ['24 sep', 'alimenta I-296'],
       mail: ['25 sep · 09:12', 'respondida desde tres notas'],
       video: ['20 sep · 29:37', 'alimenta el principio'],
       recap: ['25 sep · 42 min', 'produjo dos notas'],

@@ -55,7 +55,7 @@ export const fr: Copy = {
   compound: {
     title: 'Votre savoir fructifie.',
     a: "Chaque source que vous versez se relie à tout ce qui est déjà là. Une idée sait d'où elle vient, ce qui l'appuie et ce qui la contredit.",
-    b: "C'est en cela qu'elle fructifie : chaque note ajoutée multiplie les liens, si bien que la qualité de ce qui revient croît de façon exponentielle plutôt que pas à pas. La tenue des comptes est la partie que l'on abandonne, et c'est justement celle qu'EKHO prend en charge.",
+    b: "C'est en cela qu'elle fructifie : chaque note ajoutée multiplie les liens, si bien que la qualité de ce qui revient croît de façon exponentielle. La tenue des comptes est la partie que l'on abandonne, et c'est justement celle qu'EKHO prend en charge.",
   },
   viewer: {
     title: "Votre contexte, dans la forme qu'il vous faut.",
@@ -175,6 +175,7 @@ export const fr: Copy = {
     ],
     label:
       "Le même savoir en quatre états : d'abord dispersé et sans forme, puis éparpillé, puis rassemblé en une forme avec les premiers liens, et enfin un réseau dense de plusieurs centaines de points sans un seul nouveau.",
+    strip: 'Trois semaines d’un même travail, dans l’ordre où il est arrivé. Rien de tout cela ne sait quoi que ce soit du reste.',
     types: {
       person: 'Personne',
       meeting: 'Réunion',
@@ -241,14 +242,14 @@ export const fr: Copy = {
       gemini: [['assistant', 'Gemini'], ['vit dans', 'leur app, pas la vôtre']],
     },
     meta: {
-      person: ['client pilote · produit', '2 appels · 1 décision'],
+      person: ['25 sep', '2 appels · 1 décision'],
       meeting: ['25 sept · 42 min', 'Anna Berger · 3 notes'],
       voice: ['25 sept · 3 min', "devenue l'idée de prix"],
-      decision: ['ADR-0027 · acceptée', 'valide H-24'],
-      insight: ["I-296 · issu de l'appel", 'appuie H-24 · 4 sources'],
-      assumption: ['H-40 · ouverte', 'le pilote tranchera'],
-      principle: ['P-01 · depuis mai', '9 renvois'],
-      article: ['source niveau 1 · Karpathy', 'alimente I-296'],
+      decision: ['25 sep', 'valide H-24'],
+      insight: ['25 sep', 'appuie H-24 · 4 sources'],
+      assumption: ['12 sep', 'le pilote tranchera'],
+      principle: ['depuis mai', '9 renvois'],
+      article: ['24 sep', 'alimente I-296'],
       mail: ['25 sep · 09:12', 'répondu à partir de trois notes'],
       video: ['20 sep · 29:37', 'nourrit le principe'],
       recap: ['25 sep · 42 min', 'a produit deux notes'],

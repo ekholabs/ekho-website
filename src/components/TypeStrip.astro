@@ -21,29 +21,33 @@ interface Props {
 const { lang } = Astro.props;
 const c = t(lang);
 
-// The order they arrive in, which is the order the story tells them: the mail
-// that starts it, the people and the calls, what was made of them, and the
-// reading underneath.
+// In the order it arrived, which is the only order any of this was ever in.
+// Pushing the row sideways is three weeks passing: a rule you have held since
+// spring, then a fortnight of reading and asking, then the one Thursday when
+// it all lands at once. Nothing else joins them up — that is the chapter.
 const keys = [
-  'mail',
-  'person',
-  'meeting',
-  'voice',
-  'recap',
-  'decision',
-  'insight',
-  'assumption',
   'principle',
   'claude',
   'gemini',
-  'article',
-  'video',
+  'assumption',
   'passage',
   'encyclopedia',
+  'video',
+  'article',
+  'mail',
+  'person',
+  'meeting',
+  'recap',
+  'voice',
+  'insight',
+  'decision',
 ] as const;
 ---
 
 <div class="flow-strip">
+  {/* The line that makes fifteen cards a week rather than fifteen cards. */}
+  <p class="strip-caption">{c.graphic.strip}</p>
+
   <ul class="strip" aria-label={c.graphic.label}>
     {keys.map((k) => (
       <li class:list={['strip-card', APP_STILLS.has(k) && 'strip-card--app']}>

@@ -59,7 +59,7 @@ export const de: Copy = {
   compound: {
     title: 'Dein Wissen verzinst sich.',
     a: 'Jede Quelle, die du in dein EKHO einspeist, verbindet sich mit allem, was schon da ist. Eine Erkenntnis weiß, woher sie kommt, was sie stützt und was ihr widerspricht.',
-    b: 'Genau so verzinst es sich: Jede neue Notiz vervielfacht die Verbindungen, also wächst die Qualität dessen, was zurückkommt, exponenziell und nicht Schritt für Schritt. Die Buchführung ist der Teil, den Menschen aufgeben, und genau den übernimmt EKHO.',
+    b: 'Genau so verzinst es sich: Jede neue Notiz vervielfacht die Verbindungen, also wächst die Qualität dessen, was zurückkommt, exponenziell. Die Buchführung ist der Teil, den Menschen aufgeben, und genau den übernimmt EKHO.',
   },
   viewer: {
     title: 'Dein Kontext, in der Form, die du brauchst.',
@@ -179,6 +179,7 @@ export const de: Copy = {
     ],
     label:
       'Dasselbe Wissen in vier Zuständen: zuerst weit verteilt und formlos, dann gestreut, dann zu einer Form gesammelt mit den ersten Verbindungen, und schließlich ein dichtes Netz aus mehreren hundert Punkten, ohne einen einzigen neuen.',
+    strip: 'Drei Wochen an einem Vorgang, in der Reihenfolge, in der er hereinkam. Nichts davon weiß etwas vom Rest.',
     types: {
       person: 'Person',
       meeting: 'Meeting',
@@ -245,14 +246,14 @@ export const de: Copy = {
       gemini: [['Assistent', 'Gemini'], ['liegt in', 'deren App, nicht deiner']],
     },
     meta: {
-      person: ['Pilotkunde · Produkt', '2 Gespräche · 1 Entscheidung'],
+      person: ['25. Sep', '2 Gespräche · 1 Entscheidung'],
       meeting: ['25. Sep · 42 Min', 'Anna Berger · 3 Notizen'],
       voice: ['25. Sep · 3 Min', 'wurde zur Preis-Erkenntnis'],
-      decision: ['ADR-0027 · angenommen', 'bestätigt H-24'],
-      insight: ['I-296 · aus dem Gespräch', 'stützt H-24 · 4 Quellen'],
-      assumption: ['H-40 · offen', 'der Pilot entscheidet sie'],
-      principle: ['P-01 · seit Mai', '9 Verweise'],
-      article: ['Quellen-Stufe 1 · Karpathy', 'speist I-296'],
+      decision: ['25. Sep', 'bestätigt H-24'],
+      insight: ['25. Sep', 'stützt H-24 · 4 Quellen'],
+      assumption: ['12. Sep', 'der Pilot entscheidet sie'],
+      principle: ['seit Mai', '9 Verweise'],
+      article: ['24. Sep', 'speist I-296'],
       mail: ['25. Sep · 09:12', 'beantwortet aus drei Notizen'],
       video: ['20. Sep · 29:37', 'speist das Prinzip'],
       recap: ['25. Sep · 42 Min', 'ergab zwei Notizen'],

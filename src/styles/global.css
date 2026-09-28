@@ -4671,6 +4671,13 @@
      happens to hold the most words. The band they sit in is the last thing on
      a screen, so it has to be short enough to be seen whole — what does not
      fit is clamped, not allowed to push the row taller. */
+  .strip-caption {
+    margin: 0 0 0.9rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
   .strip-card {
     flex: 0 0 15.5rem;
     height: 11rem;

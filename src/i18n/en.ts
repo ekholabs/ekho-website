@@ -53,7 +53,7 @@ export const en = {
   compound: {
     title: 'Your knowledge is compounding.',
     a: 'Every source you ingest into your EKHO links to everything already there. An insight knows where it came from, what supports it and what contradicts it.',
-    b: 'That is what compounding means here: every note you add multiplies the connections, so the quality of what comes back grows exponentially rather than one step at a time. The bookkeeping is the part people give up on, and it is the part EKHO does.',
+    b: 'That is what compounding means here: every note you add multiplies the connections, so the quality of what comes back grows exponentially. The bookkeeping is the part people give up on, and it is the part EKHO does.',
   },
   viewer: {
     title: 'Your context, in the shape you need it.',
@@ -173,6 +173,7 @@ export const en = {
     ],
     label:
       'The same knowledge in four states: spread wide and formless at first, then scattered, then gathered into one form with the first connections, and finally a dense network of several hundred points without a single new one.',
+    strip: 'Three weeks of one piece of work, in the order it arrived. None of it knows about any of the rest.',
     types: {
       person: 'Person',
       meeting: 'Meeting',
@@ -239,14 +240,14 @@ export const en = {
       gemini: [['assistant', 'Gemini'], ['lives in', 'their app, not yours']],
     },
     meta: {
-      person: ['pilot customer · product', '2 calls · 1 decision'],
+      person: ['25 Sep', '2 calls · 1 decision'],
       meeting: ['25 Sep · 42 min', 'Anna Berger · 3 notes written'],
       voice: ['25 Sep · 3 min', 'became the pricing insight'],
-      decision: ['ADR-0027 · accepted', 'validates H-24'],
-      insight: ['I-296 · from the call', 'supports H-24 · 4 sources'],
-      assumption: ['H-40 · open', 'the pilot settles it'],
-      principle: ['P-01 · since May', 'referenced 9 times'],
-      article: ['source tier 1 · Karpathy', 'feeds I-296'],
+      decision: ['25 Sep', 'validates H-24'],
+      insight: ['25 Sep', 'supports H-24 · 4 sources'],
+      assumption: ['12 Sep', 'the pilot settles it'],
+      principle: ['since May', 'referenced 9 times'],
+      article: ['24 Sep', 'feeds I-296'],
       mail: ['25 Sep · 09:12', 'answered from three notes'],
       video: ['20 Sep · 29:37', 'fed the principle'],
       recap: ['25 Sep · 42 min', 'produced two notes'],
