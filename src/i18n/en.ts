@@ -196,6 +196,12 @@ export const en = {
     /* what each note carries besides its title: a field or two, and what it
        is joined to — which is the part that makes it context rather than a
        label */
+    quotes: {
+      person: 'She owns the rollout, not the budget.',
+      meeting: 'They will not sign without a security review.',
+      voice: 'If we price per seat, the small teams fall out.',
+      article: 'A wiki is not the notes. It is the links between them.',
+    },
     meta: {
       person: ['pilot customer · product', '2 calls · 1 decision'],
       meeting: ['25 Sep · 42 min', 'Anna Berger · 3 notes written'],

@@ -312,20 +312,27 @@ const people = [
           <p class="chapter-label">
             <span>03</span> How
           </p>
+          {/* The net, for a phone. The companion on the right is a wide-screen
+              thing: it lives in a column beside the text and moves through
+              four states as the reader steps. Here the chapters simply scroll,
+              so the one state this chapter is about is drawn in place, smaller
+              and without the labels, and everything else in the graphic's
+              story is carried by the words. Exactly one of the two is ever
+              displayed.
+
+              It sits between the chapter's number and its heading rather than
+              under the text: the heading is about the net, and on a phone a
+              heading you have to scroll past the net to reach arrives too
+              late to name it.
+
+              Animated, not a still: the phone gets the same net the wide
+              layout has, which means it can be taken hold of and turned. */}
+          <div class="flow-graphic">
+            <ContextGraphic lang={lang} caption={false} points={200} labelled={false} />
+          </div>
           <h2>{c.compound.title}</h2>
           <Statement text={c.compound.a} />
           <Statement text={c.compound.b} />
-        </div>
-        {/* The net, for a phone. The companion on the right is a wide-screen
-            thing: it lives in a column beside the text and moves through four
-            states as the reader steps. Here the chapters simply scroll, so the
-            one state this chapter is about is drawn in place, smaller and
-            without the labels, and everything else in the graphic's story is
-            carried by the words. Exactly one of the two is ever displayed. */}
-        {/* Animated, not a still: the phone gets the same net the wide layout
-            has, which means it can be taken hold of and turned. */}
-        <div class="flow-graphic">
-          <ContextGraphic lang={lang} caption={false} points={200} labelled={false} />
         </div>
       </section>
     </div>

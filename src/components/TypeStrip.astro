@@ -11,7 +11,7 @@
 // makes of that material and keep the page's own hairline and its yellow.
 import { t, type Lang } from '../i18n';
 import { ICONS } from '../lib/typeIcons';
-import { SKETCHES, TILES, APP_STILLS } from '../lib/typeSketches';
+import { TILES, APP_STILLS } from '../lib/typeSketches';
 
 interface Props {
   lang: Lang;
@@ -47,7 +47,12 @@ const keys = [
           <span class="strip-when">{c.graphic.meta[k][0]}</span>
         </p>
         <p class="strip-title">{c.graphic.titles[k]}</p>
-        <svg class="strip-body" viewBox="0 0 200 36" aria-hidden="true" set:html={SKETCHES[k]} />
+        {/* One line of the thing itself, where there is one to quote. Grey
+            bars standing in for a waveform or a page said nothing that the
+            label above them had not already said. What EKHO makes of the
+            material — decision, insight, assumption, principle — has no
+            quote: its statement is its title. */}
+        {APP_STILLS.has(k) && <p class="strip-quote">{c.graphic.quotes[k as keyof typeof c.graphic.quotes]}</p>}
         <p class="strip-link">
           <svg class="strip-arrow" viewBox="0 0 12 12" aria-hidden="true">
             <path d="M1.5 2.5v4a2 2 0 0 0 2 2h7M8 5.5l2.8 3-2.8 3" />

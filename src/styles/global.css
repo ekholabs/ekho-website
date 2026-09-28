@@ -2520,6 +2520,14 @@
       display: block;
     }
 
+    /* Sitting between the chapter's number and its heading, it needs air on
+       both sides: the 2rem above is the gap after the number, and without a
+       matching gap below, the heading reads as a caption to the drawing. */
+    .chapter-label + .flow-graphic {
+      margin-top: 1.2rem;
+      margin-bottom: 1.6rem;
+    }
+
     /* The small net is a pattern rather than a diagram here, so it is given a
        square of its own and left to be read as one. */
     .flow-graphic .context-graphic {
@@ -4464,11 +4472,16 @@
     color: var(--sk-ink);
   }
 
-  .strip-body {
-    display: block;
-    width: 100%;
-    height: auto;
-    margin-top: auto;
+  /* One line of the thing itself, held by a rule rather than set in quotes:
+     the page has no other quotation marks on it and two glyphs at this size
+     read as dirt. */
+  .strip-quote {
+    margin: 0.15rem 0 0;
+    padding-left: 0.7rem;
+    border-left: 2px solid var(--sk-quiet);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--sk-ink);
   }
 
   /* What the card is actually for: a title is a label, and a label is not
@@ -4478,6 +4491,9 @@
     display: flex;
     align-items: baseline;
     gap: 0.35rem;
+    /* packed under the content rather than pushed to the foot: the four EKHO
+       makes have no quote, and a line held at the bottom of those left a hole
+       in the middle of the card */
     margin: 0;
     font-size: 0.75rem;
     line-height: 1.35;
@@ -4514,29 +4530,12 @@
     fill: var(--sk-quiet);
   }
 
-  .strip-card .sk-quiet-ring {
-    fill: var(--sk-chrome);
-    stroke: var(--sk-surface);
-    stroke-width: 1.6;
-  }
-
-  .strip-card .sk-quiet-stroke {
-    fill: none;
-    stroke: var(--sk-quiet);
-    stroke-width: 2;
-    stroke-linecap: round;
-  }
-
   .strip-card .sk-brand {
     fill: var(--sk-brand);
   }
 
   .strip-card .sk-rec {
     fill: var(--sk-rec);
-  }
-
-  .strip-card .sk-blue {
-    fill: var(--sk-blue);
   }
 
   .strip-card .sk-pfp-bg {
@@ -4582,40 +4581,7 @@
 
   /* a key on a light ground: the fill alone is a few values off the surface
      and disappears at this size, so it is held by a line as well */
-  .strip-card .sk-key {
-    fill: var(--sk-chrome);
-    stroke: var(--sk-quiet);
-    stroke-width: 0.8;
-  }
-
   /* and the page's own line work, for the four EKHO makes */
-  .strip-card .sk-line {
-    fill: none;
-    stroke: var(--line-strong);
-    stroke-width: 1.4;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .strip-card .sk-fill {
-    fill: var(--line-strong);
-  }
-
-  .strip-card .sk-sig {
-    fill: var(--signal);
-  }
-
-  .strip-card .sk-sig-stroke {
-    fill: none;
-    stroke: var(--signal);
-    stroke-width: 1.8;
-    stroke-linecap: round;
-  }
-
-  .strip-card .sk-dash {
-    stroke-dasharray: 4 4;
-  }
-
   .strip-arrow {
     width: 0.75rem;
     height: 0.75rem;

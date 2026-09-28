@@ -198,6 +198,12 @@ export const fr: Copy = {
     /* what each note carries besides its title: a field or two, and what it
        is joined to — which is the part that makes it context rather than a
        label */
+    quotes: {
+      person: 'Elle porte le déploiement, pas le budget.',
+      meeting: 'Ils ne signeront pas sans une revue de sécurité.',
+      voice: 'Si on facture par siège, les petites équipes décrochent.',
+      article: 'Un wiki, ce ne sont pas les notes. Ce sont les liens entre elles.',
+    },
     meta: {
       person: ['client pilote · produit', '2 appels · 1 décision'],
       meeting: ['25 sept · 42 min', 'Anna Berger · 3 notes'],
