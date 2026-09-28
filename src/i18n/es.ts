@@ -61,7 +61,6 @@ export const es: Copy = {
     title: 'Tu contexto, con la forma que necesitas.',
     lede: 'El EKHO Viewer construye vistas de tu vault: tú indicas qué notas, qué campos, qué secciones y para quién, y él renderiza esa página.',
     a: 'Una vista no es una copia. Lee los mismos archivos que escribe tu agente, así que la página se mueve con tu conocimiento en lugar de quedarse atrás.',
-    b: 'Un vault sostiene tantas vistas como necesites: una hoja de ruta para la semana, un historial de decisiones, una página para alguien con quien trabajas. Esta es la propia hoja de ruta de EKHO, del vault en el que se escribió este sitio.',
     note: 'El viewer está en construcción. La hoja de ruta no: hoy ya se genera, desde los mismos archivos.',
     appTitle: 'EKHO Roadmap',
     nav: ['Resumen', 'Ahora', 'Después', 'Decisiones', 'Historial'],

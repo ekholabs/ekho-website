@@ -59,7 +59,6 @@ export const en = {
     title: 'Your context, in the shape you need it.',
     lede: 'The EKHO Viewer builds views of your vault: you say which notes, which fields, which sections and who it is for, and it renders that page.',
     a: 'A view is not a copy. It reads the same files your agent writes, so the page moves with your knowledge instead of falling behind it.',
-    b: "One vault carries as many views as you need: a roadmap for the week, a timeline of decisions, a page for somebody you work with. This one is EKHO's own roadmap, from the vault this site was written in.",
     note: 'The viewer is in build. The roadmap is not: it is generated today, from the same files.',
     appTitle: 'EKHO Roadmap',
     nav: ['Overview', 'What now', 'Next up', 'Decisions', 'Timeline'],

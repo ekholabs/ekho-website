@@ -65,7 +65,6 @@ export const de: Copy = {
     title: 'Dein Kontext, in der Form, die du brauchst.',
     lede: 'Der EKHO Viewer baut Sichten auf deinen Vault. Du sagst, welche Notizen, welche Felder, welche Abschnitte und für wen, er baut die Seite daraus.',
     a: 'Eine Sicht ist keine Kopie. Sie liest dieselben Dateien, die dein Agent schreibt, die Seite bewegt sich also mit deinem Wissen, statt ihm hinterherzulaufen.',
-    b: 'Ein Vault trägt so viele Sichten, wie du brauchst: eine Roadmap für die Woche, den Verlauf der Entscheidungen, eine Seite für jemanden, mit dem du arbeitest. Zu sehen ist EKHOs eigene Roadmap, erzeugt aus dem Vault, in dem diese Seite geschrieben wurde.',
     note: 'Der Viewer ist im Bau. Die Roadmap nicht: die wird heute erzeugt, aus denselben Dateien.',
     appTitle: 'EKHO Roadmap',
     nav: ['Überblick', 'Was jetzt', 'Was danach', 'Entscheidungen', 'Verlauf'],
