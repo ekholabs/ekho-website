@@ -354,9 +354,15 @@ const rows = c.chat.rows;
       if (ph) ph.hidden = true;
       if (typed) {
         typed.hidden = false;
-        for (let n = 3; n <= line.length; n += 3) {
+        // A character at a time, at about twice the pace of a quick typist —
+        // fast enough not to hold the page up, slow enough that it reads as
+        // somebody writing rather than as text being pasted in. The jitter is
+        // what keeps it off a metronome, and the beat after the command is
+        // the pause anyone takes between naming the tool and saying what for.
+        for (let n = 1; n <= line.length; n += 1) {
           write(typed, line.slice(0, n));
-          await wait(15);
+          const at = n === cmd.length ? 230 : 0;
+          await wait(30 + Math.random() * 16 + at);
         }
         write(typed, line);
       }
@@ -422,13 +428,14 @@ const rows = c.chat.rows;
       // different place, and a point that lands there makes the yellow appear
       // to start from somewhere the decision never was.
       const fig = next?.querySelector<HTMLElement>('[data-graphic]');
-      const at = fig?.dataset.decision;
-      const node = at ? fig?.querySelector<SVGElement>(`.cg-dots [data-i="${at}"]`) : null;
-      if (landing && node && landing.parentElement) {
-        const nr = node.getBoundingClientRect();
+      const svg = fig?.querySelector('svg');
+      const at = (fig?.dataset.decisionAt ?? '').split(',').map(Number);
+      if (landing && svg && landing.parentElement && at.length === 3) {
+        const [x, y, size] = at;
+        const sr = svg.getBoundingClientRect();
         const gr = landing.parentElement.getBoundingClientRect();
-        landing.style.left = `${Math.round(nr.x + nr.width / 2 - gr.x)}px`;
-        landing.style.top = `${Math.round(nr.y + nr.height / 2 - gr.y)}px`;
+        landing.style.left = `${Math.round(sr.x + (x / size) * sr.width - gr.x)}px`;
+        landing.style.top = `${Math.round(sr.y + (y / size) * sr.height - gr.y)}px`;
       }
       const head = Number.parseInt(
         getComputedStyle(document.documentElement).getPropertyValue('--head'),

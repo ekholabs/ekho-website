@@ -395,7 +395,29 @@ for (const i of labels.keys()) {
 // cap is centred on the decision point, so the yellow is what that point is
 // joined to rather than an arbitrary patch of the sphere. It is a cap and not
 // a layer, so it reads as part of the same body.
-const decisionAt = [...labels.entries()].find(([, l]) => l.key === 'decision')?.[0] ?? 0;
+// On a wide screen that point is fixed by the story: it is where the chat
+// window was, and the window collapses into it, so the yellow has to start
+// there whether or not that is a flattering place on the sphere. A phone has
+// no window collapsing into anything and no labels holding positions, so
+// there the point is chosen instead: the node nearest the middle of the
+// drawing, on the side facing the reader. The yellow then opens from the
+// centre of the ball rather than off its shoulder.
+const centred = (() => {
+  let best = 0;
+  let near = Infinity;
+  cloudPts.forEach(([x, y], i) => {
+    if (depth[i] < 0.45) return;
+    const d = Math.hypot(x - C, y - C);
+    if (d < near) {
+      near = d;
+      best = i;
+    }
+  });
+  return best;
+})();
+const decisionAt = labelled
+  ? ([...labels.entries()].find(([, l]) => l.key === 'decision')?.[0] ?? 0)
+  : centred;
 const AXIS = (() => {
   const v = sphere[decisionAt];
   const l = Math.hypot(v[0], v[1], v[2]) || 1;
@@ -554,6 +576,10 @@ const ariaLabel = c.graphic.label;
       not in the middle of the box, or the net appears to spread from
       somewhere the decision never was. */}
   data-decision={decisionAt}
+  {/* and where that node sits in the drawing. The circles carry their field
+      positions and are moved to the sphere at runtime, so their attributes
+      are the wrong place to read this from; the mesh is drawn here. */}
+  data-decision-at={`${cloudPts[decisionAt][0]},${cloudPts[decisionAt][1]},${SIZE}`}
   role="group"
   aria-label={ariaLabel}
 >
@@ -762,7 +788,11 @@ const ariaLabel = c.graphic.label;
         cells.forEach((c, i) => (c.textContent = shapes[i]));
         return;
       }
-      const settle = () => cells.forEach((c, i) => (c.textContent = shapes[i]));
+      const settle = () => {
+        cells.forEach((c, i) => (c.textContent = shapes[i]));
+        box.classList.remove('is-counting');
+      };
+      box.classList.add('is-counting');
       // A frame callback does not fire on a page nobody is looking at, and a
       // counter that was started and then left behind a switched tab would sit
       // at zero for good. If we cannot animate, we arrive.
@@ -790,16 +820,12 @@ const ariaLabel = c.graphic.label;
       );
     };
 
-    // Formed enough to be counted. On a wide screen that is a stage class, set
-    // by the scroll as the net comes together. On a phone there is no stage:
-    // the net is drawn in place, already whole, so being on screen is the
-    // whole condition.
-    const inPlace = window.matchMedia('(max-width: 63.999rem)');
-    const formed = () =>
-      !!figure &&
-      (figure.classList.contains('is-3') ||
-        figure.classList.contains('is-final') ||
-        (inPlace.matches && !!box.closest('.flow-graphic')));
+    // Formed enough to be counted. The stylesheet already decides this — a
+    // stage class on a wide screen, where the net comes together as you
+    // scroll, and always on a phone, where it is drawn in place already whole
+    // — so rather than working it out a second way and getting a different
+    // answer, this follows what the page is actually showing.
+    const formed = () => Number(getComputedStyle(box).opacity) > 0.5;
 
     const io = new IntersectionObserver(
       (entries) => {

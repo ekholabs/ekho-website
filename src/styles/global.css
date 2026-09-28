@@ -5598,7 +5598,15 @@
     }
   }
 
+  /* Yellow while they run and the page's ink once they have arrived: what is
+     moving is what is worth looking at, and when it stops it is a fact like
+     any other on the page. */
+  .cg-stats.is-counting .cg-stat b {
+    color: var(--signal);
+  }
+
   .cg-stat b {
+    transition: color 420ms ease;
     font-size: 1.25rem;
     font-weight: 600;
     letter-spacing: -0.02em;
