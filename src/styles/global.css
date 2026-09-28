@@ -2733,6 +2733,59 @@
     margin-top: 1.1rem;
   }
 
+  /* The roadmap window is off the phone. On a wide screen it sits beside the
+     text and proves the claim; on a narrow one it became five rows of ids and
+     pills under a chapter that had already made its point in prose, and the
+     page was long enough without it. */
+  @media (max-width: 63.999rem) {
+    #viewer .viewer {
+      display: none;
+    }
+  }
+
+  /* The object under the folder. Hidden above the breakpoint, where the vault
+     already has the stage to itself. */
+  .flow-key {
+    display: none;
+  }
+
+  @media (max-width: 63.999rem) {
+    /* The object lies behind, exactly as wide as the window that will cover
+       it, and the padding is how much of it you see before the folder starts
+       climbing. */
+    .flow-key {
+      display: block;
+      position: relative;
+      margin-top: 2rem;
+      padding-top: 11.5rem;
+    }
+
+    .flow-key-shot {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      border-radius: 1.5rem;
+      /* it opens out as you come down the page, and the folder rises against
+         it: two speeds, which is the whole of what makes it read as depth */
+      transform: scale(var(--key-scale, 0.9));
+      transform-origin: 50% 0;
+      will-change: transform;
+    }
+
+    .flow-key .flow-window {
+      position: relative;
+      z-index: 2;
+      margin-top: 0;
+      /* the folder is lifted by a transform, which moves nothing else, so the
+         space it leaves behind is taken back here rather than every frame */
+      margin-bottom: -4.5rem;
+      transform: translateY(var(--key-rise, 0px));
+      will-change: transform;
+    }
+  }
+
   @media (max-width: 63.999rem) {
     .flow-window,
     .flow-graphic,

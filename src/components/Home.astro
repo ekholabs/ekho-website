@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import key from '../assets/product/ekho-key.webp';
 import ContextGraphic from './ContextGraphic.astro';
 import Architecture from './Architecture.astro';
 import Arrow from './Arrow.astro';
@@ -222,8 +223,22 @@ const people = [
             chapter is about the folder, and the command is what you do once
             you want one. On a wide screen the window is over on the stage and
             this wrapper simply closes and opens again. */}
-        <div class="flow-window">
-          <FinderWindow lang={lang} />
+        {/* The object, and then the folder that covers it. It drifts slower
+            than the page as you scroll and the window climbs over it until
+            almost nothing of it is left, which is the chapter's argument
+            made as a movement: what you own is not the thing, it is what is
+            inside it. */}
+        <div class="flow-key" data-object>
+          <Image
+            class="flow-key-shot"
+            src={key}
+            alt=""
+            widths={[420, 640, 840]}
+            sizes="(max-width: 47.999rem) 88vw, 20rem"
+          />
+          <div class="flow-window">
+            <FinderWindow lang={lang} />
+          </div>
         </div>
         <div class="chapter-body measure">
           {/* The one line you paste. Marked as unshipped, which N4 requires and
@@ -490,6 +505,46 @@ const people = [
   const intro = document.querySelector<HTMLElement>('[data-intro]');
   const introTitle = document.querySelector<HTMLElement>('[data-intro-title]');
   const introFades = [...document.querySelectorAll<HTMLElement>('[data-intro-fade]')];
+  // The object in chapter 02 drifts against the page. A transform on one
+  // element per frame, read once and written once, so the folder climbing over
+  // it reads as two things moving at different speeds rather than as a picture
+  // being scrolled past.
+  {
+    const keys = [...document.querySelectorAll<HTMLElement>('[data-object]')];
+    const gentle = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (keys.length && !gentle.matches) {
+      let ticking = false;
+      const drift = () => {
+        ticking = false;
+        for (const k of keys) {
+          const r = k.getBoundingClientRect();
+          if (r.bottom < -200 || r.top > window.innerHeight + 200) continue;
+          // −1 as it comes up from the bottom, +1 as it leaves the top
+          // 0 as the block arrives from the bottom, 1 as it leaves the top
+          const p = Math.max(0, Math.min(1, 1 - (r.top + r.height * 0.35) / window.innerHeight));
+          // The object opens out slowly, on a curve that is even at both ends.
+          // The folder climbs on a different one, fast at the start, because it
+          // is the thing this chapter is actually about: it should be over the
+          // object well before you have finished reading.
+          const slow = p * p * (3 - 2 * p);
+          const quick = 1 - (1 - p) * (1 - p) * (1 - p);
+          k.style.setProperty('--key-scale', String(0.88 + slow * 0.2));
+          k.style.setProperty('--key-rise', `${96 - quick * 232}px`);
+        }
+      };
+      addEventListener(
+        'scroll',
+        () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(drift);
+        },
+        { passive: true },
+      );
+      drift();
+    }
+  }
+
   // The header's height, on the root, so a chapter can be scrolled to a place
   // where its rule meets the header's rather than passing under it. The step
   // bar measures this too, but only on a wide screen, and the nav is used on

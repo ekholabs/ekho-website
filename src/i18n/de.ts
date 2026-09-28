@@ -69,11 +69,6 @@ export const de: Copy = {
     appTitle: 'EKHO Roadmap',
     nav: ['Überblick', 'Was jetzt', 'Was danach', 'Entscheidungen', 'Verlauf'],
     readOnly: 'nur lesend',
-    stats: [
-      ['4', 'Ergebnisse'],
-      ['38', 'Elemente'],
-      ['6', 'offene Entscheidungen'],
-    ],
     recent: 'Läuft gerade',
     items: [
       ['e26', 'Tragen Ontologie und Daten Aktionsketten?', 'läuft'],

@@ -17,7 +17,6 @@ const { lang } = Astro.props;
 const c = t(lang);
 
 const nav = c.viewer.nav;
-const stats = c.viewer.stats;
 const items = c.viewer.items;
 ---
 
@@ -45,14 +44,10 @@ const items = c.viewer.items;
       </nav>
       <div class="app-main" aria-hidden="true">
         <p class="app-h">{nav[1]}</p>
-        <ul class="app-stats">
-          {stats.map(([n, l]) => (
-            <li>
-              <b>{n}</b>
-              <span>{l}</span>
-            </li>
-          ))}
-        </ul>
+        {/* The three counts are out. A number with a word under it is the
+            first thing every dashboard reaches for and the last thing anybody
+            reads; what makes the point here is the list underneath, which is
+            real work with real ids. */}
         <p class="app-sub">{c.viewer.recent}</p>
         <ul class="app-list">
           {items.map(([id, title, state]) => (

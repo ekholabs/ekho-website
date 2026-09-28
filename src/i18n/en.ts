@@ -63,11 +63,6 @@ export const en = {
     appTitle: 'EKHO Roadmap',
     nav: ['Overview', 'What now', 'Next up', 'Decisions', 'Timeline'],
     readOnly: 'read only',
-    stats: [
-      ['4', 'outcomes'],
-      ['38', 'elements'],
-      ['6', 'open decisions'],
-    ],
     recent: 'Running now',
     items: [
       ['e26', 'Can the ontology carry action chains?', 'running'],
