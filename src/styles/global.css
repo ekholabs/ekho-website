@@ -1070,8 +1070,10 @@
     border-color: var(--text);
   }
 
+  /* the same ink the label is set in, so the outlined button answers the
+     pointer as plainly as the filled one does */
   .pill:hover {
-    border-color: var(--line-strong);
+    border-color: var(--text);
   }
 
   .signal-text {
