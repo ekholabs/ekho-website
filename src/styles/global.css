@@ -1781,17 +1781,26 @@
     padding: 0 0.2rem;
   }
 
+  /* Both ends of the wire are held the same way, so the line reads as
+     something joining two things rather than as a mark, a rule and a chip: a
+     filled round for the model, a filled pill for the vault, the same ink
+     under both. The yellow stays on the vault end, which is the one that is
+     yours. */
   .wire-mark {
-    width: 1.25rem;
-    height: 1.25rem;
+    display: grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
     flex: none;
+    border-radius: 50%;
+    background: var(--text);
   }
 
   .wire-mark svg {
     display: block;
-    width: 100%;
-    height: 100%;
-    fill: var(--text);
+    width: 0.9rem;
+    height: 0.9rem;
+    fill: var(--bg);
   }
 
   /* the run of line between the two ends, with its label riding above it */
@@ -4870,11 +4879,16 @@
       font-size: 0.8125rem;
     }
 
-    /* the two ends of the wire carry the same weight, so the mark grows
+    /* the two ends of the wire carry the same weight, so the round grows
        with the chip */
     .flow-window .wire-mark {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .flow-window .wire-mark svg {
+      width: 1.1rem;
+      height: 1.1rem;
     }
 
     /* the way a tool call is set in a terminal client: the name in the same
@@ -5005,6 +5019,14 @@
     .chapter--wide {
       min-height: 0;
       padding-block: 3.5rem;
+    }
+
+    /* Come to rest where the chapter's rule meets the header's, not a screen
+       height past it. The rule is the top border of the chapter's number, one
+       padding down from the section's own top, so the section has to be
+       scrolled that much further than the header is tall. */
+    .chapter {
+      scroll-margin-top: calc(var(--head, 4.5rem) - 3.5rem);
     }
 
     /* The band takes the top third of the first screen, so the opening gets

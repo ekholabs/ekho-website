@@ -485,6 +485,21 @@ const people = [
   const intro = document.querySelector<HTMLElement>('[data-intro]');
   const introTitle = document.querySelector<HTMLElement>('[data-intro-title]');
   const introFades = [...document.querySelectorAll<HTMLElement>('[data-intro-fade]')];
+  // The header's height, on the root, so a chapter can be scrolled to a place
+  // where its rule meets the header's rather than passing under it. The step
+  // bar measures this too, but only on a wide screen, and the nav is used on
+  // both.
+  const headEl = document.querySelector<HTMLElement>('.site-header');
+  const measureHead = () => {
+    if (!headEl) return;
+    document.documentElement.style.setProperty(
+      '--head',
+      `${Math.round(headEl.getBoundingClientRect().height)}px`,
+    );
+  };
+  measureHead();
+  addEventListener('resize', measureHead, { passive: true });
+
   const stage = document.querySelector<HTMLElement>('.figure-stage');
   const compound = document.getElementById('compound');
   const chatOverlay = document.querySelector<HTMLElement>('.overlay[data-for="chat"]');
