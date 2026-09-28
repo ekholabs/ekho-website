@@ -724,292 +724,301 @@ const ariaLabel = c.graphic.label;
   // through the same custom properties the scroll choreography uses, so the two
   // never fight; the transitions are switched off for the duration, or every
   // frame would try to ease into the last one.
-  const figure = document.querySelector<HTMLElement>('[data-graphic]');
-  const holder = figure?.querySelector<SVGSVGElement>('svg');
-  const raw = figure?.querySelector<HTMLElement>('[data-cg-geometry]');
+  // Every instance on the page, not the first one: the wide layout has the
+  // graphic on its stage and a phone has it in the flow of the chapter, and
+  // whichever is on screen is the one somebody reaches for.
+  for (const figure of document.querySelectorAll<HTMLElement>('[data-graphic]')) {
+    const holder = figure.querySelector<SVGSVGElement>('svg');
+    const raw = figure.querySelector<HTMLElement>('[data-cg-geometry]');
+    if (!holder || !raw) continue;
+    {
+      const g = JSON.parse(raw.textContent ?? '{}') as {
+        c: number;
+        r: number;
+        size: number;
+        p: number[];
+        s: number[];
+        d0: number[];
+        e: number[];
+        o: number[];
+        k: number[];
+      };
+      const N = g.p.length / 3;
+      const SIZE = g.c * 2;
 
-  if (figure && holder && raw) {
-    const g = JSON.parse(raw.textContent ?? '{}') as {
-      c: number;
-      r: number;
-      size: number;
-      p: number[];
-      s: number[];
-      d0: number[];
-      e: number[];
-      o: number[];
-      k: number[];
-    };
-    const N = g.p.length / 3;
-    const SIZE = g.c * 2;
+      const targets: (SVGElement | null)[] = Array.from({ length: N }, (_, i) =>
+        figure.querySelector<SVGElement>(`[data-i="${i}"]`),
+      );
+      // the first links are individual elements so each can be drawn on its own,
+      // which means they have to be moved individually when the sphere turns
+      const firstEls = Array.from(figure.querySelectorAll<SVGLineElement>('.cg-first'));
+      const waveEls = Array.from(figure.querySelectorAll<SVGPathElement>('.cg-wave'));
+      const waveEdges = waveEls.map((el) =>
+        (el.dataset.wave ?? '')
+          .split(' ')
+          .filter(Boolean)
+          .map((pair) => pair.split(',').map(Number) as [number, number]),
+      );
+      const near = figure.querySelector<SVGPathElement>('.cg-near');
+      const far = figure.querySelector<SVGPathElement>('.cg-far');
+      const chord = figure.querySelector<SVGPathElement>('.cg-chord');
+      // the yellow is a stack of waves now, each with its own share of the edges
+      const ownEls = Array.from(figure.querySelectorAll<SVGPathElement>('.cg-own'));
+      const ownEdges = ownEls.map((el) =>
+        (el.dataset.own ?? '')
+          .split(' ')
+          .filter(Boolean)
+          .map((pair) => pair.split(',').map(Number) as [number, number]),
+      );
+      const hotPath = figure.querySelector<SVGPathElement>('.cg-hot');
 
-    const targets: (SVGElement | null)[] = Array.from({ length: N }, (_, i) =>
-      figure.querySelector<SVGElement>(`[data-i="${i}"]`),
-    );
-    // the first links are individual elements so each can be drawn on its own,
-    // which means they have to be moved individually when the sphere turns
-    const firstEls = Array.from(figure.querySelectorAll<SVGLineElement>('.cg-first'));
-    const waveEls = Array.from(figure.querySelectorAll<SVGPathElement>('.cg-wave'));
-    const waveEdges = waveEls.map((el) =>
-      (el.dataset.wave ?? '')
-        .split(' ')
-        .filter(Boolean)
-        .map((pair) => pair.split(',').map(Number) as [number, number]),
-    );
-    const near = figure.querySelector<SVGPathElement>('.cg-near');
-    const far = figure.querySelector<SVGPathElement>('.cg-far');
-    const chord = figure.querySelector<SVGPathElement>('.cg-chord');
-    // the yellow is a stack of waves now, each with its own share of the edges
-    const ownEls = Array.from(figure.querySelectorAll<SVGPathElement>('.cg-own'));
-    const ownEdges = ownEls.map((el) =>
-      (el.dataset.own ?? '')
-        .split(' ')
-        .filter(Boolean)
-        .map((pair) => pair.split(',').map(Number) as [number, number]),
-    );
-    const hotPath = figure.querySelector<SVGPathElement>('.cg-hot');
+      // what each point is joined to, for the highlight
+      const links: number[][] = Array.from({ length: N }, () => []);
+      for (const list of [g.e, g.o, g.k])
+        for (let i = 0; i < list.length; i += 2) {
+          links[list[i]].push(list[i + 1]);
+          links[list[i + 1]].push(list[i]);
+        }
 
-    // what each point is joined to, for the highlight
-    const links: number[][] = Array.from({ length: N }, () => []);
-    for (const list of [g.e, g.o, g.k])
-      for (let i = 0; i < list.length; i += 2) {
-        links[list[i]].push(list[i + 1]);
-        links[list[i + 1]].push(list[i]);
-      }
+      const px = new Float32Array(N);
+      const py = new Float32Array(N);
+      const pz = new Float32Array(N);
+      let yaw = 0;
+      let pitch = 0;
 
-    const px = new Float32Array(N);
-    const py = new Float32Array(N);
-    const pz = new Float32Array(N);
-    let yaw = 0;
-    let pitch = 0;
-
-    function project() {
-      const cy = Math.cos(yaw);
-      const sy = Math.sin(yaw);
-      const cp = Math.cos(pitch);
-      const sp = Math.sin(pitch);
-      for (let i = 0; i < N; i++) {
-        const x = g.p[i * 3];
-        const y = g.p[i * 3 + 1];
-        const z = g.p[i * 3 + 2];
-        const X = x * cy + z * sy;
-        const Z0 = z * cy - x * sy;
-        const Y = y * cp - Z0 * sp;
-        pz[i] = y * sp + Z0 * cp;
-        px[i] = g.c + X * g.r;
-        py[i] = g.c + Y * g.r;
-      }
-    }
-
-    const seg = (a: number, b: number) =>
-      `M${px[a].toFixed(1)} ${py[a].toFixed(1)}L${px[b].toFixed(1)} ${py[b].toFixed(1)}`;
-    const bow = (a: number, b: number) => {
-      const dx = px[b] - px[a];
-      const dy = py[b] - py[a];
-      const k = 0.08 * ((a + b) % 2 ? 1 : -1);
-      const cx = (px[a] + px[b]) / 2 - dy * k;
-      const cy2 = (py[a] + py[b]) / 2 + dx * k;
-      return `M${px[a].toFixed(1)} ${py[a].toFixed(1)}Q${cx.toFixed(1)} ${cy2.toFixed(1)} ${px[b].toFixed(1)} ${py[b].toFixed(1)}`;
-    };
-
-    function redraw() {
-      let dNear = '';
-      let dFar = '';
-      for (let i = 0; i < g.e.length; i += 2) {
-        const a = g.e[i];
-        const b = g.e[i + 1];
-        if (pz[a] + pz[b] < 0) dFar += seg(a, b);
-        else dNear += seg(a, b);
-      }
-      near?.setAttribute('d', dNear);
-      far?.setAttribute('d', dFar);
-
-      for (let w = 0; w < ownEls.length; w++) {
-        let dw = '';
-        for (const [a, b] of ownEdges[w]) dw += seg(a, b);
-        ownEls[w].setAttribute('d', dw);
-      }
-
-      let dChord = '';
-      for (let i = 0; i < g.k.length; i += 2) dChord += bow(g.k[i], g.k[i + 1]);
-      chord?.setAttribute('d', dChord);
-
-      for (const el of firstEls) {
-        const a = Number(el.dataset.fa);
-        const b = Number(el.dataset.fb);
-        el.setAttribute('x1', px[a].toFixed(1));
-        el.setAttribute('y1', py[a].toFixed(1));
-        el.setAttribute('x2', px[b].toFixed(1));
-        el.setAttribute('y2', py[b].toFixed(1));
-      }
-
-      for (let w = 0; w < waveEls.length; w++) {
-        let dw = '';
-        for (const [a, b] of waveEdges[w]) dw += seg(a, b);
-        waveEls[w].setAttribute('d', dw);
-      }
-
-      for (let i = 0; i < N; i++) {
-        const t = targets[i];
-        if (!t) continue;
-        t.style.setProperty('--dx2', `${(px[i] - g.s[i * 2]).toFixed(1)}px`);
-        t.style.setProperty('--dy2', `${(py[i] - g.s[i * 2 + 1]).toFixed(1)}px`);
-      }
-    }
-
-    // the near side carries, the far side falls back: only worth redoing when
-    // the sphere comes to rest, since it is 400-odd class changes
-    function settleDepth() {
-      for (let i = 0; i < N; i++) targets[i]?.classList.toggle('is-far', pz[i] < 0);
-    }
-
-    // ---- the opening ------------------------------------------------------
-
-    // The field is not a picture being scaled: the drawing keeps its scale, so
-    // every circle keeps the size it has later, and each one travels its own
-    // way in from where it was spread across the screen. Points outside the
-    // viewBox still draw, which is what lets the field reach past the column.
-    //
-    // Each point is given its own phase, so the field arrives loosely rather
-    // than in step. The phases come off the golden ratio, which spreads them
-    // without any two landing together.
-    const size = g.size ?? 560;
-    const coreOpen = new Float32Array(N * 2);
-    const PHASE = 0.42;
-    const ease = (t: number) => (t <= 0 ? 0 : t >= 1 ? 1 : 1 - Math.pow(1 - t, 3));
-
-    // an arrow, not a declaration: a hoisted function would lose the narrowing
-    // that proves holder is here
-    const measureField = () => {
-      const rect = holder.getBoundingClientRect();
-      const k = Math.min(rect.width, rect.height) / size;
-      if (!k) return false;
-      const ox = rect.left + (rect.width - size * k) / 2;
-      const oy = rect.top + (rect.height - size * k) / 2;
-      for (let i = 0; i < N; i++) {
-        coreOpen[i * 2] = ((g.d0[i * 2] / size) * window.innerWidth - ox) / k;
-        coreOpen[i * 2 + 1] = ((g.d0[i * 2 + 1] / size) * window.innerHeight - oy) / k;
-      }
-      return true;
-    };
-
-    const phaseOf = (i: number) => ((i * 0.6180339887) % 1) * PHASE;
-
-    (figure as HTMLElement & { cgOpenField?: (p: number) => void }).cgOpenField = (p: number) => {
-      if (!measureField()) return;
-      // a hair short of 1 still counts as arrived: leaving the class on would
-      // keep the transitions switched off for every later stage change
-      figure.classList.toggle('is-opening', p < 0.995);
-      for (let i = 0; i < N; i++) {
-        const el = targets[i];
-        if (!el) continue;
-        const t = ease((p - phaseOf(i)) / (1 - PHASE));
-        const sx = g.s[i * 2];
-        const sy = g.s[i * 2 + 1];
-        el.style.setProperty('--dx0', `${((coreOpen[i * 2] - sx) * (1 - t)).toFixed(1)}px`);
-        el.style.setProperty('--dy0', `${((coreOpen[i * 2 + 1] - sy) * (1 - t)).toFixed(1)}px`);
-      }
-    };
-
-    // ---- turning ----------------------------------------------------------
-
-    const wide = window.matchMedia('(min-width: 64rem)');
-    const formed = () => figure.classList.contains('is-2') || figure.classList.contains('is-final');
-    const grabbable = () => formed() && wide.matches;
-
-    let dragging = false;
-    let lastX = 0;
-    let lastY = 0;
-    let queued = false;
-
-    function frame() {
-      queued = false;
-      project();
-      redraw();
-    }
-    function schedule() {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(frame);
-    }
-
-    holder.addEventListener('pointerdown', (e) => {
-      if (!grabbable() || e.button !== 0) return;
-      dragging = true;
-      lastX = e.clientX;
-      lastY = e.clientY;
-      figure.classList.add('is-turning');
-      holder.setPointerCapture(e.pointerId);
-    });
-
-    holder.addEventListener('pointermove', (e) => {
-      if (!dragging) return;
-      yaw += (e.clientX - lastX) * 0.006;
-      pitch = Math.max(-1.05, Math.min(1.05, pitch + (e.clientY - lastY) * 0.006));
-      lastX = e.clientX;
-      lastY = e.clientY;
-      schedule();
-    });
-
-    // an arrow, not a declaration: a hoisted function would lose the narrowing
-    // that proves figure and holder are here
-    const release = (e: PointerEvent) => {
-      if (!dragging) return;
-      dragging = false;
-      figure.classList.remove('is-turning');
-      holder.releasePointerCapture?.(e.pointerId);
-      project();
-      settleDepth();
-    };
-    holder.addEventListener('pointerup', release);
-    holder.addEventListener('pointercancel', release);
-
-    figure.classList.toggle('is-grabbable', grabbable());
-    wide.addEventListener('change', () => figure.classList.toggle('is-grabbable', grabbable()));
-    new MutationObserver(() => figure.classList.toggle('is-grabbable', grabbable())).observe(
-      figure,
-      { attributes: true, attributeFilter: ['class'] },
-    );
-
-    // ---- what a point is joined to ---------------------------------------
-
-    let hot = -1;
-    function setHot(i: number) {
-      if (i === hot) return;
-      if (hot >= 0) targets[hot]?.classList.remove('is-hot');
-      hot = i;
-      if (i < 0) {
-        hotPath?.setAttribute('d', '');
-        return;
-      }
-      targets[i]?.classList.add('is-hot');
-      let d = '';
-      for (const j of links[i]) d += seg(i, j);
-      hotPath?.setAttribute('d', d);
-    }
-
-    holder.addEventListener('pointermove', (e) => {
-      if (dragging || !formed()) return;
-      const box = holder.getBoundingClientRect();
-      const scale = Math.min(box.width, box.height) / SIZE;
-      const vx = (e.clientX - box.left - (box.width - SIZE * scale) / 2) / scale;
-      const vy = (e.clientY - box.top - (box.height - SIZE * scale) / 2) / scale;
-      let best = -1;
-      let bd = 11 * 11;
-      for (let i = 0; i < N; i++) {
-        const dx = px[i] - vx;
-        const dy = py[i] - vy;
-        const d = dx * dx + dy * dy;
-        if (d < bd) {
-          bd = d;
-          best = i;
+      function project() {
+        const cy = Math.cos(yaw);
+        const sy = Math.sin(yaw);
+        const cp = Math.cos(pitch);
+        const sp = Math.sin(pitch);
+        for (let i = 0; i < N; i++) {
+          const x = g.p[i * 3];
+          const y = g.p[i * 3 + 1];
+          const z = g.p[i * 3 + 2];
+          const X = x * cy + z * sy;
+          const Z0 = z * cy - x * sy;
+          const Y = y * cp - Z0 * sp;
+          pz[i] = y * sp + Z0 * cp;
+          px[i] = g.c + X * g.r;
+          py[i] = g.c + Y * g.r;
         }
       }
-      setHot(best);
-    });
-    holder.addEventListener('pointerleave', () => setHot(-1));
 
-    // the served positions are the resting view, so start from them
-    project();
+      const seg = (a: number, b: number) =>
+        `M${px[a].toFixed(1)} ${py[a].toFixed(1)}L${px[b].toFixed(1)} ${py[b].toFixed(1)}`;
+      const bow = (a: number, b: number) => {
+        const dx = px[b] - px[a];
+        const dy = py[b] - py[a];
+        const k = 0.08 * ((a + b) % 2 ? 1 : -1);
+        const cx = (px[a] + px[b]) / 2 - dy * k;
+        const cy2 = (py[a] + py[b]) / 2 + dx * k;
+        return `M${px[a].toFixed(1)} ${py[a].toFixed(1)}Q${cx.toFixed(1)} ${cy2.toFixed(1)} ${px[b].toFixed(1)} ${py[b].toFixed(1)}`;
+      };
+
+      function redraw() {
+        let dNear = '';
+        let dFar = '';
+        for (let i = 0; i < g.e.length; i += 2) {
+          const a = g.e[i];
+          const b = g.e[i + 1];
+          if (pz[a] + pz[b] < 0) dFar += seg(a, b);
+          else dNear += seg(a, b);
+        }
+        near?.setAttribute('d', dNear);
+        far?.setAttribute('d', dFar);
+
+        for (let w = 0; w < ownEls.length; w++) {
+          let dw = '';
+          for (const [a, b] of ownEdges[w]) dw += seg(a, b);
+          ownEls[w].setAttribute('d', dw);
+        }
+
+        let dChord = '';
+        for (let i = 0; i < g.k.length; i += 2) dChord += bow(g.k[i], g.k[i + 1]);
+        chord?.setAttribute('d', dChord);
+
+        for (const el of firstEls) {
+          const a = Number(el.dataset.fa);
+          const b = Number(el.dataset.fb);
+          el.setAttribute('x1', px[a].toFixed(1));
+          el.setAttribute('y1', py[a].toFixed(1));
+          el.setAttribute('x2', px[b].toFixed(1));
+          el.setAttribute('y2', py[b].toFixed(1));
+        }
+
+        for (let w = 0; w < waveEls.length; w++) {
+          let dw = '';
+          for (const [a, b] of waveEdges[w]) dw += seg(a, b);
+          waveEls[w].setAttribute('d', dw);
+        }
+
+        for (let i = 0; i < N; i++) {
+          const t = targets[i];
+          if (!t) continue;
+          t.style.setProperty('--dx2', `${(px[i] - g.s[i * 2]).toFixed(1)}px`);
+          t.style.setProperty('--dy2', `${(py[i] - g.s[i * 2 + 1]).toFixed(1)}px`);
+        }
+      }
+
+      // the near side carries, the far side falls back: only worth redoing when
+      // the sphere comes to rest, since it is 400-odd class changes
+      function settleDepth() {
+        for (let i = 0; i < N; i++) targets[i]?.classList.toggle('is-far', pz[i] < 0);
+      }
+
+      // ---- the opening ------------------------------------------------------
+
+      // The field is not a picture being scaled: the drawing keeps its scale, so
+      // every circle keeps the size it has later, and each one travels its own
+      // way in from where it was spread across the screen. Points outside the
+      // viewBox still draw, which is what lets the field reach past the column.
+      //
+      // Each point is given its own phase, so the field arrives loosely rather
+      // than in step. The phases come off the golden ratio, which spreads them
+      // without any two landing together.
+      const size = g.size ?? 560;
+      const coreOpen = new Float32Array(N * 2);
+      const PHASE = 0.42;
+      const ease = (t: number) => (t <= 0 ? 0 : t >= 1 ? 1 : 1 - Math.pow(1 - t, 3));
+
+      // an arrow, not a declaration: a hoisted function would lose the narrowing
+      // that proves holder is here
+      const measureField = () => {
+        const rect = holder.getBoundingClientRect();
+        const k = Math.min(rect.width, rect.height) / size;
+        if (!k) return false;
+        const ox = rect.left + (rect.width - size * k) / 2;
+        const oy = rect.top + (rect.height - size * k) / 2;
+        for (let i = 0; i < N; i++) {
+          coreOpen[i * 2] = ((g.d0[i * 2] / size) * window.innerWidth - ox) / k;
+          coreOpen[i * 2 + 1] = ((g.d0[i * 2 + 1] / size) * window.innerHeight - oy) / k;
+        }
+        return true;
+      };
+
+      const phaseOf = (i: number) => ((i * 0.6180339887) % 1) * PHASE;
+
+      (figure as HTMLElement & { cgOpenField?: (p: number) => void }).cgOpenField = (p: number) => {
+        if (!measureField()) return;
+        // a hair short of 1 still counts as arrived: leaving the class on would
+        // keep the transitions switched off for every later stage change
+        figure.classList.toggle('is-opening', p < 0.995);
+        for (let i = 0; i < N; i++) {
+          const el = targets[i];
+          if (!el) continue;
+          const t = ease((p - phaseOf(i)) / (1 - PHASE));
+          const sx = g.s[i * 2];
+          const sy = g.s[i * 2 + 1];
+          el.style.setProperty('--dx0', `${((coreOpen[i * 2] - sx) * (1 - t)).toFixed(1)}px`);
+          el.style.setProperty('--dy0', `${((coreOpen[i * 2 + 1] - sy) * (1 - t)).toFixed(1)}px`);
+        }
+      };
+
+      // ---- turning ----------------------------------------------------------
+
+      const wide = window.matchMedia('(min-width: 64rem)');
+      const formed = () =>
+        figure.classList.contains('is-2') || figure.classList.contains('is-final');
+      // A phone can take hold of it too. What it cannot do is give up scrolling
+      // for it, so the stylesheet lets a vertical swipe pass through to the page
+      // and keeps the sideways one for the turn.
+      const grabbable = () => formed();
+      void wide;
+
+      let dragging = false;
+      let lastX = 0;
+      let lastY = 0;
+      let queued = false;
+
+      function frame() {
+        queued = false;
+        project();
+        redraw();
+      }
+      function schedule() {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(frame);
+      }
+
+      holder.addEventListener('pointerdown', (e) => {
+        if (!grabbable() || e.button !== 0) return;
+        dragging = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        figure.classList.add('is-turning');
+        holder.setPointerCapture(e.pointerId);
+      });
+
+      holder.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        yaw += (e.clientX - lastX) * 0.006;
+        pitch = Math.max(-1.05, Math.min(1.05, pitch + (e.clientY - lastY) * 0.006));
+        lastX = e.clientX;
+        lastY = e.clientY;
+        schedule();
+      });
+
+      // an arrow, not a declaration: a hoisted function would lose the narrowing
+      // that proves figure and holder are here
+      const release = (e: PointerEvent) => {
+        if (!dragging) return;
+        dragging = false;
+        figure.classList.remove('is-turning');
+        holder.releasePointerCapture?.(e.pointerId);
+        project();
+        settleDepth();
+      };
+      holder.addEventListener('pointerup', release);
+      holder.addEventListener('pointercancel', release);
+
+      figure.classList.toggle('is-grabbable', grabbable());
+      wide.addEventListener('change', () => figure.classList.toggle('is-grabbable', grabbable()));
+      new MutationObserver(() => figure.classList.toggle('is-grabbable', grabbable())).observe(
+        figure,
+        { attributes: true, attributeFilter: ['class'] },
+      );
+
+      // ---- what a point is joined to ---------------------------------------
+
+      let hot = -1;
+      function setHot(i: number) {
+        if (i === hot) return;
+        if (hot >= 0) targets[hot]?.classList.remove('is-hot');
+        hot = i;
+        if (i < 0) {
+          hotPath?.setAttribute('d', '');
+          return;
+        }
+        targets[i]?.classList.add('is-hot');
+        let d = '';
+        for (const j of links[i]) d += seg(i, j);
+        hotPath?.setAttribute('d', d);
+      }
+
+      holder.addEventListener('pointermove', (e) => {
+        if (dragging || !formed()) return;
+        const box = holder.getBoundingClientRect();
+        const scale = Math.min(box.width, box.height) / SIZE;
+        const vx = (e.clientX - box.left - (box.width - SIZE * scale) / 2) / scale;
+        const vy = (e.clientY - box.top - (box.height - SIZE * scale) / 2) / scale;
+        let best = -1;
+        let bd = 11 * 11;
+        for (let i = 0; i < N; i++) {
+          const dx = px[i] - vx;
+          const dy = py[i] - vy;
+          const d = dx * dx + dy * dy;
+          if (d < bd) {
+            bd = d;
+            best = i;
+          }
+        }
+        setHot(best);
+      });
+      holder.addEventListener('pointerleave', () => setHot(-1));
+
+      // the served positions are the resting view, so start from them
+      project();
+    }
   }
 </script>

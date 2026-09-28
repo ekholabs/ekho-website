@@ -1698,13 +1698,27 @@
     font-size: 0.8rem;
   }
 
+  /* Which vault is on the other end of this conversation. It is the one thing
+     in the window that is EKHO's rather than the chat client's, so it carries
+     the signal colour rather than a grey caption line — a chip, the way a
+     connected account is shown in any client. */
   .chat-model {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0.4rem;
     margin: 0 0 0 0.3rem;
+    padding: 0.28rem 0.6rem;
+    border-radius: 10px;
+    background: var(--signal);
+    color: var(--signal-ink);
     font-size: 0.6875rem;
-    color: var(--muted-deep);
+    font-weight: 500;
+  }
+
+  /* the square says "yours" against the window's own ground; on the yellow it
+     is the ground */
+  .chat-model .chat-sq {
+    display: none;
   }
 
   /* ---------- 05 · the viewer ---------- */
@@ -3028,7 +3042,9 @@
   /* the sphere can be taken hold of once it has formed */
   [data-graphic].is-grabbable svg {
     cursor: grab;
-    touch-action: none;
+    /* A phone scrolls with the same finger that would turn this. Vertical
+       swipes go to the page, sideways ones turn the sphere. */
+    touch-action: pan-y;
   }
 
   [data-graphic].is-turning svg {
@@ -3360,6 +3376,12 @@
     transition:
       color 200ms ease,
       border-color 200ms ease;
+  }
+
+  /* the copy that makes the strip endless has no business on a wide screen,
+     where the row wraps onto two lines */
+  .plate--dup {
+    display: none;
   }
 
   .plate:hover {
@@ -4079,20 +4101,24 @@
       display: none;
     }
 
+    .plate--dup {
+      display: grid;
+    }
+
     .plate {
       flex: 0 0 auto;
-      width: 4.25rem;
-      height: 4.25rem;
+      width: 5rem;
+      height: 5rem;
       scroll-snap-align: start;
     }
 
     .plate-mark {
-      width: 1.75rem;
-      height: 1.75rem;
+      width: 2.125rem;
+      height: 2.125rem;
     }
 
     .plate-text {
-      font-size: 1.0625rem;
+      font-size: 1.25rem;
     }
 
     /* The one claim in this chapter, so it is set as one: the label larger
@@ -4341,10 +4367,21 @@
 
     /* The vault keeps its window. A folder is a thing with edges — that is
        most of what the chapter is saying about it — and a list of file names
-       lying loose on the page says the opposite. */
+       lying loose on the page says the opposite. It sits closer to the
+       paragraph it belongs to than to the install line under it. */
     .flow-window .win--finder {
       width: 100%;
       max-width: none;
+    }
+
+    #what .flow-window {
+      margin-top: 1.1rem;
+      margin-bottom: 0;
+    }
+
+    /* the folder and the line that installs it are one pair, not two blocks */
+    #what .command {
+      margin-top: 0.75rem;
     }
 
     /* the roadmap is a list on a phone, so it loses the panel it sat on as
@@ -4419,6 +4456,17 @@
 
     .flow-window .chat-composer {
       border-radius: 999px;
+    }
+
+    /* The terminal and the skill are what the chapter is about, so on a phone
+       they take the whole width of the thread rather than the column left of
+       the mark, and they lift off the page on a wide, soft shadow instead of
+       sitting flat in it. */
+    .flow-window .tool {
+      margin-left: calc(-22px - 0.7rem);
+      padding: 0.75rem 0.9rem 0.85rem;
+      border-radius: 10px;
+      box-shadow: 0 3px 20px rgb(26 26 24 / 0.1);
     }
   }
 }
