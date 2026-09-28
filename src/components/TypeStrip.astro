@@ -54,7 +54,7 @@ const keys = [
                page where you see one before the team chapter */
             <Image class="strip-tile strip-tile--photo" src={anna} alt="" width={96} height={96} />
           ) : APP_STILLS.has(k) ? (
-            <svg class="strip-tile" viewBox="0 0 22 22" aria-hidden="true" set:html={TILES[k]} />
+            <svg class="strip-tile" viewBox="0 0 24 24" aria-hidden="true" set:html={TILES[k]} />
           ) : (
             <svg class="strip-ico" viewBox="0 0 12 12" aria-hidden="true">
               <path d={ICONS[k]} />
@@ -72,18 +72,11 @@ const keys = [
         {c.graphic.quotes[k as keyof typeof c.graphic.quotes] && (
           <p class="strip-quote">{c.graphic.quotes[k as keyof typeof c.graphic.quotes]}</p>
         )}
-        {/* What the thing knows about itself, and nothing else. Nothing here
-            points at another note: at this point in the story these have not
-            been filed, so there is nothing for them to point at. That is the
-            whole difference the chapter is about. */}
-        <dl class="strip-details">
-          {c.graphic.details[k as keyof typeof c.graphic.details].map(([label, value]) => (
-            <>
-              <dt>{label}</dt>
-              <dd>{value}</dd>
-            </>
-          ))}
-        </dl>
+        {/* No rows of fields under this. The chapter is not about how much a
+            note can carry, it is about how much lands on you in a week
+            without anything joining it up outside your head — so what each
+            card says is what the thing is, and the rest of the argument is
+            made by there being fifteen of them. */}
       </li>
     ))}
   </ul>

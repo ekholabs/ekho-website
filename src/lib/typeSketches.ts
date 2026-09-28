@@ -37,29 +37,10 @@ const rect = (x: number, y: number, w: number, h: number, cls: string, r = 2) =>
 
 /** the tile in the head of each widget: the app's mark, or EKHO's type mark */
 export const TILES: Record<string, string> = {
-  // A portrait rather than the grey silhouette a contact falls back to: at
-  // this size it is four shapes, and four shapes is enough to read as a
-  // person instead of as a missing photo. Nobody in particular — Anna Berger
-  // is a persona, and the card is a mockup.
-  person:
-    `<clipPath id="pfp"><circle cx="11" cy="11" r="11"/></clipPath>` +
-    `<g clip-path="url(#pfp)">` +
-    rect(0, 0, 22, 22, 'sk-pfp-bg', 0) +
-    `<path class="sk-pfp-top" d="M11 14c5.4 0 9 3.6 9 8H2c0-4.4 3.6-8 9-8z"/>` +
-    rect(9.2, 11.5, 3.6, 4, 'sk-pfp-skin', 1.2) +
-    `<ellipse class="sk-pfp-hair" cx="11" cy="9.6" rx="6.6" ry="7.2"/>` +
-    `<ellipse class="sk-pfp-skin" cx="11" cy="10.2" rx="4.9" ry="5.6"/>` +
-    `<path class="sk-pfp-hair" d="M6.1 8.9a4.9 4.9 0 0 1 9.8 0c-1.3-2.4-8.5-2.4-9.8 0z"/>` +
-    `</g>`,
   meeting:
-    rect(0, 0, 22, 22, 'sk-brand', 6) +
-    rect(4.5, 7, 8.5, 8, 'sk-on-brand', 1.5) +
-    `<path class="sk-on-brand" d="M14.5 8.2 18.5 6.6v8.8l-4-1.6z"/>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><rect width="24" height="24" rx="6" fill="#5b5fc7"/><rect x="5" y="8" width="9" height="8.6" rx="1.6" fill="#fff"/><path d="M15.6 9.4 19.6 7.6v8.8l-4-1.8z" fill="#fff"/></svg>`,
   voice:
-    rect(0, 0, 22, 22, 'sk-rec', 6) +
-    rect(6, 8, 2, 6, 'sk-on-rec', 1) +
-    rect(10, 5, 2, 12, 'sk-on-rec', 1) +
-    rect(14, 8.5, 2, 5, 'sk-on-rec', 1),
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><rect width="24" height="24" rx="6" fill="#ff3b30"/><rect x="6.6" y="9" width="2.1" height="6" rx="1.05" fill="#fff"/><rect x="10.9" y="5.8" width="2.1" height="12.4" rx="1.05" fill="#fff"/><rect x="15.2" y="9.6" width="2.1" height="4.8" rx="1.05" fill="#fff"/></svg>`,
   article: mark(si.siX.path, '#000000'),
 
   video: mark(si.siYoutube.path, `#${si.siYoutube.hex}`),
