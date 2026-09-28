@@ -47,7 +47,7 @@ export const en = {
     a: 'EKHO docks into the chat you already use: commands you call, and skills it applies on its own.',
     b: 'And it never changes anything without showing you first.',
     sovereignty: 'Context sovereignty',
-    note: 'Hand your context to a model provider and it becomes theirs to keep: their memory, their format, their terms. EKHO keeps it on your own disk, in Markdown, where any of these can read it.',
+    note: 'The models build a memory of you across chats now, and it is useful. It is also theirs: their format, their terms, and the longer it grows the more it costs to leave. EKHO builds that context on your own disk, in Markdown, where any of these can read it and none of them holds it.',
     edge: 'It stays yours, and swapping one for another costs you nothing.',
   },
   compound: {

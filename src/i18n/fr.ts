@@ -49,7 +49,7 @@ export const fr: Copy = {
     a: "EKHO se greffe sur la conversation que vous avez déjà : des commandes que vous lancez et des skills qu'il applique de lui-même.",
     b: "Et il ne change jamais rien sans vous le montrer d'abord.",
     sovereignty: 'Souveraineté du contexte',
-    note: 'Confiez votre contexte à un fournisseur de modèle et il devient le sien : sa mémoire, son format, ses conditions. EKHO le garde sur votre propre disque, en Markdown, là où chacun de ceux-ci peut le lire.',
+    note: "Les modèles se constituent désormais une mémoire de vous d'une conversation à l'autre, et elle est utile. Elle est aussi la leur : leur format, leurs conditions, et plus elle grandit, plus partir coûte cher. EKHO constitue ce même contexte sur votre propre disque, en Markdown, là où chacun d'eux peut le lire et où aucun ne le détient.",
     edge: "Il reste le vôtre, et passer de l'un à l'autre ne vous coûte rien.",
   },
   compound: {

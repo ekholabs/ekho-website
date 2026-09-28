@@ -49,7 +49,7 @@ export const es: Copy = {
     a: 'EKHO se acopla al chat que ya usas: comandos que tú invocas y skills que aplica por su cuenta.',
     b: 'Y nunca cambia nada sin enseñártelo antes.',
     sovereignty: 'Soberanía del contexto',
-    note: 'Entrega tu contexto a un proveedor de modelos y pasa a ser suyo: su memoria, su formato, sus condiciones. EKHO lo mantiene en tu propio disco, en Markdown, donde cualquiera de estos puede leerlo.',
+    note: 'Los modelos ya construyen una memoria tuya a lo largo de los chats, y es útil. También es suya: su formato, sus condiciones, y cuanto más crece, más caro sale marcharse. EKHO construye ese mismo contexto en tu propio disco, en Markdown, donde cualquiera de ellos puede leerlo y ninguno lo retiene.',
     edge: 'Sigue siendo tuyo, y cambiar uno por otro no te cuesta nada.',
   },
   compound: {
