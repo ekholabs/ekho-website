@@ -4178,3 +4178,112 @@
     color: var(--text);
   }
 }
+
+/* The scene on a phone --------------------------------------------------------
+   A window is a window because a desktop has them. A phone does not: it has
+   the conversation itself, full width, with the composer at the foot. So the
+   chrome comes off — the bar, the lights, the frame, the sidebar — and what is
+   left is the thing the chapter is about: the message, what EKHO did with it,
+   the table of what it would write, and the two buttons that decide. The same
+   markup, read as a thread instead of as a screenshot.
+   -------------------------------------------------------------------------- */
+@layer components {
+  @media (max-width: 47.999rem) {
+    .flow-window .win--chat,
+    .flow-window .win--finder {
+      border: 0;
+      background: none;
+      box-shadow: none;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .flow-window .win--chat .win-bar,
+    .flow-window .win--finder .win-bar {
+      display: none;
+    }
+
+    .flow-window .win--chat .win-body,
+    .flow-window .win--finder .win-body {
+      height: auto;
+      background: none;
+    }
+
+    .flow-window .win--finder {
+      max-width: none;
+    }
+
+    .flow-window .chat-thread,
+    .flow-window .chat-scroll {
+      background: none;
+      padding-inline: 0;
+    }
+
+    /* the question keeps its bubble, because that is what a question looks
+       like in a chat, and the answer stays flush left under the mark */
+    .flow-window .chat-ask {
+      max-width: 85%;
+    }
+
+    .flow-window .chat-foot {
+      padding-inline: 0;
+      background: none;
+      border-top: 0;
+    }
+
+    .flow-window .chat-composer {
+      border-radius: 999px;
+    }
+  }
+}
+
+/* A still of the field -------------------------------------------------------
+   The still of this graphic is the finished net, because that is what the last
+   chapter ends on. The opening on a phone needs the other end of it: the same
+   points where they start, spread and unjoined, with the mesh and the first
+   links simply not rendered. Nothing is translated here, so the circles stay
+   where they are drawn. */
+@layer components {
+  .context-graphic.is-field .cg-dot,
+  .context-graphic.is-field .cg-pt {
+    transform: none;
+  }
+}
+
+/* The field over the opening --------------------------------------------------
+   A phone has no second column, so the picture goes above the words rather
+   than beside them: edge to edge, cropped to a band, fading out into the page
+   so it reads as the field carrying on past the screen rather than as an image
+   somebody placed there. */
+@layer components {
+  .flow-field {
+    display: none;
+  }
+
+  @media (max-width: 63.999rem) {
+    .flow-field {
+      display: block;
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      height: 30svh;
+      max-height: 16rem;
+      margin-bottom: 2rem;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0 / 1) 55%, transparent 100%);
+      mask-image: linear-gradient(to bottom, rgb(0 0 0 / 1) 55%, transparent 100%);
+    }
+
+    .flow-field .context-graphic {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .flow-field svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}

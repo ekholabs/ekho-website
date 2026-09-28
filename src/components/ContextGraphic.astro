@@ -37,9 +37,23 @@ interface Props {
   points?: number;
   /** the labelled points, which need room for their text beside them */
   labelled?: boolean;
+  /**
+   * What a still of this graphic shows. 'net' is the finished thing, the one
+   * chapter 03 ends on. 'field' is where it starts: the points, spread, with
+   * nothing joining them yet — which is the picture the opening needs on a
+   * phone, where there is no column beside the statement to put it in.
+   */
+  state?: 'net' | 'field';
   lang: Lang;
 }
-const { animated = true, caption = true, points = 560, labelled = true, lang } = Astro.props;
+const {
+  animated = true,
+  caption = true,
+  points = 560,
+  labelled = true,
+  state = 'net',
+  lang,
+} = Astro.props;
 const c = t(lang);
 
 const SIZE = 560;
@@ -522,7 +536,13 @@ const waves: [number, number][][] = Array.from({ length: WAVES }, (_, w) =>
   restFirst.slice(w * perWave, (w + 1) * perWave),
 ).filter((w) => w.length > 0);
 
-const figureClass = ['context-graphic', animated ? '' : 'is-final'].filter(Boolean).join(' ');
+const figureClass = [
+  'context-graphic',
+  animated ? '' : 'is-final',
+  !animated && state === 'field' ? 'is-field' : '',
+]
+  .filter(Boolean)
+  .join(' ');
 const ariaLabel = c.graphic.label;
 ---
 
@@ -532,7 +552,14 @@ const ariaLabel = c.graphic.label;
   role="group"
   aria-label={ariaLabel}
 >
-  <svg viewBox={`0 0 ${SIZE} ${SIZE}`} aria-hidden="true">
+  {/* A still of the field is a band on a phone, wider than it is tall, and a
+      band of points has to be cropped out of the square rather than fitted
+      into it, or the field sits in the middle with air either side. */}
+  <svg
+    viewBox={`0 0 ${SIZE} ${SIZE}`}
+    preserveAspectRatio={!animated && state === 'field' ? 'xMidYMid slice' : undefined}
+    aria-hidden="true"
+  >
     {/* The first links used to be 135 separate lines, each drawing its own
         stroke. That is 135 paths re-rastered on every frame, on the main
         thread, in exactly the frames where the window is being scaled by the
@@ -540,44 +567,50 @@ const ariaLabel = c.graphic.label;
         in. Now only the eight links that touch a point of yours are drawn line
         by line, which is the part worth watching. The rest arrive as nine
         waves, one path each, fading. Nine elements instead of 135. */}
-    <g class="cg-firsts">
-      {waves.map((edges, w) => (
-        <path
-          class="cg-wave"
-          pathLength="1"
-          d={path(edges)}
-          style={`--w:${w}`}
-          data-wave={edges.map(([a, b]) => `${a},${b}`).join(' ')}
-        />
-      ))}
-      {mineFirst.map(([a, b], i) => (
-        <line
-          class="cg-first is-yours"
-          x1={cloudPts[a][0]}
-          y1={cloudPts[a][1]}
-          x2={cloudPts[b][0]}
-          y2={cloudPts[b][1]}
-          pathLength="1"
-          style={`--e:${i}`}
-          data-fa={a}
-          data-fb={b}
-        />
-      ))}
-    </g>
-    <g class="cg-mesh">
-      <path class="cg-link cg-far" pathLength="1" d={path(far)} />
-      <path class="cg-link cg-chord" pathLength="1" d={chords.map(bow).join('')} />
-      <path class="cg-link cg-near" pathLength="1" d={path(near)} />
-      {ownWaves.map((w) => (
-        <path
-          class="cg-link cg-own"
-          style={`--w:${w.at}`}
-          data-own={w.edges.map(([a, b]) => `${a},${b}`).join(' ')}
-          d={path(w.edges)}
-        />
-      ))}
-      <path class="cg-link cg-hot" d="" />
-    </g>
+    {!(!animated && state === 'field') && (
+      <g class="cg-firsts">
+        {waves.map((edges, w) => (
+          <path
+            class="cg-wave"
+            pathLength="1"
+            d={path(edges)}
+            style={`--w:${w}`}
+            data-wave={edges.map(([a, b]) => `${a},${b}`).join(' ')}
+          />
+        ))}
+        {mineFirst.map(([a, b], i) => (
+          <line
+            class="cg-first is-yours"
+            x1={cloudPts[a][0]}
+            y1={cloudPts[a][1]}
+            x2={cloudPts[b][0]}
+            y2={cloudPts[b][1]}
+            pathLength="1"
+            style={`--e:${i}`}
+            data-fa={a}
+            data-fb={b}
+          />
+        ))}
+      </g>
+    )}
+    {/* the still of the field has no links in it: the mesh and the first
+        links are simply not rendered */}
+    {!(!animated && state === 'field') && (
+      <g class="cg-mesh">
+        <path class="cg-link cg-far" pathLength="1" d={path(far)} />
+        <path class="cg-link cg-chord" pathLength="1" d={chords.map(bow).join('')} />
+        <path class="cg-link cg-near" pathLength="1" d={path(near)} />
+        {ownWaves.map((w) => (
+          <path
+            class="cg-link cg-own"
+            style={`--w:${w.at}`}
+            data-own={w.edges.map(([a, b]) => `${a},${b}`).join(' ')}
+            d={path(w.edges)}
+          />
+        ))}
+        <path class="cg-link cg-hot" d="" />
+      </g>
+    )}
 
     <g class="cg-dots">
       {scatter.map((p, i) => {

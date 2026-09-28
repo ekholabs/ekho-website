@@ -137,6 +137,20 @@ const people = [
         data-view
       >
         <div class="chapter-body">
+          {/* The opening on a phone has no column beside it to put the field
+              in, and without it the statement stood on an empty screen. Here
+              it is a band above the words: the same points, where they start.
+              */}
+          <div class="flow-field" data-intro-fade>
+            <ContextGraphic
+              lang={lang}
+              animated={false}
+              state="field"
+              caption={false}
+              points={260}
+              labelled={false}
+            />
+          </div>
           <h1 class="hero-title" data-intro-title>
             {c.hero.titleBefore} <span class="signal-text">{c.hero.titleSignal}</span>
           </h1>
