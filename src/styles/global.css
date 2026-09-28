@@ -499,8 +499,14 @@
      on a card of its own: the page's raised ground, no border, and a shadow
      wide enough to be a lift rather than an edge. The same treatment the
      windows in the chapters after it have. */
+  /* The ground of the step bars, carried onto the drawing: the page's own
+     tone rather than a white plate, so a card reads as part of the surface
+     the points are on. Denser than the bars are, because a bar has a blur
+     behind it and a shape in an SVG cannot: what shows through here shows
+     through sharp, and at the bars' own 70% the points were legible straight
+     across the text. */
   .cg-card {
-    fill: var(--card);
+    fill: color-mix(in srgb, var(--bg) 90%, transparent);
     filter: drop-shadow(0 3px 18px rgb(26 26 24 / 0.14));
   }
 
@@ -2622,7 +2628,9 @@
   .hero-title {
     margin: 0 0 1.5rem;
     font-size: clamp(2.125rem, 4.6vw, 3.25rem);
-    font-weight: 400;
+    /* the same weight every heading after it has: the opening was the one
+       statement on the page set lighter than the chapters it introduces */
+    font-weight: 600;
     line-height: 1.06;
     letter-spacing: -0.035em;
   }
