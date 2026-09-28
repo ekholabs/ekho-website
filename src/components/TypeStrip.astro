@@ -1,12 +1,17 @@
 ---
 // Chapter 01 on a phone. The wide layout says what context is by labelling
 // eight points in the field beside the text; there is no field here, so the
-// eight say it themselves: one card each, in a row you push sideways with a
-// thumb. Same marks, same words, same examples as the graphic — it is the
-// same eight notes, read as a list rather than seen as a cloud.
+// eight say it themselves — one widget each, on a board you push sideways with
+// a thumb, the way a phone's own widgets sit.
+//
+// Every widget is built the same way: a tile, what kind of thing it is, when
+// it is from, its title, a body, and the one line that says what EKHO has
+// joined it to. The dress is what differs. Four of them came out of somebody
+// else's app and keep that app's colours and controls; four are what EKHO
+// makes of that material and keep the page's own hairline and its yellow.
 import { t, type Lang } from '../i18n';
 import { ICONS } from '../lib/typeIcons';
-import { SKETCHES, APP_STILLS } from '../lib/typeSketches';
+import { SKETCHES, TILES, APP_STILLS } from '../lib/typeSketches';
 
 interface Props {
   lang: Lang;
@@ -29,22 +34,20 @@ const keys = [
 <div class="flow-strip">
   <ul class="strip" aria-label={c.graphic.label}>
     {keys.map((k) => (
-      <li class="strip-card">
-        {/* what the thing looks like before it is a note */}
-        <svg
-          class:list={['strip-sketch', APP_STILLS.has(k) && 'strip-sketch--app']}
-          viewBox="0 0 200 64"
-          aria-hidden="true"
-          set:html={SKETCHES[k]}
-        />
-        <p class="strip-type">
-          <svg class="strip-ico" viewBox="0 0 12 12" aria-hidden="true">
-            <path d={ICONS[k]} />
-          </svg>
-          {c.graphic.types[k]}
+      <li class:list={['strip-card', APP_STILLS.has(k) && 'strip-card--app']}>
+        <p class="strip-head">
+          {APP_STILLS.has(k) ? (
+            <svg class="strip-tile" viewBox="0 0 22 22" aria-hidden="true" set:html={TILES[k]} />
+          ) : (
+            <svg class="strip-ico" viewBox="0 0 12 12" aria-hidden="true">
+              <path d={ICONS[k]} />
+            </svg>
+          )}
+          <span class="strip-type">{c.graphic.types[k]}</span>
+          <span class="strip-when">{c.graphic.meta[k][0]}</span>
         </p>
         <p class="strip-title">{c.graphic.titles[k]}</p>
-        <p class="strip-meta">{c.graphic.meta[k][0]}</p>
+        <svg class="strip-body" viewBox="0 0 200 36" aria-hidden="true" set:html={SKETCHES[k]} />
         <p class="strip-link">
           <svg class="strip-arrow" viewBox="0 0 12 12" aria-hidden="true">
             <path d="M1.5 2.5v4a2 2 0 0 0 2 2h7M8 5.5l2.8 3-2.8 3" />
