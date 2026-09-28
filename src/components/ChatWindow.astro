@@ -241,6 +241,14 @@ const rows = c.chat.rows;
     const ask = unit.querySelector<HTMLElement>('.chat-ask');
     const typing = unit.querySelector<HTMLElement>('[data-typing]');
     const foot = unit.querySelector<HTMLElement>('.chat-foot');
+    // Where the two buttons live when they are not floating. A fixed element
+    // is positioned against the nearest transformed ancestor, not the screen,
+    // and every beat in this thread is transformed as it arrives — so while
+    // they float they are moved out of the thread entirely and put back
+    // afterwards, rather than left inside something that is moving.
+    const acts = unit.querySelector<HTMLElement>('.chat-acts');
+    const actsHome = acts?.parentElement ?? null;
+    const actsAfter = acts?.nextElementSibling ?? null;
     // the line the scene writes is the one the thread already carries
     const line = ask?.querySelector<HTMLElement>('.chat-ask-text')?.textContent?.trim() ?? '';
 
@@ -278,6 +286,30 @@ const rows = c.chat.rows;
       if (ph) ph.hidden = false;
       unit.classList.remove('is-sending', 'is-deciding', 'is-folding');
       if (typing) typing.hidden = true;
+      if (acts && actsHome && acts.parentElement !== actsHome) {
+        actsHome.insertBefore(acts, actsAfter);
+      }
+    };
+
+    // The two buttons float over the composer, so the composer's height is
+    // where they sit. Measured rather than guessed: it changes with the type
+    // scale, with the phone's own safe area, and again when the composer
+    // leaves the flow for the screen's bottom edge.
+    const measureFoot = () => {
+      if (!foot) return;
+      unit.style.setProperty('--foot-h', `${Math.round(foot.getBoundingClientRect().height)}px`);
+    };
+    measureFoot();
+    window.addEventListener('resize', measureFoot, { passive: true });
+
+    // What a client does when something arrives: it keeps the newest thing in
+    // view, just above where you write. Without this the thread grew off the
+    // bottom of the screen and EKHO appeared to be working somewhere else.
+    const follow = (el: HTMLElement) => {
+      const gap = Number.parseInt(unit.style.getPropertyValue('--foot-h'), 10) || 76;
+      const want = window.innerHeight - gap - 18;
+      const over = el.getBoundingClientRect().bottom - want;
+      if (over > 2) window.scrollBy({ top: over, behavior: 'smooth' });
     };
 
     const play = async () => {
@@ -290,6 +322,8 @@ const rows = c.chat.rows;
       // waits between them; the gaps that are left are only the ones the eye
       // needs to read what just arrived.
       unit.classList.add('is-playing');
+      // its height changes when it leaves the flow, and the buttons sit on it
+      requestAnimationFrame(measureFoot);
       const head = Number.parseInt(
         getComputedStyle(document.documentElement).getPropertyValue('--head'),
         10,
@@ -320,6 +354,7 @@ const rows = c.chat.rows;
       await wait(260);
       unit.classList.add('is-sending');
       beats[0]?.classList.add('is-in');
+      if (beats[0]) follow(beats[0]);
       await wait(180);
       unit.classList.remove('is-sending');
       if (draft) draft.hidden = true;
@@ -347,24 +382,17 @@ const rows = c.chat.rows;
       for (const b of beats.slice(1)) {
         await wait(pace[b.dataset.beat ?? '2'] ?? 200);
         b.classList.add('is-in');
+        follow(b);
       }
 
       // And then it waits for the reader. The strip is held at the top, the
       // composer at the bottom, and the two buttons float over it — which is
       // what a client looks like when it has asked you something. It stays
       // that way until one of them is pressed.
+      if (acts) unit.appendChild(acts);
       unit.classList.add('is-deciding');
+      requestAnimationFrame(measureFoot);
     };
-
-    // The two buttons float over the composer, so the composer's height is
-    // where they sit. Measured rather than guessed: it changes with the type
-    // scale and with the phone's own safe area.
-    const measureFoot = () => {
-      if (!foot) return;
-      unit.style.setProperty('--foot-h', `${Math.round(foot.getBoundingClientRect().height)}px`);
-    };
-    measureFoot();
-    window.addEventListener('resize', measureFoot, { passive: true });
 
     // Answering ends the scene. The whole exchange folds into a single point
     // and the reader is taken to the net, where that point lights: the

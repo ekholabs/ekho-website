@@ -5381,13 +5381,25 @@
     }
 
     /* the composer, at the bottom edge for as long as the scene runs */
+    /* Fixed to the screen, not stuck to the end of the thread. Sticky needs
+       room to slide in, and the composer is the last thing in its container —
+       its sticky range is nothing, so it simply ran off the bottom of a long
+       thread. This is a client: the place you write is at the bottom edge of
+       the screen for as long as the conversation is the screen. */
     .chat-unit.is-playing .chat-foot {
-      position: sticky;
+      position: fixed;
+      left: var(--gutter, 1.25rem);
+      right: var(--gutter, 1.25rem);
       bottom: 0;
-      z-index: 5;
-      padding-block: 0.6rem calc(0.6rem + env(safe-area-inset-bottom, 0px));
+      z-index: 7;
+      padding: 0.6rem 0 calc(0.7rem + env(safe-area-inset-bottom, 0px));
       background: var(--bg);
       animation: foot-up 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    /* so the last of the thread can be read clear of it */
+    .chat-unit.is-playing .chat-scroll {
+      padding-bottom: calc(var(--foot-h, 4rem) + 4.5rem);
     }
 
     @keyframes foot-up {
@@ -5456,6 +5468,11 @@
 
     /* The wait. Three dots where the mark and the answer will be, so the
        answer arrives into a place that was already held for it. */
+    .chat-typing[hidden],
+    .chat-clip[hidden] {
+      display: none;
+    }
+
     .chat-typing {
       display: flex;
       gap: 0.3rem;
@@ -5499,14 +5516,16 @@
        thread, over the composer, where a client puts a question it needs
        answered. They sit on the composer's own height, measured. */
     .chat-unit.is-deciding .chat-acts {
-      position: sticky;
-      bottom: calc(var(--foot-h, 4rem) + 0.5rem);
-      z-index: 6;
-      margin-top: 0.8rem;
+      position: fixed;
+      left: var(--gutter, 1.25rem);
+      right: var(--gutter, 1.25rem);
+      bottom: calc(var(--foot-h, 4rem) + 0.4rem);
+      z-index: 8;
+      margin: 0;
       padding: 0.5rem;
-      border-radius: 12px;
+      border-radius: 14px;
       background: var(--surface);
-      box-shadow: 0 8px 26px rgb(26 26 24 / 0.16);
+      box-shadow: 0 10px 30px rgb(26 26 24 / 0.28);
       animation: acts-up 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
@@ -5537,12 +5556,6 @@
       transition:
         transform 620ms cubic-bezier(0.55, 0, 0.3, 1),
         opacity 620ms ease-in 180ms;
-    }
-
-    /* and the composer stays with it until then */
-    .chat-unit.is-deciding .chat-foot {
-      position: sticky;
-      bottom: 0;
     }
 
     /* the send key answers when the line goes */
