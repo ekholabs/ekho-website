@@ -83,7 +83,23 @@ const rows = c.chat.rows;
 
     <div class="chat-thread">
       <div class="chat-scroll">
-        <p class="chat-ask">{c.chat.ask}</p>
+        {/* What was actually sent: the recording, and a line asking for it to
+            be put away. The file is the point of the exchange — the terminal
+            card below transcribes this exact name — and a message that asks
+            EKHO to take a call without carrying the call was a step short of
+            the truth. Not translated: it is a filename. */}
+        <div class="chat-ask">
+          <p class="chat-clip">
+            <span class="chat-clip-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 11v2M8 7.5v9M12 5v14M16 8.5v7M20 11v2" />
+              </svg>
+            </span>
+            <span class="chat-clip-name">260925_anna.m4a</span>
+            <span class="chat-clip-len">3:12</span>
+          </p>
+          <p class="chat-ask-text">{c.chat.ask}</p>
+        </div>
 
         <div class="chat-answer">
           <span class="chat-mark" data-chat-mark aria-hidden="true">

@@ -1519,6 +1519,73 @@
     line-height: 1.5;
   }
 
+  .chat-ask-text {
+    margin: 0;
+  }
+
+  /* The recording, attached the way a client shows one: a strip above the
+     line that was sent with it, with the level meter, the name and how long
+     it runs. */
+  .chat-clip {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.45rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 9px;
+    background: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--muted);
+  }
+
+  .chat-clip-ico svg {
+    display: block;
+    width: 0.875rem;
+    height: 0.875rem;
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+
+  .chat-clip-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text);
+  }
+
+  .chat-clip-len {
+    margin-left: auto;
+  }
+
+  /* A mark set as letters, not as a path, has to take the plate's ink like
+     the paths do — in the page's own ink it was the plate's colour on the
+     plate, and only showed for the moment the plate went yellow. */
+  .wire-mark .chat-mark-text {
+    color: var(--bg);
+  }
+
+  .wire.is-lit .wire-mark .chat-mark-text {
+    animation: wire-letters 1500ms ease both;
+  }
+
+  @keyframes wire-letters {
+    0% {
+      color: var(--bg);
+    }
+
+    10%,
+    68% {
+      color: var(--signal-ink);
+    }
+
+    100% {
+      color: var(--bg);
+    }
+  }
+
   .chat-answer {
     display: flex;
     gap: 0.7rem;
