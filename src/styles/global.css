@@ -16,13 +16,6 @@
   --line-strong: #bfbab2;
   --muted-deep: #9b968e;
   --muted: #6b6762;
-  /* The second half of a sentence, where a paragraph opens in full ink
-     and carries on. Grey against black was a difference in lightness
-     only, which reads as a faded black rather than as a decision; this
-     is a tinted ink, warm enough to be a colour. Deliberately not in
-     the signal's family: the yellow on this page means one thing, what
-     is yours, and typographic emphasis is not it. */
-  --ink-soft: #5f5342;
   --text: #1a1a18;
   --signal: #f5c400;
   --signal-ink: #1a1a18;
@@ -77,7 +70,6 @@
     --line-strong: #666159;
     --muted-deep: #6e6a64;
     --muted: #a09b93;
-    --ink-soft: #a89a86;
     --text: #edebe6;
     --shadow: rgb(0 0 0 / 0.3);
     --lift: 0 0 48px var(--shadow);
@@ -886,13 +878,15 @@
   .chapter-lede--claim {
     margin-bottom: 1rem;
     color: var(--text);
+    font-weight: 500;
   }
 
   /* the paragraph a claim hands off to is the same split as a statement's
-     second half, so it takes the same ink; every other lede on the page keeps
-     the muted tone, because there is nothing above it to be read against */
+     second half: same ink, and the weight above it does the separating. Every
+     other lede on the page keeps the muted tone, because there is nothing
+     above it to be read against. */
   .chapter-lede--claim + .chapter-lede {
-    color: var(--ink-soft);
+    color: var(--text);
   }
 
   .steps,
@@ -3494,7 +3488,10 @@
     max-width: 46ch;
     font-size: 0.8125rem;
     line-height: 1.6;
-    color: var(--muted-deep);
+    /* was --muted-deep, which is 2.47:1 against the ground: too little for
+       running text at any size. It reads at full ink like every other
+       paragraph, and its first sentence carries the weight. */
+    color: var(--text);
   }
 }
 
@@ -4670,7 +4667,6 @@
       max-width: none;
       font-size: 1rem;
       line-height: 1.5;
-      color: var(--ink-soft);
     }
 
     .models-edge {
@@ -5460,28 +5456,29 @@
 }
 
 /* The lead sentence -----------------------------------------------------------
-   A statement is a block of three or four lines, and on a phone that is most of
-   a screen. Its first sentence carries the point, so it is set in full ink and
-   the rest a tone back: a reader who takes only the first line still takes the
-   point, and the block has a way in. On a wide screen the blocks are short
-   enough to be read whole, so both halves are the same tone there. */
-@layer components {
-  @media (max-width: 63.999rem) {
-    /* This used to sit at seven tenths of the ink, on the argument that the
-       rest of the sentence is not an aside. It landed between the two tones
-       the page already has, close enough to full ink that it read as a
-       printing fault rather than as a decision. It takes the muted tone: a
-       step you can see, and one the page already uses elsewhere. */
-    .statement {
-      color: var(--ink-soft);
-    }
+   A statement is a block of three or four lines. Its first sentence carries the
+   point, so it is set in medium: a reader who takes only the first line still
+   takes the point, and the block has a way in.
 
-    /* The lead carried medium for a while, to give the split a second
-       carrier besides the tone. It read as heavier rather than as clearer,
-       so the weight is out again and the tone does the work alone. */
-    .statement-lead {
-      color: var(--text);
-    }
+   One colour, two weights. Tone carried this split for a long time and never
+   carried it well — at seven tenths of the ink it looked like a printing
+   fault, at the muted grey like a faded black, and a warm tinted ink was a
+   second colour on a page that has exactly one. Weight says the same thing
+   without spending anything: it survives a bright room, a bad screen and
+   greyscale, and the paragraph stays one paragraph in one ink.
+
+   It was also a phone-only treatment for a while, which made the same sentence
+   look like two different decisions depending on the window. The split is the
+   page's now, not the phone's. */
+@layer components {
+  /* Full ink, both halves. A statement sits inside a block whose default is
+     the muted tone, which would have made "one colour" mean the grey one. */
+  .statement {
+    color: var(--text);
+  }
+
+  .statement-lead {
+    font-weight: 500;
   }
 }
 
