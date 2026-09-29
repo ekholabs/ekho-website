@@ -872,6 +872,14 @@
     font-size: 1.125rem;
   }
 
+  /* A chapter that opens on a conviction rather than a description: the claim
+     in full ink, the paragraph under it a tone back, and the two set as one
+     block rather than two ledes with a chapter's worth of air between them. */
+  .chapter-lede--claim {
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
   .steps,
   .layers {
     display: grid;

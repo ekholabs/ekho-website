@@ -35,7 +35,7 @@ const chapters = [
   { id: 'who', n: '05', label: c.nav.team },
 ];
 
-// The two founders. Names, faces and profiles on a public page are the one
+// The two of us. Names, faces and profiles on a public page are the one
 // thing never to guess. The URLs come from their own contact notes in
 // EKHO_brain, and the portraits are named after the people in them, confirmed
 // by Lorenz. The first pass guessed the order and had them the wrong way round.
@@ -316,7 +316,11 @@ const people = [
             {c.how.sovereignty}
           </p>
           <ModelRow lang={lang} />
-          <p class="models-note">{c.how.note}</p>
+          {/* Set the same way as every other running paragraph on the page:
+              the first sentence in full ink, the rest a tone back. It used to
+              be a flat grey block, which read as an aside sitting directly
+              under a column of paragraphs that were not one. */}
+          <Statement text={c.how.note} class="models-note" />
           {/* The sovereignty claim, in one line. Not an appeal to privacy: the
               providers are moving into the memory layer, and a vault that lives
               there is not portable however portable the model is. Grounded in
@@ -421,6 +425,7 @@ const people = [
   >
     <div class="measure">
       <h2>{c.who.title}</h2>
+      <p class="chapter-lede chapter-lede--claim">{c.who.claim}</p>
       <p class="chapter-lede">{c.who.lede}</p>
     </div>
     <ul class="people">

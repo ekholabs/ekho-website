@@ -115,8 +115,13 @@ export const de: Copy = {
     },
   },
   who: {
-    title: 'Wer das hier baut',
-    lede: 'EKHO Labs sind zwei Gründer. Wir bauen EKHO offen und benutzen es jeden Tag für EKHO selbst: der Vault hinter dieser Seite hält 710 Notizen, und jede Entscheidung auf dieser Seite ist eine davon.',
+    title: 'Warum wir das bauen',
+    /* The conviction first, then what backs it. The claim is set in
+       full ink and the grounding a tone back, the same order the
+       rest of the page uses: say the thing, then show the receipt. */
+    claim:
+      'Wenn KI eine industrielle Revolution des Geistes ist, dann sollten die Menschen, die denken, diejenigen sein, für die sie sich auszahlt. Heute wird das Gedächtnis auf der anderen Seite gebaut.',
+    lede: 'Zwei, die in Berlin daran bauen. Wir glauben, Europa schuldet sich eine Fassung davon, die den Menschen antwortet und nicht dem Modell. Der Vault hinter dieser Seite hält 710 Notizen, und jede Entscheidung auf dieser Seite ist eine davon.',
     lorenz: 'Semantik, Ontologie & Design',
     stephan: 'Harness, Daten & Engineering',
   },

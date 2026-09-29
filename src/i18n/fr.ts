@@ -111,8 +111,13 @@ export const fr: Copy = {
     },
   },
   who: {
-    title: 'Qui construit cela',
-    lede: "EKHO Labs, ce sont deux fondateurs. Nous construisons EKHO à découvert et nous l'utilisons chaque jour pour EKHO lui-même : le vault derrière cette page contient 710 notes, et chaque décision de cette page en est une.",
+    title: 'Pourquoi nous construisons cela',
+    /* The conviction first, then what backs it. The claim is set in
+       full ink and the grounding a tone back, the same order the
+       rest of the page uses: say the thing, then show the receipt. */
+    claim:
+      "Si l'IA est une révolution industrielle de l'esprit, alors ceux qui pensent devraient être ceux à qui elle profite. Aujourd'hui, la mémoire se construit de l'autre côté.",
+    lede: "Deux personnes qui le construisent, à Berlin. Nous pensons que l'Europe se doit une version qui réponde aux personnes plutôt qu'au modèle. Le vault derrière cette page contient 710 notes, et chaque décision de cette page en est une.",
     lorenz: 'Sémantique, ontologie et design',
     stephan: 'Harness, données et ingénierie',
   },
