@@ -31,7 +31,7 @@ export const en = {
   },
   why: {
     title: 'What becomes scarce when intelligence is abundant?',
-    a: 'Context. Everything you know: your decisions and why you made them, the people you work with, what you have read and what you concluded.',
+    a: 'Context is what connects the most disparate things you know, at the moment you ask. Your decisions and why you made them, the people you work with, what you have read and what you concluded.',
     b: 'The model is the same for everyone - your context is unique.',
     c: 'But knowledge is scattered by nature, across your head, chats, emails and notes. Pulling it together was a lost cause. Until now.',
   },

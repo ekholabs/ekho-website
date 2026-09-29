@@ -37,7 +37,7 @@ export const de: Copy = {
   },
   why: {
     title: 'Was wird knapp, wenn Intelligenz zur Ware wird?',
-    a: 'Kontext. Alles, was du weißt: was du entschieden hast und warum, mit wem du arbeitest, was du gelesen und was du daraus geschlossen hast.',
+    a: 'Kontext ist das, was die unterschiedlichsten Dinge, die du weißt, im Moment der Abfrage miteinander verbindet. Was du entschieden hast und warum, mit wem du arbeitest, was du gelesen und was du daraus geschlossen hast.',
     b: 'Das Modell ist für alle dasselbe, dein Kontext ist einzigartig.',
     c: 'Nur liegt Wissen von Natur aus verstreut: im Kopf, in Chats, in Mails, in Notizen, die nichts voneinander wissen. Es zusammenzuführen war aussichtslos. Bis jetzt.',
   },
