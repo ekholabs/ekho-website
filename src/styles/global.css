@@ -886,7 +886,7 @@
      other lede on the page keeps the muted tone, because there is nothing
      above it to be read against. */
   .chapter-lede--claim + .chapter-lede {
-    color: var(--text);
+    color: var(--muted);
   }
 
   .steps,
@@ -3489,9 +3489,9 @@
     font-size: 0.8125rem;
     line-height: 1.6;
     /* was --muted-deep, which is 2.47:1 against the ground: too little for
-       running text at any size. It reads at full ink like every other
-       paragraph, and its first sentence carries the weight. */
-    color: var(--text);
+       running text at any size. It reads like every other paragraph now, and
+       its first sentence carries the ink and the weight. */
+    color: var(--muted);
   }
 }
 
@@ -5471,13 +5471,21 @@
    look like two different decisions depending on the window. The split is the
    page's now, not the phone's. */
 @layer components {
-  /* Full ink, both halves. A statement sits inside a block whose default is
-     the muted tone, which would have made "one colour" mean the grey one. */
+  /* One system for the whole of the body copy: medium in full ink is the
+     point, regular in the muted grey is everything else. The grey is the one
+     the hero's own lede stands in, so a paragraph in chapter 03 and the first
+     paragraph on the page are the same colour.
+
+     Both carriers at once, and that is the version that works. Tone alone
+     failed three times — seven tenths of the ink looked like a printing
+     fault, the grey alone like a faded black, a warm tinted ink was a second
+     colour on a page that has one. Weight alone was legible but flat. */
   .statement {
-    color: var(--text);
+    color: var(--muted);
   }
 
   .statement-lead {
+    color: var(--text);
     font-weight: 500;
   }
 }
@@ -5505,11 +5513,6 @@
       font-size: 1.4375rem;
       line-height: 1.25;
       letter-spacing: -0.025em;
-      color: var(--text);
-    }
-
-    .statement--pull .statement-lead {
-      color: inherit;
     }
 
     /* 3 · every other chapter on its own ground, edge to edge */

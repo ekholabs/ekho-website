@@ -1,10 +1,10 @@
 ---
 // A paragraph that leads with its own first sentence. Borrowed from the way
-// gigs.com carries a long block on a phone: the opening sentence in full ink,
-// the rest a tone back, so a reader who takes only the first line still takes
-// the point. Nothing in the copy changes — the split happens here, at the
-// first sentence end followed by a space, and a paragraph that has only one
-// sentence simply stays whole.
+// gigs.com carries a long block on a phone: the opening sentence set in
+// medium, the rest regular, so a reader who takes only the first line still
+// takes the point. Nothing in the copy changes — the split happens here, at
+// the first sentence end followed by a space, and a paragraph that has only
+// one sentence simply stays whole, unmarked and in one weight.
 interface Props {
   text: string;
   class?: string;
@@ -24,7 +24,11 @@ const pull = !m && text.length < 80;
 ---
 
 <p class:list={['statement', { 'statement--pull': pull }, cls]}>
-  <span class="statement-lead">{lead}</span>
+  {/* No rest means the paragraph is one sentence, so there is no lead to mark:
+      the span would put the whole block in medium, which is how a paragraph
+      turns into a heading. It is only wrapped when there is something for the
+      weight to separate it from. */}
+  {rest ? <span class="statement-lead">{lead}</span> : lead}
   {rest && ' '}
   {rest}
 </p>
