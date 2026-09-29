@@ -878,6 +878,7 @@
   .chapter-lede--claim {
     margin-bottom: 1rem;
     color: var(--text);
+    font-weight: 500;
   }
 
   .steps,
@@ -5461,8 +5462,14 @@
       color: var(--muted);
     }
 
+    /* Colour alone was carrying the split, and colour alone is the weakest
+       way to carry anything: it changes with the ground, with the screen and
+       with the light in the room. The lead takes the weight as well. Medium,
+       not bold — the system font gives 400, 500 and 700, and 700 would make
+       every paragraph open on a heading. */
     .statement-lead {
       color: var(--text);
+      font-weight: 500;
     }
   }
 }
@@ -5495,6 +5502,7 @@
 
     .statement--pull .statement-lead {
       color: inherit;
+      font-weight: inherit;
     }
 
     /* 3 · every other chapter on its own ground, edge to edge */
