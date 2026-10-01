@@ -1,87 +1,7 @@
-/* Plain CSS, no framework. The tokens live in :root below and nowhere else;
-   the element styles in `base` are the site's reset. */
+/* Plain CSS, no framework. Every value comes from the design system's tokens
+   (./ds/tokens.css, ADR-0028); the element styles in `base` are the reset. */
 @layer base, components;
-
-:root {
-  /* EKHO Design System v0.5 - the Braun formal language (ADR-0027).
-     Light is the main mode, dark is the second. One warm yellow that carries on
-     both grounds, used for exactly one meaning: what is yours. */
-  color-scheme: light dark;
-  --bg: #edebe6;
-  --surface: #f5f4f1;
-  --surface-raised: #e2dfd9;
-  --line: #d8d4cd;
-  --line-strong: #bfbab2;
-  --muted-deep: #9b968e;
-  --muted: #6b6762;
-  --text: #1a1a18;
-  --signal: #f5c400;
-  --signal-ink: #1a1a18;
-  --shadow: rgb(26 26 24 / 0.045);
-  /* One size for running text, set by the opening and used by every chapter
-     after it, so the page reads at one pitch rather than a different one per
-     section. */
-  --body-size: clamp(1rem, 1.3vw, 1.125rem);
-  --body-leading: 1.6;
-  /* the dark panel: EKHO core in the architecture, and the ground behind a screen */
-  --core: #1a1a18;
-  --core-ink: #edebe6;
-  /* the highlighted layer: anthracite on a light ground, light on a dark one */
-  --block: #1a1a18;
-  --block-ink: #edebe6;
-  --core-line: #34332f;
-  --core-muted: #8d8880;
-
-  /* older names, kept so the existing component styles keep resolving */
-  --border: var(--line);
-  --stripe: var(--surface-raised);
-  --surface-hover: var(--surface-raised);
-
-  /* centred, wide, barely there. Only on dark and white panels, never in the
-     architecture diagram except on hover. Never clipped: whatever holds a
-     lifted box needs the padding to let the blur finish. */
-  --lift: 0 0 48px var(--shadow);
-  --lift-hover: 0 0 56px rgb(26 26 24 / 0.09);
-
-  /* links: the text stays ink, the yellow sits underneath */
-  --link: var(--text);
-  --link-line: var(--signal);
-  --link-thickness: 2px;
-  --link-offset: 3px;
-  --dots: var(--line-strong);
-  --radius: 4px;
-  --maxw: 44rem;
-  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1c1b19;
-    /* A step lighter than they were: at #232220 a panel was seven values off
-       the page ground, which on a dark screen is not a surface, it is a guess.
-       Everything raised rides on these two. */
-    --surface: #2a2926;
-    --surface-raised: #333230;
-    /* A hairline on a dark ground has to be lighter than the same line on a
-       light one to read as a line at all: at #302e2b it was four steps off the
-       background and the rules between the blocks disappeared. */
-    --line: #4c4943;
-    --line-strong: #666159;
-    --muted-deep: #6e6a64;
-    --muted: #a09b93;
-    --text: #edebe6;
-    --shadow: rgb(0 0 0 / 0.3);
-    --lift: 0 0 48px var(--shadow);
-    --lift-hover: 0 0 56px rgb(0 0 0 / 0.42);
-    --core: #121210;
-    --core-ink: #edebe6;
-    --block: #edebe6;
-    --block-ink: #1a1a18;
-    --core-line: #2b2a27;
-    --core-muted: #86817a;
-  }
-}
+@import './ds/tokens.css';
 
 @layer base {
   *,
@@ -107,7 +27,7 @@
   a {
     color: var(--link);
     text-decoration-color: var(--link-line);
-    text-decoration-thickness: var(--link-thickness);
+    text-decoration-thickness: var(--underline-thin);
     text-underline-offset: var(--link-offset);
     text-decoration-skip-ink: none;
   }
@@ -120,18 +40,18 @@
     background: var(--signal);
     color: var(--signal-ink);
     padding: 0 0.2em;
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
     white-space: nowrap;
   }
 
   h1,
   h2,
   h3 {
-    font-weight: 500;
+    font-weight: var(--weight-medium);
   }
 
   strong {
-    font-weight: 700;
+    font-weight: var(--weight-semibold);
   }
 
   code {
@@ -140,29 +60,29 @@
   }
 
   main {
-    padding-block: 4rem 5rem;
+    padding-block: var(--space-16) var(--space-24);
   }
 
   h1 {
-    font-size: clamp(2rem, 6vw, 2.75rem);
+    font-size: var(--text-h2);
     line-height: 1.15;
     letter-spacing: -0.03em;
-    margin: 0 0 1rem;
+    margin: 0 0 var(--space-4);
   }
 
   h2 {
-    font-size: 1.25rem;
+    font-size: var(--text-h3);
     letter-spacing: -0.01em;
-    margin: 3rem 0 0.75rem;
+    margin: var(--space-12) 0 var(--space-3);
   }
 
   pre {
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: var(--space-4);
     overflow-x: auto;
-    margin: 0 0 1rem;
+    margin: 0 0 var(--space-4);
   }
 }
 
@@ -171,12 +91,12 @@
     width: 100%;
     max-width: var(--maxw);
     margin-inline: auto;
-    padding-inline: 16px;
+    padding-inline: var(--space-4);
   }
 
   .site-header,
   .site-footer {
-    border-block: 1px solid var(--border);
+    border-block: 1px solid var(--line);
     border-inline: 0;
   }
 
@@ -184,9 +104,9 @@
   .site-header {
     position: sticky;
     top: 0;
-    z-index: 20;
+    z-index: var(--z-header);
     border-top: 0;
-    padding-block: 1rem;
+    padding-block: var(--space-4);
     background: color-mix(in srgb, var(--bg) 85%, transparent);
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
@@ -196,12 +116,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 
   .brand {
     flex: none;
-    font-weight: 500;
+    font-weight: var(--weight-medium);
     letter-spacing: 0.02em;
     color: var(--text);
     text-decoration: none;
@@ -209,8 +129,8 @@
 
   .nav {
     display: flex;
-    gap: 1.25rem;
-    font-size: 0.9375rem;
+    gap: var(--space-5);
+    font-size: var(--text-small);
   }
 
   .nav a {
@@ -223,15 +143,15 @@
   }
 
   .lede {
-    font-size: 1.125rem;
+    font-size: var(--text-body);
     color: var(--muted);
-    margin: 0 0 2rem;
+    margin: 0 0 var(--space-8);
     max-width: 34rem;
   }
 
   .note {
     color: var(--muted);
-    font-size: 0.9375rem;
+    font-size: var(--text-small);
   }
 
   /* wide layout: no content column, the page lays out its sections on the wide grid */
@@ -252,7 +172,7 @@
   .header-aside {
     display: none;
     color: var(--muted);
-    font-size: 0.875rem;
+    font-size: var(--text-small);
     text-decoration: none;
     white-space: nowrap;
   }
@@ -297,19 +217,19 @@
   .cta-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--space-3);
   }
 
   .pill {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1.25rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
     color: var(--text);
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
     text-decoration: none;
   }
 
@@ -329,8 +249,8 @@
   }
 
   .pill:focus-visible {
-    outline: 2px solid var(--signal);
-    outline-offset: 3px;
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
   }
 
   /* story: chapters on the left, the graphic that builds up beside them */
@@ -345,7 +265,7 @@
     z-index: 5;
     height: 38svh;
     background: var(--bg);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--line);
   }
 
   @media (min-width: 64rem) {
@@ -376,7 +296,7 @@
     justify-content: center;
     height: 100%;
     margin: 0;
-    padding-block: 1rem;
+    padding-block: var(--space-4);
   }
 
   .context-graphic svg {
@@ -426,12 +346,12 @@
     stroke: var(--muted-deep);
     stroke-width: 0.62;
     stroke-linecap: round;
-    transition: opacity 800ms ease;
+    transition: opacity var(--duration-slow) ease;
   }
 
   .cg-mesh {
     opacity: 1;
-    transition: opacity 800ms ease;
+    transition: opacity var(--duration-slow) ease;
   }
 
   /* the far side of the hull falls back, the near side carries */
@@ -469,7 +389,7 @@
     stroke: var(--signal);
     stroke-width: 1;
     opacity: 0;
-    transition: opacity 180ms ease;
+    transition: opacity var(--duration-fast) ease;
   }
 
   .cg-hit {
@@ -478,7 +398,7 @@
 
   .cg-tip {
     opacity: 0;
-    transition: opacity 180ms ease;
+    transition: opacity var(--duration-fast) ease;
   }
 
   /* The named points are the only text on the drawing, and over a field of
@@ -526,14 +446,14 @@
   }
 
   .cg-tip-type {
-    font-size: 9px;
+    font-size: 9px; /* drawn inside the graphic, at the graphic's scale */
     letter-spacing: 0.1em;
     text-transform: uppercase;
     fill: var(--muted);
   }
 
   .cg-tip-title {
-    font-size: 12px;
+    font-size: var(--text-label);
     fill: var(--text);
   }
 
@@ -549,9 +469,9 @@
   }
 
   .cg-caption {
-    margin-top: 0.75rem;
+    margin-top: var(--space-3);
     text-align: center;
-    font-size: 0.8125rem;
+    font-size: var(--text-caption);
     color: var(--muted);
   }
 
@@ -666,7 +586,7 @@
        was already there. Switching it on in one frame put a blink in the
        middle of the movement — but it has to be over before the window is,
        or the sparse net of the chapter before shows through the new one. */
-    transition: opacity 380ms ease;
+    transition: opacity var(--duration-base) ease;
   }
 
   .reveal-on [data-graphic].is-net .cg-dot:not(.is-named) {
@@ -725,12 +645,12 @@
      full size and openable. One model on the page, not two. */
   .arch {
     display: grid;
-    gap: 0.75rem;
-    margin-top: 2.5rem;
+    gap: var(--space-3);
+    margin-top: var(--space-10);
   }
 
   .arch-row {
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);
     transition:
       transform 200ms ease,
       box-shadow 200ms ease;
@@ -741,8 +661,8 @@
     flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: 0.25rem 1.5rem;
-    padding: 1.35rem 1.6rem;
+    gap: var(--space-1) var(--space-6);
+    padding: var(--space-5) var(--space-6);
   }
 
   summary.arch-head {
@@ -756,7 +676,7 @@
 
   summary.arch-head::after {
     content: '+';
-    font-size: 1.25rem;
+    font-size: var(--text-h3);
     line-height: 1;
     opacity: 0.6;
   }
@@ -766,38 +686,38 @@
   }
 
   summary.arch-head:focus-visible {
-    outline: 2px solid var(--signal);
-    outline-offset: -2px;
-    border-radius: var(--radius);
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+    border-radius: var(--radius-sm);
   }
 
   details.arch-row:hover,
   details.arch-row[open] {
-    box-shadow: var(--lift);
+    box-shadow: var(--shadow-lift);
     transform: translateY(-1px);
   }
 
   .arch-title {
-    font-size: clamp(1.25rem, 2vw, 1.6rem);
-    font-weight: 500;
+    font-size: var(--text-h3);
+    font-weight: var(--weight-medium);
     letter-spacing: -0.015em;
   }
 
   .arch-code {
-    font-weight: 400;
+    font-weight: var(--weight-regular);
     opacity: 0.55;
   }
 
   .arch-note {
     margin-left: auto;
-    font-size: 0.9375rem;
+    font-size: var(--text-small);
   }
 
   .arch-desc {
     max-width: 62ch;
     margin: 0;
-    padding: 0 1.6rem 1.5rem;
-    font-size: 1rem;
+    padding: 0 var(--space-6) var(--space-6);
+    font-size: var(--text-small);
     line-height: 1.55;
   }
 
@@ -842,18 +762,18 @@
 
   /* chapter content: a short lede, then numbered steps or stacked layers */
   .chapter-lede {
-    margin: 0 0 2rem;
+    margin: 0 0 var(--space-8);
     color: var(--muted);
-    font-size: 1.125rem;
+    font-size: var(--text-body);
   }
 
   /* A chapter that opens on a conviction rather than a description: the claim
      in full ink, the paragraph under it a tone back, and the two set as one
      block rather than two ledes with a chapter's worth of air between them. */
   .chapter-lede--claim {
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-4);
     color: var(--text);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
   }
 
   /* the paragraph a claim hands off to is the same split as a statement's
@@ -879,18 +799,18 @@
 
   .chapter-nav ol {
     display: flex;
-    gap: 1.25rem;
+    gap: var(--space-5);
     width: max-content;
     margin: 0 0 0 auto;
     padding: 0;
     list-style: none;
-    font-size: 0.875rem;
+    font-size: var(--text-small);
   }
 
   .chapter-nav a {
     display: inline-flex;
-    gap: 0.4rem;
-    padding-bottom: 3px;
+    gap: var(--space-2);
+    padding-bottom: var(--space-1);
     border-bottom: 1.5px solid transparent;
     color: var(--muted);
     text-decoration: none;
@@ -917,12 +837,12 @@
     flex-direction: column;
     justify-content: center;
     min-height: 100svh;
-    padding-block: 6rem 4rem;
+    padding-block: var(--space-24) var(--space-16);
   }
 
   .chapter-label {
-    margin: 0 0 0.5rem;
-    font-size: 0.75rem;
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-label);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
@@ -930,27 +850,27 @@
 
   .chapter-label span {
     color: var(--signal);
-    margin-right: 0.35rem;
+    margin-right: var(--space-1);
   }
 
   .chapter h2 {
     margin-top: 0;
-    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-size: var(--text-h2);
     letter-spacing: -0.02em;
     line-height: 1.2;
   }
 
   .statement {
-    font-weight: 600;
-    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-body);
     line-height: 1.45;
     letter-spacing: -0.01em;
-    margin: 0 0 1.5rem;
+    margin: 0 0 var(--space-6);
   }
 
   .footer-nav {
     display: flex;
-    gap: 1.25rem;
+    gap: var(--space-5);
   }
 
   .footer-nav a {
@@ -964,15 +884,15 @@
 
   .site-footer {
     border-bottom: 0;
-    padding-block: 1.5rem;
+    padding-block: var(--space-6);
     color: var(--muted);
-    font-size: 0.875rem;
+    font-size: var(--text-small);
   }
 
   .site-footer .wrap {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
+    gap: var(--space-2) var(--space-5);
     justify-content: space-between;
   }
 }
@@ -984,13 +904,11 @@
 
 @layer components {
   :root {
-    /* a depicted window is a depiction of somebody else's chrome, not an EKHO
-       surface, so it keeps the radius those windows actually have. Every EKHO
-       surface on the page stays on --radius (4px). */
+    /* the inside of a depicted window: somebody else's chrome, so its own
+       panel colours. Its corners follow the system (--radius-lg). */
     --panel: #fff;
     --panel-line: #ddd8cf;
     --panel-sub: #f4f2ec;
-    --win-radius: 10px;
     /* the windows that float over the graph are glass: a lit rim, a top
        highlight and a halo that lifts them off whatever is behind */
     --glass: 97%;
@@ -1016,7 +934,7 @@
   .cta-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--space-3);
     margin: 0;
   }
 
@@ -1049,8 +967,8 @@
 
   .story-text .chapter {
     justify-content: space-between;
-    gap: 2.5rem;
-    padding-block: 5rem 3rem;
+    gap: var(--space-10);
+    padding-block: var(--space-24) var(--space-12);
   }
 
   .chapter-body {
@@ -1058,18 +976,18 @@
   }
 
   .chapter h2 {
-    margin-bottom: 1.1rem;
-    font-weight: 600;
-    font-size: clamp(1.625rem, 3.4vw, 2.375rem);
+    margin-bottom: var(--space-4);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-h2);
     letter-spacing: -0.03em;
     line-height: 1.08;
     max-width: 20ch;
   }
 
   .statement {
-    font-weight: 400;
-    font-size: var(--body-size);
-    line-height: var(--body-leading);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
     letter-spacing: 0;
     color: var(--muted);
     max-width: 52ch;
@@ -1082,13 +1000,13 @@
   .chapter-lede {
     max-width: 58ch;
     color: var(--muted);
-    font-size: var(--body-size);
-    line-height: var(--body-leading);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
   }
 
   .fig-note {
-    margin-top: 1.5rem;
-    font-size: 0.8125rem;
+    margin-top: var(--space-6);
+    font-size: var(--text-caption);
     line-height: 1.6;
     color: var(--muted-deep);
   }
@@ -1100,29 +1018,29 @@
     width: 100%;
     background: var(--panel);
     border: 1px solid var(--panel-line);
-    border-radius: var(--win-radius);
-    box-shadow: 0 10px 26px -14px rgb(26 26 24 / 0.1);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
     overflow: hidden;
   }
 
   .win-bar {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 0.75rem;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
     background: var(--panel-sub);
     border-bottom: 1px solid var(--panel-line);
   }
 
   .win-lights {
     display: inline-flex;
-    gap: 0.4rem;
+    gap: var(--space-2);
   }
 
   .win-lights i {
     width: 11px;
     height: 11px;
-    border-radius: 999px;
+    border-radius: var(--radius-full);
     background: #ff5f57;
   }
 
@@ -1137,10 +1055,10 @@
   .win-title {
     flex: 1;
     text-align: center;
-    font-size: 0.75rem;
-    font-weight: 500;
+    font-size: var(--text-label);
+    font-weight: var(--weight-medium);
     color: var(--muted);
-    padding-right: 2.6rem;
+    padding-right: var(--space-10);
   }
 
   .win-body {
@@ -1165,42 +1083,42 @@
     flex: none;
     display: flex;
     flex-direction: column;
-    padding: 0.7rem 0.6rem;
+    padding: var(--space-3) var(--space-2);
     background: var(--panel-sub);
     border-right: 1px solid var(--panel-line);
-    font-size: 0.75rem;
+    font-size: var(--text-label);
   }
 
   .chat-side ul {
     list-style: none;
-    margin: 0 0 0.5rem;
+    margin: 0 0 var(--space-2);
     padding: 0;
   }
 
   .chat-new {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin: 0 0 0.9rem;
-    padding: 0.4rem 0.5rem;
-    font-weight: 500;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-4);
+    padding: var(--space-2) var(--space-2);
+    font-weight: var(--weight-medium);
     color: var(--text);
   }
 
   .chat-plus {
-    font-size: 0.9rem;
+    font-size: var(--text-small);
     color: var(--muted);
   }
 
   .chat-day {
-    margin: 0 0 0.25rem 0.5rem;
-    font-size: 0.6875rem;
+    margin: 0 0 var(--space-1) var(--space-2);
+    font-size: var(--text-micro);
     color: var(--muted-deep);
   }
 
   .chat-side li {
-    padding: 0.35rem 0.5rem;
-    border-radius: var(--radius);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
     color: var(--muted);
     white-space: nowrap;
     overflow: hidden;
@@ -1216,19 +1134,19 @@
     margin: auto 0 0;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.45rem 0.5rem;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-2);
     background: var(--panel);
     border: 1px solid var(--panel-line);
-    border-radius: var(--radius);
-    font-weight: 500;
+    border-radius: var(--radius-sm);
+    font-weight: var(--weight-medium);
     color: var(--text);
   }
 
   .chat-vault small {
     display: block;
-    font-weight: 400;
-    font-size: 0.625rem;
+    font-weight: var(--weight-regular);
+    font-size: var(--text-micro);
     color: var(--muted-deep);
   }
 
@@ -1260,16 +1178,16 @@
     flex: 1;
     min-height: 0;
     overflow: hidden;
-    padding: 1rem 1.15rem 0;
+    padding: var(--space-4) var(--space-5) 0;
   }
 
   .chat-ask {
     max-width: 78%;
-    margin: 0 0 1.1rem auto;
-    padding: 0.55rem 0.9rem;
+    margin: 0 0 var(--space-4) auto;
+    padding: var(--space-2) var(--space-4);
     background: var(--surface-raised);
-    border-radius: 14px;
-    font-size: 0.8125rem;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-caption);
     line-height: 1.5;
   }
 
@@ -1285,7 +1203,7 @@
     font-size: 0.95em;
     color: var(--signal-ink);
     background: color-mix(in srgb, var(--signal) 42%, transparent);
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     padding: 0.05em 0.3em;
   }
 
@@ -1295,13 +1213,13 @@
   .chat-clip {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
-    margin: 0 0 0.45rem;
-    padding: 0.35rem 0.5rem;
-    border-radius: 9px;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-md);
     background: var(--bg);
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: var(--text-micro);
     color: var(--muted);
   }
 
@@ -1354,7 +1272,7 @@
 
   .chat-answer {
     display: flex;
-    gap: 0.7rem;
+    gap: var(--space-3);
   }
 
   /* The mark of whichever model is answering. It sits on the window's own
@@ -1367,7 +1285,7 @@
     display: grid;
     place-items: center;
     border: 1px solid var(--panel-line);
-    border-radius: 7px;
+    border-radius: var(--radius-md);
     color: var(--muted);
   }
 
@@ -1378,35 +1296,35 @@
   }
 
   .chat-mark-text {
-    font-size: 9px;
-    font-weight: 600;
+    font-size: var(--text-micro);
+    font-weight: var(--weight-semibold);
     letter-spacing: -0.02em;
   }
 
   .chat-said {
-    margin: 0.2rem 0 0.7rem;
-    font-size: 0.8125rem;
+    margin: var(--space-1) 0 var(--space-3);
+    font-size: var(--text-caption);
     line-height: 1.55;
   }
 
   .tool {
-    margin-bottom: 0.6rem;
-    padding: 0.55rem 0.7rem 0.65rem;
+    margin-bottom: var(--space-2);
+    padding: var(--space-2) var(--space-3) var(--space-3);
     background: var(--panel);
     border: 1px solid var(--panel-line);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
   }
 
   .tool-head {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
-    margin: 0 0 0.45rem;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-2);
   }
 
   .tool-kind {
-    font-size: 0.625rem;
-    font-weight: 500;
+    font-size: var(--text-micro);
+    font-weight: var(--weight-medium);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted-deep);
@@ -1441,14 +1359,14 @@
 
   /* what a terminal draws in front of what a command returned */
   .tool-branch {
-    margin-right: 0.3rem;
+    margin-right: var(--space-1);
     color: var(--muted-deep);
   }
 
   .tool-mono {
-    margin: 0 0 0.15rem;
+    margin: 0 0 var(--space-0-5);
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: var(--text-micro);
     line-height: 1.5;
     white-space: nowrap;
     overflow: hidden;
@@ -1460,53 +1378,53 @@
   }
 
   .tool-said {
-    margin: 0 0 0.45rem;
-    font-size: 0.75rem;
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-label);
     color: var(--muted);
   }
 
   .tool-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.75rem;
+    font-size: var(--text-label);
   }
 
   .tool-table td {
-    padding: 0.16rem 0.5rem 0.16rem 0;
+    padding: var(--space-0-5) var(--space-2) var(--space-0-5) 0;
     vertical-align: top;
   }
 
   .tool-op {
     width: 2.4rem;
     font-family: var(--font-mono);
-    font-size: 0.625rem;
+    font-size: var(--text-micro);
     color: var(--muted-deep);
   }
 
   .tool-type {
     width: 4.6rem;
     font-family: var(--font-mono);
-    font-size: 0.625rem;
-    font-weight: 500;
+    font-size: var(--text-micro);
+    font-weight: var(--weight-medium);
   }
 
   .chat-acts {
     display: flex;
-    gap: 0.5rem;
-    margin: 0.2rem 0 0;
+    gap: var(--space-2);
+    margin: var(--space-1) 0 0;
   }
 
   /* These are buttons now, because one of them does something — and a button
      with no colour and no font of its own takes the browser's, which on a
      phone is the system blue in the system face. Both are said here. */
   .chat-btn {
-    padding: 0.4rem 0.85rem;
+    padding: var(--space-2) var(--space-3);
     border: 1px solid var(--line);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     background: none;
     color: var(--text);
     font-family: inherit;
-    font-size: 0.75rem;
+    font-size: var(--text-label);
     line-height: inherit;
   }
 
@@ -1521,27 +1439,27 @@
     background: var(--text);
     border-color: var(--text);
     color: var(--panel);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
   }
 
   .chat-foot {
-    padding: 0.5rem 1.25rem 0.9rem;
+    padding: var(--space-2) var(--space-5) var(--space-4);
   }
 
   .chat-composer {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    margin: 0 0 0.4rem;
-    padding: 0.45rem 0.45rem 0.45rem 0.8rem;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-2);
+    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
     background: var(--panel);
     border: 1px solid var(--panel-line);
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
   }
 
   .chat-ph {
     flex: 1;
-    font-size: 0.8125rem;
+    font-size: var(--text-caption);
     color: var(--muted-deep);
   }
 
@@ -1575,14 +1493,14 @@
   .wire-pill {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
+    gap: var(--space-2);
     flex: none;
-    padding: 0.3rem 0.75rem;
-    border-radius: 999px;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
     background: var(--text);
     color: var(--bg);
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: var(--text-label);
+    font-weight: var(--weight-semibold);
     letter-spacing: 0.02em;
   }
 
@@ -1610,9 +1528,9 @@
   .wire {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin: 0 0 0.85rem;
-    padding: 0 0.2rem;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-3);
+    padding: 0 var(--space-1);
   }
 
   /* Both ends of the wire are held the same way, so the line reads as
@@ -1762,8 +1680,8 @@
     bottom: 0.35rem;
     transform: translateX(-50%);
     white-space: nowrap;
-    font-size: 0.625rem;
-    font-weight: 500;
+    font-size: var(--text-micro);
+    font-weight: var(--weight-medium);
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--muted);
@@ -1776,7 +1694,7 @@
      where there is no second column to put anything in. */
   .chapter--split {
     display: grid;
-    gap: 1.5rem;
+    gap: var(--space-6);
     align-items: center;
   }
 
@@ -1796,17 +1714,17 @@
   }
 
   .viewer {
-    margin-top: 2.5rem;
+    margin-top: var(--space-10);
     padding: clamp(1.25rem, 3vw, 2.5rem);
     background: var(--core);
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);
   }
 
   .viewer .win {
     --panel: #fbfaf7;
     --panel-line: #e6e2da;
     --panel-sub: #f2f0ea;
-    box-shadow: 0 14px 36px -18px rgb(0 0 0 / 0.28);
+    box-shadow: var(--shadow-md);
   }
 
   .win--app .win-body {
@@ -1819,18 +1737,18 @@
     flex: none;
     display: flex;
     flex-direction: column;
-    padding: 0.8rem 0.6rem;
+    padding: var(--space-3) var(--space-2);
     background: var(--panel-sub);
     border-right: 1px solid var(--panel-line);
-    font-size: 0.75rem;
+    font-size: var(--text-label);
   }
 
   .app-brand {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
-    margin: 0 0 1rem 0.4rem;
-    font-weight: 600;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-4) var(--space-2);
+    font-weight: var(--weight-semibold);
     letter-spacing: 0.04em;
   }
 
@@ -1848,39 +1766,39 @@
   }
 
   .app-side li {
-    padding: 0.35rem 0.5rem;
-    border-radius: var(--radius);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
     color: #6b6762;
   }
 
   .app-side li.is-sel {
     background: #e2dfd9;
     color: #1a1a18;
-    font-weight: 500;
+    font-weight: var(--weight-medium);
   }
 
   .app-side-foot {
-    margin: auto 0 0 0.5rem;
-    font-size: 0.625rem;
+    margin: auto 0 0 var(--space-2);
+    font-size: var(--text-micro);
     color: #9b968e;
   }
 
   .app-main {
     flex: 1;
     min-width: 0;
-    padding: 1.1rem 1.25rem;
+    padding: var(--space-4) var(--space-5);
   }
 
   .app-h {
-    margin: 0 0 0.9rem;
-    font-size: 1.125rem;
-    font-weight: 600;
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
     letter-spacing: -0.02em;
   }
 
   .app-sub {
-    margin: 0 0 0.5rem;
-    font-size: 0.625rem;
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-micro);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: #9b968e;
@@ -1895,11 +1813,11 @@
   .app-list li {
     display: grid;
     grid-template-columns: 4.6rem minmax(0, 1fr) auto;
-    gap: 0.75rem;
+    gap: var(--space-3);
     align-items: baseline;
-    padding: 0.45rem 0;
+    padding: var(--space-2) 0;
     border-bottom: 1px solid var(--panel-line);
-    font-size: 0.75rem;
+    font-size: var(--text-label);
   }
 
   .app-list li:last-child {
@@ -1908,7 +1826,7 @@
 
   .app-type {
     font-family: var(--font-mono);
-    font-size: 0.625rem;
+    font-size: var(--text-micro);
     color: #6b6762;
   }
 
@@ -1920,10 +1838,10 @@
 
   /* the state of an element, set the way the roadmap page sets it */
   .app-pill {
-    padding: 0.1rem 0.4rem;
+    padding: var(--space-0-5) var(--space-2);
     border: 1px solid var(--panel-line);
-    border-radius: 3px;
-    font-size: 0.5625rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-micro);
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: #6b6762;
@@ -1936,7 +1854,7 @@
   }
 
   details.arch-row:hover {
-    box-shadow: var(--lift-hover);
+    box-shadow: var(--shadow-lift-hover);
   }
 
   /* ---------- 07 · who ---------- */
@@ -1944,15 +1862,15 @@
   .people {
     list-style: none;
     display: grid;
-    gap: 1.5rem;
-    margin: 2.5rem 0 0;
+    gap: var(--space-6);
+    margin: var(--space-10) 0 0;
     padding: 0;
   }
 
   @media (min-width: 48rem) {
     .people {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.5rem 3rem;
+      gap: var(--space-6) var(--space-12);
     }
   }
 
@@ -1962,8 +1880,8 @@
   .people li {
     display: flex;
     align-items: center;
-    gap: 1.1rem;
-    padding: 1.25rem 0 0.25rem;
+    gap: var(--space-4);
+    padding: var(--space-5) 0 var(--space-1);
     border-top: 1px solid var(--line);
   }
 
@@ -1974,11 +1892,11 @@
     flex: none;
     width: 8rem;
     height: 8rem;
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);
     object-fit: cover;
     filter: grayscale(1) contrast(1.02);
     opacity: 0.86;
-    transition: opacity 260ms ease;
+    transition: opacity var(--duration-fast) ease;
   }
 
   .people li:hover .people-face {
@@ -1988,14 +1906,14 @@
   .people-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: var(--space-2);
   }
 
   .people-in {
     width: 0.9375rem;
     height: 0.9375rem;
     fill: var(--muted);
-    transition: fill 200ms ease;
+    transition: fill var(--duration-fast) ease;
   }
 
   .people li:hover .people-in,
@@ -2005,14 +1923,14 @@
 
   .people b {
     display: block;
-    margin-bottom: 0.3rem;
-    font-size: 1.0625rem;
-    font-weight: 600;
+    margin-bottom: var(--space-1);
+    font-size: var(--text-title);
+    font-weight: var(--weight-semibold);
     letter-spacing: -0.02em;
   }
 
   .people span {
-    font-size: 0.875rem;
+    font-size: var(--text-small);
     line-height: 1.6;
     color: var(--muted);
   }
@@ -2020,26 +1938,26 @@
   /* ---------- 08 · waitlist ---------- */
 
   .waitlist {
-    margin-top: 2rem;
+    margin-top: var(--space-8);
   }
 
   .waitlist--mail {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 
   .waitlist-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--space-3);
   }
 
   .waitlist-label {
     display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.75rem;
+    margin-bottom: var(--space-2);
+    font-size: var(--text-label);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted-deep);
@@ -2047,18 +1965,18 @@
 
   .waitlist-input {
     flex: 1 1 16rem;
-    padding: 0.7rem 1rem;
+    padding: var(--space-3) var(--space-4);
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);
     color: var(--text);
     font: inherit;
-    font-size: 0.9375rem;
+    font-size: var(--text-small);
   }
 
   .waitlist-note {
-    margin: 0.75rem 0 0;
-    font-size: 0.8125rem;
+    margin: var(--space-3) 0 0;
+    font-size: var(--text-caption);
     color: var(--muted-deep);
   }
 
@@ -2101,33 +2019,33 @@
     }
 
     .chapter h2 {
-      font-size: clamp(2rem, 8.9vw, 2.5rem);
+      font-size: var(--text-h2);
       line-height: 1.06;
       letter-spacing: -0.042em;
     }
 
     .chapter-lede {
-      font-size: 1.125rem;
+      font-size: var(--text-body);
       line-height: 1.45;
     }
 
     .statement {
-      font-size: 1.125rem;
+      font-size: var(--text-body);
       line-height: 1.45;
     }
 
     .chapter-label {
-      font-size: 0.8125rem;
+      font-size: var(--text-caption);
     }
 
     .hero-title {
-      font-size: clamp(2.375rem, 10.6vw, 3.25rem);
+      font-size: var(--text-display);
       line-height: 1.02;
       letter-spacing: -0.045em;
     }
 
     .hero-lede {
-      font-size: 1.125rem;
+      font-size: var(--text-body);
       line-height: 1.45;
     }
   }
@@ -2143,7 +2061,7 @@
     }
 
     .viewer {
-      padding: 1rem;
+      padding: var(--space-4);
     }
   }
 
@@ -2165,14 +2083,14 @@
   .story-figure {
     display: flex;
     flex-direction: column;
-    gap: 1.75rem;
+    gap: var(--space-8);
   }
 
   @media (min-width: 64rem) {
     .story-figure {
-      padding-left: 4rem;
+      padding-left: var(--space-16);
       border-left: 1px solid transparent;
-      transition: border-color 400ms ease;
+      transition: border-color var(--duration-base) ease;
       /* the opaque band and its stacking belong to the narrow layout only: here
          the field has to pass behind the statement, not cover it */
       background: none;
@@ -2248,16 +2166,16 @@
   .fin-list {
     list-style: none;
     margin: 0;
-    padding: 0.5rem 0.4rem 0.6rem;
+    padding: var(--space-2) var(--space-2) var(--space-2);
   }
 
   .fin-list li {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
-    padding: 0.32rem 0.6rem;
-    border-radius: var(--radius);
-    font-size: 0.8125rem;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-caption);
     color: var(--text);
   }
 
@@ -2370,11 +2288,11 @@
 
     .story-text .chapter {
       min-height: 0;
-      padding-block: 2.5rem 3rem;
+      padding-block: var(--space-10) var(--space-12);
     }
 
     .story-text .chapter:first-child {
-      padding-top: 1.5rem;
+      padding-top: var(--space-6);
     }
 
     .win--finder {
@@ -2382,8 +2300,8 @@
     }
 
     .fin-list li {
-      font-size: 0.75rem;
-      padding: 0.26rem 0.5rem;
+      font-size: var(--text-label);
+      padding: var(--space-1) var(--space-2);
     }
 
     .overlay .chat-unit {
@@ -2404,13 +2322,13 @@
   .flow-graphic,
   .flow-strip {
     display: none;
-    margin-top: 2rem;
+    margin-top: var(--space-8);
   }
 
   /* the row sits closer to the text above it, so a taller card still ends
      above the bottom of the screen */
   .flow-strip {
-    margin-top: 1.1rem;
+    margin-top: var(--space-4);
   }
 
   /* The roadmap window is off the phone. On a wide screen it sits beside the
@@ -2442,7 +2360,7 @@
     .flow-key {
       display: block;
       position: relative;
-      margin-top: 1.25rem;
+      margin-top: var(--space-5);
       padding-top: 19rem;
     }
 
@@ -2452,7 +2370,7 @@
       left: 0;
       width: 100%;
       height: auto;
-      border-radius: 1.5rem;
+      border-radius: var(--radius-lg);
       /* it opens out as you come down the page, and the folder rises against
          it: two speeds, which is the whole of what makes it read as depth */
       transform: scale(var(--key-scale, 0.9));
@@ -2533,8 +2451,8 @@
        both sides: the 2rem above is the gap after the number, and without a
        matching gap below, the heading reads as a caption to the drawing. */
     .chapter-label + .flow-graphic {
-      margin-top: 1.2rem;
-      margin-bottom: 1.6rem;
+      margin-top: var(--space-5);
+      margin-bottom: var(--space-6);
     }
 
     /* The small net is a pattern rather than a diagram here, so it is given a
@@ -2619,9 +2537,9 @@
   }
 
   .burger:focus-visible {
-    outline: 2px solid var(--signal);
-    outline-offset: 2px;
-    border-radius: var(--radius);
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+    border-radius: var(--radius-sm);
   }
 
   /* the two extra rows only exist for the panel */
@@ -2640,7 +2558,7 @@
       z-index: 15;
       flex: none;
       overflow-y: auto;
-      padding: 5.25rem 1rem 2.5rem;
+      padding: 5.25rem var(--space-4) var(--space-10);
       background: var(--bg);
       opacity: 0;
       visibility: hidden;
@@ -2679,11 +2597,11 @@
     .chapter-nav a {
       display: flex;
       align-items: baseline;
-      gap: 0.9rem;
-      padding: 1.05rem 0;
+      gap: var(--space-4);
+      padding: var(--space-4) 0;
       border-bottom: 0;
-      font-size: 1.5rem;
-      font-weight: 500;
+      font-size: var(--text-h3);
+      font-weight: var(--weight-medium);
       letter-spacing: -0.025em;
       color: var(--text);
       white-space: normal;
@@ -2692,8 +2610,8 @@
     .chapter-nav .chapter-nav-n {
       flex: none;
       width: 1.5rem;
-      font-size: 0.8125rem;
-      font-weight: 400;
+      font-size: var(--text-caption);
+      font-weight: var(--weight-regular);
       color: var(--muted-deep);
     }
 
@@ -2739,8 +2657,8 @@
 @layer components {
   /* the architecture at full size: the rail's rows, bigger and openable */
   .arch {
-    gap: 0.4rem;
-    margin-top: 3rem;
+    gap: var(--space-2);
+    margin-top: var(--space-12);
   }
 
   .arch-row {
@@ -2748,15 +2666,15 @@
   }
 
   .arch-head {
-    padding: 1.4rem 1.6rem;
+    padding: var(--space-6) var(--space-6);
   }
 
   .arch-title {
     display: inline-flex;
     align-items: baseline;
-    gap: 0.75rem;
-    font-size: clamp(1.375rem, 2.2vw, 1.75rem);
-    font-weight: 600;
+    gap: var(--space-3);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
     letter-spacing: -0.025em;
   }
 
@@ -2770,8 +2688,8 @@
 
   .arch-code {
     font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    font-weight: 400;
+    font-size: var(--text-caption);
+    font-weight: var(--weight-regular);
     opacity: 1;
     color: var(--muted-deep);
   }
@@ -2782,7 +2700,7 @@
 
   summary.arch-head::after {
     color: var(--muted-deep);
-    font-weight: 400;
+    font-weight: var(--weight-regular);
   }
 
   .arch-desc {
@@ -2795,7 +2713,7 @@
   }
 
   .arch-desc strong {
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     color: var(--text);
   }
 
@@ -2803,29 +2721,29 @@
   .arch-parts {
     list-style: none;
     display: grid;
-    gap: 0.75rem;
-    margin: 1.25rem 0 0;
+    gap: var(--space-3);
+    margin: var(--space-5) 0 0;
     padding: 0;
   }
 
   .arch-parts li {
     display: grid;
     grid-template-columns: 6rem minmax(0, 1fr);
-    gap: 0.2rem 1rem;
-    padding-top: 0.75rem;
+    gap: var(--space-1) var(--space-4);
+    padding-top: var(--space-3);
     border-top: 1px solid var(--line);
-    font-size: 0.9375rem;
+    font-size: var(--text-small);
   }
 
   .arch-parts b {
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     color: var(--text);
   }
 
   .arch-parts code {
     grid-column: 1;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: var(--text-label);
     color: var(--muted-deep);
   }
 
@@ -2836,11 +2754,11 @@
 
   @media (max-width: 47.999rem) {
     .arch-head {
-      padding: 1.1rem 1.1rem;
+      padding: var(--space-4) var(--space-4);
     }
 
     .arch-desc {
-      padding: 0 1.1rem 1.25rem;
+      padding: 0 var(--space-4) var(--space-5);
     }
 
     .arch-parts li {
@@ -2863,37 +2781,37 @@
   }
 
   .hero-title {
-    margin: 0 0 1.5rem;
-    font-size: clamp(2.125rem, 4.6vw, 3.25rem);
+    margin: 0 0 var(--space-6);
+    font-size: var(--text-display);
     /* the same weight every heading after it has: the opening was the one
        statement on the page set lighter than the chapters it introduces */
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     line-height: 1.06;
     letter-spacing: -0.035em;
   }
 
   .hero-lede {
-    margin: 0 0 2.25rem;
+    margin: 0 0 var(--space-10);
     max-width: 44ch;
-    font-size: var(--body-size);
-    line-height: var(--body-leading);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
     color: var(--muted);
   }
 
   .cta-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--space-3);
     margin: 0;
   }
 
   @media (max-width: 63.999rem) {
     .chapter--hero {
-      padding-block: 2rem 3rem;
+      padding-block: var(--space-8) var(--space-12);
     }
 
     .hero-title {
-      font-size: clamp(2.375rem, 10.6vw, 3.25rem);
+      font-size: var(--text-display);
     }
   }
 }
@@ -2905,7 +2823,7 @@
      hover and focus. */
   .reveal-on [data-graphic].is-1:not(.is-2) .cg-tip {
     opacity: 1;
-    transition: opacity 550ms ease;
+    transition: opacity var(--duration-slow) ease;
     transition-delay: calc(var(--n) * 260ms + 500ms);
   }
 
@@ -2974,10 +2892,10 @@
      movement. They all stand now, at the size the opening sets for running
      text: one pitch for the whole page rather than a louder one per chapter. */
   .statement {
-    font-size: var(--body-size);
-    line-height: var(--body-leading);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
     max-width: 44ch;
-    margin: 0 0 1rem;
+    margin: 0 0 var(--space-4);
   }
 
   .statement:last-child {
@@ -3032,7 +2950,7 @@
   }
 
   .chapter--wide h2 {
-    font-size: clamp(1.5rem, 3vw, 2.125rem);
+    font-size: var(--text-h2);
   }
 
   .chapter--wide .chapter-lede {
@@ -3049,11 +2967,11 @@
   }
 
   .arch-title {
-    font-size: clamp(1.0625rem, 1.7vw, 1.625rem);
+    font-size: var(--text-h3);
   }
 
   .arch-note {
-    font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
+    font-size: var(--text-small);
   }
 }
 
@@ -3083,7 +3001,7 @@
        set deliberately. The height that gives back is what leaves the step
        button room under the chapter. */
     margin-top: calc(1.75rem - 2.5rem);
-    padding-top: 1.6rem;
+    padding-top: var(--space-6);
     border-top: 1px solid var(--line);
   }
 
@@ -3094,10 +3012,10 @@
   .models-label {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin: 0 0 0.7rem;
-    font-size: 0.75rem;
-    font-weight: 600;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-label);
+    font-weight: var(--weight-semibold);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text);
@@ -3114,7 +3032,7 @@
   .models-note {
     margin: 0;
     max-width: 46ch;
-    font-size: 0.8125rem;
+    font-size: var(--text-caption);
     line-height: 1.6;
     /* was --muted-deep, which is 2.47:1 against the ground: too little for
        running text at any size. It reads like every other paragraph now, and
@@ -3149,7 +3067,7 @@
     stroke: var(--signal);
     stroke-width: 1;
     opacity: 0;
-    transition: opacity 140ms ease;
+    transition: opacity var(--duration-fast) ease;
   }
 
   [data-graphic].is-2 .cg-hot {
@@ -3196,7 +3114,7 @@
   .cg-chord {
     stroke-dasharray: 1;
     stroke-dashoffset: 0;
-    transition: opacity 500ms ease;
+    transition: opacity var(--duration-slow) ease;
   }
 
   /* The yellow arrives in waves rather than being pulled across a dash. Same
@@ -3205,7 +3123,7 @@
      What changed is the property: a dash offset is repainted on every frame of
      the run, an opacity is not. */
   .cg-own {
-    transition: opacity 260ms ease;
+    transition: opacity var(--duration-fast) ease;
   }
 
   .reveal-on [data-graphic].is-3 .cg-own {
@@ -3229,7 +3147,7 @@
     .cg-far,
     .cg-near,
     .cg-chord {
-      transition: opacity 500ms ease;
+      transition: opacity var(--duration-slow) ease;
       stroke-dashoffset: 0;
     }
 
@@ -3326,7 +3244,7 @@
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
     opacity: 0.001;
-    transition: opacity 300ms ease;
+    transition: opacity var(--duration-base) ease;
   }
 
   .reveal-on [data-graphic].is-2:not(.is-net) .cg-wave {
@@ -3344,7 +3262,7 @@
   @media (prefers-reduced-motion: reduce) {
     .reveal-on [data-graphic].is-2:not(.is-net) .cg-wave {
       stroke-dashoffset: 0;
-      transition: opacity 400ms ease;
+      transition: opacity var(--duration-base) ease;
     }
   }
 }
@@ -3371,7 +3289,7 @@
        over most of a second it was the other fault: the loose net of two
        chapters back stood in the finished one while the reader was already
        looking at it. */
-    transition: opacity 300ms ease;
+    transition: opacity var(--duration-base) ease;
   }
 
   .reveal-on [data-graphic].is-2:not(.is-net) .cg-first {
@@ -3394,7 +3312,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .reveal-on [data-graphic].is-2:not(.is-net) .cg-first {
-      transition: opacity 400ms ease;
+      transition: opacity var(--duration-base) ease;
       stroke-dashoffset: 0;
     }
   }
@@ -3446,8 +3364,8 @@
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 0 0 1rem;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-4);
     padding: 0;
   }
 
@@ -3466,7 +3384,7 @@
     font: inherit;
     cursor: pointer;
     border: 1px solid var(--line);
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);
     background: var(--surface);
     color: var(--muted);
     transition:
@@ -3487,8 +3405,8 @@
   }
 
   .plate:focus-visible {
-    outline: 2px solid var(--signal);
-    outline-offset: 2px;
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
   }
 
   .plate:hover {
@@ -3503,8 +3421,8 @@
   }
 
   .plate-text {
-    font-size: 0.8125rem;
-    font-weight: 600;
+    font-size: var(--text-caption);
+    font-weight: var(--weight-semibold);
     letter-spacing: -0.02em;
   }
 }
@@ -3512,11 +3430,11 @@
 @layer components {
   /* the one line in this chapter that is an argument rather than a description */
   .models-edge {
-    margin: 0.75rem 0 0;
+    margin: var(--space-3) 0 0;
     max-width: 44ch;
-    font-size: 0.9375rem;
+    font-size: var(--text-small);
     line-height: 1.55;
-    font-weight: 500;
+    font-weight: var(--weight-medium);
     color: var(--text);
   }
 }
@@ -3547,7 +3465,7 @@
     cursor: pointer;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 820ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: transform var(--duration-slow) var(--ease-out);
   }
 
   .overlay[data-for='finder'] {
@@ -3577,14 +3495,14 @@
   .flip-shot {
     width: 100%;
     height: auto;
-    border-radius: var(--win-radius);
-    box-shadow: 0 10px 26px -14px rgb(26 26 24 / 0.1);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
   }
 
   .flip:focus-visible {
-    outline: 2px solid var(--signal);
-    outline-offset: 6px;
-    border-radius: 1.25rem;
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+    border-radius: var(--radius-lg);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -3643,7 +3561,7 @@
     color: inherit;
     text-decoration: none;
     box-shadow: inset 0 -1.5px 0 transparent;
-    transition: box-shadow 180ms ease;
+    transition: box-shadow var(--duration-fast) ease;
   }
 
   .people-link span {
@@ -3664,14 +3582,14 @@
     /* a terminal is black in either mode, because a terminal is black */
     --term: #0a0a09;
     max-width: 27rem;
-    margin: 2.25rem 0 0;
-    padding: 0.85rem 1rem 0.9rem;
+    margin: var(--space-10) 0 0;
+    padding: var(--space-3) var(--space-4) var(--space-4);
     /* No edge at all: the panel is held off the page by a wide, soft shadow
        instead, which is what a terminal window on a desk actually looks like.
        The note underneath is what marks this as unshipped; N4 asks for the
        marking, not for a border. */
     border: 0;
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);
     background: var(--term);
     box-shadow:
       0 20px 60px -22px rgb(0 0 0 / 0.38),
@@ -3679,9 +3597,9 @@
   }
 
   .command-label {
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--space-2);
     color: #7c776f;
-    font-size: 0.625rem;
+    font-size: var(--text-micro);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--muted-deep);
@@ -3692,20 +3610,20 @@
     font-family: var(--font-mono);
     /* sized so the line fits the column in one piece: a command broken across
        two lines looks like two commands */
-    font-size: 0.75rem;
+    font-size: var(--text-label);
     line-height: 1.55;
     color: #e9e7e2;
     overflow-wrap: anywhere;
   }
 
   .command-prompt {
-    margin-right: 0.35rem;
+    margin-right: var(--space-1);
     color: #7c776f;
   }
 
   .command-note {
-    margin: 0.55rem 0 0;
-    font-size: 0.75rem;
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-label);
     color: var(--muted-deep);
   }
 
@@ -3715,7 +3633,7 @@
      moves or reflows when the pointer arrives. */
   .command {
     position: relative;
-    transition: box-shadow 0.25s ease;
+    transition: box-shadow var(--duration-fast) ease;
   }
 
   .command:hover,
@@ -3729,17 +3647,17 @@
     align-items: center;
     background: none;
     border: 1px solid #2e2c28;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     color: #9b958b;
     cursor: pointer;
     display: flex;
     font: inherit;
-    font-size: 0.6875rem;
-    font-weight: 500;
-    gap: 0.35rem;
+    font-size: var(--text-micro);
+    font-weight: var(--weight-medium);
+    gap: var(--space-1);
     letter-spacing: 0.02em;
     opacity: 0;
-    padding: 0.25rem 0.45rem;
+    padding: var(--space-1) var(--space-2);
     position: absolute;
     right: 0.6rem;
     top: 0.6rem;
@@ -3760,8 +3678,8 @@
   }
 
   .command-copy:focus-visible {
-    outline: 2px solid var(--signal);
-    outline-offset: 2px;
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
   }
 
   .command-copy.is-done {
@@ -3810,7 +3728,7 @@
        every pixel and would be pushed out of the top instead. */
     .story-text .chapter,
     .chapter--wide {
-      padding-block: 4rem 0;
+      padding-block: var(--space-16) 0;
       justify-content: center;
     }
 
@@ -3837,13 +3755,13 @@
 
   .lang-select {
     appearance: none;
-    padding: 0.2rem 1.25rem 0.2rem 0.4rem;
+    padding: var(--space-1) var(--space-5) var(--space-1) var(--space-2);
     border: 0;
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);
     background: none;
     color: var(--muted);
     font: inherit;
-    font-size: 0.8125rem;
+    font-size: var(--text-caption);
     letter-spacing: 0.04em;
     cursor: pointer;
   }
@@ -3853,8 +3771,8 @@
   }
 
   .lang-select:focus-visible {
-    outline: 2px solid var(--signal);
-    outline-offset: 2px;
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
   }
 
   .lang-select option {
@@ -3865,7 +3783,7 @@
   .lang-caret {
     position: absolute;
     right: 0.35rem;
-    font-size: 0.7rem;
+    font-size: var(--text-micro);
     color: var(--muted-deep);
     pointer-events: none;
   }
@@ -3885,7 +3803,7 @@
     .header-aside {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: var(--space-4);
       grid-column: 3;
       grid-row: 1;
       justify-self: end;
@@ -3893,7 +3811,7 @@
 
     .header-github {
       color: var(--muted);
-      font-size: 0.875rem;
+      font-size: var(--text-small);
       text-decoration: none;
       white-space: nowrap;
     }
@@ -3919,7 +3837,7 @@
   .pill-mark {
     fill: none;
     height: 0.875rem;
-    margin-left: 0.15rem;
+    margin-left: var(--space-0-5);
     stroke: var(--signal);
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -3947,9 +3865,9 @@
     cursor: pointer;
     display: flex;
     font: inherit;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    gap: 0.4375rem;
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
+    gap: var(--space-2);
     left: 0;
     letter-spacing: 0.02em;
     padding: 0.625rem 1rem 0.625rem var(--step-left, 1rem);
@@ -3992,7 +3910,7 @@
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 1.5;
-    transition: transform 0.2s ease;
+    transition: transform var(--duration-fast) ease;
     width: 0.875rem;
   }
 
@@ -4013,10 +3931,10 @@
   }
 
   .view-step:focus-visible {
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     color: var(--text);
-    outline: 2px solid var(--signal);
-    outline-offset: 2px;
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -4060,7 +3978,7 @@
     /* Room between the text and the rule. The column ends at the rule, so
        without this the last word of a full line sits against it. */
     .story-text .chapter {
-      padding-right: 3rem;
+      padding-right: var(--space-12);
     }
 
     /* The hero is exempt: its body is sticky and centred on a screen of its
@@ -4092,14 +4010,14 @@
     position: fixed;
     right: 0;
     top: var(--step-top, 0);
-    transition: opacity 500ms ease;
+    transition: opacity var(--duration-slow) ease;
     z-index: -1;
   }
 
   .stage-title {
     color: var(--muted);
-    font-size: 0.6875rem;
-    font-weight: 500;
+    font-size: var(--text-micro);
+    font-weight: var(--weight-medium);
     /* Centred on the stage, not tucked into its left corner: the two counts
        took the corners, and the name of the thing they are counting belongs
        between them. Same reckoning as the picker confirm — the text column is
@@ -4109,12 +4027,12 @@
     letter-spacing: 0.14em;
     margin: 0;
     opacity: 0;
-    padding: 1.6rem 0 0;
+    padding: var(--space-6) 0 0;
     pointer-events: none;
     position: fixed;
     text-transform: uppercase;
     top: var(--step-top, 0);
-    transition: opacity 500ms ease;
+    transition: opacity var(--duration-slow) ease;
     white-space: nowrap;
     z-index: 3;
   }
@@ -4174,7 +4092,7 @@
        tighter. Without it the top row slips under the back bar when the last
        layer is open, and the whole point is that all five stay in view. */
     #architecture .arch-desc {
-      font-size: clamp(0.875rem, 1.05vw, 1rem);
+      font-size: var(--text-small);
       line-height: 1.48;
       /* On a tall window this is never reached and the text simply stands. On
          a short one the open layer scrolls rather than pushing a row out of
@@ -4186,7 +4104,7 @@
     }
 
     #architecture .arch-parts {
-      gap: 0.5rem;
+      gap: var(--space-2);
     }
 
     /* Five rows, so every pixel taken off a row is worth five. Together with
@@ -4242,14 +4160,14 @@
   @media (max-width: 63.999rem) {
     .plates {
       flex-wrap: nowrap;
-      gap: 0.6rem;
+      gap: var(--space-2);
       width: 100vw;
       margin-left: calc(50% - 50vw);
-      padding: 0.25rem var(--gutter, 1.25rem) 1.25rem;
+      padding: 0.25rem var(--gutter) 1.25rem;
       overflow-x: auto;
       overscroll-behavior-x: contain;
       scroll-snap-type: x proximity;
-      scroll-padding-left: var(--gutter, 1.25rem);
+      scroll-padding-left: var(--gutter);
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
@@ -4275,14 +4193,14 @@
     }
 
     .plate-text {
-      font-size: 1.25rem;
+      font-size: var(--text-h3);
     }
 
     /* The one claim in this chapter, so it is set as one: the label larger
        and in full ink, the sentence under it at reading size rather than as
        a footnote. */
     .models-label {
-      font-size: 0.9375rem;
+      font-size: var(--text-small);
       letter-spacing: 0.08em;
     }
 
@@ -4293,12 +4211,12 @@
 
     .models-note {
       max-width: none;
-      font-size: 1rem;
+      font-size: var(--text-body);
       line-height: 1.5;
     }
 
     .models-edge {
-      font-size: 1.125rem;
+      font-size: var(--text-body);
       line-height: 1.4;
     }
   }
@@ -4319,7 +4237,7 @@
 
     .flow-window .chat-scroll {
       overflow: visible;
-      padding-bottom: 0.9rem;
+      padding-bottom: var(--space-4);
     }
 
     .flow-window .tool-mono {
@@ -4394,16 +4312,16 @@
   .strip {
     list-style: none;
     display: flex;
-    gap: 0.75rem;
+    gap: var(--space-3);
     margin: 0;
-    padding: 0.5rem var(--gutter, 1.25rem) 1.25rem;
+    padding: 0.5rem var(--gutter) 1.25rem;
     /* out of the column and across the screen */
     width: 100vw;
     margin-left: calc(50% - 50vw);
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x proximity;
-    scroll-padding-left: var(--gutter, 1.25rem);
+    scroll-padding-left: var(--gutter);
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
@@ -4420,8 +4338,8 @@
      a screen, so it has to be short enough to be seen whole — what does not
      fit is clamped, not allowed to push the row taller. */
   .strip-caption {
-    margin: 0 0 0.9rem;
-    font-size: 0.875rem;
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-small);
     line-height: 1.5;
     color: var(--muted);
   }
@@ -4432,11 +4350,11 @@
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
-    padding: 0.9rem 1.1rem 0.95rem;
-    border-radius: 1.25rem;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-4) var(--space-4);
+    border-radius: var(--radius-lg);
     background: var(--surface);
-    box-shadow: 0 2px 10px rgb(26 26 24 / 0.045);
+    box-shadow: var(--shadow-sm);
   }
 
   /* the four that came out of somebody else's app sit on that app's own
@@ -4449,23 +4367,23 @@
   .strip-head {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-2);
     margin: 0;
-    font-size: 0.6875rem;
+    font-size: var(--text-micro);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--muted);
   }
 
   .strip-type {
-    font-weight: 500;
+    font-weight: var(--weight-medium);
   }
 
   /* when it is from, at the far end of the head, the way a widget dates itself */
   .strip-when {
     margin-left: auto;
     font-family: var(--font-mono);
-    font-size: 0.625rem;
+    font-size: var(--text-micro);
     letter-spacing: 0;
     text-transform: none;
     white-space: nowrap;
@@ -4511,8 +4429,8 @@
 
   .strip-title {
     margin: 0;
-    font-size: 1.0625rem;
-    font-weight: 500;
+    font-size: var(--text-title);
+    font-weight: var(--weight-medium);
     line-height: 1.3;
     letter-spacing: -0.015em;
     color: var(--text);
@@ -4526,10 +4444,10 @@
      the page has no other quotation marks on it and two glyphs at this size
      read as dirt. */
   .strip-quote {
-    margin: 0.15rem 0 0;
-    padding-left: 0.7rem;
+    margin: var(--space-0-5) 0 0;
+    padding-left: var(--space-3);
     border-left: 2px solid var(--sk-quiet);
-    font-size: 0.8125rem;
+    font-size: var(--text-caption);
     line-height: 1.45;
     color: var(--sk-ink);
   }
@@ -4545,8 +4463,8 @@
   .strip-nav {
     display: flex;
     justify-content: flex-end;
-    gap: 0.6rem;
-    margin: 1.1rem var(--gutter, 1.25rem) 0 0;
+    gap: var(--space-2);
+    margin: 1.1rem var(--gutter) 0 0;
   }
 
   .strip-key {
@@ -4585,8 +4503,8 @@
   }
 
   .strip-key:focus-visible {
-    outline: 2px solid var(--signal);
-    outline-offset: 2px;
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
   }
 
   /* The colours the four captured widgets are dressed in. They belong to the
@@ -4675,7 +4593,7 @@
 
     #how .flow-window {
       order: 2;
-      margin-top: 1.5rem;
+      margin-top: var(--space-6);
     }
 
     /* One object with two parts, so they are built as one: the black line
@@ -4698,9 +4616,9 @@
       /* The top of this box is under the folder, so its padding has to carry
          the overlap as well: 0.9rem of it is hidden, and what is left has to
          read the same as the air under the last line. */
-      padding: 2.05rem 1rem 1.15rem;
-      border-radius: var(--win-radius);
-      box-shadow: 0 10px 26px -14px rgb(26 26 24 / 0.1);
+      padding: var(--space-8) var(--space-4) var(--space-5);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
     }
 
     /* the button lines up with the label rather than with the top edge, which
@@ -4723,15 +4641,15 @@
     }
 
     .viewer .app-h {
-      font-size: 1.25rem;
+      font-size: var(--text-h3);
     }
 
     .viewer .app-list li {
       grid-template-columns: 3rem minmax(0, 1fr);
-      row-gap: 0.15rem;
-      padding-block: 0.7rem;
+      row-gap: var(--space-0-5);
+      padding-block: var(--space-3);
       border-bottom-color: var(--line);
-      font-size: 0.9375rem;
+      font-size: var(--text-small);
     }
 
     .viewer .app-pill {
@@ -4776,7 +4694,7 @@
     }
 
     .flow-window .chat-composer {
-      border-radius: 999px;
+      border-radius: var(--radius-full);
     }
 
     /* The terminal and the skill are what the chapter is about, so on a phone
@@ -4796,7 +4714,7 @@
     .flow-window .chat-mark {
       width: 34px;
       height: 34px;
-      border-radius: 9px;
+      border-radius: var(--radius-md);
     }
 
     .flow-window .chat-mark svg {
@@ -4805,41 +4723,41 @@
     }
 
     .flow-window .chat-mark-text {
-      font-size: 11px;
+      font-size: var(--text-micro);
     }
 
     .flow-window .tool {
-      padding: 0.9rem 1rem 1rem;
-      border-radius: 10px;
-      box-shadow: 0 1px 8px rgb(26 26 24 / 0.04);
+      padding: var(--space-4) var(--space-4) var(--space-4);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
     }
 
     /* The whole thread is set at the size a client sets it on a phone, not at
        the size it takes beside a column of text on a desktop: this is the one
        picture on the page that has to be read rather than recognised. */
     .flow-window .chat-ask {
-      padding: 0.7rem 1rem;
-      font-size: 1rem;
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--text-body);
       line-height: 1.4;
     }
 
     .flow-window .chat-said {
-      font-size: 1rem;
+      font-size: var(--text-body);
       line-height: 1.45;
     }
 
     .flow-window .tool-said {
-      font-size: 0.9375rem;
+      font-size: var(--text-small);
       line-height: 1.45;
     }
 
     .flow-window .tool-mono {
-      font-size: 0.75rem;
+      font-size: var(--text-label);
       line-height: 1.55;
     }
 
     .flow-window .tool-table {
-      font-size: 0.9375rem;
+      font-size: var(--text-small);
     }
 
     /* Three columns do not fit a phone: the note's title had a third of the
@@ -4849,8 +4767,8 @@
     .flow-window .tool-table tr {
       display: grid;
       grid-template-columns: auto 1fr;
-      column-gap: 0.5rem;
-      padding-block: 0.4rem;
+      column-gap: var(--space-2);
+      padding-block: var(--space-2);
     }
 
     .flow-window .tool-table td {
@@ -4859,31 +4777,31 @@
 
     .flow-window .tool-table td:last-child {
       grid-column: 1 / -1;
-      padding-top: 0.1rem;
+      padding-top: var(--space-0-5);
     }
 
     /* the two columns that say what kind of row it is stay small, so the row
        itself has the width to stay on one line */
     .flow-window .tool-op,
     .flow-window .tool-type {
-      font-size: 0.6875rem;
+      font-size: var(--text-micro);
     }
 
     .flow-window .chat-btn {
-      padding: 0.55rem 1.1rem;
-      font-size: 0.9375rem;
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-small);
     }
 
     .flow-window .chat-composer {
-      padding: 0.6rem 0.6rem 0.6rem 1rem;
+      padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
     }
 
     .flow-window .chat-ph {
-      font-size: 1rem;
+      font-size: var(--text-body);
     }
 
     .flow-window .wire-pill {
-      font-size: 0.9375rem;
+      font-size: var(--text-small);
     }
 
     /* the two ends of the wire carry the same weight, so the round grows
@@ -4902,7 +4820,7 @@
        monospace as the line it ran */
     .flow-window .tool-kind {
       font-family: var(--font-mono);
-      font-size: 0.6875rem;
+      font-size: var(--text-micro);
       letter-spacing: 0.02em;
       text-transform: none;
     }
@@ -4939,7 +4857,7 @@
       margin-left: calc(50% - 50vw);
       height: 30svh;
       max-height: 16rem;
-      margin-bottom: 2rem;
+      margin-bottom: var(--space-8);
       overflow: hidden;
       -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0 / 1) 55%, transparent 100%);
       mask-image: linear-gradient(to bottom, rgb(0 0 0 / 1) 55%, transparent 100%);
@@ -4991,7 +4909,7 @@
 
   .statement-lead {
     color: var(--text);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
   }
 }
 
@@ -5009,13 +4927,13 @@
        for a while, which made an eyebrow into a headline and took the
        chapter's own heading down a peg. */
     .chapter-label {
-      padding-top: 0.9rem;
+      padding-top: var(--space-4);
       border-top: 1px solid var(--line);
     }
 
     /* 2 · a claim stands taller than the paragraphs around it */
     .statement--pull {
-      font-size: 1.4375rem;
+      font-size: var(--text-h3);
       line-height: 1.25;
       letter-spacing: -0.025em;
     }
@@ -5027,7 +4945,7 @@
       background: var(--surface);
       width: 100vw;
       margin-left: calc(50% - 50vw);
-      padding-inline: var(--gutter, 1.25rem);
+      padding-inline: var(--gutter);
     }
 
     /* 4 · height follows content: a screen each was the wide layout's rhythm,
@@ -5035,7 +4953,7 @@
     .story-text .chapter,
     .chapter--wide {
       min-height: 0;
-      padding-block: 3.5rem;
+      padding-block: var(--space-16);
     }
 
     /* Come to rest where the chapter's rule meets the header's, not a screen
@@ -5052,7 +4970,7 @@
     .story-text .chapter--hero {
       min-height: calc(100svh - 3.5rem);
       justify-content: center;
-      padding-block: 1.5rem 3rem;
+      padding-block: var(--space-6) var(--space-12);
     }
   }
 }
@@ -5070,16 +4988,16 @@
     left: 50%;
     bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%);
-    z-index: 40;
+    z-index: var(--z-toast);
     margin: 0;
-    padding: 0.55rem 1rem;
-    border-radius: 999px;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
     /* the signal colour, like the vault chip in the window it is about */
     background: var(--signal);
     color: var(--signal-ink);
-    box-shadow: 0 6px 18px -8px rgb(26 26 24 / 0.18);
-    font-size: 0.8125rem;
-    font-weight: 500;
+    box-shadow: var(--shadow-md);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-medium);
     white-space: nowrap;
     pointer-events: none;
     animation: picked-in 220ms ease;
@@ -5135,7 +5053,7 @@
       top: var(--head, 4.5rem);
       z-index: 6;
       margin-bottom: 0;
-      padding-block: 0.7rem;
+      padding-block: var(--space-3);
       background: var(--bg);
       box-shadow: 0 1px 0 var(--line);
       transition:
@@ -5151,8 +5069,8 @@
        the screen for as long as the conversation is the screen. */
     .chat-unit.is-playing .chat-foot {
       position: fixed;
-      left: var(--gutter, 1.25rem);
-      right: var(--gutter, 1.25rem);
+      left: var(--gutter);
+      right: var(--gutter);
       bottom: 0;
       z-index: 7;
       padding: 0.6rem 0 calc(0.7rem + env(safe-area-inset-bottom, 0px));
@@ -5218,7 +5136,7 @@
     }
 
     .chat-clip--draft {
-      margin-bottom: 0.5rem;
+      margin-bottom: var(--space-2);
       animation: clip-in 340ms cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
@@ -5238,10 +5156,10 @@
 
     .chat-typing {
       display: flex;
-      gap: 0.3rem;
+      gap: var(--space-1);
       align-items: center;
-      margin: 0 0 0.6rem;
-      padding-left: 2.6rem;
+      margin: 0 0 var(--space-2);
+      padding-left: var(--space-10);
       height: 1.4rem;
     }
 
@@ -5280,15 +5198,15 @@
        answered. They sit on the composer's own height, measured. */
     .chat-unit.is-deciding .chat-acts {
       position: fixed;
-      left: var(--gutter, 1.25rem);
-      right: var(--gutter, 1.25rem);
+      left: var(--gutter);
+      right: var(--gutter);
       bottom: calc(var(--foot-h, 4rem) + 0.4rem);
       z-index: 8;
       margin: 0;
-      padding: 0.5rem;
-      border-radius: 14px;
+      padding: var(--space-2);
+      border-radius: var(--radius-lg);
       background: var(--surface);
-      box-shadow: 0 4px 16px -6px rgb(26 26 24 / 0.12);
+      box-shadow: var(--shadow-md);
       animation: acts-up 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
@@ -5301,10 +5219,10 @@
 
     .chat-unit.is-deciding .chat-btn {
       flex: 1 1 auto;
-      padding-block: 0.6rem;
+      padding-block: var(--space-2);
       font: inherit;
-      font-size: 0.875rem;
-      font-weight: 500;
+      font-size: var(--text-small);
+      font-weight: var(--weight-medium);
       cursor: pointer;
     }
 
@@ -5337,14 +5255,14 @@
     z-index: 2;
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-4);
     margin: 0;
-    padding: 0 0.25rem;
-    font-size: 0.75rem;
+    padding: 0 var(--space-1);
+    font-size: var(--text-label);
     color: var(--muted);
     pointer-events: none;
     opacity: 0;
-    transition: opacity 500ms ease;
+    transition: opacity var(--duration-slow) ease;
   }
 
   [data-graphic].is-3 .cg-stats,
@@ -5370,9 +5288,9 @@
   }
 
   .cg-stat b {
-    transition: color 420ms ease;
-    font-size: 1.25rem;
-    font-weight: 600;
+    transition: color var(--duration-base) ease;
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
     letter-spacing: -0.02em;
     color: var(--text);
     font-variant-numeric: tabular-nums;
@@ -5380,11 +5298,11 @@
 
   @media (max-width: 63.999rem) {
     .cg-stats {
-      font-size: 0.8125rem;
+      font-size: var(--text-caption);
     }
 
     .cg-stat b {
-      font-size: 1.375rem;
+      font-size: var(--text-h3);
     }
   }
 }

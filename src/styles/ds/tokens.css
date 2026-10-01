@@ -1,14 +1,43 @@
-/* EKHO design system · tokens (proposal, step 2 of ADR-0028)
+/* EKHO design system · tokens (ADR-0028)
    ---------------------------------------------------------------------------
    Every scale here is read off the site as it renders today, at 375 and
    1440 px: the values that already carry the page become the steps, the
-   strays in between snap to the nearest one. Nothing on the site uses these
-   names yet; they sit next to the existing tokens until the switch-over.
+   strays in between snap to the nearest one. This file is the one place a
+   value is written; the Figma library mirrors it (ADR-0029).
 
    Fluid values interpolate linearly between 375 px (mobile) and 1440 px
    (desktop) and hold still outside that range. */
 
 :root {
+  /* --- colour: the Braun formal language (ADR-0027) --------------------- */
+  /* Light is the main mode, dark is the second. One warm yellow that carries
+     on both grounds, used for exactly one meaning: what is yours. */
+  color-scheme: light dark;
+  --bg: #edebe6;
+  --surface: #f5f4f1;
+  --surface-raised: #e2dfd9;
+  --line: #d8d4cd;
+  --line-strong: #bfbab2;
+  --muted-deep: #9b968e;
+  --muted: #6b6762;
+  --text: #1a1a18;
+  --signal: #f5c400;
+  --signal-ink: #1a1a18;
+  /* the dark panel: EKHO core in the architecture, the ground behind a screen */
+  --core: #1a1a18;
+  /* the highlighted layer: anthracite on a light ground, light on a dark one */
+  --block: #1a1a18;
+  --block-ink: #edebe6;
+
+  /* links: the text stays ink, the yellow sits underneath */
+  --link: var(--text);
+  --link-line: var(--signal);
+  --link-offset: 3px;
+
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  --maxw: 44rem; /* the text column */
+
   /* --- type: size ------------------------------------------------------- */
   --text-display: clamp(2.5rem, 2.236rem + 1.127vw, 3.25rem); /* 40 → 52 */
   --text-h2: clamp(2rem, 1.868rem + 0.563vw, 2.375rem); /* 32 → 38 */
@@ -99,6 +128,21 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --bg: #1c1b19;
+    /* a step above the ground you can see: at #232220 a panel was a guess */
+    --surface: #2a2926;
+    --surface-raised: #333230;
+    /* a hairline on a dark ground is lighter than on a light one, or it
+       disappears */
+    --line: #4c4943;
+    --line-strong: #666159;
+    --muted-deep: #6e6a64;
+    --muted: #a09b93;
+    --text: #edebe6;
+    --core: #121210;
+    --block: #edebe6;
+    --block-ink: #1a1a18;
+
     /* light-ink shadows vanish on a dark ground: black, and stronger */
     --shadow-ink: 0 0 0;
     --shadow-sm: 0 1px 8px rgb(var(--shadow-ink) / 0.22);
