@@ -4953,7 +4953,7 @@
     .story-text .chapter,
     .chapter--wide {
       min-height: 0;
-      padding-block: var(--space-16);
+      padding-block: var(--space-12);
     }
 
     /* Come to rest where the chapter's rule meets the header's, not a screen
