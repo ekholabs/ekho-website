@@ -212,3 +212,400 @@
     }
   }
 }
+
+@layer components {
+  /* --- header, navigation, menu, language, footer: the frame of every page.
+     The chapter navigation is a row on a desktop and a full-screen menu behind
+     the burger on a phone. */
+  .ekho-header,
+  .ekho-footer {
+    border-block: 1px solid var(--line);
+    border-inline: 0;
+  }
+
+  /* the header stays at the top on every page, over a blurred backdrop */
+  .ekho-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    border-top: 0;
+    padding-block: var(--space-4);
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  .ekho-header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .ekho-brand {
+    flex: none;
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .ekho-links {
+    display: flex;
+    gap: var(--space-5);
+    font-size: var(--text-small);
+  }
+
+  .ekho-links a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .ekho-links a:hover {
+    color: var(--text);
+  }
+
+  .ekho-header__aside:hover {
+    color: var(--text);
+  }
+
+  @media (min-width: 64rem) {
+    .ekho-header .ekho-header--centred {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+    }
+
+    .ekho-header--centred .ekho-brand {
+      grid-column: 2;
+      grid-row: 1;
+      letter-spacing: 0.04em;
+    }
+
+    .ekho-header--centred .ekho-nav {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .ekho-header--centred .ekho-nav ol {
+      margin-left: 0;
+    }
+
+    .ekho-header--centred .ekho-header__aside {
+      display: block;
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: end;
+    }
+  }
+  /* chapter navigation, inside the sticky header on the homepage. On narrow
+     screens the list scrolls sideways; the active chapter is kept in view. */
+  .ekho-nav {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .ekho-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ekho-nav ol {
+    display: flex;
+    gap: var(--space-5);
+    width: max-content;
+    margin: 0 0 0 auto;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-small);
+  }
+
+  .ekho-nav a {
+    display: inline-flex;
+    gap: var(--space-2);
+    padding-bottom: var(--space-1);
+    border-bottom: 1.5px solid transparent;
+    color: var(--muted);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .ekho-nav a:hover {
+    color: var(--text);
+  }
+
+  .ekho-nav__n {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ekho-footer__nav {
+    display: flex;
+    gap: var(--space-5);
+  }
+
+  .ekho-footer__nav a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .ekho-footer__nav a:hover {
+    color: var(--text);
+  }
+
+  .ekho-footer {
+    border-bottom: 0;
+    padding-block: var(--space-6);
+    color: var(--muted);
+    font-size: var(--text-small);
+  }
+
+  .ekho-footer .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    justify-content: space-between;
+  }
+
+  .ekho-nav__arrow {
+    width: 0.85em;
+    height: 0.85em;
+  }
+
+  .ekho-nav a[aria-current] {
+    border-bottom-color: var(--signal);
+    color: var(--text);
+  }
+
+  .ekho-nav a[aria-current] .ekho-nav__n {
+    color: var(--text);
+  }
+
+  /* ------------------------------------------------------------------
+     The menu on narrow screens. The chapters do not fit in a row there, so
+     the same <nav> becomes a full-screen panel behind a button. One list of
+     links, laid out two ways.
+     ------------------------------------------------------------------ */
+
+  .ekho-burger {
+    display: none;
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: -0.6rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .ekho-burger__lines::before,
+  .ekho-burger__lines::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20px;
+    height: 1.5px;
+    margin-left: -10px;
+    background: currentcolor;
+    transition:
+      transform 240ms ease,
+      opacity 240ms ease;
+  }
+
+  .ekho-burger__lines::before {
+    transform: translateY(-4px);
+  }
+
+  .ekho-burger__lines::after {
+    transform: translateY(4px);
+  }
+
+  .menu-open .ekho-burger__lines::before {
+    transform: rotate(45deg);
+  }
+
+  .menu-open .ekho-burger__lines::after {
+    transform: rotate(-45deg);
+  }
+
+  .ekho-burger:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+    border-radius: var(--radius-sm);
+  }
+
+  /* the two extra rows only exist for the panel */
+  .ekho-nav__extra {
+    display: none;
+  }
+
+  @media (max-width: 63.999rem) {
+    .ekho-burger {
+      display: block;
+    }
+
+    .ekho-nav {
+      position: fixed;
+      inset: 0;
+      z-index: 15;
+      flex: none;
+      overflow-y: auto;
+      padding: 5.25rem var(--space-4) var(--space-10);
+      background: var(--bg);
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity 240ms ease,
+        visibility 240ms;
+    }
+
+    .menu-open .ekho-nav {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .ekho-nav ol {
+      display: block;
+      width: auto;
+      margin: 0;
+    }
+
+    .ekho-nav__extra {
+      display: block;
+    }
+
+    .ekho-nav li {
+      border-top: 1px solid var(--line);
+    }
+
+    .ekho-nav li:last-child {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ekho-nav a {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-4);
+      padding: var(--space-4) 0;
+      border-bottom: 0;
+      font-size: var(--text-h3);
+      font-weight: var(--weight-medium);
+      letter-spacing: -0.025em;
+      color: var(--text);
+      white-space: normal;
+    }
+
+    .ekho-nav .ekho-nav__n {
+      flex: none;
+      width: 1.5rem;
+      font-size: var(--text-caption);
+      font-weight: var(--weight-regular);
+      color: var(--muted-deep);
+    }
+
+    /* the chapter you are in is marked, not coloured in */
+    .ekho-nav a[aria-current]::after {
+      content: '';
+      width: 9px;
+      height: 9px;
+      margin-left: auto;
+      align-self: center;
+      border-radius: 50%;
+      background: var(--signal);
+    }
+  }
+  /* The header blurs what scrolls under it. A backdrop-filter makes the header
+     the containing block for any fixed descendant, which pinned the menu panel
+     to the header's own box instead of the viewport. While the menu is open the
+     blur comes off, so the panel measures against the viewport again and the
+     header, at a higher z-index, keeps sitting on top of it. */
+  .menu-open .ekho-header {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  @media (max-width: 63.999rem) {
+    .ekho-header .ekho-brand,
+    .ekho-burger {
+      position: relative;
+      z-index: 16;
+    }
+  }
+  /* The language switch. A native select, because it is the one control every
+     platform already knows how to open, reach by keyboard and read aloud, and
+     because each option is a real path: with the script off it is still a list
+     of the four pages, and the pages exist. */
+  .ekho-header__aside {
+    color: var(--muted);
+    font-size: var(--text-small);
+    text-decoration: none;
+    white-space: nowrap;
+    display: none;
+  }
+
+  .ekho-lang {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ekho-lang__select {
+    appearance: none;
+    padding: var(--space-1) var(--space-5) var(--space-1) var(--space-2);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: var(--text-caption);
+    letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+
+  .ekho-lang__select:hover {
+    color: var(--text);
+  }
+
+  .ekho-lang__select:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  .ekho-lang__select option {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  .ekho-lang__caret {
+    position: absolute;
+    right: 0.35rem;
+    font-size: var(--text-micro);
+    color: var(--muted-deep);
+    pointer-events: none;
+  }
+
+  @media (min-width: 64rem) {
+    .ekho-header__aside {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: end;
+    }
+
+    .ekho-header__link {
+      color: var(--muted);
+      font-size: var(--text-small);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .ekho-header__link:hover {
+      color: var(--text);
+    }
+  }
+}

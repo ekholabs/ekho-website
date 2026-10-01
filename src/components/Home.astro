@@ -65,7 +65,7 @@ const people = [
 
 <Base title={c.meta.title} description={c.meta.description} layout="wide" lang={lang}>
   <nav
-    class="chapter-nav"
+    class="ekho-nav"
     id="chapter-nav"
     aria-label={c.nav.chapters}
     slot="header-nav"
@@ -75,20 +75,20 @@ const people = [
       {chapters.map((c) => (
         <li>
           <a href={`#${c.id}`} data-chapter-link={c.id}>
-            <span class="chapter-nav-n">{c.n}</span>
+            <span class="ekho-nav__n">{c.n}</span>
             {c.label}
           </a>
         </li>
       ))}
-      <li class="chapter-nav-extra">
+      <li class="ekho-nav__extra">
         <a href="#waitlist" data-chapter-link="waitlist">
-          <span class="chapter-nav-n">06</span>
+          <span class="ekho-nav__n">06</span>
           {c.nav.waitlist}
         </a>
       </li>
-      <li class="chapter-nav-extra">
+      <li class="ekho-nav__extra">
         <a href="https://github.com/ekholabs">
-          <Arrow class="chapter-nav-arrow" />
+          <Arrow class="ekho-nav__arrow" />
           GitHub
         </a>
       </li>
@@ -578,7 +578,7 @@ const people = [
   // where its rule meets the header's rather than passing under it. The step
   // bar measures this too, but only on a wide screen, and the nav is used on
   // both.
-  const headEl = document.querySelector<HTMLElement>('.site-header');
+  const headEl = document.querySelector<HTMLElement>('.ekho-header');
   const measureHead = () => {
     if (!headEl) return;
     document.documentElement.style.setProperty(
@@ -1191,7 +1191,7 @@ const people = [
     const span = (
       wide ? here : document.querySelector<HTMLElement>('.story-text')
     )?.getBoundingClientRect();
-    const header = document.querySelector<HTMLElement>('.site-header')?.getBoundingClientRect();
+    const header = document.querySelector<HTMLElement>('.ekho-header')?.getBoundingClientRect();
     // on the root, because the bars are not the only thing hung off this box:
     // the rule between the columns and the stage behind the graph use it too
     if (span) {
