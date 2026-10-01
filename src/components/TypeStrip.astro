@@ -48,7 +48,7 @@ const keys = [
   {/* The line that makes fifteen cards a week rather than fifteen cards. */}
   <p class="strip-caption">{c.graphic.strip}</p>
 
-  <ul class="strip" aria-label={c.graphic.label}>
+  <ul class="ekho-scroller strip" aria-label={c.graphic.label}>
     {keys.map((k) => (
       <li class:list={['strip-card', APP_STILLS.has(k) && 'strip-card--app']}>
         <p class="strip-head">
