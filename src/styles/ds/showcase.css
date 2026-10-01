@@ -1,0 +1,458 @@
+/* The design-system page. Built only from the tokens in ./tokens.css, so the
+   page is also the test that they are enough to lay something out with. */
+
+/* the same layer order as global.css: this file can load first */
+@layer base, components;
+
+@layer components {
+  .ds {
+    padding-block: var(--space-12) var(--space-24);
+  }
+
+  .ds-head {
+    max-width: 44rem;
+    margin-bottom: var(--space-16);
+  }
+
+  .ds-eyebrow {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-label);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .ds-eyebrow b {
+    color: var(--text);
+    font-weight: inherit;
+  }
+
+  .ds-title {
+    margin: 0 0 var(--space-6);
+    font-size: var(--text-display);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-display);
+  }
+
+  .ds-lead {
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    color: var(--muted);
+  }
+
+  .ds-lead strong {
+    color: var(--text);
+    font-weight: var(--weight-medium);
+  }
+
+  .ds-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-caption);
+    color: var(--muted);
+  }
+
+  .ds-dot {
+    display: inline-block;
+    flex: none;
+    width: var(--dot-size);
+    height: var(--dot-size);
+    background: var(--signal);
+  }
+
+  .ds-section {
+    padding-block: var(--space-12);
+    border-top: 1px solid var(--line);
+  }
+
+  .ds-section > h2 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-h2);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-heading);
+  }
+
+  .ds-section > p {
+    max-width: 44rem;
+    margin: 0 0 var(--space-8);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    color: var(--muted);
+  }
+
+  /* a table that becomes a stack of cards on a phone */
+  .ds-rows {
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+
+  .ds-row {
+    display: grid;
+    gap: var(--space-2) var(--space-6);
+    padding-block: var(--space-5);
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+  }
+
+  @media (min-width: 64rem) {
+    .ds-row {
+      grid-template-columns: 9rem minmax(0, 1fr) 13rem 15rem;
+    }
+  }
+
+  .ds-name {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    color: var(--text);
+  }
+
+  .ds-meta {
+    font-size: var(--text-caption);
+    line-height: var(--leading-ui);
+    color: var(--muted);
+  }
+
+  .ds-meta b {
+    color: var(--text);
+    font-weight: var(--weight-medium);
+  }
+
+  .ds-was {
+    font-size: var(--text-caption);
+    line-height: var(--leading-ui);
+    color: var(--muted);
+  }
+
+  .ds-was::before {
+    content: 'replaces ';
+    color: var(--muted);
+  }
+
+  /* type specimens */
+  .ds-spec {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ds-spec--display {
+    font-size: var(--text-display);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-display);
+  }
+
+  .ds-spec--h2 {
+    font-size: var(--text-h2);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-heading);
+  }
+
+  .ds-spec--h3 {
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-title);
+  }
+
+  .ds-spec--title {
+    font-size: var(--text-title);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-title);
+  }
+
+  .ds-spec--body {
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+  }
+
+  .ds-spec--small {
+    font-size: var(--text-small);
+    line-height: var(--leading-ui);
+  }
+
+  .ds-spec--caption {
+    font-size: var(--text-caption);
+    line-height: var(--leading-ui);
+  }
+
+  .ds-spec--label {
+    font-size: var(--text-label);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .ds-spec--micro {
+    font-size: var(--text-micro);
+    line-height: var(--leading-ui);
+  }
+
+  .ds-spec--mono {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+  }
+
+  .ds-now {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* spacing */
+  .ds-bar {
+    height: var(--space-3);
+    background: var(--text);
+    border-radius: 1px;
+  }
+
+  /* radius and elevation tiles */
+  .ds-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: var(--space-6);
+    padding: var(--space-6);
+    margin-inline: calc(var(--space-6) * -1);
+  }
+
+  .ds-tile {
+    display: grid;
+    align-content: end;
+    gap: var(--space-1);
+    min-height: 8rem;
+    padding: var(--space-4);
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .ds-tile .ds-name {
+    font-size: var(--text-label);
+  }
+
+  .ds-tiles--shadow .ds-tile {
+    border-color: transparent;
+    border-radius: var(--radius-sm);
+  }
+
+  .ds-old {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .ds-old span {
+    display: grid;
+    place-items: end start;
+    width: 4.5rem;
+    height: 3.5rem;
+    padding: var(--space-1) var(--space-2);
+    border: 1px dashed var(--line-strong);
+    font-size: var(--text-micro);
+    color: var(--muted);
+  }
+
+  /* motion */
+  .ds-track {
+    position: relative;
+    height: var(--space-6);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ds-track .ds-dot {
+    position: absolute;
+    left: 0;
+    bottom: var(--space-2);
+  }
+
+  .ds-motion.is-on .ds-track .ds-dot {
+    left: calc(100% - var(--dot-size));
+  }
+
+  .ds-play {
+    font: inherit;
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .ds-play:hover {
+    border-color: var(--text);
+  }
+
+  .ds-play:focus-visible,
+  .ds-focus:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  /* small parts */
+  .ds-parts {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  @media (min-width: 48rem) {
+    .ds-parts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .ds-part {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+  }
+
+  .ds-part > * {
+    justify-self: start;
+  }
+
+  .ds-u-thin {
+    text-decoration: underline;
+    text-decoration-color: var(--signal);
+    text-decoration-thickness: var(--underline-thin);
+    text-underline-offset: 3px;
+    text-decoration-skip-ink: none;
+  }
+
+  .ds-u-bold {
+    box-shadow: inset 0 calc(var(--underline-bold) * -1) 0 var(--signal);
+  }
+
+  .ds-swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  .ds-swatch {
+    display: grid;
+    gap: var(--space-1);
+    font-size: var(--text-caption);
+    color: var(--muted);
+  }
+
+  .ds-swatch i {
+    display: block;
+    height: 4rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+
+  .ds-swatch .ds-name {
+    color: var(--text);
+  }
+
+  .ds-open {
+    margin-top: var(--space-8);
+    padding: var(--space-5) var(--space-6);
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-small);
+    line-height: var(--leading-ui);
+  }
+
+  .ds-open h3 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-title);
+    font-weight: var(--weight-semibold);
+  }
+
+  .ds-open ul {
+    margin: 0;
+    padding-left: var(--space-5);
+    color: var(--muted);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-track .ds-dot {
+    transition: none !important;
+  }
+}
+
+/* Both modes side by side. The page itself follows the reader's setting; these
+   two panels pin one mode each, so the pair can be compared at a glance. The
+   values repeat the two :root blocks until the colour tokens move into
+   tokens.css with the switch-over. */
+@layer components {
+  .ds-modes {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 64rem) {
+    .ds-modes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .ds-mode {
+    padding: var(--space-6);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .ds-mode > .ds-eyebrow {
+    margin-bottom: var(--space-4);
+  }
+
+  .ds-mode--light {
+    --bg: #edebe6;
+    --surface: #f5f4f1;
+    --surface-raised: #e2dfd9;
+    --line: #d8d4cd;
+    --line-strong: #bfbab2;
+    --muted-deep: #9b968e;
+    --muted: #6b6762;
+    --text: #1a1a18;
+    --core: #1a1a18;
+    --shadow-ink: 26 26 24;
+    --shadow-sm: 0 1px 8px rgb(var(--shadow-ink) / 0.045);
+    --shadow-md: 0 10px 26px -14px rgb(var(--shadow-ink) / 0.12);
+    --shadow-lift: 0 0 48px rgb(var(--shadow-ink) / 0.045);
+    --shadow-lift-hover: 0 0 56px rgb(var(--shadow-ink) / 0.09);
+  }
+
+  .ds-mode--dark {
+    --bg: #1c1b19;
+    --surface: #2a2926;
+    --surface-raised: #333230;
+    --line: #4c4943;
+    --line-strong: #666159;
+    --muted-deep: #6e6a64;
+    --muted: #a09b93;
+    --text: #edebe6;
+    --core: #121210;
+    --shadow-ink: 0 0 0;
+    --shadow-sm: 0 1px 8px rgb(var(--shadow-ink) / 0.22);
+    --shadow-md: 0 10px 26px -14px rgb(var(--shadow-ink) / 0.46);
+    --shadow-lift: 0 0 48px rgb(var(--shadow-ink) / 0.3);
+    --shadow-lift-hover: 0 0 56px rgb(var(--shadow-ink) / 0.42);
+  }
+
+  .ds-mode .ds-swatches {
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  }
+
+  .ds-mode .ds-tiles {
+    grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+  }
+}

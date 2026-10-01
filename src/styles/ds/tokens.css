@@ -1,0 +1,109 @@
+/* EKHO design system · tokens (proposal, step 2 of ADR-0028)
+   ---------------------------------------------------------------------------
+   Every scale here is read off the site as it renders today, at 375 and
+   1440 px: the values that already carry the page become the steps, the
+   strays in between snap to the nearest one. Nothing on the site uses these
+   names yet; they sit next to the existing tokens until the switch-over.
+
+   Fluid values interpolate linearly between 375 px (mobile) and 1440 px
+   (desktop) and hold still outside that range. */
+
+:root {
+  /* --- type: size ------------------------------------------------------- */
+  --text-display: clamp(2.5rem, 2.236rem + 1.127vw, 3.25rem); /* 40 → 52 */
+  --text-h2: clamp(2rem, 1.868rem + 0.563vw, 2.375rem); /* 32 → 38 */
+  --text-h3: clamp(1.25rem, 1.162rem + 0.376vw, 1.5rem); /* 20 → 24 */
+  --text-title: 1.0625rem; /* 17: card and row titles */
+  --text-body: clamp(1rem, 0.956rem + 0.188vw, 1.125rem); /* 16 → 18 */
+  --text-small: 0.875rem; /* 14: buttons, navigation, captions */
+  --text-caption: 0.8125rem; /* 13: notes under a figure, secondary lines */
+  --text-label: 0.75rem; /* 12: eyebrows, UI inside product mock-ups */
+  --text-micro: 0.6875rem; /* 11: the smallest thing on the page, mock-ups only */
+
+  /* --- type: weight, leading, tracking ---------------------------------- */
+  --weight-regular: 400; /* running text */
+  --weight-medium: 500; /* labels, the lead-in of a paragraph */
+  --weight-semibold: 600; /* every heading */
+
+  --leading-tight: 1.06; /* display and h2 */
+  --leading-snug: 1.25; /* h3, titles, pull statements */
+  --leading-ui: 1.45; /* small text, UI */
+  --leading-body: 1.6; /* running text */
+
+  --tracking-display: -0.035em;
+  --tracking-heading: -0.025em;
+  --tracking-title: -0.015em;
+  --tracking-label: 0.1em; /* uppercase only */
+
+  /* --- space: a 4 px grid ----------------------------------------------- */
+  --space-0-5: 0.125rem; /*  2 */
+  --space-1: 0.25rem; /*  4 */
+  --space-2: 0.5rem; /*  8 */
+  --space-3: 0.75rem; /* 12 */
+  --space-4: 1rem; /* 16 */
+  --space-5: 1.25rem; /* 20 */
+  --space-6: 1.5rem; /* 24 */
+  --space-8: 2rem; /* 32 */
+  --space-10: 2.5rem; /* 40 */
+  --space-12: 3rem; /* 48 */
+  --space-16: 4rem; /* 64 */
+  --space-24: 6rem; /* 96 */
+
+  /* the page's side margin, one value for the text column and every
+     full-bleed row, so they line up */
+  --gutter: 1rem;
+
+  /* --- radius ----------------------------------------------------------- */
+  --radius-sm: 4px; /* the default: buttons, fields, panels, rows */
+  --radius-md: 8px; /* cards and tools inside a window */
+  --radius-lg: 12px; /* windows, large surfaces, bubbles */
+  --radius-full: 999px; /* dots, round keys, pills that are round on purpose */
+
+  /* --- elevation -------------------------------------------------------- */
+  --shadow-ink: 26 26 24;
+  /* a small card resting on a surface */
+  --shadow-sm: 0 1px 8px rgb(var(--shadow-ink) / 0.045);
+  /* a window or a raised card */
+  --shadow-md: 0 10px 26px -14px rgb(var(--shadow-ink) / 0.12);
+  /* a panel lifted off the page: centred, wide, barely there (ADR-0027) */
+  --shadow-lift: 0 0 48px rgb(var(--shadow-ink) / 0.045);
+  --shadow-lift-hover: 0 0 56px rgb(var(--shadow-ink) / 0.09);
+
+  /* --- motion ----------------------------------------------------------- */
+  --duration-fast: 180ms; /* hover, focus, pressing */
+  --duration-base: 320ms; /* a state changes */
+  --duration-slow: 760ms; /* something enters the page */
+  --ease-standard: ease;
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1); /* leaves fast, lands soft */
+  --ease-settle: cubic-bezier(0.16, 1, 0.3, 1); /* arrives and comes to rest */
+
+  /* --- layers ----------------------------------------------------------- */
+  /* inside a component, stack with 0 to 9; across the page only these */
+  --z-header: 20;
+  --z-toast: 40;
+
+  /* --- small parts that repeat ------------------------------------------ */
+  --focus-ring: 2px solid var(--signal);
+  --focus-offset: 3px;
+  --dot-size: 9px; /* the signal square: what is EKHO's, or yours */
+  --underline-thin: 2px; /* links in text */
+  --underline-bold: 3px; /* the signal under a headline */
+
+  /* --- breakpoints ------------------------------------------------------ */
+  /* CSS cannot read these in a media query; they are here for scripts and as
+     the record. In CSS write the literal, and only these two:
+     (max-width: 47.999rem) phone · (min-width: 64rem) desktop */
+  --bp-md: 48rem;
+  --bp-lg: 64rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* light-ink shadows vanish on a dark ground: black, and stronger */
+    --shadow-ink: 0 0 0;
+    --shadow-sm: 0 1px 8px rgb(var(--shadow-ink) / 0.22);
+    --shadow-md: 0 10px 26px -14px rgb(var(--shadow-ink) / 0.46);
+    --shadow-lift: 0 0 48px rgb(var(--shadow-ink) / 0.3);
+    --shadow-lift-hover: 0 0 56px rgb(var(--shadow-ink) / 0.42);
+  }
+}
