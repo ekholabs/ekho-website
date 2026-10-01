@@ -188,12 +188,19 @@ const colours = [
         Unchanged from v0.5 (ADR-0027). Light is the main mode; switch your system to dark to see
         the second.
       </p>
-      <div class="ds-swatches">
-        {colours.map(([t, use]) => (
-          <div class="ds-swatch">
-            <i style={`background: var(--${t})`} />
-            <span class="ds-name">--{t}</span>
-            <span>{use}</span>
+      <div class="ds-modes">
+        {(['light', 'dark'] as const).map((m) => (
+          <div class:list={['ds-mode', `ds-mode--${m}`]}>
+            <p class="ds-eyebrow">{m === 'light' ? 'Light · main mode' : 'Dark · second mode'}</p>
+            <div class="ds-swatches">
+              {colours.map(([t, use]) => (
+                <div class="ds-swatch">
+                  <i style={`background: var(--${t})`} />
+                  <span class="ds-name">--{t}</span>
+                  <span>{use}</span>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </div>
@@ -297,14 +304,20 @@ const colours = [
         Four shadows, each with a dark version. Today eight shadows are drawn in light ink and all
         but vanish on the dark ground.
       </p>
-      <div class="ds-tiles ds-tiles--shadow">
-        {shadows.map(([n, v, use, was]) => (
-          <div class="ds-tile" style={`box-shadow: ${v}`}>
-            <span class="ds-name">--shadow-{n}</span>
-            <span class="ds-meta">
-              <b>{use}</b>
-            </span>
-            <span class="ds-was">{was}</span>
+      <div class="ds-modes">
+        {(['light', 'dark'] as const).map((m) => (
+          <div class:list={['ds-mode', `ds-mode--${m}`]}>
+            <p class="ds-eyebrow">{m === 'light' ? 'Light' : 'Dark'}</p>
+            <div class="ds-tiles ds-tiles--shadow">
+              {shadows.map(([n, v, use]) => (
+                <div class="ds-tile" style={`box-shadow: ${v}`}>
+                  <span class="ds-name">--shadow-{n}</span>
+                  <span class="ds-meta">
+                    <b>{use}</b>
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </div>

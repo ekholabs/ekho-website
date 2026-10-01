@@ -129,7 +129,7 @@
   .ds-was {
     font-size: var(--text-caption);
     line-height: var(--leading-ui);
-    color: var(--muted-deep);
+    color: var(--muted);
   }
 
   .ds-was::before {
@@ -383,5 +383,76 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-track .ds-dot {
     transition: none !important;
+  }
+}
+
+/* Both modes side by side. The page itself follows the reader's setting; these
+   two panels pin one mode each, so the pair can be compared at a glance. The
+   values repeat the two :root blocks until the colour tokens move into
+   tokens.css with the switch-over. */
+@layer components {
+  .ds-modes {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 64rem) {
+    .ds-modes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .ds-mode {
+    padding: var(--space-6);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .ds-mode > .ds-eyebrow {
+    margin-bottom: var(--space-4);
+  }
+
+  .ds-mode--light {
+    --bg: #edebe6;
+    --surface: #f5f4f1;
+    --surface-raised: #e2dfd9;
+    --line: #d8d4cd;
+    --line-strong: #bfbab2;
+    --muted-deep: #9b968e;
+    --muted: #6b6762;
+    --text: #1a1a18;
+    --core: #1a1a18;
+    --shadow-ink: 26 26 24;
+    --shadow-sm: 0 1px 8px rgb(var(--shadow-ink) / 0.045);
+    --shadow-md: 0 10px 26px -14px rgb(var(--shadow-ink) / 0.12);
+    --shadow-lift: 0 0 48px rgb(var(--shadow-ink) / 0.045);
+    --shadow-lift-hover: 0 0 56px rgb(var(--shadow-ink) / 0.09);
+  }
+
+  .ds-mode--dark {
+    --bg: #1c1b19;
+    --surface: #2a2926;
+    --surface-raised: #333230;
+    --line: #4c4943;
+    --line-strong: #666159;
+    --muted-deep: #6e6a64;
+    --muted: #a09b93;
+    --text: #edebe6;
+    --core: #121210;
+    --shadow-ink: 0 0 0;
+    --shadow-sm: 0 1px 8px rgb(var(--shadow-ink) / 0.22);
+    --shadow-md: 0 10px 26px -14px rgb(var(--shadow-ink) / 0.46);
+    --shadow-lift: 0 0 48px rgb(var(--shadow-ink) / 0.3);
+    --shadow-lift-hover: 0 0 56px rgb(var(--shadow-ink) / 0.42);
+  }
+
+  .ds-mode .ds-swatches {
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  }
+
+  .ds-mode .ds-tiles {
+    grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
   }
 }
