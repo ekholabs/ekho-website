@@ -166,7 +166,9 @@ const people = [
             />
           </div>
           <h1 class="hero-title" data-intro-title>
-            {c.hero.titleBefore} <span class="signal-text">{c.hero.titleSignal}</span>
+            {c.hero.titleBefore}
+            <br />
+            <span class="signal-text">{c.hero.titleSignal}</span>
           </h1>
           <p class="hero-lede" data-intro-fade>
             {c.hero.lede}
@@ -1193,14 +1195,18 @@ const people = [
     // through the architecture stack.
     const here = views[index]?.closest('[data-chapter]') ?? views[index];
     const wide = here?.classList.contains('chapter--wide') ?? true;
-    const span = (
-      wide ? here : document.querySelector<HTMLElement>('.story-text')
-    )?.getBoundingClientRect();
+    const spanEl = wide ? here : document.querySelector<HTMLElement>('.story-text');
+    const span = spanEl?.getBoundingClientRect();
+    // The label lines up with the text, not with the box around it: a wide
+    // chapter carries the page's side margin as padding, and measuring its
+    // outer edge set Back and Next a margin's width left of where they stood
+    // in the chapters before.
+    const inset = spanEl ? parseFloat(getComputedStyle(spanEl).paddingLeft) || 0 : 0;
     const header = document.querySelector<HTMLElement>('.site-header')?.getBoundingClientRect();
     // on the root, because the bars are not the only thing hung off this box:
     // the rule between the columns and the stage behind the graph use it too
     if (span) {
-      root.style.setProperty('--step-left', `${Math.round(span.left)}px`);
+      root.style.setProperty('--step-left', `${Math.round(span.left + inset)}px`);
       root.style.setProperty('--step-right', `${Math.round(span.right)}px`);
     }
     // the middle of the drawing itself, so the stage's name can sit between the
