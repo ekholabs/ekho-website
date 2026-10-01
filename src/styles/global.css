@@ -697,8 +697,8 @@
     /* the inside of a depicted window: somebody else's chrome, so its own
        panel colours. Its corners follow the system (--radius-lg). */
     --panel: #fff;
-    --panel-line: #ddd8cf;
-    --panel-sub: #f4f2ec;
+    --panel-line: #dad7d3;
+    --panel-sub: #f2f1ee;
     /* the windows that float over the graph are glass: a lit rim, a top
        highlight and a halo that lifts them off whatever is behind */
     --glass: 97%;
@@ -710,13 +710,13 @@
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --panel: #36342e;
-      --panel-line: #4a473f;
-      --panel-sub: #2c2a26;
+      --panel: #343330;
+      --panel-line: #484642;
+      --panel-sub: #2b2a28;
       --glass: 95%;
       --glass-rim: rgb(255 255 255 / 0.14);
       --glass-top: rgb(255 255 255 / 0.07);
-      --glass-halo: rgb(237 235 230 / 0.05);
+      --glass-halo: rgb(236 234 232 / 0.05);
       --glass-cast: rgb(0 0 0 / 0.5);
     }
   }
@@ -1492,11 +1492,11 @@
   .app-side li {
     padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-sm);
-    color: #6b6762;
+    color: #696764;
   }
 
   .app-side li.is-sel {
-    background: #e2dfd9;
+    background: #e0dedc;
     color: #1a1a18;
     font-weight: var(--weight-medium);
   }
@@ -1504,7 +1504,7 @@
   .app-side-foot {
     margin: auto 0 0 var(--space-2);
     font-size: var(--text-micro);
-    color: #9b968e;
+    color: #989692;
   }
 
   .app-main {
@@ -1525,7 +1525,7 @@
     font-size: var(--text-micro);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #9b968e;
+    color: #989692;
   }
 
   .app-list {
@@ -1551,7 +1551,7 @@
   .app-type {
     font-family: var(--font-mono);
     font-size: var(--text-micro);
-    color: #6b6762;
+    color: #696764;
   }
 
   .app-title {
@@ -1568,7 +1568,7 @@
     font-size: var(--text-micro);
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #6b6762;
+    color: #696764;
     white-space: nowrap;
   }
 
@@ -4031,10 +4031,10 @@
      sit on, so the two families still read apart. */
   @media (prefers-color-scheme: dark) {
     .strip-card {
-      --sk-surface: #333230;
+      --sk-surface: #323231;
       --sk-chrome: #45423c;
-      --sk-quiet: #6b6762;
-      --sk-ink: #edebe6;
+      --sk-quiet: #696764;
+      --sk-ink: #eceae8;
     }
   }
 }
