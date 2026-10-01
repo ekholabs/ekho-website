@@ -2,7 +2,7 @@
 // folder is a translation of this one, so this is the shape they all follow.
 export const en = {
   meta: {
-    title: 'EKHO Labs — AI is only as good as your context',
+    title: 'EKHO Labs — AI is as good as your context',
     description:
       'EKHO turns what you know into connected context that compounds, so you get more out of AI every time you use it, and it stays yours.',
   },
@@ -23,7 +23,7 @@ export const en = {
     copied: 'Copied',
   },
   hero: {
-    titleBefore: 'AI is only as good as your context.',
+    titleBefore: 'AI is as good as your context.',
     titleSignal: 'Own it.',
     lede: 'EKHO turns what you know into one connected context source your AI can work with. Create and hold your synthetic Memory. Every time you use it, you get more out of it - without losing control.',
     cta: 'Join the waitlist',
