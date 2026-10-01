@@ -16,7 +16,7 @@ const ENDPOINT = '';
 
 {ENDPOINT ? (
   <form class="waitlist" action={ENDPOINT} method="post">
-    <label class="waitlist-label" for="wl-email">
+    <label class="ekho-eyebrow waitlist-label" for="wl-email">
       {c.waitlist.label}
     </label>
     <div class="waitlist-row">
@@ -29,7 +29,7 @@ const ENDPOINT = '';
         autocomplete="email"
         placeholder="you@example.com"
       />
-      <button class="pill pill--solid" type="submit">
+      <button class="ekho-button ekho-button--solid" type="submit">
         {c.waitlist.cta}
       </button>
     </div>
@@ -37,7 +37,7 @@ const ENDPOINT = '';
   </form>
 ) : (
   <p class="waitlist waitlist--mail">
-    <a class="pill pill--solid" href="mailto:hello@ekholabs.eu?subject=Waitlist">
+    <a class="ekho-button ekho-button--solid" href="mailto:hello@ekholabs.eu?subject=Waitlist">
       {c.waitlist.cta}
     </a>
     <span class="waitlist-note">{c.waitlist.note}</span>

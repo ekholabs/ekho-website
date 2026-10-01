@@ -36,7 +36,7 @@ const plates: Plate[] = [
     past the start before it wraps, and a screen's width of it is always
     visible. On a wide screen the row wraps onto two lines and the copies are
     not rendered. */}
-<ul class="plates" data-plates>
+<ul class="ekho-scroller--narrow plates" data-plates>
   {[...plates, ...plates, ...plates].map((p, i) => (
     <li class:list={['plate-slot', { 'plate--dup': i >= plates.length }]}>
       {/* Pressing one puts its mark on the answer in the window below and says

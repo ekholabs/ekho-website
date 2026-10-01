@@ -2,6 +2,8 @@
    (./ds/tokens.css, ADR-0028); the element styles in `base` are the reset. */
 @layer base, components;
 @import './ds/tokens.css';
+@import './ds/components.css';
+@import './ds/context-graphic.css';
 
 @layer base {
   *,
@@ -209,50 +211,6 @@
       justify-self: end;
     }
   }
-
-  .signal-text {
-    color: var(--signal);
-  }
-
-  .cta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-  }
-
-  .pill {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-5);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-sm);
-    color: var(--text);
-    font-size: var(--text-small);
-    font-weight: var(--weight-medium);
-    text-decoration: none;
-  }
-
-  .pill:hover {
-    border-color: var(--muted);
-  }
-
-  .pill--solid {
-    border-color: var(--text);
-    background: var(--text);
-    color: var(--signal-ink);
-  }
-
-  .pill--solid:hover {
-    border-color: var(--signal);
-    background: var(--signal);
-  }
-
-  .pill:focus-visible {
-    outline: var(--focus-ring);
-    outline-offset: var(--focus-offset);
-  }
-
   /* story: chapters on the left, the graphic that builds up beside them */
   .story {
     display: grid;
@@ -289,22 +247,6 @@
       border-bottom: 0;
     }
   }
-
-  .context-graphic {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
-    margin: 0;
-    padding-block: var(--space-4);
-  }
-
-  .context-graphic svg {
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-  }
-
   /* The companion graphic. Several hundred points, one set for the whole page,
      moved between four states instead of cross-faded between four pictures.
      Every dot is drawn once at its scattered position and the other states are
@@ -313,94 +255,6 @@
      relayout every frame.
 
      The resting state, with no script, is the finished net. */
-  /* A named point is a circle inside a group, and the group carries every move
-     the point makes. Without this the circle reads the same custom properties
-     its group does and travels the distance a second time, which in the hero
-     put the eight of them somewhere between the field and the sphere — two of
-     them close enough to touch. */
-  .cg-pt .cg-dot {
-    transform: none;
-  }
-
-  .cg-dot,
-  .cg-pt {
-    transform: translate(var(--dx2), var(--dy2));
-    transition:
-      transform 950ms cubic-bezier(0.22, 0.61, 0.36, 1),
-      fill 700ms ease,
-      opacity 700ms ease;
-  }
-
-  .cg-dot {
-    fill: var(--text);
-    opacity: 0.9;
-  }
-
-  .cg-dot.is-named {
-    fill: var(--signal);
-    opacity: 1;
-  }
-
-  .cg-link {
-    fill: none;
-    stroke: var(--muted-deep);
-    stroke-width: 0.62;
-    stroke-linecap: round;
-    transition: opacity var(--duration-slow) ease;
-  }
-
-  .cg-mesh {
-    opacity: 1;
-    transition: opacity var(--duration-slow) ease;
-  }
-
-  /* the far side of the hull falls back, the near side carries */
-  .cg-far {
-    stroke: var(--muted-deep);
-    opacity: 0.2;
-  }
-
-  .cg-near {
-    stroke: var(--muted);
-    opacity: 0.7;
-  }
-
-  .cg-chord {
-    stroke: var(--muted);
-    opacity: 0.32;
-  }
-
-  /* the one region that is yours */
-  .cg-own {
-    stroke: var(--signal);
-    opacity: 0.55;
-  }
-
-  .cg-dot.is-mine {
-    fill: var(--signal);
-  }
-
-  .cg-dot.is-far {
-    opacity: 0.32;
-  }
-
-  .cg-halo {
-    fill: none;
-    stroke: var(--signal);
-    stroke-width: 1;
-    opacity: 0;
-    transition: opacity var(--duration-fast) ease;
-  }
-
-  .cg-hit {
-    fill: transparent;
-  }
-
-  .cg-tip {
-    opacity: 0;
-    transition: opacity var(--duration-fast) ease;
-  }
-
   /* The named points are the only text on the drawing, and over a field of
      several hundred dots it was read against the noise. Each pair of lines sits
      on a card of its own: the page's raised ground, no border, and a shadow
@@ -412,69 +266,10 @@
      behind it and a shape in an SVG cannot: what shows through here shows
      through sharp, and at the bars' own 70% the points were legible straight
      across the text. */
-  /* The small form of the widgets: the same ground, the same generous corner,
-     the same soft shadow and no frame. What is left out is what a card this
-     size cannot carry — the date, the quoted line, what it is joined to. */
-  .cg-card {
-    fill: color-mix(in srgb, var(--surface) 94%, transparent);
-    filter: drop-shadow(0 4px 20px rgb(26 26 24 / 0.12));
-  }
-
-  /* the tile the mark sits in, held by a hairline rather than filled: the
-     drawing is monochrome and eight coloured tiles would be the loudest thing
-     on it */
-  .cg-tile {
-    fill: none;
-    stroke: var(--line);
-    stroke-width: 1;
-  }
-
   /* a filter re-rasters on every frame, and turning moves all eight of them */
   [data-graphic].is-turning .cg-card {
     filter: none;
   }
-
-  .cg-ico {
-    fill: none;
-    /* the mark and the word it stands in front of carry the same tone, and on
-       a card that is nearly the page's own ground the deeper grey was a guess
-       rather than a label */
-    stroke: var(--muted);
-    stroke-width: 1.1;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .cg-tip-type {
-    font-size: 9px; /* drawn inside the graphic, at the graphic's scale */
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    fill: var(--muted);
-  }
-
-  .cg-tip-title {
-    font-size: var(--text-label);
-    fill: var(--text);
-  }
-
-  .cg-pt:hover .cg-tip,
-  .cg-pt:focus-visible .cg-tip,
-  .cg-pt:hover .cg-halo,
-  .cg-pt:focus-visible .cg-halo {
-    opacity: 1;
-  }
-
-  .cg-pt:focus {
-    outline: none;
-  }
-
-  .cg-caption {
-    margin-top: var(--space-3);
-    text-align: center;
-    font-size: var(--text-caption);
-    color: var(--muted);
-  }
-
   /* stage 0, the hero: every point there is, spread wide, all one grey.
      A named point is a circle inside a group that already carries the move, so
      it is left out here or it travels the distance twice and ends up off the
@@ -842,14 +637,9 @@
 
   .chapter-label {
     margin: 0 0 var(--space-2);
-    font-size: var(--text-label);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
   }
 
   .chapter-label span {
-    color: var(--signal);
     margin-right: var(--space-1);
   }
 
@@ -930,39 +720,6 @@
       --glass-cast: rgb(0 0 0 / 0.5);
     }
   }
-
-  .cta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    margin: 0;
-  }
-
-  .pill--solid {
-    background: var(--text);
-    color: var(--bg);
-    border-color: var(--text);
-  }
-
-  /* The outline stays the ink it is made of. Going to the muted tone turned
-     the one filled control on the page grey under the pointer, which on a dark
-     ground read as a disabled button. */
-  .pill--solid:hover {
-    background: color-mix(in srgb, var(--text) 86%, var(--bg));
-    border-color: var(--text);
-  }
-
-  /* the same ink the label is set in, so the outlined button answers the
-     pointer as plainly as the filled one does */
-  .pill:hover {
-    border-color: var(--text);
-  }
-
-  .signal-text {
-    color: inherit;
-    box-shadow: inset 0 -3px 0 var(--signal);
-  }
-
   /* ---------- the story column ---------- */
 
   .story-text .chapter {
@@ -1149,18 +906,6 @@
     font-size: var(--text-micro);
     color: var(--muted-deep);
   }
-
-  .chat-sq,
-  .tool-sq {
-    width: 9px;
-    height: 9px;
-    /* round, everywhere the signal is set as a mark: the page has one shape
-       for "this is EKHO's" and it is the same shape as the point on the net */
-    border-radius: 50%;
-    background: var(--signal);
-    flex: none;
-  }
-
   /* What belongs to EKHO inside somebody else's client is marked by its label,
      not by a decoration: the square, and the kind in full text colour. */
   .tool--skill .tool-kind {
@@ -1462,19 +1207,6 @@
     font-size: var(--text-caption);
     color: var(--muted-deep);
   }
-
-  /* the arrows: hairlines at the weight of the rest of the line work */
-  .arrow {
-    width: 1em;
-    height: 1em;
-    fill: none;
-    stroke: currentcolor;
-    stroke-width: 1.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    vertical-align: -0.12em;
-  }
-
   .chapter-nav-arrow {
     width: 0.85em;
     height: 0.85em;
@@ -1751,14 +1483,6 @@
     font-weight: var(--weight-semibold);
     letter-spacing: 0.04em;
   }
-
-  .app-sq {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--signal);
-  }
-
   .app-side ul {
     list-style: none;
     margin: 0;
@@ -1957,10 +1681,6 @@
   .waitlist-label {
     display: block;
     margin-bottom: var(--space-2);
-    font-size: var(--text-label);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted-deep);
   }
 
   .waitlist-input {
@@ -2033,11 +1753,6 @@
       font-size: var(--text-body);
       line-height: 1.45;
     }
-
-    .chapter-label {
-      font-size: var(--text-caption);
-    }
-
     .hero-title {
       font-size: var(--text-display);
       line-height: 1.02;
@@ -2679,11 +2394,7 @@
   }
 
   .arch-sq {
-    width: 11px;
-    height: 11px;
     align-self: center;
-    border-radius: 50%;
-    background: var(--signal);
   }
 
   .arch-code {
@@ -2797,14 +2508,6 @@
     line-height: var(--leading-body);
     color: var(--muted);
   }
-
-  .cta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    margin: 0;
-  }
-
   @media (max-width: 63.999rem) {
     .chapter--hero {
       padding-block: var(--space-8) var(--space-12);
@@ -2826,14 +2529,6 @@
     transition: opacity var(--duration-slow) ease;
     transition-delay: calc(var(--n) * 260ms + 500ms);
   }
-
-  /* a pointer on a dot overrides the sequence, without waiting for a delay */
-  .cg-pt:hover .cg-tip,
-  .cg-pt:focus-visible .cg-tip {
-    opacity: 1;
-    transition-delay: 0s;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .reveal-on [data-graphic].is-1:not(.is-2) .cg-tip {
       transition: none;
@@ -3014,21 +2709,8 @@
     align-items: center;
     gap: var(--space-2);
     margin: 0 0 var(--space-3);
-    font-size: var(--text-label);
-    font-weight: var(--weight-semibold);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
     color: var(--text);
   }
-
-  .models-sq {
-    width: 9px;
-    height: 9px;
-    flex: none;
-    border-radius: 50%;
-    background: var(--signal);
-  }
-
   .models-note {
     margin: 0;
     max-width: 46ch;
@@ -3061,28 +2743,8 @@
   [data-graphic].is-turning .cg-pt {
     transition: none;
   }
-
-  /* what the pointer is on, and what it is joined to */
-  .cg-hot {
-    stroke: var(--signal);
-    stroke-width: 1;
-    opacity: 0;
-    transition: opacity var(--duration-fast) ease;
-  }
-
   [data-graphic].is-2 .cg-hot {
     opacity: 0.9;
-  }
-
-  .cg-dot.is-hot,
-  .cg-pt.is-hot .cg-dot {
-    fill: var(--signal);
-    opacity: 1;
-  }
-
-  .cg-pt.is-hot .cg-tip,
-  .cg-pt.is-hot .cg-halo {
-    opacity: 1;
   }
 }
 
@@ -3095,37 +2757,6 @@
 
      It starts after the points have begun to gather, because the form has to
      arrive before the connections have anywhere to be. */
-  /* What this has to read as: the net is already there, the conversation in
-     the window lands in it as one node, and the connections the digest makes
-     are spun outwards from that node.
-
-     So the white net is not drawn at all. It stands complete behind the chat
-     window from the moment the chapter turns, and what uncovers it is the
-     window shrinking away. That is true to what is being shown: those
-     connections were there before this conversation.
-
-     Only the yellow is drawn. It is ordered outwards from the node, it waits
-     for the window to finish becoming that node, and it takes its time,
-     because it is the one thing this chapter is about. The curve is close to
-     even: a thing spreading spreads at its own pace rather than rushing the
-     first half of the way. */
-  .cg-far,
-  .cg-near,
-  .cg-chord {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 0;
-    transition: opacity var(--duration-slow) ease;
-  }
-
-  /* The yellow arrives in waves rather than being pulled across a dash. Same
-     outward order, and each wave still lands a fifth of a second after the
-     points it reaches have turned — --w is where it sits along the drawing.
-     What changed is the property: a dash offset is repainted on every frame of
-     the run, an opacity is not. */
-  .cg-own {
-    transition: opacity var(--duration-fast) ease;
-  }
-
   .reveal-on [data-graphic].is-3 .cg-own {
     transition-delay: calc(320ms + var(--w, 0) * 2600ms);
   }
@@ -3144,13 +2775,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .cg-far,
-    .cg-near,
-    .cg-chord {
-      transition: opacity var(--duration-slow) ease;
-      stroke-dashoffset: 0;
-    }
-
     .reveal-on [data-graphic].is-3 .cg-own {
       transition-delay: 0s;
     }
@@ -3214,39 +2838,12 @@
 }
 
 @layer components {
-  /* Points outside the viewBox still draw, which is what lets the field reach
-     past its column and across the screen without the drawing being scaled. */
-  .context-graphic svg {
-    overflow: visible;
-  }
-
   .figure-stage {
     will-change: auto;
   }
 }
 
 @layer components {
-  /* The bulk of the first links arrive as waves rather than as 135 separate
-     strokes: one path per wave, nine paints instead of 135 per frame. Each
-     wave is still drawn rather than faded in — a connection that appears is
-     not a connection being made — and the dash runs over the whole path, so
-     the lines inside a wave lay themselves down one after another.
-
-     Nothing starts before the points are nearly home. The lines are fixed to
-     where the points end up, so a line drawn while its two ends are still
-     travelling stands in empty space, which is what made the build look like
-     two separate events. */
-  .cg-wave {
-    fill: none;
-    stroke: var(--muted);
-    stroke-width: 0.62;
-    stroke-linecap: round;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    opacity: 0.001;
-    transition: opacity var(--duration-base) ease;
-  }
-
   .reveal-on [data-graphic].is-2:not(.is-net) .cg-wave {
     opacity: 0.8;
     stroke-dashoffset: 0;
@@ -3268,30 +2865,6 @@
 }
 
 @layer components {
-  /* Each first link is drawn from one point to the other, and they start one
-     after another. Half a second per stroke, eleven milliseconds between them,
-     so the web is visibly built rather than switched on. */
-  .cg-first {
-    fill: none;
-    stroke: var(--muted);
-    stroke-width: 0.62;
-    stroke-linecap: round;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    /* Not zero: at zero the browser skips painting these 135 lines entirely,
-       and the whole raster then lands in the one frame where the window is
-       already scaling down. A hair of alpha keeps them painted and invisible,
-       so the handover has nothing left to prepare. */
-    opacity: 0.001;
-    /* Leaving is a fade, but a short one. These are the same links the full
-       net contains, so switching them off in one frame while the net switches
-       on in the next made the handover a blink instead of a dissolve — and
-       over most of a second it was the other fault: the loose net of two
-       chapters back stood in the finished one while the reader was already
-       looking at it. */
-    transition: opacity var(--duration-base) ease;
-  }
-
   .reveal-on [data-graphic].is-2:not(.is-net) .cg-first {
     opacity: 0.8;
     stroke-dashoffset: 0;
@@ -3361,12 +2934,19 @@
      in it: the row reads as one set rather than as eight logos of eight sizes.
      Monochrome, like everything else on the page. */
   .plates {
-    list-style: none;
     display: flex;
-    flex-wrap: wrap;
     gap: var(--space-2);
-    margin: 0 0 var(--space-4);
-    padding: 0;
+    list-style: none;
+  }
+
+  /* on a desktop the plates wrap in the column; on a phone they scroll
+     (ekho-scroller--narrow) */
+  @media (min-width: 64rem) {
+    .plates {
+      flex-wrap: wrap;
+      margin: 0 0 var(--space-4);
+      padding: 0;
+    }
   }
 
   .plate-slot {
@@ -3440,13 +3020,6 @@
 }
 
 @layer components {
-  /* The first links that touch a point of yours are drawn in the signal colour,
-     so the yellow in this chapter is the first few things of yours that found
-     each other, not a scatter of lone dots. */
-  .cg-first.is-yours {
-    stroke: var(--signal);
-  }
-
   .reveal-on [data-graphic].is-2:not(.is-net) .cg-first.is-yours {
     opacity: 1;
   }
@@ -3560,7 +3133,7 @@
   .people-link {
     color: inherit;
     text-decoration: none;
-    box-shadow: inset 0 -1.5px 0 transparent;
+    box-shadow: inset 0 calc(var(--underline-thin) * -1) 0 transparent;
     transition: box-shadow var(--duration-fast) ease;
   }
 
@@ -3570,7 +3143,7 @@
   }
 
   .people-link:hover {
-    box-shadow: inset 0 -1.5px 0 var(--signal);
+    box-shadow: inset 0 calc(var(--underline-thin) * -1) 0 var(--signal);
   }
 }
 
@@ -3598,10 +3171,7 @@
 
   .command-label {
     margin-bottom: var(--space-2);
-    color: #7c776f;
-    font-size: var(--text-micro);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    /* the terminal stays dark in both modes */
     color: var(--muted-deep);
   }
 
@@ -3831,21 +3401,6 @@
   .view-steps[hidden] {
     display: none;
   }
-
-  /* The hero's second button carries the same mark as the step bars, since it
-     does the same thing: it moves the reader on one view. */
-  .pill-mark {
-    fill: none;
-    height: 0.875rem;
-    margin-left: var(--space-0-5);
-    stroke: var(--signal);
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 1.5;
-    vertical-align: -0.15em;
-    width: 0.875rem;
-  }
-
   /* Each one is a bar across the whole left column, not a loose control: it
      runs from the edge of the window to the rule that divides the text from
      the figure, over the same blurred ground as the header, and closes the
@@ -4015,22 +3570,17 @@
   }
 
   .stage-title {
-    color: var(--muted);
-    font-size: var(--text-micro);
-    font-weight: var(--weight-medium);
     /* Centred on the stage, not tucked into its left corner: the two counts
        took the corners, and the name of the thing they are counting belongs
        between them. Same reckoning as the picker confirm — the text column is
        a fixed 29rem and the stage has the rest. */
     left: var(--stage-mid, calc(50% + 14.5rem));
     transform: translateX(-50%);
-    letter-spacing: 0.14em;
     margin: 0;
     opacity: 0;
     padding: var(--space-6) 0 0;
     pointer-events: none;
     position: fixed;
-    text-transform: uppercase;
     top: var(--step-top, 0);
     transition: opacity var(--duration-slow) ease;
     white-space: nowrap;
@@ -4159,23 +3709,9 @@
      a strip pushed sideways like the cards in chapter 01. */
   @media (max-width: 63.999rem) {
     .plates {
-      flex-wrap: nowrap;
       gap: var(--space-2);
-      width: 100vw;
-      margin-left: calc(50% - 50vw);
-      padding: 0.25rem var(--gutter) 1.25rem;
-      overflow-x: auto;
-      overscroll-behavior-x: contain;
-      scroll-snap-type: x proximity;
-      scroll-padding-left: var(--gutter);
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+      margin-bottom: var(--space-4);
     }
-
-    .plates::-webkit-scrollbar {
-      display: none;
-    }
-
     .plate-slot {
       flex: 0 0 auto;
       width: 5rem;
@@ -4195,20 +3731,6 @@
     .plate-text {
       font-size: var(--text-h3);
     }
-
-    /* The one claim in this chapter, so it is set as one: the label larger
-       and in full ink, the sentence under it at reading size rather than as
-       a footnote. */
-    .models-label {
-      font-size: var(--text-small);
-      letter-spacing: 0.08em;
-    }
-
-    .models-sq {
-      width: 11px;
-      height: 11px;
-    }
-
     .models-note {
       max-width: none;
       font-size: var(--text-body);
@@ -4310,26 +3832,8 @@
    the text above it. */
 @layer components {
   .strip {
-    list-style: none;
-    display: flex;
     gap: var(--space-3);
-    margin: 0;
-    padding: 0.5rem var(--gutter) 1.25rem;
-    /* out of the column and across the screen */
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x proximity;
-    scroll-padding-left: var(--gutter);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
   }
-
-  .strip::-webkit-scrollbar {
-    display: none;
-  }
-
   /* A widget on a board, the way a phone lays them out: a filled tile with a
      generous corner and a soft shadow, no frame, and the content set with
      room around it. Nothing here is a panel with a border. */
@@ -4833,12 +4337,6 @@
    points where they start, spread and unjoined, with the mesh and the first
    links simply not rendered. Nothing is translated here, so the circles stay
    where they are drawn. */
-@layer components {
-  .context-graphic.is-field .cg-dot,
-  .context-graphic.is-field .cg-pt {
-    transform: none;
-  }
-}
 
 /* The field over the opening --------------------------------------------------
    A phone has no second column, so the picture goes above the words rather
@@ -5247,24 +4745,6 @@
    over the drawing rather than under it, because the drawing is what they are
    about, and they only run once the net has formed. */
 @layer components {
-  .cg-stats {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 2;
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-4);
-    margin: 0;
-    padding: 0 var(--space-1);
-    font-size: var(--text-label);
-    color: var(--muted);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity var(--duration-slow) ease;
-  }
-
   [data-graphic].is-3 .cg-stats,
   [data-graphic].is-final .cg-stats {
     opacity: 1;
@@ -5277,32 +4757,6 @@
   @media (max-width: 63.999rem) {
     .flow-graphic [data-graphic] .cg-stats {
       opacity: 1;
-    }
-  }
-
-  /* Yellow while they run and the page's ink once they have arrived: what is
-     moving is what is worth looking at, and when it stops it is a fact like
-     any other on the page. */
-  .cg-stats.is-counting .cg-stat b {
-    color: var(--signal);
-  }
-
-  .cg-stat b {
-    transition: color var(--duration-base) ease;
-    font-size: var(--text-h3);
-    font-weight: var(--weight-semibold);
-    letter-spacing: -0.02em;
-    color: var(--text);
-    font-variant-numeric: tabular-nums;
-  }
-
-  @media (max-width: 63.999rem) {
-    .cg-stats {
-      font-size: var(--text-caption);
-    }
-
-    .cg-stat b {
-      font-size: var(--text-h3);
     }
   }
 }

@@ -102,7 +102,7 @@ const people = [
       then that frame as a panel; both competed with the net for attention, and
       the net is the subject. */}
   <div class="stage-wash" data-stage-wash aria-hidden="true"></div>
-  <p class="stage-title" data-stage-wash aria-hidden="true">
+  <p class="ekho-eyebrow stage-title" data-stage-wash aria-hidden="true">
     {c.graphic.frameTitle}
   </p>
 
@@ -166,21 +166,29 @@ const people = [
             />
           </div>
           <h1 class="hero-title" data-intro-title>
-            {c.hero.titleBefore} <span class="signal-text">{c.hero.titleSignal}</span>
+            {c.hero.titleBefore} <span class="ekho-underline">{c.hero.titleSignal}</span>
           </h1>
           <p class="hero-lede" data-intro-fade>
             {c.hero.lede}
           </p>
-          <p class="cta-row" data-intro-fade>
+          <p class="ekho-button-row" data-intro-fade>
             {/* Straight to the mail. The chapter at the foot of the page says
                 the same thing at more length, but somebody who presses this
                 has already decided. */}
-            <a class="pill pill--solid" href="mailto:hello@ekholabs.eu?subject=Waitlist">
+            <a
+              class="ekho-button ekho-button--solid"
+              href="mailto:hello@ekholabs.eu?subject=Waitlist"
+            >
               {c.hero.cta}
             </a>
-            <a class="pill" href="#why">
+            <a class="ekho-button" href="#why">
               {c.hero.seeHow}
-              <svg class="pill-mark" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <svg
+                class="ekho-button__mark"
+                viewBox="0 0 16 16"
+                aria-hidden="true"
+                focusable="false"
+              >
                 <path d="M3.5 6 8 10.5 12.5 6" />
               </svg>
             </a>
@@ -199,7 +207,7 @@ const people = [
         data-done=""
       >
         <div class="chapter-body measure">
-          <p class="chapter-label">
+          <p class="ekho-eyebrow chapter-label">
             <span>01</span> {c.nav.why}
           </p>
           <h2>{c.why.title}</h2>
@@ -224,7 +232,7 @@ const people = [
         data-overlay="finder"
       >
         <div class="chapter-body measure">
-          <p class="chapter-label">
+          <p class="ekho-eyebrow chapter-label">
             <span>02</span> {c.nav.what}
           </p>
           <h2>{c.what.title}</h2>
@@ -258,7 +266,7 @@ const people = [
               the page this one replaced, so the address and the key placeholder
               are the ones the repo already used. */}
           <figure class="command" data-command>
-            <figcaption class="command-label">{c.what.commandLabel}</figcaption>
+            <figcaption class="ekho-eyebrow command-label">{c.what.commandLabel}</figcaption>
             <button
               class="command-copy"
               type="button"
@@ -295,7 +303,7 @@ const people = [
         data-overlay="chat"
       >
         <div class="chapter-body measure">
-          <p class="chapter-label">
+          <p class="ekho-eyebrow chapter-label">
             <span>03</span> {c.nav.how}
           </p>
           <h2>{c.how.title}</h2>
@@ -311,8 +319,8 @@ const people = [
             design one, and because the claim here is about a file format and
             not about a partnership. See docs/landing-v2.md. */}
         <div class="models">
-          <p class="models-label">
-            <span class="models-sq" aria-hidden="true"></span>
+          <p class="ekho-eyebrow models-label">
+            <span class="ekho-dot models-sq" aria-hidden="true"></span>
             {c.how.sovereignty}
           </p>
           <ModelRow lang={lang} />
@@ -340,7 +348,7 @@ const people = [
         data-done="conversation llm harness vault"
       >
         <div class="chapter-body measure">
-          <p class="chapter-label">
+          <p class="ekho-eyebrow chapter-label">
             <span>03</span> How
           </p>
           {/* The net, for a phone. The companion on the right is a wide-screen
@@ -405,7 +413,7 @@ const people = [
     data-stage="3"
   >
     <div class="measure">
-      <p class="chapter-label">
+      <p class="ekho-eyebrow chapter-label">
         <span>04</span> {c.nav.architecture}
       </p>
       <h2>{c.architecture.title}</h2>
