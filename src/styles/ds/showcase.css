@@ -457,3 +457,38 @@
     grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
   }
 }
+
+@layer components {
+  .ds-icon-group {
+    margin-bottom: var(--space-8);
+  }
+
+  .ds-icons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+    gap: var(--space-2);
+  }
+
+  .ds-icon {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3);
+    margin: 0;
+    padding: var(--space-5) var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+  }
+
+  .ds-icon .ekho-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ds-icon figcaption {
+    font-size: var(--text-micro);
+    line-height: var(--leading-snug);
+    color: var(--muted);
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+}

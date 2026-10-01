@@ -1,0 +1,37 @@
+---
+// One Lucide icon (ADR-0030), set into the page at build time: no script, no
+// request, nothing from elsewhere. The stroke, size and colour come from
+// .ekho-icon in the design system (1.5 px, 1em, currentColor); a local class
+// may change the size, never the stroke.
+//
+//   <Icon name="arrow-up-right" />
+//   <Icon name="copy" class="command-copy-ico" />
+//   <Icon name="search" label="Search" />    a label makes it an image
+//
+// The names are Lucide's: https://lucide.dev/icons
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
+interface Props {
+  name: string;
+  class?: string;
+  label?: string;
+}
+
+const { name, class: cls, label } = Astro.props;
+const file = join(process.cwd(), 'node_modules/lucide-static/icons', `${name}.svg`);
+const inner = readFileSync(file, 'utf8')
+  .replace(/^[\s\S]*?<svg[^>]*>/, '')
+  .replace(/<\/svg>\s*$/, '')
+  .trim();
+---
+
+<svg
+  class:list={['ekho-icon', cls]}
+  viewBox="0 0 24 24"
+  aria-hidden={label ? undefined : 'true'}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  focusable="false"
+  set:html={inner}
+/>

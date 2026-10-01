@@ -4,6 +4,7 @@ import key from '../assets/product/ekho-key.webp';
 import ContextGraphic from './ContextGraphic.astro';
 import Architecture from './Architecture.astro';
 import Arrow from './Arrow.astro';
+import Icon from './Icon.astro';
 import FinderWindow from './FinderWindow.astro';
 import ChatWindow from './ChatWindow.astro';
 import RoadmapMockup from './RoadmapMockup.astro';
@@ -64,7 +65,7 @@ const people = [
 
 <Base title={c.meta.title} description={c.meta.description} layout="wide" lang={lang}>
   <nav
-    class="chapter-nav"
+    class="ekho-nav"
     id="chapter-nav"
     aria-label={c.nav.chapters}
     slot="header-nav"
@@ -74,20 +75,20 @@ const people = [
       {chapters.map((c) => (
         <li>
           <a href={`#${c.id}`} data-chapter-link={c.id}>
-            <span class="chapter-nav-n">{c.n}</span>
+            <span class="ekho-nav__n">{c.n}</span>
             {c.label}
           </a>
         </li>
       ))}
-      <li class="chapter-nav-extra">
+      <li class="ekho-nav__extra">
         <a href="#waitlist" data-chapter-link="waitlist">
-          <span class="chapter-nav-n">06</span>
+          <span class="ekho-nav__n">06</span>
           {c.nav.waitlist}
         </a>
       </li>
-      <li class="chapter-nav-extra">
+      <li class="ekho-nav__extra">
         <a href="https://github.com/ekholabs">
-          <Arrow class="chapter-nav-arrow" />
+          <Arrow class="ekho-nav__arrow" />
           GitHub
         </a>
       </li>
@@ -185,14 +186,7 @@ const people = [
             </a>
             <a class="ekho-button" href="#why">
               {c.hero.seeHow}
-              <svg
-                class="ekho-button__mark"
-                viewBox="0 0 16 16"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path d="M3.5 6 8 10.5 12.5 6" />
-              </svg>
+              <Icon name="chevron-down" class="ekho-button__mark" />
             </a>
           </p>
         </div>
@@ -212,7 +206,7 @@ const people = [
           <p class="ekho-eyebrow chapter-label">
             <span>01</span> {c.nav.why}
           </p>
-          <h2>{c.why.title}</h2>
+          <h2 class="ekho-heading">{c.why.title}</h2>
           <Statement text={c.why.a} />
           <Statement text={c.why.b} />
           <Statement text={c.why.c} />
@@ -237,7 +231,7 @@ const people = [
           <p class="ekho-eyebrow chapter-label">
             <span>02</span> {c.nav.what}
           </p>
-          <h2>{c.what.title}</h2>
+          <h2 class="ekho-heading">{c.what.title}</h2>
           <Statement text={c.what.a} />
           <Statement text={c.what.b} />
         </div>
@@ -267,29 +261,26 @@ const people = [
               which the dashed edge says before the note does. Recovered from
               the page this one replaced, so the address and the key placeholder
               are the ones the repo already used. */}
-          <figure class="command" data-command>
-            <figcaption class="ekho-eyebrow command-label">{c.what.commandLabel}</figcaption>
+          <figure class="ekho-code" data-command>
+            <figcaption class="ekho-eyebrow ekho-code__label">{c.what.commandLabel}</figcaption>
             <button
-              class="command-copy"
+              class="ekho-code__copy"
               type="button"
               data-command-copy
               data-idle={c.nav.copy}
               data-done={c.nav.copied}
             >
-              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-                <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
-                <path d="M10.5 3.5A1.5 1.5 0 0 0 9 2H4a2 2 0 0 0-2 2v5a1.5 1.5 0 0 0 1.5 1.5" />
-              </svg>
+              <Icon name="copy" />
               <span data-command-copy-label>{c.nav.copy}</span>
             </button>
             <code data-command-text>
-              <span class="command-prompt" aria-hidden="true">
+              <span class="ekho-code__prompt" aria-hidden="true">
                 $
               </span>{' '}
               curl -fsSL https://get.ekholabs.eu/i/&lt;key&gt; | sh
             </code>
           </figure>
-          <p class="command-note">{c.what.commandNote}</p>
+          <p class="ekho-code__note">{c.what.commandNote}</p>
         </div>
       </section>
 
@@ -308,7 +299,7 @@ const people = [
           <p class="ekho-eyebrow chapter-label">
             <span>03</span> {c.nav.how}
           </p>
-          <h2>{c.how.title}</h2>
+          <h2 class="ekho-heading">{c.how.title}</h2>
           <Statement text={c.how.a} />
           <Statement text={c.how.b} />
         </div>
@@ -377,7 +368,7 @@ const people = [
                 invisible until then. */}
             <span class="graphic-landing" data-landing aria-hidden="true"></span>
           </div>
-          <h2>{c.compound.title}</h2>
+          <h2 class="ekho-heading">{c.compound.title}</h2>
           <Statement text={c.compound.a} />
           <Statement text={c.compound.b} />
         </div>
@@ -397,8 +388,8 @@ const people = [
     {/* Two columns, like the chapters before it: what the viewer is on the
         left, one window of it on the right. */}
     <div class="split-text">
-      <h2>{c.viewer.title}</h2>
-      <p class="chapter-lede">{c.viewer.lede}</p>
+      <h2 class="ekho-heading">{c.viewer.title}</h2>
+      <p class="ekho-lede">{c.viewer.lede}</p>
       <Statement text={c.viewer.a} />
       <p class="fig-note">{c.viewer.note}</p>
     </div>
@@ -418,8 +409,8 @@ const people = [
       <p class="ekho-eyebrow chapter-label">
         <span>04</span> {c.nav.architecture}
       </p>
-      <h2>{c.architecture.title}</h2>
-      <p class="chapter-lede">{c.architecture.lede}</p>
+      <h2 class="ekho-heading">{c.architecture.title}</h2>
+      <p class="ekho-lede">{c.architecture.lede}</p>
     </div>
     <Architecture lang={lang} />
   </section>
@@ -434,9 +425,9 @@ const people = [
     data-stage="3"
   >
     <div class="measure">
-      <h2>{c.who.title}</h2>
-      <p class="chapter-lede chapter-lede--claim">{c.who.claim}</p>
-      <p class="chapter-lede">{c.who.lede}</p>
+      <h2 class="ekho-heading">{c.who.title}</h2>
+      <p class="ekho-lede ekho-lede--claim">{c.who.claim}</p>
+      <p class="ekho-lede">{c.who.lede}</p>
     </div>
     <ul class="people">
       {people.map((p) => (
@@ -471,8 +462,8 @@ const people = [
     data-stage="3"
   >
     <div class="measure">
-      <h2>{c.waitlist.title}</h2>
-      <p class="chapter-lede">{c.waitlist.lede}</p>
+      <h2 class="ekho-heading">{c.waitlist.title}</h2>
+      <p class="ekho-lede">{c.waitlist.lede}</p>
       <Waitlist lang={lang} />
     </div>
   </section>
@@ -487,15 +478,11 @@ const people = [
   */}
   <div class="view-steps" data-view-steps hidden>
     <button class="view-step view-step--prev" type="button" data-view-step="-1">
-      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-        <path d="M3.5 10 8 5.5 12.5 10" />
-      </svg>
+      <Icon name="chevron-up" />
       <span>{c.nav.prev}</span>
     </button>
     <button class="view-step view-step--next" type="button" data-view-step="1">
-      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-        <path d="M3.5 6 8 10.5 12.5 6" />
-      </svg>
+      <Icon name="chevron-down" />
       <span>{c.nav.next}</span>
     </button>
   </div>
@@ -593,7 +580,7 @@ const people = [
   // where its rule meets the header's rather than passing under it. The step
   // bar measures this too, but only on a wide screen, and the nav is used on
   // both.
-  const headEl = document.querySelector<HTMLElement>('.site-header');
+  const headEl = document.querySelector<HTMLElement>('.ekho-header');
   const measureHead = () => {
     if (!headEl) return;
     document.documentElement.style.setProperty(
@@ -709,7 +696,7 @@ const people = [
   let dotAge = 0;
 
   function paintCollapse(collapse: number) {
-    const chatWin = chatOverlay?.querySelector<HTMLElement>('.win');
+    const chatWin = chatOverlay?.querySelector<HTMLElement>('.ekho-window');
     if (!figure || !chatWin) return;
 
     if (collapse > 0 && collapse < 1) {
@@ -805,7 +792,7 @@ const people = [
       // and the window shrinks into it. The window is held on screen until the
       // collapse is done, or it would fade out from under the movement.
       let collapse = 0;
-      const chatWin = chatOverlay?.querySelector<HTMLElement>('.win');
+      const chatWin = chatOverlay?.querySelector<HTMLElement>('.ekho-window');
       // The lit stage belongs to the story chapters only: not to the opening,
       // where there is nothing yet to be a ground for, and not below the
       // story, where the chapters take the whole page and a lit strip down one
@@ -1210,7 +1197,7 @@ const people = [
     // outer edge set Back and Next a margin's width left of where they stood
     // in the chapters before.
     const inset = spanEl ? parseFloat(getComputedStyle(spanEl).paddingLeft) || 0 : 0;
-    const header = document.querySelector<HTMLElement>('.site-header')?.getBoundingClientRect();
+    const header = document.querySelector<HTMLElement>('.ekho-header')?.getBoundingClientRect();
     // on the root, because the bars are not the only thing hung off this box:
     // the rule between the columns and the stage behind the graph use it too
     if (span) {
@@ -1266,7 +1253,7 @@ const people = [
         range.selectNodeContents(copyText);
         // start after the prompt, so what gets selected is what would have been
         // copied rather than a dollar sign the reader then has to delete
-        const prompt = copyText.querySelector('.command-prompt');
+        const prompt = copyText.querySelector('.ekho-code__prompt');
         if (prompt) range.setStartAfter(prompt);
         sel.removeAllRanges();
         sel.addRange(range);

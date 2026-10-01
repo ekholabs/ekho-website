@@ -1,11 +1,9 @@
 ---
-// The two arrows the page uses, drawn rather than set in type. A glyph like ↗
-// carries the weight and the baseline of whatever font is around it and never
-// matches the hairlines next to it; these are stroked at the same weight as
-// the rest of the line work.
+// The two arrows the page uses, from the icon set (ADR-0030).
 //
 // out  · leaves the page (an external link)
 // send · commits what is in the field (the composer button in the mockup)
+import Icon from './Icon.astro';
 
 interface Props {
   kind?: 'out' | 'send';
@@ -14,21 +12,4 @@ interface Props {
 const { kind = 'out', class: cls } = Astro.props;
 ---
 
-<svg
-  class:list={['ekho-icon', `arrow--${kind}`, cls]}
-  viewBox="0 0 24 24"
-  aria-hidden="true"
-  focusable="false"
->
-  {kind === 'out' ? (
-    <>
-      <path d="M6.75 17.25 17 7" />
-      <path d="M9.5 7H17v7.5" />
-    </>
-  ) : (
-    <>
-      <path d="M12 19V5.75" />
-      <path d="M6.5 11.25 12 5.75l5.5 5.5" />
-    </>
-  )}
-</svg>
+<Icon name={kind === 'out' ? 'arrow-up-right' : 'arrow-up'} class={cls} />

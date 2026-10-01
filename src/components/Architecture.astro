@@ -21,7 +21,7 @@ const layers = [
   { key: 'ontology', code: 'ekho-core', ...L.ontology },
   // The vault used to break into knowledge, specs and code here. The split is
   // out for now — it describes how the vault is worked with rather than what
-  // the layer is — and the .arch-parts styles are still in place for when it
+  // the layer is — and the .ekho-disclosure__parts styles are still in place for when it
   // comes back.
   { key: 'vault', ...L.vault },
 ] as {
@@ -34,18 +34,20 @@ const layers = [
 }[];
 ---
 
-<div class="arch" data-arch>
+<div class="ekho-disclosure" data-arch>
   {layers.map((l) => (
-    <details class:list={['arch-row', `arch-row--${l.key}`]} name="arch">
-      <summary class="arch-head">
-        <span class="arch-title">
-          {l.key === 'vault' && <span class="ekho-dot arch-sq" aria-hidden="true"></span>}
+    <details class:list={['ekho-disclosure__item', `arch-row--${l.key}`]} name="arch">
+      <summary class="ekho-disclosure__head">
+        <span class="ekho-disclosure__title">
+          {l.key === 'vault' && (
+            <span class="ekho-dot ekho-disclosure__mark" aria-hidden="true"></span>
+          )}
           {l.title}
-          {l.code && <span class="arch-code">{l.code}</span>}
+          {l.code && <span class="ekho-disclosure__code">{l.code}</span>}
         </span>
-        <span class="arch-note">{l.note}</span>
+        <span class="ekho-disclosure__note">{l.note}</span>
       </summary>
-      <div class="arch-desc">
+      <div class="ekho-disclosure__body">
         <p>
           <strong>{l.lead}</strong> {l.text}
         </p>

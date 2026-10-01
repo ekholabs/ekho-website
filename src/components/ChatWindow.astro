@@ -52,18 +52,18 @@ const rows = c.chat.rows;
   </p>
 
   <figure
-    class="win win--chat"
+    class="ekho-window ekho-window--glass ekho-window--chat"
     aria-label="EKHO running inside an ordinary chat client: a command it runs and a skill it applies"
   >
-    <div class="win-bar">
-      <span class="win-lights" aria-hidden="true">
+    <div class="ekho-window__bar">
+      <span class="ekho-window__lights" aria-hidden="true">
         <i></i>
         <i></i>
         <i></i>
       </span>
-      <span class="win-title">{c.chat.windowTitle}</span>
+      <span class="ekho-window__title">{c.chat.windowTitle}</span>
     </div>
-    <div class="win-body">
+    <div class="ekho-window__body">
       <nav class="chat-side" aria-hidden="true">
         <p class="chat-new">
           <span class="chat-plus">+</span> {c.chat.newChat}

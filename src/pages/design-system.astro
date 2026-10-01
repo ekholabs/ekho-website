@@ -3,6 +3,7 @@
 // step 2: the scales read off the site, before the site is switched over to
 // them. Not linked from anywhere and, like every page until launch, noindex.
 import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
 import '../styles/ds/showcase.css';
 
 const type = [
@@ -157,6 +158,76 @@ const colours = [
   ['text', 'ink'],
   ['signal', 'what is yours'],
   ['core', 'EKHO core, screens'],
+] as const;
+
+const icons = [
+  [
+    'Controls',
+    [
+      'arrow-up-right',
+      'arrow-right',
+      'arrow-up',
+      'chevron-down',
+      'chevron-right',
+      'chevron-left',
+      'chevron-up',
+      'copy',
+      'check',
+      'x',
+      'menu',
+      'plus',
+      'minus',
+      'search',
+      'external-link',
+      'download',
+      'more-horizontal',
+      'refresh-cw',
+      'settings-2',
+      'filter',
+    ],
+  ],
+  [
+    'Knowledge and vault',
+    [
+      'folder',
+      'folder-open',
+      'file-text',
+      'files',
+      'inbox',
+      'archive',
+      'link',
+      'network',
+      'waypoints',
+      'git-branch',
+      'git-pull-request',
+      'tag',
+      'bookmark',
+      'book-open',
+      'library',
+      'database',
+    ],
+  ],
+  [
+    'Things in the graph',
+    [
+      'lightbulb',
+      'flask-conical',
+      'scale',
+      'compass',
+      'user',
+      'users',
+      'building-2',
+      'calendar',
+      'message-square',
+      'mic',
+      'audio-lines',
+      'quote',
+      'sparkles',
+      'list-checks',
+      'target',
+      'clock',
+    ],
+  ],
 ] as const;
 ---
 
@@ -350,6 +421,28 @@ const colours = [
           Play
         </button>
       </p>
+    </section>
+
+    <section class="ds-section">
+      <h2>Icons</h2>
+      <p>
+        Lucide (ADR-0030) at a 1.5 px stroke, in the colour of the text around it. Set into the page
+        at build time by <code>&lt;Icon name="…" /&gt;</code>. EKHO's own type marks are not part of
+        it. The full set: <a href="https://lucide.dev/icons">lucide.dev/icons</a>.
+      </p>
+      {icons.map(([group, names]) => (
+        <div class="ds-icon-group">
+          <p class="ds-eyebrow">{group}</p>
+          <div class="ds-icons">
+            {names.map((n) => (
+              <figure class="ds-icon">
+                <Icon name={n} />
+                <figcaption>{n}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      ))}
     </section>
 
     <section class="ds-section">

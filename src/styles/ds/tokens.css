@@ -38,6 +38,31 @@
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
   --maxw: 44rem; /* the text column */
 
+  /* --- window: a depicted window is somebody else's chrome, so it has its
+     own panel colours; the ones floating over the graph are glass --------- */
+  /* the inside of a depicted window: somebody else's chrome, so its own
+  panel colours. Its corners follow the system (--radius-lg). */
+  --panel: #fff;
+  --panel-line: #ddd8cf;
+  --panel-sub: #f4f2ec;
+  /* the windows that float over the graph are glass: a lit rim, a top
+  highlight and a halo that lifts them off whatever is behind */
+  --glass: 97%;
+  --glass-rim: rgb(255 255 255 / 0.9);
+  --glass-top: rgb(255 255 255 / 0.8);
+  --glass-halo: rgb(26 26 24 / 0.05);
+  --glass-cast: rgb(26 26 24 / 0.2);
+
+  /* --- terminal: dark in either mode, because a terminal is black ------- */
+  --term: #0a0a09;
+  --term-ink: #e9e7e2;
+  --term-muted: #9b958b;
+  --term-prompt: #7c776f;
+  --term-line: #2e2c28;
+  --term-line-strong: #4a463f;
+  --term-shadow: 0 20px 60px -22px rgb(0 0 0 / 0.38), 0 4px 14px -8px rgb(0 0 0 / 0.22);
+  --term-shadow-hover: 0 24px 66px -20px rgb(0 0 0 / 0.46), 0 5px 16px -8px rgb(0 0 0 / 0.28);
+
   /* --- type: size ------------------------------------------------------- */
   --text-display: clamp(2.5rem, 2.236rem + 1.127vw, 3.25rem); /* 40 → 52 */
   --text-h2: clamp(2rem, 1.868rem + 0.563vw, 2.375rem); /* 32 → 38 */
@@ -60,7 +85,7 @@
   --leading-body: 1.6; /* running text */
 
   --tracking-display: -0.035em;
-  --tracking-heading: -0.025em;
+  --tracking-heading: -0.03em;
   --tracking-title: -0.015em;
   --tracking-label: 0.1em; /* uppercase only */
 
@@ -114,6 +139,7 @@
   /* --- small parts that repeat ------------------------------------------ */
   --focus-ring: 2px solid var(--signal);
   --focus-offset: 3px;
+  --icon-stroke: 1.5; /* Lucide line weight (ADR-0030) */
   --dot-size: 9px; /* the signal point, round: what is EKHO's, or yours */
   --underline-thin: 2px; /* links in text */
   --underline-bold: 3px; /* the signal under a headline */
@@ -124,6 +150,13 @@
      (max-width: 47.999rem) phone · (min-width: 64rem) desktop */
   --bp-md: 48rem;
   --bp-lg: 64rem;
+}
+
+/* On a phone headings sit tighter, the way the site has always set them. */
+@media (max-width: 47.999rem) {
+  :root {
+    --tracking-heading: -0.042em;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -142,6 +175,15 @@
     --core: #121210;
     --block: #edebe6;
     --block-ink: #1a1a18;
+
+    --panel: #36342e;
+    --panel-line: #4a473f;
+    --panel-sub: #2c2a26;
+    --glass: 95%;
+    --glass-rim: rgb(255 255 255 / 0.14);
+    --glass-top: rgb(255 255 255 / 0.07);
+    --glass-halo: rgb(237 235 230 / 0.05);
+    --glass-cast: rgb(0 0 0 / 0.5);
 
     /* light-ink shadows vanish on a dark ground: black, and stronger */
     --shadow-ink: 0 0 0;

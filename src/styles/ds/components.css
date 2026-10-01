@@ -69,7 +69,7 @@
     margin-left: var(--space-0-5);
     fill: none;
     stroke: var(--signal);
-    stroke-width: 1.5;
+    stroke-width: var(--icon-stroke);
     stroke-linecap: round;
     stroke-linejoin: round;
     vertical-align: -0.15em;
@@ -81,13 +81,13 @@
     box-shadow: inset 0 calc(var(--underline-bold) * -1) 0 var(--signal);
   }
 
-  /* --- icon: drawn line work at one stroke weight -------------------------- */
+  /* --- icon: Lucide (ADR-0030), one stroke weight, the colour of its text --- */
   .ekho-icon {
     width: 1em;
     height: 1em;
     fill: none;
     stroke: currentcolor;
-    stroke-width: 1.5;
+    stroke-width: var(--icon-stroke);
     stroke-linecap: round;
     stroke-linejoin: round;
     vertical-align: -0.12em;
@@ -147,5 +147,948 @@
     .ekho-scroller--narrow::-webkit-scrollbar {
       display: none;
     }
+  }
+}
+
+@layer components {
+  /* --- heading: the h2 of a chapter or a section --------------------------- */
+  .ekho-heading {
+    max-width: 20ch;
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-h2);
+    font-weight: var(--weight-semibold);
+    line-height: 1.08;
+    letter-spacing: var(--tracking-heading);
+  }
+
+  @media (max-width: 47.999rem) {
+    .ekho-heading {
+      line-height: var(--leading-tight);
+    }
+  }
+
+  /* --- lede: the paragraph under a heading that says what the section is --- */
+  .ekho-lede {
+    max-width: 58ch;
+    margin: 0 0 var(--space-8);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    color: var(--muted);
+  }
+
+  /* a claim before the lede: the point in medium, then the lede explains it */
+  .ekho-lede--claim {
+    margin-bottom: var(--space-4);
+    font-weight: var(--weight-medium);
+  }
+
+  /* --- statement: a paragraph that leads with its own first sentence ------- */
+  .ekho-statement {
+    max-width: 44ch;
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-body);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-body);
+    letter-spacing: 0;
+    color: var(--muted);
+  }
+
+  .ekho-statement:last-child {
+    margin-bottom: 0;
+  }
+
+  .ekho-statement__lead {
+    font-weight: var(--weight-medium);
+    color: var(--text);
+  }
+
+  /* a one-sentence claim, set larger on a phone for a column of paragraphs to
+     rise to */
+  @media (max-width: 63.999rem) {
+    .ekho-statement--pull {
+      font-size: var(--text-h3);
+      line-height: var(--leading-snug);
+      letter-spacing: -0.025em;
+    }
+  }
+}
+
+@layer components {
+  /* --- header, navigation, menu, language, footer: the frame of every page.
+     The chapter navigation is a row on a desktop and a full-screen menu behind
+     the burger on a phone. */
+  .ekho-header,
+  .ekho-footer {
+    border-block: 1px solid var(--line);
+    border-inline: 0;
+  }
+
+  /* the header stays at the top on every page, over a blurred backdrop */
+  .ekho-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    border-top: 0;
+    padding-block: var(--space-4);
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  .ekho-header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .ekho-brand {
+    flex: none;
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .ekho-links {
+    display: flex;
+    gap: var(--space-5);
+    font-size: var(--text-small);
+  }
+
+  .ekho-links a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .ekho-links a:hover {
+    color: var(--text);
+  }
+
+  .ekho-header__aside:hover {
+    color: var(--text);
+  }
+
+  @media (min-width: 64rem) {
+    .ekho-header .ekho-header--centred {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+    }
+
+    .ekho-header--centred .ekho-brand {
+      grid-column: 2;
+      grid-row: 1;
+      letter-spacing: 0.04em;
+    }
+
+    .ekho-header--centred .ekho-nav {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .ekho-header--centred .ekho-nav ol {
+      margin-left: 0;
+    }
+
+    .ekho-header--centred .ekho-header__aside {
+      display: block;
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: end;
+    }
+  }
+  /* chapter navigation, inside the sticky header on the homepage. On narrow
+     screens the list scrolls sideways; the active chapter is kept in view. */
+  .ekho-nav {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .ekho-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ekho-nav ol {
+    display: flex;
+    gap: var(--space-5);
+    width: max-content;
+    margin: 0 0 0 auto;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-small);
+  }
+
+  .ekho-nav a {
+    display: inline-flex;
+    gap: var(--space-2);
+    padding-bottom: var(--space-1);
+    border-bottom: 1.5px solid transparent;
+    color: var(--muted);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .ekho-nav a:hover {
+    color: var(--text);
+  }
+
+  .ekho-nav__n {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ekho-footer__nav {
+    display: flex;
+    gap: var(--space-5);
+  }
+
+  .ekho-footer__nav a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .ekho-footer__nav a:hover {
+    color: var(--text);
+  }
+
+  .ekho-footer {
+    border-bottom: 0;
+    padding-block: var(--space-6);
+    color: var(--muted);
+    font-size: var(--text-small);
+  }
+
+  .ekho-footer .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    justify-content: space-between;
+  }
+
+  .ekho-nav__arrow {
+    width: 0.85em;
+    height: 0.85em;
+  }
+
+  .ekho-nav a[aria-current] {
+    border-bottom-color: var(--signal);
+    color: var(--text);
+  }
+
+  .ekho-nav a[aria-current] .ekho-nav__n {
+    color: var(--text);
+  }
+
+  /* ------------------------------------------------------------------
+     The menu on narrow screens. The chapters do not fit in a row there, so
+     the same <nav> becomes a full-screen panel behind a button. One list of
+     links, laid out two ways.
+     ------------------------------------------------------------------ */
+
+  .ekho-burger {
+    display: none;
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: -0.6rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .ekho-burger__lines::before,
+  .ekho-burger__lines::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20px;
+    height: 1.5px;
+    margin-left: -10px;
+    background: currentcolor;
+    transition:
+      transform 240ms ease,
+      opacity 240ms ease;
+  }
+
+  .ekho-burger__lines::before {
+    transform: translateY(-4px);
+  }
+
+  .ekho-burger__lines::after {
+    transform: translateY(4px);
+  }
+
+  .menu-open .ekho-burger__lines::before {
+    transform: rotate(45deg);
+  }
+
+  .menu-open .ekho-burger__lines::after {
+    transform: rotate(-45deg);
+  }
+
+  .ekho-burger:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+    border-radius: var(--radius-sm);
+  }
+
+  /* the two extra rows only exist for the panel */
+  .ekho-nav__extra {
+    display: none;
+  }
+
+  @media (max-width: 63.999rem) {
+    .ekho-burger {
+      display: block;
+    }
+
+    .ekho-nav {
+      position: fixed;
+      inset: 0;
+      z-index: 15;
+      flex: none;
+      overflow-y: auto;
+      padding: 5.25rem var(--space-4) var(--space-10);
+      background: var(--bg);
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity 240ms ease,
+        visibility 240ms;
+    }
+
+    .menu-open .ekho-nav {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .ekho-nav ol {
+      display: block;
+      width: auto;
+      margin: 0;
+    }
+
+    .ekho-nav__extra {
+      display: block;
+    }
+
+    .ekho-nav li {
+      border-top: 1px solid var(--line);
+    }
+
+    .ekho-nav li:last-child {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ekho-nav a {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-4);
+      padding: var(--space-4) 0;
+      border-bottom: 0;
+      font-size: var(--text-h3);
+      font-weight: var(--weight-medium);
+      letter-spacing: -0.025em;
+      color: var(--text);
+      white-space: normal;
+    }
+
+    .ekho-nav .ekho-nav__n {
+      flex: none;
+      width: 1.5rem;
+      font-size: var(--text-caption);
+      font-weight: var(--weight-regular);
+      color: var(--muted-deep);
+    }
+
+    /* the chapter you are in is marked, not coloured in */
+    .ekho-nav a[aria-current]::after {
+      content: '';
+      width: 9px;
+      height: 9px;
+      margin-left: auto;
+      align-self: center;
+      border-radius: 50%;
+      background: var(--signal);
+    }
+  }
+  /* The header blurs what scrolls under it. A backdrop-filter makes the header
+     the containing block for any fixed descendant, which pinned the menu panel
+     to the header's own box instead of the viewport. While the menu is open the
+     blur comes off, so the panel measures against the viewport again and the
+     header, at a higher z-index, keeps sitting on top of it. */
+  .menu-open .ekho-header {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  @media (max-width: 63.999rem) {
+    .ekho-header .ekho-brand,
+    .ekho-burger {
+      position: relative;
+      z-index: 16;
+    }
+  }
+  /* The language switch. A native select, because it is the one control every
+     platform already knows how to open, reach by keyboard and read aloud, and
+     because each option is a real path: with the script off it is still a list
+     of the four pages, and the pages exist. */
+  .ekho-header__aside {
+    color: var(--muted);
+    font-size: var(--text-small);
+    text-decoration: none;
+    white-space: nowrap;
+    display: none;
+  }
+
+  .ekho-lang {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ekho-lang__select {
+    appearance: none;
+    padding: var(--space-1) var(--space-5) var(--space-1) var(--space-2);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: var(--text-caption);
+    letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+
+  .ekho-lang__select:hover {
+    color: var(--text);
+  }
+
+  .ekho-lang__select:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  .ekho-lang__select option {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  .ekho-lang__caret {
+    position: absolute;
+    right: var(--space-1);
+    width: 0.75rem;
+    height: 0.75rem;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  @media (min-width: 64rem) {
+    .ekho-header__aside {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: end;
+    }
+
+    .ekho-header__link {
+      color: var(--muted);
+      font-size: var(--text-small);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .ekho-header__link:hover {
+      color: var(--text);
+    }
+  }
+}
+
+@layer components {
+  /* --- disclosure: a list of rows that open one at a time, the open one carried in the dark block ------------------- */
+
+  summary.ekho-disclosure__head {
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary.ekho-disclosure__head::-webkit-details-marker {
+    display: none;
+  }
+
+  details[open] > summary.ekho-disclosure__head::after {
+    content: '−';
+  }
+
+  summary.ekho-disclosure__head:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+    border-radius: var(--radius-sm);
+  }
+
+  details.ekho-disclosure__item:hover,
+  details.ekho-disclosure__item[open] {
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-1px);
+  }
+
+  details.ekho-disclosure__item:hover {
+    box-shadow: var(--shadow-lift-hover);
+  }
+
+  .ekho-disclosure__item {
+    border-radius: var(--radius-sm);
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease;
+    box-shadow: none;
+    background: var(--surface);
+  }
+
+  .ekho-disclosure__mark {
+    align-self: center;
+  }
+
+  .ekho-disclosure__code {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-regular);
+    opacity: 1;
+    color: var(--muted-deep);
+  }
+
+  summary.ekho-disclosure__head::after {
+    content: '+';
+    font-size: var(--text-h3);
+    line-height: 1;
+    opacity: 0.6;
+    color: var(--muted-deep);
+    font-weight: var(--weight-regular);
+  }
+
+  .ekho-disclosure__body {
+    margin: 0;
+    padding: 0 var(--space-6) var(--space-6);
+    font-size: var(--text-small);
+    line-height: 1.55;
+    max-width: 68ch;
+    color: var(--muted);
+  }
+
+  .ekho-disclosure__body p {
+    margin: 0;
+  }
+
+  .ekho-disclosure__body strong {
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+  }
+
+  /* the vault opens onto its three parts */
+  .ekho-disclosure__parts {
+    list-style: none;
+    display: grid;
+    gap: var(--space-3);
+    margin: var(--space-5) 0 0;
+    padding: 0;
+  }
+
+  .ekho-disclosure__parts li {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: var(--space-1) var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--line);
+    font-size: var(--text-small);
+  }
+
+  .ekho-disclosure__parts b {
+    font-weight: var(--weight-semibold);
+    color: var(--text);
+  }
+
+  .ekho-disclosure__parts code {
+    grid-column: 1;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    color: var(--muted-deep);
+  }
+
+  .ekho-disclosure__parts span {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  @media (max-width: 47.999rem) {
+    .ekho-disclosure__head {
+      padding: var(--space-4) var(--space-4);
+    }
+
+    .ekho-disclosure__body {
+      padding: 0 var(--space-4) var(--space-5);
+    }
+
+    .ekho-disclosure__parts li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ekho-disclosure__parts span {
+      grid-column: 1;
+      grid-row: auto;
+    }
+  }
+  /* in chapter 06 the row you opened is the one that carries */
+  .ekho-disclosure__item[open] {
+    background: var(--block);
+  }
+
+  .ekho-disclosure__item[open] .ekho-disclosure__title {
+    color: var(--block-ink);
+  }
+
+  .ekho-disclosure__item[open] .ekho-disclosure__note,
+  .ekho-disclosure__item[open] .ekho-disclosure__code,
+  .ekho-disclosure__item[open] summary.ekho-disclosure__head::after {
+    color: color-mix(in srgb, var(--block-ink) 62%, transparent);
+  }
+
+  .ekho-disclosure__item[open] .ekho-disclosure__body {
+    color: color-mix(in srgb, var(--block-ink) 74%, transparent);
+  }
+
+  .ekho-disclosure__item[open] .ekho-disclosure__body strong,
+  .ekho-disclosure__item[open] .ekho-disclosure__parts b {
+    color: var(--block-ink);
+  }
+
+  .ekho-disclosure__item[open] .ekho-disclosure__parts li {
+    border-top-color: color-mix(in srgb, var(--block-ink) 20%, transparent);
+  }
+
+  .ekho-disclosure__item[open] .ekho-disclosure__parts code {
+    color: color-mix(in srgb, var(--block-ink) 55%, transparent);
+  }
+
+  details.ekho-disclosure__item[open]:hover {
+    box-shadow: none;
+  }
+
+  .ekho-disclosure {
+    display: grid;
+    margin-top: clamp(1.25rem, 3.5vh, 2.5rem);
+    gap: clamp(0.2rem, 0.55vh, 0.4rem);
+  }
+
+  .ekho-disclosure__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-6);
+    padding: clamp(0.7rem, 1.9vh, 1.4rem) clamp(1rem, 2vw, 1.6rem);
+  }
+
+  .ekho-disclosure__title {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.025em;
+    font-size: var(--text-h3);
+  }
+
+  .ekho-disclosure__note {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: var(--text-small);
+  }
+
+  @supports selector(::details-content) {
+    .ekho-disclosure__item::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition:
+        block-size 420ms cubic-bezier(0.2, 0.7, 0.3, 1),
+        content-visibility 420ms allow-discrete;
+    }
+
+    .ekho-disclosure__item[open]::details-content {
+      block-size: auto;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    @supports selector(::details-content) {
+      .ekho-disclosure__item::details-content {
+        transition: none;
+      }
+    }
+  }
+  @media (max-width: 63.999rem) {
+    /* The repository name beside a layer is an aside, and here it is what
+         makes the row wrap onto a second line. */
+    .ekho-disclosure__code {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ekho-disclosure__item,
+    details.ekho-disclosure__item:hover,
+    details.ekho-disclosure__item[open] {
+      transition: none;
+      transform: none;
+    }
+  }
+}
+
+@layer components {
+  /* --- code: the one line you paste, in a terminal, with a copy button ---- */
+  .ekho-code {
+    max-width: 27rem;
+    margin: var(--space-10) 0 0;
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    /* No edge at all: the panel is held off the page by a wide, soft shadow
+       instead, which is what a terminal window on a desk actually looks like.
+       The note underneath is what marks this as unshipped; N4 asks for the
+       marking, not for a border. */
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--term);
+    box-shadow: var(--term-shadow);
+  }
+
+  .ekho-code__label {
+    margin-bottom: var(--space-2);
+    /* the terminal stays dark in both modes */
+    color: var(--muted-deep);
+  }
+
+  .ekho-code code {
+    display: block;
+    font-family: var(--font-mono);
+    /* sized so the line fits the column in one piece: a command broken across
+       two lines looks like two commands */
+    font-size: var(--text-label);
+    line-height: 1.55;
+    color: var(--term-ink);
+    overflow-wrap: anywhere;
+  }
+
+  .ekho-code__prompt {
+    margin-right: var(--space-1);
+    color: var(--term-prompt);
+  }
+
+  .ekho-code__note {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-label);
+    color: var(--muted-deep);
+  }
+
+  /* A command on a page is there to be taken. The box answers the pointer and
+     the button hands the line over; it is always in the DOM and always
+     reachable by keyboard, and only its opacity waits for the hover, so nothing
+     moves or reflows when the pointer arrives. */
+  .ekho-code {
+    position: relative;
+    transition: box-shadow var(--duration-fast) ease;
+  }
+
+  .ekho-code:hover,
+  .ekho-code:focus-within {
+    box-shadow: var(--term-shadow-hover);
+  }
+
+  .ekho-code__copy {
+    align-items: center;
+    background: none;
+    border: 1px solid var(--term-line);
+    border-radius: var(--radius-sm);
+    color: var(--term-muted);
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-size: var(--text-micro);
+    font-weight: var(--weight-medium);
+    gap: var(--space-1);
+    letter-spacing: 0.02em;
+    opacity: 0;
+    padding: var(--space-1) var(--space-2);
+    position: absolute;
+    right: 0.6rem;
+    top: 0.6rem;
+    transition:
+      opacity 0.25s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .ekho-code:hover .ekho-code__copy,
+  .ekho-code__copy:focus-visible {
+    opacity: 1;
+  }
+
+  .ekho-code__copy:hover {
+    border-color: var(--term-line-strong);
+    color: var(--term-ink);
+  }
+
+  .ekho-code__copy:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  .ekho-code__copy.is-done {
+    border-color: color-mix(in srgb, var(--signal) 55%, var(--term-line));
+    color: var(--signal);
+    opacity: 1;
+  }
+
+  .ekho-code__copy svg {
+    height: 0.75rem;
+    width: 0.75rem;
+  }
+
+  /* Without a pointer there is no hover to reveal it, so it simply stays. */
+  @media (hover: none) {
+    .ekho-code__copy {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ekho-code,
+    .ekho-code__copy {
+      transition: none;
+    }
+  }
+}
+
+@layer components {
+  /* --- window: a depicted window, opaque or as glass over the graph. The traffic lights are the colours of somebody else's chrome and stay literal --------- */
+  /* ---------- windows: the reader's own environment ---------- */
+
+  .ekho-window {
+    margin: 0;
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  .ekho-window__bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--panel-sub);
+    border-bottom: 1px solid var(--panel-line);
+  }
+
+  .ekho-window__lights {
+    display: inline-flex;
+    gap: var(--space-2);
+  }
+
+  .ekho-window__lights i {
+    width: 11px;
+    height: 11px;
+    border-radius: var(--radius-full);
+    background: #ff5f57;
+  }
+
+  .ekho-window__lights i:nth-child(2) {
+    background: #febc2e;
+  }
+
+  .ekho-window__lights i:nth-child(3) {
+    background: #28c840;
+  }
+
+  .ekho-window__title {
+    flex: 1;
+    text-align: center;
+    font-size: var(--text-label);
+    font-weight: var(--weight-medium);
+    color: var(--muted);
+    padding-right: var(--space-10);
+  }
+
+  .ekho-window__body {
+    display: flex;
+    min-height: 0;
+  }
+
+  /* --- Finder --- */
+
+  .ekho-window--finder .ekho-window__body {
+    height: 16.5rem;
+  }
+
+  /* --- chat --- */
+
+  .ekho-window--chat .ekho-window__body {
+    height: 34rem;
+  }
+
+  /* the window never spills out of its column */
+  .ekho-window__body > * {
+    min-width: 0;
+  }
+
+  /* --- the Finder window: one list, real folders --- */
+
+  .ekho-window--finder {
+    width: 17.5rem;
+  }
+
+  @media (max-width: 63.999rem) {
+    .ekho-window--finder {
+      width: 13.5rem;
+    }
+  }
+  /* The Finder and the chat window lie on the graph, so the pane has an edge
+     rather than a printed outline: a hairline rim, a single-pixel highlight
+     along the top where a glass front would catch the light, and a halo so
+     faint it reads as depth and not as an effect. The cloud behind stays just
+     perceptible through it.
+
+     Deliberately not done: a saturation boost, a strong blur, or translucent
+     panels inside the window. That is the look of a particular year, and this
+     has to still be right in five. The viewer in chapter 05 is a product shot
+     on a solid ground and stays opaque. */
+  .ekho-window--glass {
+    background: color-mix(in srgb, var(--panel) var(--glass), transparent);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border-color: var(--glass-rim);
+    box-shadow:
+      0 0 64px -12px var(--glass-halo),
+      0 22px 54px -24px var(--glass-cast),
+      inset 0 1px 0 var(--glass-top);
+  }
+
+  .ekho-window--glass .ekho-window__bar {
+    background: color-mix(in srgb, var(--panel-sub) 70%, transparent);
+    border-bottom-color: var(--glass-rim);
+  }
+
+  @supports not (backdrop-filter: blur(1px)) {
+    .ekho-window--glass {
+      background: var(--panel);
+    }
+  }
+  .ekho-window--app .ekho-window__body {
+    color: #1a1a18;
+    height: clamp(15rem, 41vh, 23.5rem);
   }
 }
