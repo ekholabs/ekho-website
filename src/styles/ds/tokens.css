@@ -114,6 +114,7 @@
   /* --- small parts that repeat ------------------------------------------ */
   --focus-ring: 2px solid var(--signal);
   --focus-offset: 3px;
+  --icon-stroke: 1.5; /* Lucide line weight (ADR-0030) */
   --dot-size: 9px; /* the signal point, round: what is EKHO's, or yours */
   --underline-thin: 2px; /* links in text */
   --underline-bold: 3px; /* the signal under a headline */

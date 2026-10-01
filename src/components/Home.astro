@@ -4,6 +4,7 @@ import key from '../assets/product/ekho-key.webp';
 import ContextGraphic from './ContextGraphic.astro';
 import Architecture from './Architecture.astro';
 import Arrow from './Arrow.astro';
+import Icon from './Icon.astro';
 import FinderWindow from './FinderWindow.astro';
 import ChatWindow from './ChatWindow.astro';
 import RoadmapMockup from './RoadmapMockup.astro';
@@ -183,14 +184,7 @@ const people = [
             </a>
             <a class="ekho-button" href="#why">
               {c.hero.seeHow}
-              <svg
-                class="ekho-button__mark"
-                viewBox="0 0 16 16"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path d="M3.5 6 8 10.5 12.5 6" />
-              </svg>
+              <Icon name="chevron-down" class="ekho-button__mark" />
             </a>
           </p>
         </div>
@@ -274,10 +268,7 @@ const people = [
               data-idle={c.nav.copy}
               data-done={c.nav.copied}
             >
-              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-                <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
-                <path d="M10.5 3.5A1.5 1.5 0 0 0 9 2H4a2 2 0 0 0-2 2v5a1.5 1.5 0 0 0 1.5 1.5" />
-              </svg>
+              <Icon name="copy" />
               <span data-command-copy-label>{c.nav.copy}</span>
             </button>
             <code data-command-text>
@@ -485,15 +476,11 @@ const people = [
   */}
   <div class="view-steps" data-view-steps hidden>
     <button class="view-step view-step--prev" type="button" data-view-step="-1">
-      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-        <path d="M3.5 10 8 5.5 12.5 10" />
-      </svg>
+      <Icon name="chevron-up" />
       <span>{c.nav.prev}</span>
     </button>
     <button class="view-step view-step--next" type="button" data-view-step="1">
-      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-        <path d="M3.5 6 8 10.5 12.5 6" />
-      </svg>
+      <Icon name="chevron-down" />
       <span>{c.nav.next}</span>
     </button>
   </div>
