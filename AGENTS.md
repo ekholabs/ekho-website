@@ -44,8 +44,7 @@ src/
     Base.astro     the shell every page wraps itself in:
                    <head>, meta tags, site header, footer
   styles/
-    global.css     design tokens (:root), the Tailwind theme (@theme)
-                   and every shared style in the site
+    global.css     design tokens (:root) and every style
 public/            copied into the build verbatim, no processing
   CNAME            the custom domain — see N1
   favicon.svg      tab icon
@@ -55,7 +54,7 @@ tools/
 .github/workflows/
   ci.yml           format · types · build · CNAME · links — on every PR
   deploy.yml       build and publish to GitHub Pages — on push to main
-astro.config.mjs   site URL, integrations, the Tailwind Vite plugin
+astro.config.mjs   site URL, integrations
 dist/              build output. Generated, git-ignored, never edited (N2)
 ```
 
@@ -119,40 +118,24 @@ import Base from '../layouts/Base.astro';
 
 ## 6 · Styling
 
-Styling is **Tailwind CSS v4**, CSS-first: no `tailwind.config.js`, the whole setup lives in `src/styles/global.css`, wired in through `@tailwindcss/vite` in `astro.config.mjs`. It compiles to plain static CSS at build time, so N5 holds.
+Styling is **plain CSS**, no framework: everything lives in `src/styles/global.css` and compiles to static CSS at build time, so N5 holds.
 
-The file has four parts, in this order:
+**This site is the reference for EKHO's visual language.** What it looks like on a phone and on a desktop is the standard the other EKHO surfaces take their tokens and components from (ADR-0028 in the EKHO_brain vault; the formal language behind it is ADR-0027, "Braun"). Its tokens and recurring components are being lifted into a self-contained layer step by step; until that lands, the file below is the source.
 
-1. **`:root` tokens** — the only place a colour or radius value is written. Change it **there**, once, and it applies everywhere.
-2. **`@theme inline`** — maps the tokens onto Tailwind utilities. Tailwind's default colours, fonts and radii are switched off (`--color-*: initial` …), so only EKHO values exist: `bg-blue-500` generates nothing.
-3. **`@layer base`** — element styles (`body`, `a`, `h1`, `pre` …). Tailwind's Preflight reset is deliberately not imported; this layer is the base instead.
-4. **`@layer components`** — named classes for patterns that repeat (`.wrap`, `.card`, `.site-header` …).
+The file has three parts, in this order:
 
-Utilities come last in the cascade, so a utility on an element always beats base and component styles.
+1. **`:root` tokens** — the only place a colour, radius, shadow or font stack is written, light first, dark in a `prefers-color-scheme: dark` block. Change a value **there**, once, and it applies everywhere.
+2. **`@layer base`** — element styles (`body`, `a`, `h1`, `pre` …). This layer is the reset; there is no third-party one.
+3. **`@layer components`** — named classes for everything else (`.wrap`, `.chapter`, `.pill`, `.site-header` …).
 
-```css
-token      utility                     meaning
---bg       bg-background               page background
---text     text-foreground             body text
---surface  bg-card                     cards and code blocks
---muted    text-muted-foreground       secondary text
---border   border-border               hairlines
---signal   bg-signal / text-signal     the one accent (yellow)
---signal-ink  text-signal-foreground   text on a yellow surface
---radius   rounded-block               corner rounding
---maxw     (used by .wrap)             content column width
-```
-
-Spacing, sizing, grid, flex and breakpoints are Tailwind's defaults (`p-4`, `gap-6`, `md:grid-cols-2` …).
-
-**The site is dark only.** There is one `:root` block and no light theme — it is not a missing feature, it is the decision. Do not add a `prefers-color-scheme: light` block or a theme switch.
+**Light is the main mode, dark is the second.** Both follow the reader's system setting; there is no theme switch.
 
 Rules that hold regardless of what you are styling:
 
-- The look follows the EKHO Design System (v0.4, derived from the pitch deck): black, white and greys, exactly one signal colour (yellow `--signal`), Helvetica Neue. Yellow is opt-in and never a default surface; as text it only ever sits on the dark ground.
-- Tailwind utilities in the markup for layout and one-off styling; a pattern that repeats on several pages becomes a named class in `@layer components` instead of a copied string of utilities.
-- Never hardcode a colour or radius in a page or layout file — no hex values, no arbitrary values like `bg-[#151515]` or `rounded-[12px]`. Use a utility from the table, or add a token and map it in `@theme`.
-- One stylesheet. No CSS-in-JS, no second CSS file, no `tailwind.config.js`, no Tailwind plugins or component kits (shadcn/ui is React and belongs to the viewer, not here).
+- The look follows the EKHO Design System (v0.5, ADR-0027): warm light grey as the body, anthracite instead of black, exactly one signal colour (warm yellow `--signal`, `#F5C400`) for exactly one meaning, what belongs to the reader. Helvetica Neue.
+- Never hardcode a colour, radius or shadow in a component rule, page or layout file. Use a token, or add one in `:root` (both modes).
+- A pattern that appears in more than one place is one named class, not a copy with small differences.
+- One stylesheet. No CSS-in-JS, no CSS framework, no component kits (shadcn/ui is React and belongs to the viewer, not here).
 - The site must work at 320px wide with no horizontal scroll. The `.wrap` class already handles the content column and its 16px gutters — use it rather than inventing margins.
 - No web font unless someone decides the tradeoff is worth it. The current stack uses the reader's system font: nothing to download, nothing to ask consent for.
 
@@ -254,7 +237,6 @@ Those four IPv4 addresses are GitHub's, shared by every Pages site, and they cha
 - **Adding a page and expecting it in the nav.** Routing is automatic; the header is not. Edit the `.nav` block in `src/layouts/Base.astro`.
 - **`npm install` instead of `npm ci` in CI.** `npm ci` is deliberate: it installs exactly what `package-lock.json` pins, so the deployed build matches the one you tested.
 - **A style outside any `@layer`.** Unlayered CSS beats every utility regardless of specificity, so a `p-8` on the element silently does nothing. New rules go into `@layer base` or `@layer components`.
-- **A Tailwind colour that renders as nothing.** `text-gray-500`, `bg-blue-500` and friends do not exist here on purpose (§6). Use `text-muted-foreground` and the other token utilities.
 - **Trusting a green CI for copy.** CI proves the site compiles and its links resolve. It has no opinion about whether a sentence is true or a heading is good.
 
 ## 12 · Context
@@ -262,4 +244,3 @@ Those four IPv4 addresses are GitHub's, shared by every Pages site, and they cha
 - `ekho` — the CLI this site describes. Its `AGENTS.md` is the model this file follows.
 - `ekho-cockpit` — the spec vault. The source of truth for what EKHO is, when the site needs to describe it.
 - [Astro docs](https://docs.astro.build) — for anything about the framework itself.
-- [Tailwind CSS v4 docs](https://tailwindcss.com/docs) — utilities, `@theme`, `@layer`.

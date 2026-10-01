@@ -519,7 +519,6 @@ const people = [
   const chapterNav = document.querySelector<HTMLElement>('[data-chapter-nav]');
   const graphics = [...document.querySelectorAll<HTMLElement>('[data-graphic]')];
   const arch = document.querySelector<HTMLElement>('[data-arch]');
-  const railRows = [...document.querySelectorAll<HTMLElement>('[data-rail] [data-layer]')];
   const figure = document.querySelector<HTMLElement>('[data-story-figure]');
   const intro = document.querySelector<HTMLElement>('[data-intro]');
   const introTitle = document.querySelector<HTMLElement>('[data-intro-title]');
@@ -831,20 +830,6 @@ const people = [
       }
 
       if (!(collapse > 0 && collapse < 1)) figure.dataset.show = current?.dataset.overlay ?? '';
-    }
-
-    // the architecture rail: one stack for the whole story, moved through its
-    // states by whichever chapter is being read
-    {
-      const on = (current?.dataset.layers ?? '').split(' ').filter(Boolean);
-      const done = (current?.dataset.done ?? '').split(' ').filter(Boolean);
-      for (const r of railRows) {
-        const k = r.dataset.layer ?? '';
-        const isOn = on.includes(k);
-        r.classList.toggle('is-on', isOn);
-        r.classList.toggle('is-done', !isOn && done.includes(k));
-        r.classList.toggle('is-off', !isOn && !done.includes(k));
-      }
     }
 
     // the graphic: 0 field, 1 scattered, 2 connected, 3 compounding

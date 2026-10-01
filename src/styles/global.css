@@ -1,8 +1,6 @@
-/* Tailwind v4, CSS-first. The theme lives in this file and nowhere else.
-   Preflight is not imported: the element styles below are the site's base. */
-@layer theme, base, components, utilities;
-@import 'tailwindcss/theme.css' layer(theme);
-@import 'tailwindcss/utilities.css' layer(utilities);
+/* Plain CSS, no framework. The tokens live in :root below and nowhere else;
+   the element styles in `base` are the site's reset. */
+@layer base, components;
 
 :root {
   /* EKHO Design System v0.5 - the Braun formal language (ADR-0027).
@@ -53,6 +51,8 @@
   --dots: var(--line-strong);
   --radius: 4px;
   --maxw: 44rem;
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -81,30 +81,6 @@
     --core-line: #2b2a27;
     --core-muted: #86817a;
   }
-}
-
-/* The tokens above as Tailwind utilities: bg-background, text-muted-foreground,
-   border-border, bg-signal, rounded-block … Tailwind's default palette and radii
-   are removed, so only the EKHO values exist (one signal, no stray blue or green). */
-@theme inline {
-  --color-*: initial;
-  --color-background: var(--bg);
-  --color-foreground: var(--text);
-  --color-card: var(--surface);
-  --color-muted-foreground: var(--muted);
-  --color-border: var(--border);
-  --color-line: var(--line);
-  --color-line-strong: var(--line-strong);
-  --color-surface-raised: var(--surface-raised);
-  --color-muted-deep: var(--muted-deep);
-  --color-core: var(--core);
-  --color-signal: var(--signal);
-  --color-signal-foreground: var(--signal-ink);
-  --font-*: initial;
-  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-  --radius-*: initial;
-  --radius-block: var(--radius);
 }
 
 @layer base {
@@ -352,7 +328,6 @@
     background: var(--signal);
   }
 
-  .tile:focus-visible,
   .pill:focus-visible {
     outline: 2px solid var(--signal);
     outline-offset: 3px;
@@ -889,55 +864,6 @@
     color: var(--muted);
   }
 
-  .steps,
-  .layers {
-    display: grid;
-    gap: 0.75rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .steps p,
-  .layers p {
-    margin: 0;
-    color: var(--muted);
-  }
-
-  .layers li {
-    padding: 1.1rem 1.25rem;
-    border-radius: var(--radius);
-    background-color: var(--surface);
-    box-shadow: var(--lift);
-  }
-
-  .layers h3 {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 0 0 0.25rem;
-    font-size: 1.125rem;
-  }
-
-  .layers .layer-owned {
-    background-color: var(--signal);
-    color: var(--signal-ink);
-  }
-
-  .layers .layer-owned p {
-    color: var(--signal-ink);
-  }
-
-  .tag {
-    padding: 0.15rem 0.6rem;
-    border-radius: 999px;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 0.75rem;
-    font-weight: 400;
-  }
-
   /* chapter navigation, inside the sticky header on the homepage. On narrow
      screens the list scrolls sideways; the active chapter is kept in view. */
   .chapter-nav {
@@ -1167,108 +1093,6 @@
     color: var(--muted-deep);
   }
 
-  /* ---------- the architecture, assembling ---------- */
-
-  .stack {
-    margin: 0;
-  }
-
-  .stack-label {
-    margin: 0 0 0.75rem;
-    font-size: 0.6875rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted-deep);
-  }
-
-  .stack-rows {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .stack-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.6rem 0;
-    border-top: 1px solid var(--line);
-    border-radius: var(--radius);
-    transition:
-      background 320ms ease,
-      color 320ms ease,
-      padding 320ms ease,
-      box-shadow 320ms ease;
-  }
-
-  .stack-name {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--muted-deep);
-  }
-
-  .stack-note {
-    font-size: 0.75rem;
-    color: var(--muted-deep);
-    text-align: right;
-  }
-
-  .stack-sq {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--line-strong);
-    flex: none;
-    transition: background 320ms ease;
-  }
-
-  .stack-row.is-done .stack-name,
-  .stack-row.is-done .stack-note {
-    color: var(--muted);
-  }
-
-  .stack-row.is-on {
-    background: var(--surface);
-    border-top-color: transparent;
-    padding: 0.68rem 1rem;
-    box-shadow: var(--lift);
-  }
-
-  .stack-row.is-on .stack-name {
-    color: var(--text);
-    font-weight: 600;
-    font-size: 1.0625rem;
-  }
-
-  .stack-row.is-on .stack-note {
-    color: var(--muted);
-  }
-
-  .stack-row.is-on .stack-sq {
-    background: var(--signal);
-  }
-
-  .stack--full .stack-row {
-    background: var(--surface);
-    border-top-color: transparent;
-    padding: 0.8rem 1rem;
-  }
-
-  .stack--full .stack-name {
-    color: var(--text);
-  }
-
-  .stack--full .stack-sq {
-    background: var(--signal);
-  }
-
   /* ---------- windows: the reader's own environment ---------- */
 
   .win {
@@ -1328,107 +1152,6 @@
 
   .win--finder .win-body {
     height: 16.5rem;
-  }
-
-  .fin-side {
-    width: 9.5rem;
-    flex: none;
-    padding: 0.6rem 0.5rem;
-    background: var(--panel-sub);
-    border-right: 1px solid var(--panel-line);
-    font-size: 0.75rem;
-  }
-
-  .fin-group {
-    margin: 0.4rem 0 0.25rem 0.5rem;
-    font-size: 0.6875rem;
-    color: var(--muted-deep);
-  }
-
-  .fin-side ul,
-  .fin-col {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .fin-side li {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.28rem 0.5rem;
-    border-radius: var(--radius);
-    color: var(--muted);
-  }
-
-  .fin-side li.is-sel {
-    background: var(--surface-raised);
-    color: var(--text);
-  }
-
-  .fin-ico {
-    width: 11px;
-    height: 9px;
-    border-radius: 1px;
-    background: var(--line-strong);
-    flex: none;
-  }
-
-  .fin-ico--dir {
-    background: var(--muted-deep);
-  }
-
-  .fin-ico--doc {
-    width: 8px;
-    height: 10px;
-    background: none;
-    border: 1px solid var(--line-strong);
-    border-radius: 1px;
-  }
-
-  .fin-cols {
-    display: flex;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .fin-col {
-    flex: 1;
-    min-width: 0;
-    padding: 0.4rem;
-    border-right: 1px solid var(--panel-line);
-    font-size: 0.75rem;
-  }
-
-  .fin-col--last {
-    border-right: 0;
-  }
-
-  .fin-col li {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.3rem 0.4rem;
-    border-radius: var(--radius);
-    color: var(--text);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .fin-col li.is-sel {
-    background: var(--surface-raised);
-    color: var(--text);
-    font-weight: 500;
-  }
-
-  .fin-arrow {
-    margin-left: auto;
-    color: var(--muted-deep);
-  }
-
-  .fin-side li.is-sel .fin-ico {
-    background: var(--signal);
   }
 
   /* --- chat --- */
@@ -2155,27 +1878,6 @@
     letter-spacing: -0.02em;
   }
 
-  .app-stats {
-    list-style: none;
-    display: flex;
-    gap: 2rem;
-    margin: 0 0 1.4rem;
-    padding: 0 0 1rem;
-    border-bottom: 1px solid var(--panel-line);
-  }
-
-  .app-stats b {
-    display: block;
-    font-size: 1.375rem;
-    font-weight: 400;
-    letter-spacing: -0.02em;
-  }
-
-  .app-stats span {
-    font-size: 0.6875rem;
-    color: #9b968e;
-  }
-
   .app-sub {
     margin: 0 0 0.5rem;
     font-size: 0.625rem;
@@ -2214,12 +1916,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .app-meta {
-    font-size: 0.625rem;
-    color: #9b968e;
-    white-space: nowrap;
   }
 
   /* the state of an element, set the way the roadmap page sets it */
@@ -2615,30 +2311,6 @@
   .overlay .chat-side {
     width: 11rem;
   }
-
-  /* --- the architecture, assembling under the graph --- */
-
-  .stack--rail {
-    flex: none;
-  }
-
-  .stack--rail .stack-row.is-off {
-    display: none;
-  }
-
-  .stack--rail .stack-rows {
-    gap: 0.3rem;
-  }
-
-  .stack--rail .stack-label {
-    margin-bottom: 0.6rem;
-  }
-
-  @media (max-width: 63.999rem) {
-    .stack--rail .stack-row.is-off {
-      display: flex;
-    }
-  }
 }
 
 @layer components {
@@ -2647,11 +2319,6 @@
     position: absolute;
     inset: 0;
     justify-content: center;
-  }
-
-  /* before the first layer lights up there is nothing to label */
-  .stack--rail:not(:has(.stack-row.is-on, .stack-row.is-done)) {
-    visibility: hidden;
   }
 }
 
@@ -2698,10 +2365,6 @@
     /* the eight names are set beside the points at a size that assumes a
        column: here the strip in chapter 01 carries them instead */
     .story-figure .cg-tip {
-      display: none;
-    }
-
-    .stack--rail {
       display: none;
     }
 
@@ -3265,18 +2928,6 @@
   /* The layer being read has to carry, not whisper: it inverts against the
      ground rather than sitting a shade off it. Anthracite on the light mode,
      the light tone on the dark one. */
-  .stack-row.is-on {
-    background: var(--block);
-    box-shadow: none;
-  }
-
-  .stack-row.is-on .stack-name {
-    color: var(--block-ink);
-  }
-
-  .stack-row.is-on .stack-note {
-    color: color-mix(in srgb, var(--block-ink) 62%, transparent);
-  }
 
   /* in chapter 06 the row you opened is the one that carries */
   .arch-row[open] {
@@ -3458,29 +3109,6 @@
     flex: none;
     border-radius: 50%;
     background: var(--signal);
-  }
-
-  .models-list {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 0.9rem;
-    margin: 0 0 0.75rem;
-    padding: 0;
-  }
-
-  .models-list li {
-    font-size: 0.9375rem;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    color: var(--text);
-  }
-
-  .models-list li + li::before {
-    content: '·';
-    margin-right: 0.9rem;
-    color: var(--line-strong);
-    font-weight: 400;
   }
 
   .models-note {
@@ -4710,10 +4338,6 @@
     .viewer .app-side {
       display: none;
     }
-
-    .viewer .app-meta {
-      overflow-wrap: anywhere;
-    }
   }
 }
 
@@ -4965,48 +4589,6 @@
     outline-offset: 2px;
   }
 
-  .strip-details {
-    display: grid;
-    grid-template-columns: 4.5rem 1fr;
-    align-items: baseline;
-    gap: 0.3rem 0.7rem;
-    /* packed under what is above them, not held at the foot. Holding them
-       there lined the rows up across the row of cards, but it opened a hole in
-       the middle of every card that has no quoted line — and a hole reads as
-       something missing, while space at the bottom reads as calm. */
-    margin: 0.15rem 0 0;
-  }
-
-  .strip-details dt {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    color: var(--muted);
-  }
-
-  .strip-details dd {
-    margin: 0;
-    font-size: 0.75rem;
-    line-height: 1.3;
-    color: var(--text);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .strip-card--app .strip-details dd {
-    color: var(--sk-ink);
-  }
-
-  .strip-link {
-    display: flex;
-    align-items: baseline;
-    gap: 0.35rem;
-    margin: 0;
-    font-size: 0.75rem;
-    line-height: 1.35;
-    color: var(--muted);
-  }
-
   /* The colours the four captured widgets are dressed in. They belong to the
      apps that material came out of, not to this page, which is why they are
      literals here and never tokens. */
@@ -5032,78 +4614,6 @@
       --sk-quiet: #6b6762;
       --sk-ink: #edebe6;
     }
-  }
-
-  .strip-card .sk-chrome {
-    fill: var(--sk-chrome);
-  }
-
-  .strip-card .sk-quiet {
-    fill: var(--sk-quiet);
-  }
-
-  .strip-card .sk-brand {
-    fill: var(--sk-brand);
-  }
-
-  .strip-card .sk-rec {
-    fill: var(--sk-rec);
-  }
-
-  .strip-card .sk-pfp-bg {
-    fill: #d9d3c7;
-  }
-
-  .strip-card .sk-pfp-hair {
-    fill: #54412f;
-  }
-
-  .strip-card .sk-pfp-skin {
-    fill: #e8c3a4;
-  }
-
-  .strip-card .sk-pfp-top {
-    fill: #3a3a40;
-  }
-
-  .strip-card .sk-on-brand,
-  .strip-card .sk-on-rec {
-    fill: #fff;
-  }
-
-  /* the one mark that is set the other way round in the dark: the post client
-     puts its ink on its paper, and both flip together */
-  .strip-card .sk-x {
-    fill: #000;
-  }
-
-  .strip-card .sk-x-on {
-    stroke: #fff;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .strip-card .sk-x {
-      fill: #fff;
-    }
-
-    .strip-card .sk-x-on {
-      stroke: #000;
-    }
-  }
-
-  /* a key on a light ground: the fill alone is a few values off the surface
-     and disappears at this size, so it is held by a line as well */
-  /* and the page's own line work, for the four EKHO makes */
-  .strip-arrow {
-    width: 0.75rem;
-    height: 0.75rem;
-    flex: none;
-    align-self: center;
-    fill: none;
-    stroke: var(--signal);
-    stroke-width: 1.2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
   }
 }
 
@@ -5238,13 +4748,8 @@
       white-space: normal;
     }
 
-    .viewer .app-stats {
-      border-bottom-color: var(--line);
-    }
-
     .viewer .app-sub,
-    .viewer .app-type,
-    .viewer .app-stats span {
+    .viewer .app-type {
       color: var(--muted);
     }
 
