@@ -554,31 +554,6 @@
       transform: none;
     }
   }
-
-  /* chapter content: a short lede, then numbered steps or stacked layers */
-  .chapter-lede {
-    margin: 0 0 var(--space-8);
-    color: var(--muted);
-    font-size: var(--text-body);
-  }
-
-  /* A chapter that opens on a conviction rather than a description: the claim
-     in full ink, the paragraph under it a tone back, and the two set as one
-     block rather than two ledes with a chapter's worth of air between them. */
-  .chapter-lede--claim {
-    margin-bottom: var(--space-4);
-    color: var(--text);
-    font-weight: var(--weight-medium);
-  }
-
-  /* the paragraph a claim hands off to is the same split as a statement's
-     second half: same ink, and the weight above it does the separating. Every
-     other lede on the page keeps the muted tone, because there is nothing
-     above it to be read against. */
-  .chapter-lede--claim + .chapter-lede {
-    color: var(--muted);
-  }
-
   /* chapter navigation, inside the sticky header on the homepage. On narrow
      screens the list scrolls sideways; the active chapter is kept in view. */
   .chapter-nav {
@@ -642,22 +617,6 @@
   .chapter-label span {
     margin-right: var(--space-1);
   }
-
-  .chapter h2 {
-    margin-top: 0;
-    font-size: var(--text-h2);
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-  }
-
-  .statement {
-    font-weight: var(--weight-semibold);
-    font-size: var(--text-body);
-    line-height: 1.45;
-    letter-spacing: -0.01em;
-    margin: 0 0 var(--space-6);
-  }
-
   .footer-nav {
     display: flex;
     gap: var(--space-5);
@@ -731,36 +690,9 @@
   .chapter-body {
     flex: 0 0 auto;
   }
-
-  .chapter h2 {
-    margin-bottom: var(--space-4);
-    font-weight: var(--weight-semibold);
-    font-size: var(--text-h2);
-    letter-spacing: -0.03em;
-    line-height: 1.08;
-    max-width: 20ch;
-  }
-
-  .statement {
-    font-weight: var(--weight-regular);
-    font-size: var(--text-body);
-    line-height: var(--leading-body);
-    letter-spacing: 0;
-    color: var(--muted);
-    max-width: 52ch;
-  }
-
   .chapter-label span {
     color: var(--muted-deep);
   }
-
-  .chapter-lede {
-    max-width: 58ch;
-    color: var(--muted);
-    font-size: var(--text-body);
-    line-height: var(--leading-body);
-  }
-
   .fig-note {
     margin-top: var(--space-6);
     font-size: var(--text-caption);
@@ -1737,31 +1669,10 @@
     li {
       letter-spacing: -0.011em;
     }
-
-    .chapter h2 {
-      font-size: var(--text-h2);
-      line-height: 1.06;
-      letter-spacing: -0.042em;
-    }
-
-    .chapter-lede {
-      font-size: var(--text-body);
-      line-height: 1.45;
-    }
-
-    .statement {
-      font-size: var(--text-body);
-      line-height: 1.45;
-    }
     .hero-title {
       font-size: var(--text-display);
       line-height: 1.02;
       letter-spacing: -0.045em;
-    }
-
-    .hero-lede {
-      font-size: var(--text-body);
-      line-height: 1.45;
     }
   }
 }
@@ -2580,22 +2491,6 @@
 }
 
 @layer components {
-  /* The statements are the argument, so they are read, not skimmed. They used
-     to dim everything but the line nearest the middle of the screen, which is a
-     deck mannerism: on a page where all three are in view at once it leaves two
-     thirds of the text unreadable while the graph is already carrying the
-     movement. They all stand now, at the size the opening sets for running
-     text: one pitch for the whole page rather than a louder one per chapter. */
-  .statement {
-    font-size: var(--text-body);
-    line-height: var(--leading-body);
-    max-width: 44ch;
-    margin: 0 0 var(--space-4);
-  }
-
-  .statement:last-child {
-    margin-bottom: 0;
-  }
 }
 
 @layer components {
@@ -2643,15 +2538,6 @@
   .chapter--wide {
     padding-block: clamp(3.5rem, 9vh, 6rem) clamp(2.5rem, 6vh, 4rem);
   }
-
-  .chapter--wide h2 {
-    font-size: var(--text-h2);
-  }
-
-  .chapter--wide .chapter-lede {
-    line-height: 1.55;
-  }
-
   .arch {
     margin-top: clamp(1.25rem, 3.5vh, 2.5rem);
     gap: clamp(0.2rem, 0.55vh, 0.4rem);
@@ -4378,23 +4264,6 @@
    look like two different decisions depending on the window. The split is the
    page's now, not the phone's. */
 @layer components {
-  /* One system for the whole of the body copy: medium in full ink is the
-     point, regular in the muted grey is everything else. The grey is the one
-     the hero's own lede stands in, so a paragraph in chapter 03 and the first
-     paragraph on the page are the same colour.
-
-     Both carriers at once, and that is the version that works. Tone alone
-     failed three times — seven tenths of the ink looked like a printing
-     fault, the grey alone like a faded black, a warm tinted ink was a second
-     colour on a page that has one. Weight alone was legible but flat. */
-  .statement {
-    color: var(--muted);
-  }
-
-  .statement-lead {
-    color: var(--text);
-    font-weight: var(--weight-medium);
-  }
 }
 
 /* Rhythm on a phone -----------------------------------------------------------
@@ -4414,14 +4283,6 @@
       padding-top: var(--space-4);
       border-top: 1px solid var(--line);
     }
-
-    /* 2 · a claim stands taller than the paragraphs around it */
-    .statement--pull {
-      font-size: var(--text-h3);
-      line-height: 1.25;
-      letter-spacing: -0.025em;
-    }
-
     /* 3 · every other chapter on its own ground, edge to edge */
     .story-text #what,
     .story-text #compound,

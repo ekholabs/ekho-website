@@ -204,7 +204,7 @@ const people = [
           <p class="ekho-eyebrow chapter-label">
             <span>01</span> {c.nav.why}
           </p>
-          <h2>{c.why.title}</h2>
+          <h2 class="ekho-heading">{c.why.title}</h2>
           <Statement text={c.why.a} />
           <Statement text={c.why.b} />
           <Statement text={c.why.c} />
@@ -229,7 +229,7 @@ const people = [
           <p class="ekho-eyebrow chapter-label">
             <span>02</span> {c.nav.what}
           </p>
-          <h2>{c.what.title}</h2>
+          <h2 class="ekho-heading">{c.what.title}</h2>
           <Statement text={c.what.a} />
           <Statement text={c.what.b} />
         </div>
@@ -297,7 +297,7 @@ const people = [
           <p class="ekho-eyebrow chapter-label">
             <span>03</span> {c.nav.how}
           </p>
-          <h2>{c.how.title}</h2>
+          <h2 class="ekho-heading">{c.how.title}</h2>
           <Statement text={c.how.a} />
           <Statement text={c.how.b} />
         </div>
@@ -366,7 +366,7 @@ const people = [
                 invisible until then. */}
             <span class="graphic-landing" data-landing aria-hidden="true"></span>
           </div>
-          <h2>{c.compound.title}</h2>
+          <h2 class="ekho-heading">{c.compound.title}</h2>
           <Statement text={c.compound.a} />
           <Statement text={c.compound.b} />
         </div>
@@ -386,8 +386,8 @@ const people = [
     {/* Two columns, like the chapters before it: what the viewer is on the
         left, one window of it on the right. */}
     <div class="split-text">
-      <h2>{c.viewer.title}</h2>
-      <p class="chapter-lede">{c.viewer.lede}</p>
+      <h2 class="ekho-heading">{c.viewer.title}</h2>
+      <p class="ekho-lede">{c.viewer.lede}</p>
       <Statement text={c.viewer.a} />
       <p class="fig-note">{c.viewer.note}</p>
     </div>
@@ -407,8 +407,8 @@ const people = [
       <p class="ekho-eyebrow chapter-label">
         <span>04</span> {c.nav.architecture}
       </p>
-      <h2>{c.architecture.title}</h2>
-      <p class="chapter-lede">{c.architecture.lede}</p>
+      <h2 class="ekho-heading">{c.architecture.title}</h2>
+      <p class="ekho-lede">{c.architecture.lede}</p>
     </div>
     <Architecture lang={lang} />
   </section>
@@ -423,9 +423,9 @@ const people = [
     data-stage="3"
   >
     <div class="measure">
-      <h2>{c.who.title}</h2>
-      <p class="chapter-lede chapter-lede--claim">{c.who.claim}</p>
-      <p class="chapter-lede">{c.who.lede}</p>
+      <h2 class="ekho-heading">{c.who.title}</h2>
+      <p class="ekho-lede ekho-lede--claim">{c.who.claim}</p>
+      <p class="ekho-lede">{c.who.lede}</p>
     </div>
     <ul class="people">
       {people.map((p) => (
@@ -460,8 +460,8 @@ const people = [
     data-stage="3"
   >
     <div class="measure">
-      <h2>{c.waitlist.title}</h2>
-      <p class="chapter-lede">{c.waitlist.lede}</p>
+      <h2 class="ekho-heading">{c.waitlist.title}</h2>
+      <p class="ekho-lede">{c.waitlist.lede}</p>
       <Waitlist lang={lang} />
     </div>
   </section>

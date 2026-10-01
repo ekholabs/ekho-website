@@ -149,3 +149,66 @@
     }
   }
 }
+
+@layer components {
+  /* --- heading: the h2 of a chapter or a section --------------------------- */
+  .ekho-heading {
+    max-width: 20ch;
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-h2);
+    font-weight: var(--weight-semibold);
+    line-height: 1.08;
+    letter-spacing: var(--tracking-heading);
+  }
+
+  @media (max-width: 47.999rem) {
+    .ekho-heading {
+      line-height: var(--leading-tight);
+    }
+  }
+
+  /* --- lede: the paragraph under a heading that says what the section is --- */
+  .ekho-lede {
+    max-width: 58ch;
+    margin: 0 0 var(--space-8);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    color: var(--muted);
+  }
+
+  /* a claim before the lede: the point in medium, then the lede explains it */
+  .ekho-lede--claim {
+    margin-bottom: var(--space-4);
+    font-weight: var(--weight-medium);
+  }
+
+  /* --- statement: a paragraph that leads with its own first sentence ------- */
+  .ekho-statement {
+    max-width: 44ch;
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-body);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-body);
+    letter-spacing: 0;
+    color: var(--muted);
+  }
+
+  .ekho-statement:last-child {
+    margin-bottom: 0;
+  }
+
+  .ekho-statement__lead {
+    font-weight: var(--weight-medium);
+    color: var(--text);
+  }
+
+  /* a one-sentence claim, set larger on a phone for a column of paragraphs to
+     rise to */
+  @media (max-width: 63.999rem) {
+    .ekho-statement--pull {
+      font-size: var(--text-h3);
+      line-height: var(--leading-snug);
+      letter-spacing: -0.025em;
+    }
+  }
+}

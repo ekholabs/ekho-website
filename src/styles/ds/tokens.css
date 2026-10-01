@@ -60,7 +60,7 @@
   --leading-body: 1.6; /* running text */
 
   --tracking-display: -0.035em;
-  --tracking-heading: -0.025em;
+  --tracking-heading: -0.03em;
   --tracking-title: -0.015em;
   --tracking-label: 0.1em; /* uppercase only */
 
@@ -125,6 +125,13 @@
      (max-width: 47.999rem) phone · (min-width: 64rem) desktop */
   --bp-md: 48rem;
   --bp-lg: 64rem;
+}
+
+/* On a phone headings sit tighter, the way the site has always set them. */
+@media (max-width: 47.999rem) {
+  :root {
+    --tracking-heading: -0.042em;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

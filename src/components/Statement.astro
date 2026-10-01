@@ -23,12 +23,12 @@ const rest = m ? m[2] : '';
 const pull = !m && text.length < 80;
 ---
 
-<p class:list={['statement', { 'statement--pull': pull }, cls]}>
+<p class:list={['ekho-statement', { 'ekho-statement--pull': pull }, cls]}>
   {/* No rest means the paragraph is one sentence, so there is no lead to mark:
       the span would put the whole block in medium, which is how a paragraph
       turns into a heading. It is only wrapped when there is something for the
       weight to separate it from. */}
-  {rest ? <span class="statement-lead">{lead}</span> : lead}
+  {rest ? <span class="ekho-statement__lead">{lead}</span> : lead}
   {rest && ' '}
   {rest}
 </p>
