@@ -970,3 +970,125 @@
     }
   }
 }
+
+@layer components {
+  /* --- window: a depicted window, opaque or as glass over the graph. The traffic lights are the colours of somebody else's chrome and stay literal --------- */
+  /* ---------- windows: the reader's own environment ---------- */
+
+  .ekho-window {
+    margin: 0;
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  .ekho-window__bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--panel-sub);
+    border-bottom: 1px solid var(--panel-line);
+  }
+
+  .ekho-window__lights {
+    display: inline-flex;
+    gap: var(--space-2);
+  }
+
+  .ekho-window__lights i {
+    width: 11px;
+    height: 11px;
+    border-radius: var(--radius-full);
+    background: #ff5f57;
+  }
+
+  .ekho-window__lights i:nth-child(2) {
+    background: #febc2e;
+  }
+
+  .ekho-window__lights i:nth-child(3) {
+    background: #28c840;
+  }
+
+  .ekho-window__title {
+    flex: 1;
+    text-align: center;
+    font-size: var(--text-label);
+    font-weight: var(--weight-medium);
+    color: var(--muted);
+    padding-right: var(--space-10);
+  }
+
+  .ekho-window__body {
+    display: flex;
+    min-height: 0;
+  }
+
+  /* --- Finder --- */
+
+  .ekho-window--finder .ekho-window__body {
+    height: 16.5rem;
+  }
+
+  /* --- chat --- */
+
+  .ekho-window--chat .ekho-window__body {
+    height: 34rem;
+  }
+
+  /* the window never spills out of its column */
+  .ekho-window__body > * {
+    min-width: 0;
+  }
+
+  /* --- the Finder window: one list, real folders --- */
+
+  .ekho-window--finder {
+    width: 17.5rem;
+  }
+
+  @media (max-width: 63.999rem) {
+    .ekho-window--finder {
+      width: 13.5rem;
+    }
+  }
+  /* The Finder and the chat window lie on the graph, so the pane has an edge
+     rather than a printed outline: a hairline rim, a single-pixel highlight
+     along the top where a glass front would catch the light, and a halo so
+     faint it reads as depth and not as an effect. The cloud behind stays just
+     perceptible through it.
+
+     Deliberately not done: a saturation boost, a strong blur, or translucent
+     panels inside the window. That is the look of a particular year, and this
+     has to still be right in five. The viewer in chapter 05 is a product shot
+     on a solid ground and stays opaque. */
+  .ekho-window--glass {
+    background: color-mix(in srgb, var(--panel) var(--glass), transparent);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border-color: var(--glass-rim);
+    box-shadow:
+      0 0 64px -12px var(--glass-halo),
+      0 22px 54px -24px var(--glass-cast),
+      inset 0 1px 0 var(--glass-top);
+  }
+
+  .ekho-window--glass .ekho-window__bar {
+    background: color-mix(in srgb, var(--panel-sub) 70%, transparent);
+    border-bottom-color: var(--glass-rim);
+  }
+
+  @supports not (backdrop-filter: blur(1px)) {
+    .ekho-window--glass {
+      background: var(--panel);
+    }
+  }
+  .ekho-window--app .ekho-window__body {
+    color: #1a1a18;
+    height: clamp(15rem, 41vh, 23.5rem);
+  }
+}

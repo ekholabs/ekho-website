@@ -696,7 +696,7 @@ const people = [
   let dotAge = 0;
 
   function paintCollapse(collapse: number) {
-    const chatWin = chatOverlay?.querySelector<HTMLElement>('.win');
+    const chatWin = chatOverlay?.querySelector<HTMLElement>('.ekho-window');
     if (!figure || !chatWin) return;
 
     if (collapse > 0 && collapse < 1) {
@@ -792,7 +792,7 @@ const people = [
       // and the window shrinks into it. The window is held on screen until the
       // collapse is done, or it would fade out from under the movement.
       let collapse = 0;
-      const chatWin = chatOverlay?.querySelector<HTMLElement>('.win');
+      const chatWin = chatOverlay?.querySelector<HTMLElement>('.ekho-window');
       // The lit stage belongs to the story chapters only: not to the opening,
       // where there is nothing yet to be a ground for, and not below the
       // story, where the chapters take the whole page and a lit strip down one

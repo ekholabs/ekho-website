@@ -399,33 +399,6 @@
    ========================================================================== */
 
 @layer components {
-  :root {
-    /* the inside of a depicted window: somebody else's chrome, so its own
-       panel colours. Its corners follow the system (--radius-lg). */
-    --panel: #fff;
-    --panel-line: #ddd8cf;
-    --panel-sub: #f4f2ec;
-    /* the windows that float over the graph are glass: a lit rim, a top
-       highlight and a halo that lifts them off whatever is behind */
-    --glass: 97%;
-    --glass-rim: rgb(255 255 255 / 0.9);
-    --glass-top: rgb(255 255 255 / 0.8);
-    --glass-halo: rgb(26 26 24 / 0.05);
-    --glass-cast: rgb(26 26 24 / 0.2);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --panel: #36342e;
-      --panel-line: #4a473f;
-      --panel-sub: #2c2a26;
-      --glass: 95%;
-      --glass-rim: rgb(255 255 255 / 0.14);
-      --glass-top: rgb(255 255 255 / 0.07);
-      --glass-halo: rgb(237 235 230 / 0.05);
-      --glass-cast: rgb(0 0 0 / 0.5);
-    }
-  }
   /* ---------- the story column ---------- */
 
   .story-text .chapter {
@@ -446,74 +419,6 @@
     line-height: 1.6;
     color: var(--muted-deep);
   }
-
-  /* ---------- windows: the reader's own environment ---------- */
-
-  .win {
-    margin: 0;
-    width: 100%;
-    background: var(--panel);
-    border: 1px solid var(--panel-line);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    overflow: hidden;
-  }
-
-  .win-bar {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-    background: var(--panel-sub);
-    border-bottom: 1px solid var(--panel-line);
-  }
-
-  .win-lights {
-    display: inline-flex;
-    gap: var(--space-2);
-  }
-
-  .win-lights i {
-    width: 11px;
-    height: 11px;
-    border-radius: var(--radius-full);
-    background: #ff5f57;
-  }
-
-  .win-lights i:nth-child(2) {
-    background: #febc2e;
-  }
-
-  .win-lights i:nth-child(3) {
-    background: #28c840;
-  }
-
-  .win-title {
-    flex: 1;
-    text-align: center;
-    font-size: var(--text-label);
-    font-weight: var(--weight-medium);
-    color: var(--muted);
-    padding-right: var(--space-10);
-  }
-
-  .win-body {
-    display: flex;
-    min-height: 0;
-  }
-
-  /* --- Finder --- */
-
-  .win--finder .win-body {
-    height: 16.5rem;
-  }
-
-  /* --- chat --- */
-
-  .win--chat .win-body {
-    height: 34rem;
-  }
-
   .chat-side {
     width: 10.5rem;
     flex: none;
@@ -1126,18 +1031,12 @@
     border-radius: var(--radius-sm);
   }
 
-  .viewer .win {
+  .viewer .ekho-window {
     --panel: #fbfaf7;
     --panel-line: #e6e2da;
     --panel-sub: #f2f0ea;
     box-shadow: var(--shadow-md);
   }
-
-  .win--app .win-body {
-    height: 20rem;
-    color: #1a1a18;
-  }
-
   .app-side {
     width: 9.5rem;
     flex: none;
@@ -1414,11 +1313,6 @@
       padding: var(--space-4);
     }
   }
-
-  /* the window never spills out of its column */
-  .win-body > * {
-    min-width: 0;
-  }
 }
 
 @layer components {
@@ -1506,13 +1400,6 @@
   html:not(.js) .overlay {
     display: none;
   }
-
-  /* --- the Finder window: one list, real folders --- */
-
-  .win--finder {
-    width: 17.5rem;
-  }
-
   .fin-list {
     list-style: none;
     margin: 0;
@@ -1551,13 +1438,13 @@
      and a window that bleeds over those rows makes both unreadable. It is the
      window that matters here, so it takes the room it can get and the bar and
      the body share what is left. */
-  .overlay .win {
+  .overlay .ekho-window {
     display: flex;
     flex-direction: column;
     max-height: 100%;
   }
 
-  .overlay .win-body {
+  .overlay .ekho-window__body {
     min-height: 0;
   }
 
@@ -1566,12 +1453,12 @@
     max-height: 100%;
   }
 
-  .overlay .chat-unit .win--chat {
+  .overlay .chat-unit .ekho-window--chat {
     width: 100%;
     min-height: 0;
   }
 
-  .overlay .win--chat .win-body {
+  .overlay .ekho-window--chat .ekho-window__body {
     height: 34rem;
     flex: 0 1 auto;
   }
@@ -1644,11 +1531,6 @@
     .story-text .chapter:first-child {
       padding-top: var(--space-6);
     }
-
-    .win--finder {
-      width: 13.5rem;
-    }
-
     .fin-list li {
       font-size: var(--text-label);
       padding: var(--space-1) var(--space-2);
@@ -1658,7 +1540,7 @@
       width: calc(100% - 1.5rem);
     }
 
-    .overlay .win--chat .win-body {
+    .overlay .ekho-window--chat .ekho-window__body {
       height: 19rem;
     }
   }
@@ -1817,12 +1699,12 @@
       display: none;
     }
 
-    .flow-window .win--finder {
+    .flow-window .ekho-window--finder {
       width: 100%;
       max-width: 20rem;
     }
 
-    .flow-window .win--chat .win-body {
+    .flow-window .ekho-window--chat .ekho-window__body {
       height: 24rem;
     }
 
@@ -1910,43 +1792,6 @@
 }
 
 @layer components {
-  /* The Finder and the chat window lie on the graph, so the pane has an edge
-     rather than a printed outline: a hairline rim, a single-pixel highlight
-     along the top where a glass front would catch the light, and a halo so
-     faint it reads as depth and not as an effect. The cloud behind stays just
-     perceptible through it.
-
-     Deliberately not done: a saturation boost, a strong blur, or translucent
-     panels inside the window. That is the look of a particular year, and this
-     has to still be right in five. The viewer in chapter 05 is a product shot
-     on a solid ground and stays opaque. */
-  .win--finder,
-  .win--chat {
-    background: color-mix(in srgb, var(--panel) var(--glass), transparent);
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-    border-color: var(--glass-rim);
-    box-shadow:
-      0 0 64px -12px var(--glass-halo),
-      0 22px 54px -24px var(--glass-cast),
-      inset 0 1px 0 var(--glass-top);
-  }
-
-  .win--finder .win-bar,
-  .win--chat .win-bar {
-    background: color-mix(in srgb, var(--panel-sub) 70%, transparent);
-    border-bottom-color: var(--glass-rim);
-  }
-
-  @supports not (backdrop-filter: blur(1px)) {
-    .win--finder,
-    .win--chat {
-      background: var(--panel);
-    }
-  }
-}
-
-@layer components {
   /* The architecture has to be graspable in one look, which means it has to fit
      on the screen. Its measurements follow the viewport height rather than a
      fixed rem, so the five layers stay inside the frame on a laptop as well as
@@ -1962,12 +1807,6 @@
     margin-top: clamp(1.25rem, 3vh, 2.5rem);
     padding: clamp(1.25rem, 3.4vh, 3rem);
   }
-
-  .win--app .win-body {
-    /* tall enough that the last row of the zone is a row and not a cut */
-    height: clamp(15rem, 41vh, 23.5rem);
-  }
-
   .fig-note {
     margin-top: clamp(0.85rem, 2vh, 1.5rem);
   }
@@ -2383,7 +2222,7 @@
      those positions would otherwise have seven backdrop layers recomputed
      against it. */
   .is-moving .ekho-header,
-  .is-moving .win,
+  .is-moving .ekho-window,
   .is-moving .view-step {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -2401,7 +2240,7 @@
     pointer-events: none;
   }
 
-  [data-story-figure].is-collapsing .win--chat {
+  [data-story-figure].is-collapsing .ekho-window--chat {
     transform-origin: center center;
     transition: none;
     /* The blur behind the window is recomputed for every size it passes
@@ -2808,7 +2647,7 @@
    edge. */
 @layer components {
   @media (max-width: 63.999rem) {
-    .flow-window .win--chat .win-body {
+    .flow-window .ekho-window--chat .ekho-window__body {
       height: auto;
     }
 
@@ -3092,8 +2931,8 @@
    -------------------------------------------------------------------------- */
 @layer components {
   @media (max-width: 47.999rem) {
-    .viewer .win--app,
-    .flow-window .win--chat {
+    .viewer .ekho-window--app,
+    .flow-window .ekho-window--chat {
       border: 0;
       background: none;
       box-shadow: none;
@@ -3101,13 +2940,13 @@
       backdrop-filter: none;
     }
 
-    .viewer .win--app .win-bar,
-    .flow-window .win--chat .win-bar {
+    .viewer .ekho-window--app .ekho-window__bar,
+    .flow-window .ekho-window--chat .ekho-window__bar {
       display: none;
     }
 
-    .viewer .win--app .win-body,
-    .flow-window .win--chat .win-body {
+    .viewer .ekho-window--app .ekho-window__body,
+    .flow-window .ekho-window--chat .ekho-window__body {
       height: auto;
       background: none;
     }
@@ -3116,7 +2955,7 @@
        most of what the chapter is saying about it — and a list of file names
        lying loose on the page says the opposite. It sits closer to the
        paragraph it belongs to than to the install line under it. */
-    .flow-window .win--finder {
+    .flow-window .ekho-window--finder {
       width: 100%;
       max-width: none;
     }
@@ -3218,7 +3057,7 @@
       color: var(--muted);
     }
 
-    .flow-window .win--finder {
+    .flow-window .ekho-window--finder {
       max-width: none;
     }
 

@@ -38,6 +38,21 @@
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
   --maxw: 44rem; /* the text column */
 
+  /* --- window: a depicted window is somebody else's chrome, so it has its
+     own panel colours; the ones floating over the graph are glass --------- */
+  /* the inside of a depicted window: somebody else's chrome, so its own
+  panel colours. Its corners follow the system (--radius-lg). */
+  --panel: #fff;
+  --panel-line: #ddd8cf;
+  --panel-sub: #f4f2ec;
+  /* the windows that float over the graph are glass: a lit rim, a top
+  highlight and a halo that lifts them off whatever is behind */
+  --glass: 97%;
+  --glass-rim: rgb(255 255 255 / 0.9);
+  --glass-top: rgb(255 255 255 / 0.8);
+  --glass-halo: rgb(26 26 24 / 0.05);
+  --glass-cast: rgb(26 26 24 / 0.2);
+
   /* --- terminal: dark in either mode, because a terminal is black ------- */
   --term: #0a0a09;
   --term-ink: #e9e7e2;
@@ -160,6 +175,15 @@
     --core: #121210;
     --block: #edebe6;
     --block-ink: #1a1a18;
+
+    --panel: #36342e;
+    --panel-line: #4a473f;
+    --panel-sub: #2c2a26;
+    --glass: 95%;
+    --glass-rim: rgb(255 255 255 / 0.14);
+    --glass-top: rgb(255 255 255 / 0.07);
+    --glass-halo: rgb(237 235 230 / 0.05);
+    --glass-cast: rgb(0 0 0 / 0.5);
 
     /* light-ink shadows vanish on a dark ground: black, and stronger */
     --shadow-ink: 0 0 0;
