@@ -8,7 +8,7 @@ import type { Copy } from './en';
 // Harness gehört, bleibt englisch: Vault, Skill, Harness, Ontology.
 export const de: Copy = {
   meta: {
-    title: 'EKHO Labs — KI ist nur so gut wie dein Kontext',
+    title: 'EKHO Labs — KI ist so gut wie dein Kontext',
     description:
       'EKHO macht aus deinem Wissen einen verbundenen Kontext, der sich verzinst. Jede Nutzung deiner KI bringt mehr als die vorige, und der Kontext bleibt deiner.',
   },
@@ -29,7 +29,7 @@ export const de: Copy = {
     copied: 'Kopiert',
   },
   hero: {
-    titleBefore: 'KI ist nur so gut wie dein Kontext.',
+    titleBefore: 'KI ist so gut wie dein Kontext.',
     titleSignal: 'Er gehört dir.',
     lede: 'EKHO macht aus dem, was du weißt, eine zusammenhängende Kontextquelle, mit der deine KI arbeiten kann. Bau dir dein synthetisches Gedächtnis und behalte es. Jede Nutzung bringt mehr als die vorige - ohne die Kontrolle abzugeben.',
     cta: 'Auf die Warteliste',
