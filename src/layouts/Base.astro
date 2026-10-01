@@ -1,5 +1,6 @@
 ---
 import Arrow from '../components/Arrow.astro';
+import Icon from '../components/Icon.astro';
 import '../styles/global.css';
 import { languages, langs, pathFor, defaultLang, t, type Lang } from '../i18n';
 
@@ -87,9 +88,7 @@ const indexable = false;
                   </option>
                 ))}
               </select>
-              <span class="ekho-lang__caret" aria-hidden="true">
-                ⌄
-              </span>
+              <Icon name="chevron-down" class="ekho-lang__caret" />
             </label>
             <a class="ekho-header__link" href="https://github.com/ekholabs">
               GitHub <Arrow />

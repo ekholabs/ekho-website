@@ -581,9 +581,10 @@
 
   .ekho-lang__caret {
     position: absolute;
-    right: 0.35rem;
-    font-size: var(--text-micro);
-    color: var(--muted-deep);
+    right: var(--space-1);
+    width: 0.75rem;
+    height: 0.75rem;
+    color: var(--muted);
     pointer-events: none;
   }
 
