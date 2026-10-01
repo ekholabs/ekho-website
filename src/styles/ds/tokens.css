@@ -13,13 +13,13 @@
   /* Light is the main mode, dark is the second. One warm yellow that carries
      on both grounds, used for exactly one meaning: what is yours. */
   color-scheme: light dark;
-  --bg: #edebe6;
-  --surface: #f5f4f1;
-  --surface-raised: #e2dfd9;
-  --line: #d8d4cd;
-  --line-strong: #bfbab2;
-  --muted-deep: #9b968e;
-  --muted: #6b6762;
+  --bg: #eceae8;
+  --surface: #f4f4f2;
+  --surface-raised: #e0dedc;
+  --line: #d6d4d0;
+  --line-strong: #bcbab6;
+  --muted-deep: #989692;
+  --muted: #696764;
   --text: #1a1a18;
   --signal: #f5c400;
   --signal-ink: #1a1a18;
@@ -27,7 +27,7 @@
   --core: #1a1a18;
   /* the highlighted layer: anthracite on a light ground, light on a dark one */
   --block: #1a1a18;
-  --block-ink: #edebe6;
+  --block-ink: #eceae8;
 
   /* links: the text stays ink, the yellow sits underneath */
   --link: var(--text);
@@ -128,19 +128,19 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1c1b19;
+    --bg: #1b1b1a;
     /* a step above the ground you can see: at #232220 a panel was a guess */
-    --surface: #2a2926;
-    --surface-raised: #333230;
+    --surface: #292927;
+    --surface-raised: #323231;
     /* a hairline on a dark ground is lighter than on a light one, or it
        disappears */
-    --line: #4c4943;
-    --line-strong: #666159;
-    --muted-deep: #6e6a64;
-    --muted: #a09b93;
-    --text: #edebe6;
+    --line: #4a4846;
+    --line-strong: #63605c;
+    --muted-deep: #6c6a67;
+    --muted: #9d9a96;
+    --text: #eceae8;
     --core: #121210;
-    --block: #edebe6;
+    --block: #eceae8;
     --block-ink: #1a1a18;
 
     /* light-ink shadows vanish on a dark ground: black, and stronger */
