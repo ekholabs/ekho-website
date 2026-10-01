@@ -75,6 +75,9 @@ npm run format       # Prettier: format it
 npm run check        # Astro: broken templates, bad props, type errors
 npm run build        # does it compile at all?
 node tools/check-links.mjs   # after a build: do internal links resolve? (N8)
+
+# Figma
+npm run capture      # pictures of the live site for Figma's Live page, into captures/
 ```
 
 `npm run dev` is the one you want open the whole time you are editing. Leave it running; it rebuilds on every save.
@@ -139,7 +142,7 @@ Rules that hold regardless of what you are styling:
 - The site must work at 320px wide with no horizontal scroll. The `.wrap` class already handles the content column and its 16px gutters — use it rather than inventing margins.
 - No web font unless someone decides the tradeoff is worth it. The current stack uses the reader's system font: nothing to download, nothing to ask consent for.
 
-**Figma follows the code, in the same PR.** The design system has a Figma library, [EKHO Design System](https://www.figma.com/design/o7ENxxaNym4BpIhRCCB6gq), and the site has its own file, [ekholabs.eu](https://www.figma.com/design/85QPHlWql0cQfsEhbUwlwA), with a _Live_ page showing the site as it is online (ADR-0029 in the EKHO_brain vault). A PR that changes a token or a shared component also updates the library, adds a line to its changelog with the PR number, and publishes it; a PR that changes what the site looks like refreshes the _Live_ page. Say in the PR description that this was done. Exploration happens in the _Explorations_ page of the site's file, never in the library. If code and Figma disagree, the code is right.
+**Figma follows the code, in the same PR.** The design system has a Figma library, [EKHO Design System](https://www.figma.com/design/o7ENxxaNym4BpIhRCCB6gq), and the site has its own file, [ekholabs.eu](https://www.figma.com/design/85QPHlWql0cQfsEhbUwlwA), with a _Live_ page showing the site as it is online (ADR-0029 in the EKHO_brain vault). A PR that changes a token or a shared component also updates the library, adds a line to its changelog with the PR number, and publishes it; a PR that changes what the site looks like refreshes the _Live_ page with `npm run capture` (pass a local URL to capture the branch). Say in the PR description that this was done. Exploration happens in the _Explorations_ page of the site's file, never in the library. If code and Figma disagree, the code is right.
 
 ## 7 · Branches, commits, pull requests
 
