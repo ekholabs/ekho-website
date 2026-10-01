@@ -261,10 +261,10 @@ const people = [
               which the dashed edge says before the note does. Recovered from
               the page this one replaced, so the address and the key placeholder
               are the ones the repo already used. */}
-          <figure class="command" data-command>
-            <figcaption class="ekho-eyebrow command-label">{c.what.commandLabel}</figcaption>
+          <figure class="ekho-code" data-command>
+            <figcaption class="ekho-eyebrow ekho-code__label">{c.what.commandLabel}</figcaption>
             <button
-              class="command-copy"
+              class="ekho-code__copy"
               type="button"
               data-command-copy
               data-idle={c.nav.copy}
@@ -274,13 +274,13 @@ const people = [
               <span data-command-copy-label>{c.nav.copy}</span>
             </button>
             <code data-command-text>
-              <span class="command-prompt" aria-hidden="true">
+              <span class="ekho-code__prompt" aria-hidden="true">
                 $
               </span>{' '}
               curl -fsSL https://get.ekholabs.eu/i/&lt;key&gt; | sh
             </code>
           </figure>
-          <p class="command-note">{c.what.commandNote}</p>
+          <p class="ekho-code__note">{c.what.commandNote}</p>
         </div>
       </section>
 
@@ -1253,7 +1253,7 @@ const people = [
         range.selectNodeContents(copyText);
         // start after the prompt, so what gets selected is what would have been
         // copied rather than a dollar sign the reader then has to delete
-        const prompt = copyText.querySelector('.command-prompt');
+        const prompt = copyText.querySelector('.ekho-code__prompt');
         if (prompt) range.setStartAfter(prompt);
         sel.removeAllRanges();
         sel.addRange(range);

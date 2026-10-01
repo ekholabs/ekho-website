@@ -38,6 +38,16 @@
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
   --maxw: 44rem; /* the text column */
 
+  /* --- terminal: dark in either mode, because a terminal is black ------- */
+  --term: #0a0a09;
+  --term-ink: #e9e7e2;
+  --term-muted: #9b958b;
+  --term-prompt: #7c776f;
+  --term-line: #2e2c28;
+  --term-line-strong: #4a463f;
+  --term-shadow: 0 20px 60px -22px rgb(0 0 0 / 0.38), 0 4px 14px -8px rgb(0 0 0 / 0.22);
+  --term-shadow-hover: 0 24px 66px -20px rgb(0 0 0 / 0.46), 0 5px 16px -8px rgb(0 0 0 / 0.28);
+
   /* --- type: size ------------------------------------------------------- */
   --text-display: clamp(2.5rem, 2.236rem + 1.127vw, 3.25rem); /* 40 → 52 */
   --text-h2: clamp(2rem, 1.868rem + 0.563vw, 2.375rem); /* 32 → 38 */

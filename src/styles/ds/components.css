@@ -847,3 +847,126 @@
     }
   }
 }
+
+@layer components {
+  /* --- code: the one line you paste, in a terminal, with a copy button ---- */
+  .ekho-code {
+    max-width: 27rem;
+    margin: var(--space-10) 0 0;
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    /* No edge at all: the panel is held off the page by a wide, soft shadow
+       instead, which is what a terminal window on a desk actually looks like.
+       The note underneath is what marks this as unshipped; N4 asks for the
+       marking, not for a border. */
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--term);
+    box-shadow: var(--term-shadow);
+  }
+
+  .ekho-code__label {
+    margin-bottom: var(--space-2);
+    /* the terminal stays dark in both modes */
+    color: var(--muted-deep);
+  }
+
+  .ekho-code code {
+    display: block;
+    font-family: var(--font-mono);
+    /* sized so the line fits the column in one piece: a command broken across
+       two lines looks like two commands */
+    font-size: var(--text-label);
+    line-height: 1.55;
+    color: var(--term-ink);
+    overflow-wrap: anywhere;
+  }
+
+  .ekho-code__prompt {
+    margin-right: var(--space-1);
+    color: var(--term-prompt);
+  }
+
+  .ekho-code__note {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-label);
+    color: var(--muted-deep);
+  }
+
+  /* A command on a page is there to be taken. The box answers the pointer and
+     the button hands the line over; it is always in the DOM and always
+     reachable by keyboard, and only its opacity waits for the hover, so nothing
+     moves or reflows when the pointer arrives. */
+  .ekho-code {
+    position: relative;
+    transition: box-shadow var(--duration-fast) ease;
+  }
+
+  .ekho-code:hover,
+  .ekho-code:focus-within {
+    box-shadow: var(--term-shadow-hover);
+  }
+
+  .ekho-code__copy {
+    align-items: center;
+    background: none;
+    border: 1px solid var(--term-line);
+    border-radius: var(--radius-sm);
+    color: var(--term-muted);
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-size: var(--text-micro);
+    font-weight: var(--weight-medium);
+    gap: var(--space-1);
+    letter-spacing: 0.02em;
+    opacity: 0;
+    padding: var(--space-1) var(--space-2);
+    position: absolute;
+    right: 0.6rem;
+    top: 0.6rem;
+    transition:
+      opacity 0.25s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .ekho-code:hover .ekho-code__copy,
+  .ekho-code__copy:focus-visible {
+    opacity: 1;
+  }
+
+  .ekho-code__copy:hover {
+    border-color: var(--term-line-strong);
+    color: var(--term-ink);
+  }
+
+  .ekho-code__copy:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  .ekho-code__copy.is-done {
+    border-color: color-mix(in srgb, var(--signal) 55%, var(--term-line));
+    color: var(--signal);
+    opacity: 1;
+  }
+
+  .ekho-code__copy svg {
+    height: 0.75rem;
+    width: 0.75rem;
+  }
+
+  /* Without a pointer there is no hover to reveal it, so it simply stays. */
+  @media (hover: none) {
+    .ekho-code__copy {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ekho-code,
+    .ekho-code__copy {
+      transition: none;
+    }
+  }
+}

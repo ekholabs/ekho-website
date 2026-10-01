@@ -2434,137 +2434,6 @@
 }
 
 @layer components {
-  /* The one line you paste. The dashed edge is the site's mark for something
-     that does not exist yet: it says so before the note underneath does, which
-     is what N4 asks for. */
-  .command {
-    /* a terminal is black in either mode, because a terminal is black */
-    --term: #0a0a09;
-    max-width: 27rem;
-    margin: var(--space-10) 0 0;
-    padding: var(--space-3) var(--space-4) var(--space-4);
-    /* No edge at all: the panel is held off the page by a wide, soft shadow
-       instead, which is what a terminal window on a desk actually looks like.
-       The note underneath is what marks this as unshipped; N4 asks for the
-       marking, not for a border. */
-    border: 0;
-    border-radius: var(--radius-sm);
-    background: var(--term);
-    box-shadow:
-      0 20px 60px -22px rgb(0 0 0 / 0.38),
-      0 4px 14px -8px rgb(0 0 0 / 0.22);
-  }
-
-  .command-label {
-    margin-bottom: var(--space-2);
-    /* the terminal stays dark in both modes */
-    color: var(--muted-deep);
-  }
-
-  .command code {
-    display: block;
-    font-family: var(--font-mono);
-    /* sized so the line fits the column in one piece: a command broken across
-       two lines looks like two commands */
-    font-size: var(--text-label);
-    line-height: 1.55;
-    color: #e9e7e2;
-    overflow-wrap: anywhere;
-  }
-
-  .command-prompt {
-    margin-right: var(--space-1);
-    color: #7c776f;
-  }
-
-  .command-note {
-    margin: var(--space-2) 0 0;
-    font-size: var(--text-label);
-    color: var(--muted-deep);
-  }
-
-  /* A command on a page is there to be taken. The box answers the pointer and
-     the button hands the line over; it is always in the DOM and always
-     reachable by keyboard, and only its opacity waits for the hover, so nothing
-     moves or reflows when the pointer arrives. */
-  .command {
-    position: relative;
-    transition: box-shadow var(--duration-fast) ease;
-  }
-
-  .command:hover,
-  .command:focus-within {
-    box-shadow:
-      0 24px 66px -20px rgb(0 0 0 / 0.46),
-      0 5px 16px -8px rgb(0 0 0 / 0.28);
-  }
-
-  .command-copy {
-    align-items: center;
-    background: none;
-    border: 1px solid #2e2c28;
-    border-radius: var(--radius-sm);
-    color: #9b958b;
-    cursor: pointer;
-    display: flex;
-    font: inherit;
-    font-size: var(--text-micro);
-    font-weight: var(--weight-medium);
-    gap: var(--space-1);
-    letter-spacing: 0.02em;
-    opacity: 0;
-    padding: var(--space-1) var(--space-2);
-    position: absolute;
-    right: 0.6rem;
-    top: 0.6rem;
-    transition:
-      opacity 0.25s ease,
-      color 0.2s ease,
-      border-color 0.2s ease;
-  }
-
-  .command:hover .command-copy,
-  .command-copy:focus-visible {
-    opacity: 1;
-  }
-
-  .command-copy:hover {
-    border-color: #4a463f;
-    color: #e9e7e2;
-  }
-
-  .command-copy:focus-visible {
-    outline: var(--focus-ring);
-    outline-offset: var(--focus-offset);
-  }
-
-  .command-copy.is-done {
-    border-color: color-mix(in srgb, var(--signal) 55%, #2e2c28);
-    color: var(--signal);
-    opacity: 1;
-  }
-
-  .command-copy svg {
-    height: 0.75rem;
-    width: 0.75rem;
-  }
-
-  /* Without a pointer there is no hover to reveal it, so it simply stays. */
-  @media (hover: none) {
-    .command-copy {
-      opacity: 1;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .command,
-    .command-copy {
-      transition: none;
-    }
-  }
-}
-
-@layer components {
   /* In the snapped position the content has to sit the same distance from the
      top of the screen as from the bottom. The section rests with its top at the
      viewport top, and the header covers the first 4rem of that, so the two gaps
@@ -3287,7 +3156,7 @@
       margin-top: calc(1.1rem - 1.2rem);
     }
 
-    #what .command {
+    #what .ekho-code {
       position: relative;
       z-index: 0;
       margin-top: calc(-0.9rem - 2.5rem);
@@ -3301,7 +3170,7 @@
 
     /* the button lines up with the label rather than with the top edge, which
        is what made it look pressed into the corner */
-    #what .command-copy {
+    #what .ekho-code__copy {
       top: 1.9rem;
       right: 0.9rem;
     }
